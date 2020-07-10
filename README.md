@@ -17,7 +17,6 @@ The design goals of PEEOS include:
   * Graphical user interface based on System 7.5 and earlier versions of Classic Mac OS
   * Custom lightweight Objective-C foundation
   * Bitmapped graphics, low DPI displays
-  * Computation as opposed to communication
   * No Unicode support by design
 
 At the moment it is based on Linux, mainly for the graphics drivers.
