@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+$|=1;
+
 use strict;
 
 my $pid = shift @ARGV;

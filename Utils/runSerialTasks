@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+$|=1;
+
 $path = "$ENV{'PEEOS_HOME'}/SerialTasks";
 
 $count = 1;
