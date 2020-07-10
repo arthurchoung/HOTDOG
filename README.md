@@ -23,7 +23,7 @@ At the moment it is based on Linux, mainly for the graphics drivers.
 
 Inspiration is mostly taken from Classic Mac OS 7.5 and earlier versions, NeXT, Mac OS X (up to perhaps Tiger), and iOS (up to 6). There is also an Amiga mode, just for fun.
 
-PEEOS uses a custom lightweight Objective-C foundation on top of the GNUstep Objective-C runtime. But it does not use the GNUstep Foundation. The style of Objective-C is completely different from the one Apple uses, everything is basically **id**.
+PEEOS uses a custom lightweight Objective-C foundation on top of the GNUstep Objective-C runtime. It does not use the GNUstep Foundation. The style of Objective-C is completely different from the one Apple uses, everything is basically **id**.
 
 By design, Unicode is not supported.
 
