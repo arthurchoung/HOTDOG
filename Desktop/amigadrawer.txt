@@ -1,0 +1,39 @@
+palette
+b #000000
+. #000022
+* #ff8800
+X #0055aa
+o #ffffff
+
+pixels
+           ...........................................................
+           bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+       ....oooooooooooooooooooooooooooooooooooooooooooooooooooooo...o.
+       bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+   ....oooooooooooooooooooooooooooooooooooooooooooooooooooooooo...oo..
+   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+................................................................ooo.o.
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo..oooo..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..ooo......................................................ooo..ooo.o.
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..oo.o..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..ooo.o.
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..ooo..ooooooooooooooooo...oooooooooo...ooooooooooooooooo..ooo..oo.o..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..ooo..oooooooooooooooo................oooooooooooooooooo..ooo..o.o.. 
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 
+..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..oo..  
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  
+..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..o..   
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   
+..ooo......................................................ooo....    
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    
+..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo...     
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     
+................................................................      
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      
+

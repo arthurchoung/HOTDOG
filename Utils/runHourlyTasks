@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+
+$|=1;
+
+$path = "$ENV{'PEEOS_HOME'}/HourlyTasks";
+
+for (;;) {
+    $files = `ls -tr $path 2>/dev/null`;
+    @files = split '\n', $files;
+    foreach $elt (@files) {
+        $file = "$path/$elt";
+        print "running '$file'...\n";
+        system("sh \"$file\"");
+        print " (finished)\n";
+    }
+
+    for ($i=3600; $i>0; $i--) {
+        print "$path waiting $i...\n";
+        sleep 1;
+    }
+}
+

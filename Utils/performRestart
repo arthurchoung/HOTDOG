@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$PEEOS_HOME/peeos "confirmWithAlert:'Restart?' title:'Restart?' okText:'Restart' continuation:[['shutdown' '-r' 'now']|runCommandWithSudoInBackground]"

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$PEEOS_HOME/peeos "confirmWithAlert:'Shutdown?' title:'Shutdown?' okText:'Shutdown' continuation:[['shutdown' '-h' 'now']|runCommandWithSudoInBackground]"

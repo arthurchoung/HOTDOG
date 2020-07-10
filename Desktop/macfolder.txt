@@ -1,0 +1,39 @@
+palette
+b #000000
+. #9999ff
+X #ccccff
+o #ffffff
+
+highlightedPalette
+b #000000
+. #26267f
+X #33337f
+o #7f7f7f
+
+pixels
+     bbbbbbb                   
+    bXXXXXXXb                  
+   bXXXXXXXXXb                  
+  bXXXXXXXXXXXb                      
+ bXXXXXXXXXXXXXbbbbbbbbbbbbbbb 
+bXXXXXXXXXXXXXXXXXXXXXXXXXXXXXb
+booooooooooooooooooooooooooooob
+boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b
+bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b
+boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b
+bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b
+boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b
+bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b
+boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b
+bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b
+boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b
+bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b
+boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b
+bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b
+boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b
+bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b
+boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b
+bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b
+boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+

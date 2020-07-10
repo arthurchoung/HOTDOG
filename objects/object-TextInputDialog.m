@@ -1,0 +1,360 @@
+/*
+
+ PEEOS
+
+ Copyright (c) 2020 Arthur Choung. All rights reserved.
+
+ Email: arthur -at- peeos.org
+
+ This file is part of PEEOS.
+
+ PEEOS is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+ */
+
+#import "PEEOS.h"
+
+#ifdef BUILD_FOR_LINUX
+@implementation Definitions(fjdklsjflkdsjlkfdsljkfkjsd)
++ (id)inputNumberWithAlert:(id)text
+{
+    return [self inputTextWithAlert:text];
+}
++ (id)inputTextWithAlert:(id)text
+{
+    text = [text keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines];
+    id quotedTitle = nil;
+    id quotedText = nil;
+    id lines = [text split:@"\n"];
+    if ([lines count] > 1) {
+        quotedTitle = [[lines nth:0] asQuotedString];
+        quotedText = [[[lines subarrayFromIndex:1] join:@"\n"] asQuotedString];
+    } else {
+        quotedTitle = [text asQuotedString];
+        quotedText = quotedTitle;
+    }
+    id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", quotedTitle, quotedText, 10, 10, 600, 400);
+    id cmd = @[ @"peeos", message ];
+    id outputData = [cmd runCommandAndReturnOutput];
+    if (!outputData) {
+        return nil;
+    }
+    id output = [outputData asString];
+    if ([output length]) {
+        return output;
+    }
+    return nil;
+}
+@end
+@implementation NSObject(jfkldslkfjkdslfj)
+- (void)inputNumberWithAlert:(id)text title:(id)title key:(id)key continuation:(id)continuation
+{
+    [self inputTextWithAlert:text title:title key:key continuation:continuation];
+}
+- (void)inputTextWithAlert:(id)text title:(id)title key:(id)key continuation:(id)continuation
+{
+    id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
+    id quotedTitle = [[[self str:title] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
+    id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", quotedTitle, quotedText, 10, 10, 600, 400);
+    id cmd = @[ @"peeos", message ];
+    id outputData = [cmd runCommandAndReturnOutput];
+    if (!outputData) {
+        return;
+    }
+    id output = [outputData asString];
+    if ([output length]) {
+        [[Definitions interfaceObject] setValue:output forKey:key];
+        [self evaluateMessage:continuation];
+    }
+}
+
+
+@end
+#endif
+
+@implementation Definitions(jfldslkfjdslkjf)
++ (id)TextInputDialog:(id)text field:(id)field
+{
+    id obj = [@"TextInputDialog" asInstance];
+    [obj setValue:text forKey:@"text"];
+    [obj setValue:@[ field ] forKey:@"fields"];
+    return obj;
+}
++ (int)preferredHeightForTextInputDialog:(id)text width:(int)width
+{
+    int textWidth = width - 89 - 18;
+    id fittedText = [Definitions fitBitmapString:text width:textWidth];
+
+    int minAlertHeight = 28 + 32 + 23 + 28 + 21;
+    int textHeight = [Definitions bitmapHeightForText:fittedText];
+    int alertHeight = 24 + textHeight + 20 + 28 + 21;
+    if (alertHeight < minAlertHeight) {
+        alertHeight = minAlertHeight;
+    }
+    return alertHeight;
+}
+@end
+
+@interface TextInputDialog: IvarObject
+{
+    id _text;
+    int _numberOfRects;
+    Int4 _rects[2];
+    int _buttonDown;
+    int _buttonHover;
+    id _fields;
+    id _buffers;
+    int _cursorBlink;
+    int _cursorPos;
+    int _currentField;
+    int _returnKey;
+}
+@end
+@implementation TextInputDialog
+- (void)handleBackgroundUpdate:(id)event
+{
+    _cursorBlink--;
+    if (_cursorBlink < 0) {
+        _cursorBlink = 1;
+    }
+}
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+{
+    [Definitions drawAlertBorderInBitmap:bitmap rect:r];
+
+    int textHeight = [bitmap bitmapHeightForText:@"A"];
+
+    int fieldWidth = 0;
+    for (int i=0; i<[_fields count]; i++) {
+        int w = [bitmap bitmapWidthForText:[_fields nth:i]];
+        if (w > fieldWidth) {
+            fieldWidth = w;
+        }
+    }
+
+    int y = 20;
+
+    int textWidth = (int)r.w - 20 - fieldWidth - 18;
+    id text = [bitmap fitBitmapString:_text width:textWidth];
+NSLog(@"text '%@'", text);
+    [bitmap setColorIntR:0 g:0 b:0 a:255];
+    [bitmap drawBitmapText:text x:10+fieldWidth+10+4 y:y];
+
+    y += [Definitions bitmapHeightForText:text];
+    y += 15;
+
+    {
+        int x = 5;
+        for (int i=0; i<[_fields count]; i++) {
+            id field = [_fields nth:i];
+            [bitmap setColorIntR:0 g:0 b:0 a:255];
+            [bitmap drawBitmapText:field x:10+fieldWidth-[bitmap bitmapWidthForText:field] y:y+6];
+
+            int x = 10 + fieldWidth + 10;
+            [bitmap setColor:@"black"];
+            [bitmap fillRectX:x y:y w:r.w-x-10 h:22];
+            [bitmap setColor:@"white"];
+            [bitmap fillRectX:x+1 y:y+1 w:r.w-x-10-2 h:22-2];
+
+            id str = [_buffers nth:i];
+            if (!str) {
+                str = @"";
+            }
+            id left = [str stringToIndex:_cursorPos];
+            id right = [str stringFromIndex:_cursorPos];
+
+            if ([left length]) {
+                [bitmap setColorIntR:0 g:0 b:0 a:255];
+                [bitmap drawBitmapText:left x:x+4 y:y+6];
+                x += [bitmap bitmapWidthForText:left]+2;
+            }
+            if (_currentField == i) {
+                if (_cursorBlink) {
+                    [bitmap setColor:@"black"];
+                    [bitmap drawVerticalLineX:x-1+4 y:y+3 y:y+12+6];
+                }
+            }
+            if ([right length]) {
+                [bitmap setColorIntR:0 g:0 b:0 a:255];
+                [bitmap drawBitmapText:right x:x+4 y:y+6];
+            }
+
+            y -= 27;
+        }
+    }
+
+    ////
+
+    Int4 okButtonRect = [Definitions rectWithX:r.w-88 y:r.y+r.h-21-28 w:70 h:28];
+    _rects[0] = okButtonRect;
+    BOOL okButtonDown = NO;
+    if ((_buttonDown == 1) && (_buttonDown == _buttonHover)) {
+        okButtonDown = YES;
+    } else if (_returnKey) {
+        okButtonDown = YES;
+    }
+    if (okButtonDown) {
+        char *palette = ". #000000\nb #000000\nw #ffffff\n";
+        [Definitions drawDefaultButtonInBitmap:bitmap rect:okButtonRect palette:palette];
+        [bitmap setColorIntR:255 g:255 b:255 a:255];
+        [bitmap drawBitmapText:@"OK" centeredInRect:okButtonRect];
+    } else {
+        char *palette = ". #ffffff\nb #000000\nw #ffffff\n";
+        [Definitions drawDefaultButtonInBitmap:bitmap rect:okButtonRect palette:palette];
+        [bitmap setColorIntR:0 g:0 b:0 a:255];
+        [bitmap drawBitmapText:@"OK" centeredInRect:okButtonRect];
+    }
+    Int4 cancelButtonRect = [Definitions rectWithX:r.w-88-70-35 y:r.y+r.h-21-28 w:70 h:28];
+    _rects[1] = cancelButtonRect;
+    _numberOfRects = 2;
+    if ((_buttonDown == 2) && (_buttonDown == _buttonHover)) {
+        char *palette = ". #000000\nb #000000\nw #ffffff\n";
+        [Definitions drawButtonInBitmap:bitmap rect:cancelButtonRect palette:palette];
+        [bitmap setColorIntR:255 g:255 b:255 a:255];
+        [bitmap drawBitmapText:@"Cancel" centeredInRect:cancelButtonRect];
+    } else {
+        char *palette = ". #ffffff\nb #000000\nw #ffffff\n";
+        [Definitions drawButtonInBitmap:bitmap rect:cancelButtonRect palette:palette];
+        [bitmap setColorIntR:0 g:0 b:0 a:255];
+        [bitmap drawBitmapText:@"Cancel" centeredInRect:cancelButtonRect];
+    }
+}
+- (void)handleKeyDown:(id)event
+{
+    if (!_buffers) {
+        id arr = [_fields mapBlock:^(id obj) {
+            return @"";
+        }];
+        [self setValue:arr forKey:@"buffers"];
+    }
+    id buf = [_buffers nth:_currentField];
+    id str = [event valueForKey:@"keyString"];
+    if ([str length] == 1) {
+        if (![buf length]) {
+            [_buffers replaceObjectAtIndex:_currentField withObject:str];
+            _cursorPos = 1;
+            _cursorBlink = 1;
+        } else {
+            id left = [buf stringToIndex:_cursorPos];
+            id right = [buf stringFromIndex:_cursorPos];
+            id newBuf = nsfmt(@"%@%@%@", left, str, right);
+            [_buffers replaceObjectAtIndex:_currentField withObject:newBuf];
+            _cursorPos++;
+            _cursorBlink = 1;
+        }
+    } else if ([str isEqual:@"left"]) {
+        if (_cursorPos - 1 >= 0) {
+            _cursorPos--;
+        }
+        _cursorBlink = 1;
+    } else if ([str isEqual:@"right"]) {
+        if (_cursorPos + 1 <= [buf length]) {
+            _cursorPos++;
+        }
+        _cursorBlink = 1;
+    } else if ([str isEqual:@"backspace"]) {
+        if (_cursorPos >= 1) {
+            id left = (_cursorPos > 1) ? [buf stringToIndex:_cursorPos-1] : @"";
+            id right = [buf stringFromIndex:_cursorPos];
+            id newBuf = nsfmt(@"%@%@", left, right);
+            [_buffers replaceObjectAtIndex:_currentField withObject:newBuf];
+            _cursorPos--;
+        }
+        _cursorBlink = 1;
+    } else if ([str isEqual:@"return"]) {
+        _returnKey = 1;
+    } else if ([str isEqual:@"tab"]) {
+        if ([_fields count] > 1) {
+            _currentField++;
+            if (_currentField >= [_fields count]) {
+                _currentField = 0;
+            }
+            _cursorPos = [[_buffers nth:_currentField] length];
+            _cursorBlink = 2;
+        }
+    } else if ([str isEqual:@"shifttab"]) {
+        if ([_fields count] > 1) {
+            _currentField--;
+            if (_currentField < 0) {
+                _currentField = [_fields count]-1;
+            }
+            _cursorPos = [[_buffers nth:_currentField] length];
+            _cursorBlink = 2;
+        }
+    }
+}
+- (void)handleKeyUp:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"]) {
+        if (_returnKey) {
+            [self handleOKButton:event];
+            _returnKey = 0;
+        }
+    }
+}
+- (void)handleMouseDown:(id)event
+{
+    int mouseX = [event intValueForKey:@"mouseX"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+    _buttonDown = 0;
+    for (int i=0; i<_numberOfRects; i++) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_rects[i]]) {
+            _buttonDown = i+1;
+        }
+    }
+}
+- (void)handleMouseMoved:(id)event
+{
+    int mouseX = [event intValueForKey:@"mouseX"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+    _buttonHover = 0;
+    for (int i=0; i<_numberOfRects; i++) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_rects[i]]) {
+            _buttonHover = i+1;
+        }
+    }
+}
+- (void)handleMouseUp:(id)event
+{
+    int mouseX = [event intValueForKey:@"mouseX"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+    int buttonUp = 0;
+    for (int i=0; i<_numberOfRects; i++) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_rects[i]]) {
+            if (i+1 == _buttonDown) {
+                buttonUp = _buttonDown;
+            }
+        }
+    }
+    _buttonDown = 0;
+    if (buttonUp == 1) {
+        [self handleOKButton:event];
+    } else if (buttonUp == 2) {
+        [self handleCancelButton:event];
+    }
+}
+- (void)handleOKButton:(id)event
+{
+    id x11dict = [event valueForKey:@"x11dict"];
+    [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+    [[_buffers nth:0] writeToStandardOutput];
+}
+- (void)handleCancelButton:(id)event
+{
+    id x11dict = [event valueForKey:@"x11dict"];
+    [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+}
+@end
+

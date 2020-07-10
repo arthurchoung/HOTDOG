@@ -1,0 +1,41 @@
+palette
+b #000000
+. #000022
+X #FF8800
+o #0055AA
+O #FFFFFF
+
+pixels
+..........................      
+bbbbbbbbbbbbbbbbbbbbbbbbbb      
+..OOOOOOXXXXXX....XXXXOO....    
+bbbbbbbbbbbbbbbbbbbbbbbbbbbb    
+..OOOOOOXXXXXX....XXXXOOOO....  
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  
+..OOOOOOXXXXXX....XXXXOOOOOO....
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOXXXXXX....XXXXOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOXXXXXXXXXXXXXXOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+................................
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ "x$1" == "x" ] || [ "x$2" == "x" ]; then
+    echo "Usage: $0 <timezone> <text>"
+    echo "Example: $0 America/Los_Angeles LA"
+    exit 1
+fi
+
+while true
+do
+    TZ="$1" date "+$2 %a %b %d %I:%M:%S %p"
+    sleep 1
+done
+

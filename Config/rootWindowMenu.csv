@@ -1,0 +1,17 @@
+displayName,messageForClick
+PEEOS,"[ 'peeos' ] | runCommandInBackground"
+XTerm,"[ 'xterm' '-geometry' '80x50' '+bc' '+uc' ] | runCommandInBackground"
+Firefox,"[ 'firefox' ] | runCommandInBackground"
+Thunderbird,"[ 'thunderbird' ] | runCommandInBackground"
+,
+"Restart","[ 'performRestart' ]|runCommandInBackground"
+"Shutdown","[ 'performShutdown' ]|runCommandInBackground"
+,
+"About PEEOS","'Personal Execution Environment Operating System (PEEOS)\\n\\nWritten by Arthur Choung\\n'|showAlert"
+,
+Enter Expose Mode,"enterExposeMode"
+,
+Enter Amiga Mode,"enterAmigaMode"
+Enter Mac Mode,"enterMacMode"
+,
+"'xrandrOutput'|setNilValueForKey","'xrandrOutput'|setNilValueForKey"

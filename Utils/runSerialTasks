@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+
+$path = "$ENV{'PEEOS_HOME'}/SerialTasks";
+
+$count = 1;
+for (;;) {
+    $files = `ls -tr $path 2>/dev/null`;
+    @files = split '\n', $files;
+    $file = shift @files;
+    if (not $file) {
+        print "$path waiting $count...\n";
+        sleep 1;
+        $count++;
+        next;
+    }
+    $file = "$path/$file";
+    system("sh \"$file\"");
+    unlink $file;
+    $count = 1;
+}
+

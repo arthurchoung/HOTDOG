@@ -1,0 +1,3 @@
+"displayName","messageForClick","drawChevron","transition","testMessage","stringFormat"
+Interactive Objects,"execDir:'Config/objects.csv'|menuFromPath|asListInterface"
+Settings,"execDir:'Config/settings.csv'|menuFromPath|asListInterface"
