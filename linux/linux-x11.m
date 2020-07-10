@@ -1371,6 +1371,12 @@ NSLog(@"pixelBytesBGR565 %d", draw_GL_NEAREST);
 NSLog(@"_displayFD %d", _displayFD);
 
     if (_isWindowManager) {
+        if (![alertsPath fileExists]) {
+            [alertsPath makeDirectory];
+        }
+        if (![desktopPath fileExists]) {
+            [desktopPath makeDirectory];
+        }
         [self handleAlertsPath];
         [self handleDesktopPath];
         inotifywait = [Definitions INotifyWait:@[ alertsPath, desktopPath ]];

@@ -4,11 +4,15 @@ Personal Execution Environment Operating System
 
 For more information, please visit http://peeos.org
 
+
+
 ## Screenshots
 
 ![Mac Screenshot](Screenshots/peeos-screenshot-1-mac.png)
 
 ![Amiga Screenshot](Screenshots/peeos-screenshot-2-amiga.png)
+
+
 
 ## Overview
 
@@ -31,6 +35,8 @@ Low DPI displays are preferred, since the graphics are bitmapped and fixed in si
 
 PEEOS does not use Automatic Reference Counting. It causes problems with type-checking during compilation (it is too strict).
 
+
+
 ## How to compile and run
 
 $ sh makeExternal.sh
@@ -46,6 +52,8 @@ $ ./peeos runWindowManager
 To run the iPod style interface:
 
 $ ./peeos
+
+
 
 ## Legal
 
