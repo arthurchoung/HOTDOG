@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-$CC = '/home/arthur/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi21-clang';
-$AR = '/home/arthur/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar';
-$RANLIB = '/home/arthur/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ranlib';
+$CC = $ENV{'HOME'} . '/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi21-clang';
+$AR = $ENV{'HOME'} . '/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar';
+$RANLIB = $ENV{'HOME'} . '/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ranlib';
 
 $cflags = '-DGC_DEBUG -DGNUSTEP -DNO_LEGACY -DTYPE_DEPENDENT_DISPATCH -D__OBJC_RUNTIME_INTERNAL__=1  -std=gnu99  -fexceptions -fPIC -march=armv7-a';
 $asmflags = '-fPIC -DGC_DEBUG -DGNUSTEP -DNO_LEGACY -DTYPE_DEPENDENT_DISPATCH -D__OBJC_RUNTIME_INTERNAL__=1  -fPIC -march=armv7-a';

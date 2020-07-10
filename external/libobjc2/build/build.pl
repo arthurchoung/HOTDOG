@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+$CC = 'clang';
+$AR = 'ar';
+$RANLIB = 'ranlib';
+
 $cflags = '-DGNUSTEP -DNO_LEGACY -DTYPE_DEPENDENT_DISPATCH -D__OBJC_RUNTIME_INTERNAL__=1  -std=gnu99  -fexceptions -march=i586 -fPIC';
 $asmflags = '-DGNUSTEP -DNO_LEGACY -DTYPE_DEPENDENT_DISPATCH -D__OBJC_RUNTIME_INTERNAL__=1  -fPIC';
 $mflags = '-DGNUSTEP -DNO_LEGACY -DTYPE_DEPENDENT_DISPATCH -D__OBJC_RUNTIME_INTERNAL__=1  -std=gnu99  -fexceptions -march=i586 -fPIC    -Wno-deprecated-objc-isa-usage -Wno-objc-root-class -fobjc-runtime=gnustep-1.7';
@@ -49,9 +53,9 @@ foreach $file (@files) {
     } elsif ($file =~ m/\.m$/) {
         $flags = $mflags;
     }
-    print "/usr/bin/clang $flags -o $file.o -c ../$file\n";
+    print "$CC $flags -o $file.o -c ../$file\n";
 }
 
-#print "/usr/bin/ar qc libobjc.a " . join(' ', map { "$_.o" } @files) . "\n";
-#print "/usr/bin/ranlib libobjc.a\n";
+#print "$AR qc libobjc.a " . join(' ', map { "$_.o" } @files) . "\n";
+#print "$RANLIB libobjc.a\n";
 
