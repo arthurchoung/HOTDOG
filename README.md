@@ -4,11 +4,13 @@ Personal Execution Environment Operating System
 
 For more information, please visit http://peeos.org
 
-## About
+## Screenshots
 
 ![Mac Screenshot](Screenshots/peeos-screenshot-1-mac.png)
 
 ![Amiga Screenshot](Screenshots/peeos-screenshot-2-amiga.png)
+
+## Overview
 
 The design goals of PEEOS include:
 
@@ -32,7 +34,10 @@ PEEOS does not use Automatic Reference Counting. It causes problems with type-ch
 
 ## How to compile and run
 
+$ sh makeExternal.sh
+
 $ sh makeUtils.sh
+
 $ perl build.pl
 
 To run the window manager:
