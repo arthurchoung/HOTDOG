@@ -103,7 +103,6 @@ find -L
     $execPath/misc/
     $execPath/external/jsmn
     $execPath/external/tidy-html5-5.6.0/src
-    -not -name '.*'
 EOF
     $cmd =~ s/\n/ /g;
     my @lines = `$cmd`;
