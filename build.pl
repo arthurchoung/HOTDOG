@@ -52,6 +52,12 @@ sub cflagsForFile
 sub ldflagsForFile
 {
     my ($path) = @_;
+    if ($path eq "$execPath/linux/linux-x11.m") {
+        return '-lX11 -lXext -lXfixes';
+    }
+    if ($path eq "$execPath/linux/linux-opengl.m") {
+        return '-lGL';
+    }
     if ($path eq "$execPath/misc/misc-gmime.m") {
         return `pkg-config --libs gmime-3.0`;
     }
@@ -157,10 +163,6 @@ clang -o $execPath/peeos
     $execPath/external/libobjc2/build/*.o
     -lpthread
     -lm
-    -lX11
-    -lXext
-    -lXfixes
-    -lGL
     $ldflags
 EOF
     writeTextToFile($cmd, "$logsPath/LINK");

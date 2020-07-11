@@ -999,7 +999,8 @@ NSLog(@"keyString '%@'", keyString);
                 [obj drawInBitmap:bitmap rect:r1];
             }
 #ifdef BUILD_FOR_LINUX
-#ifndef BUILD_FOR_ANDROID
+#ifdef BUILD_FOR_ANDROID
+#else
             else if ([obj respondsToSelector:@selector(updateBitmap)]) {
                 if (![[@"windowManager" valueForKey] valueForKey:@"openGLTexture"]) {
                     [obj updateBitmap];

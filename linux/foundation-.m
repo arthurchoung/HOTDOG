@@ -29,11 +29,15 @@
 #import <objc/Object.h>
 #import <objc/hooks.h>
 
+#ifdef BUILD_WITH_GNU_PRINTF
+#else
+#import "foundation-printf.h"
+#endif
+
 #ifdef BUILD_FOR_ANDROID
 #include <android/log.h>
 #define LOG(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
 #else
-#include <printf.h>
 #define LOG(...) ((void)fprintf(stderr, __VA_ARGS__))
 #endif
 
@@ -62,12 +66,18 @@ exit(0);
 
 void NSLog(id formatString, ...)///$;
 {
-#ifdef BUILD_FOR_ANDROID
+#ifdef BUILD_WITH_GNU_PRINTF
+    va_list args;
+    va_start(args, formatString);
+    vfprintf(stderr, [formatString UTF8String], args);
+    va_end(args);
+    fprintf(stderr, "\n");
+#else
     char *fmt = [formatString UTF8String];
     char *strp = NULL;
     va_list args;
     va_start(args, formatString);
-    int result = android_vasprintf(&strp, fmt, args);
+    int result = foundation_vasprintf(&strp, fmt, args);
     va_end(args);
     if (result < 0) {
 LOG("OUT OF MEMORY! NSString +stringWithFormat:\n");
@@ -77,12 +87,6 @@ LOG("OUT OF MEMORY! NSString +stringWithFormat:\n");
 LOG("%s\n", strp);
         free(strp);
     }
-#else
-    va_list args;
-    va_start(args, formatString);
-    vfprintf(stderr, [formatString UTF8String], args);
-    va_end(args);
-    fprintf(stderr, "\n");
 #endif
 }
 
@@ -576,10 +580,10 @@ NSLog(@"WARNING: no autorelease pool");
     if (self) {
         char *fmt = [formatString UTF8String];
         char *strp = NULL;
-#ifdef BUILD_FOR_ANDROID
-        int result = android_vasprintf(&strp, fmt, args);
-#else
+#ifdef BUILD_WITH_GNU_PRINTF
         int result = vasprintf(&strp, fmt, args);
+#else
+        int result = foundation_vasprintf(&strp, fmt, args);
 #endif
         if (result < 0) {
 NSLog(@"OUT OF MEMORY! NSString -initWithFormat:arguments:");
@@ -627,10 +631,10 @@ NSLog(@"OUT OF MEMORY! NSString -initWithBytes:length:");
     char *strp = NULL;
     va_list args;
     va_start(args, formatString);
-#ifdef BUILD_FOR_ANDROID
-    int result = android_vasprintf(&strp, fmt, args);
-#else
+#ifdef BUILD_WITH_GNU_PRINTF
     int result = vasprintf(&strp, fmt, args);
+#else
+    int result = foundation_vasprintf(&strp, fmt, args);
 #endif
     va_end(args);
     if (result < 0) {
@@ -1633,10 +1637,10 @@ int qsort_compare_helper(void *a, void *b, void *arg)
 }
 - (id)destructiveSortArrayWithBlock:(void *)block
 {
-#ifdef BUILD_FOR_ANDROID
-    android_qsort_r(_contents, _length, sizeof(id), qsort_compare_helper, block);
-#else
+#ifdef BUILD_WITH_GNU_QSORT_R
     qsort_r(_contents, _length, sizeof(id), qsort_compare_helper, block);
+#else
+    foundation_qsort_r(_contents, _length, sizeof(id), qsort_compare_helper, block);
 #endif
     return self;
 }
@@ -2001,7 +2005,8 @@ NSLog(@"OUT OF MEMORY! NSDictionary -setValue:forKey:");
 }
 @end
 
-#ifndef BUILD_FOR_ANDROID
+#ifdef BUILD_WITH_GNU_PRINTF
+#include <printf.h>
 int print_objc_object(FILE *stream, struct printf_info *info, void **args)
 {
     id obj = *((id *) args[0]);
@@ -2102,7 +2107,7 @@ LOG("ERROR! missing NSObject\n");
         exit(0);
     }
 
-#ifndef BUILD_FOR_ANDROID
+#ifdef BUILD_WITH_GNU_PRINTF
     if (register_printf_function('@', print_objc_object, print_objc_object_arginfo) != 0) {
 fprintf(stderr, "ERROR! register_printf_function\n");
         exit(0);

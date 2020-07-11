@@ -33,7 +33,8 @@ int main(int argc, char **argv)
 
 	@autoreleasepool {
 
-#ifndef BUILD_FOR_ANDROID
+#ifdef BUILD_FOR_ANDROID
+#else
         id execDir = [Definitions execDir];
         if (setenv("PEEOS_HOME", [execDir UTF8String], 1) != 0) {
 NSLog(@"Unable to setenv PEEOS_HOME=%@", execDir);
@@ -68,7 +69,8 @@ NSLog(@"Unable to setenv PEEOS_HOME=%@", execDir);
 #endif
 
 /*
-#ifndef BUILD_FOR_ANDROID
+#ifdef BUILD_FOR_ANDROID
+#else
         if (object == [object class]) {
             object = [object asInstance];
         }

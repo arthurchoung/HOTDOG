@@ -103,76 +103,7 @@
 {
     return (double)[self alphaInt] / 255.0;
 }
-#ifndef BUILD_FOUNDATION
-- (int)redInt
-{
-    if ([self length] < 3) {
-        return 255;
-    }    
-    int c1 = [self characterAtIndex:1];
-    int c2 = [self characterAtIndex:2];
-    int n1 = (isdigit(c1)) ? (c1 - '0') : (c1 - 'a' + 10);
-    int n2 = (isdigit(c2)) ? (c2 - '0') : (c2 - 'a' + 10);
-    if ((n1 < 0) || (n1 > 15)) {
-        return 255;
-    }
-    if ((n2 < 0) || (n2 > 15)) {
-        return 255;
-    }
-    return n1*16 + n2;
-}
-- (int)greenInt
-{
-    if ([self length] < 5) {
-        return 255;
-    }
-    int c1 = [self characterAtIndex:3];
-    int c2 = [self characterAtIndex:4];
-    int n1 = (isdigit(c1)) ? (c1 - '0') : (c1 - 'a' + 10);
-    int n2 = (isdigit(c2)) ? (c2 - '0') : (c2 - 'a' + 10);
-    if ((n1 < 0) || (n1 > 15)) {
-        return 255;
-    }
-    if ((n2 < 0) || (n2 > 15)) {
-        return 255;
-    }
-    return n1*16 + n2;
-}
-- (int)blueInt
-{
-    if ([self length] < 7) {
-        return 255;
-    }
-    int c1 = [self characterAtIndex:5];
-    int c2 = [self characterAtIndex:6];
-    int n1 = (isdigit(c1)) ? (c1 - '0') : (c1 - 'a' + 10);
-    int n2 = (isdigit(c2)) ? (c2 - '0') : (c2 - 'a' + 10);
-    if ((n1 < 0) || (n1 > 15)) {
-        return 255;
-    }
-    if ((n2 < 0) || (n2 > 15)) {
-        return 255;
-    }
-    return n1*16 + n2;
-}
-- (int)alphaInt
-{
-    if ([self length] < 9) {
-        return 255;
-    }
-    int c1 = [self characterAtIndex:7];
-    int c2 = [self characterAtIndex:8];
-    int n1 = (isdigit(c1)) ? (c1 - '0') : (c1 - 'a' + 10);
-    int n2 = (isdigit(c2)) ? (c2 - '0') : (c2 - 'a' + 10);
-    if ((n1 < 0) || (n1 > 15)) {
-        return 255;
-    }
-    if ((n2 < 0) || (n2 > 15)) {
-        return 255;
-    }
-    return n1*16 + n2;
-}
-#else
+#ifdef BUILD_FOUNDATION
 - (int)redInt
 {
     if (!_contents) {
@@ -243,6 +174,75 @@
     }
     int c1 = _contents[7];
     int c2 = _contents[8];
+    int n1 = (isdigit(c1)) ? (c1 - '0') : (c1 - 'a' + 10);
+    int n2 = (isdigit(c2)) ? (c2 - '0') : (c2 - 'a' + 10);
+    if ((n1 < 0) || (n1 > 15)) {
+        return 255;
+    }
+    if ((n2 < 0) || (n2 > 15)) {
+        return 255;
+    }
+    return n1*16 + n2;
+}
+#else
+- (int)redInt
+{
+    if ([self length] < 3) {
+        return 255;
+    }    
+    int c1 = [self characterAtIndex:1];
+    int c2 = [self characterAtIndex:2];
+    int n1 = (isdigit(c1)) ? (c1 - '0') : (c1 - 'a' + 10);
+    int n2 = (isdigit(c2)) ? (c2 - '0') : (c2 - 'a' + 10);
+    if ((n1 < 0) || (n1 > 15)) {
+        return 255;
+    }
+    if ((n2 < 0) || (n2 > 15)) {
+        return 255;
+    }
+    return n1*16 + n2;
+}
+- (int)greenInt
+{
+    if ([self length] < 5) {
+        return 255;
+    }
+    int c1 = [self characterAtIndex:3];
+    int c2 = [self characterAtIndex:4];
+    int n1 = (isdigit(c1)) ? (c1 - '0') : (c1 - 'a' + 10);
+    int n2 = (isdigit(c2)) ? (c2 - '0') : (c2 - 'a' + 10);
+    if ((n1 < 0) || (n1 > 15)) {
+        return 255;
+    }
+    if ((n2 < 0) || (n2 > 15)) {
+        return 255;
+    }
+    return n1*16 + n2;
+}
+- (int)blueInt
+{
+    if ([self length] < 7) {
+        return 255;
+    }
+    int c1 = [self characterAtIndex:5];
+    int c2 = [self characterAtIndex:6];
+    int n1 = (isdigit(c1)) ? (c1 - '0') : (c1 - 'a' + 10);
+    int n2 = (isdigit(c2)) ? (c2 - '0') : (c2 - 'a' + 10);
+    if ((n1 < 0) || (n1 > 15)) {
+        return 255;
+    }
+    if ((n2 < 0) || (n2 > 15)) {
+        return 255;
+    }
+    return n1*16 + n2;
+}
+- (int)alphaInt
+{
+    if ([self length] < 9) {
+        return 255;
+    }
+    int c1 = [self characterAtIndex:7];
+    int c2 = [self characterAtIndex:8];
     int n1 = (isdigit(c1)) ? (c1 - '0') : (c1 - 'a' + 10);
     int n2 = (isdigit(c2)) ? (c2 - '0') : (c2 - 'a' + 10);
     if ((n1 < 0) || (n1 > 15)) {

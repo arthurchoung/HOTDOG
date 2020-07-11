@@ -59,7 +59,8 @@ static id callMethod(id target, struct objc_method *m, id args)
         [arr addObject:nsfmt(@"| target: %@", target)];
         [arr addObject:nsfmt(@"| selector: %s", selectorName)];
         [arr addObject:nsfmt(@"| arguments: %@", args)];
-#ifndef BUILD_FOUNDATION
+#ifdef BUILD_FOUNDATION
+#else
         [arr addObject:nsfmt(@"| callStackSymbols %@", [NSThread callStackSymbols])];
 #endif
         id str = [arr join:@"\n"];
@@ -826,17 +827,7 @@ NSLog(@"%@", err);
     }
     SEL sel = sel_registerName([_selectorName UTF8String]);
     struct objc_method *m = NULL;
-#ifndef BUILD_FOUNDATION
-    BOOL isClass = (_recipient == [_recipient class]) ? YES : NO;
-    if (isClass) {
-        m = class_getClassMethod(_recipient, sel);
-        if (!m) {
-            m = class_getInstanceMethod(_recipient, sel);
-        }
-    } else {
-        m = class_getInstanceMethod(object_getClass(_recipient), sel);
-    }
-#else
+#ifdef BUILD_FOUNDATION
     id cls = object_getClass(_recipient);;
     if (cls == objc_getClass("NSConstantString")) {
         cls = objc_getClass("NSString");
@@ -846,6 +837,16 @@ NSLog(@"%@", err);
         m = class_getClassMethod(_recipient, sel);
     } else {
         m = class_getInstanceMethod(cls, sel);
+    }
+#else
+    BOOL isClass = (_recipient == [_recipient class]) ? YES : NO;
+    if (isClass) {
+        m = class_getClassMethod(_recipient, sel);
+        if (!m) {
+            m = class_getInstanceMethod(_recipient, sel);
+        }
+    } else {
+        m = class_getInstanceMethod(object_getClass(_recipient), sel);
     }
 #endif
     

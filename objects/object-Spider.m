@@ -48,7 +48,9 @@
 @end
 
 @implementation Definitions(jfkdlsjfkldskfj)
-#ifndef BUILD_FOR_IOS
+#ifdef BUILD_FOR_IOS
+#else
+//FIXME
 + (BOOL)isiPad
 {
     return YES;

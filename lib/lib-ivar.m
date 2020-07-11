@@ -25,7 +25,8 @@
 
 #import "PEEOS.h"
 
-#ifndef BUILD_FOUNDATION
+#ifdef BUILD_FOUNDATION
+#else
 @implementation NSString(dsjfkljsdkfjsdlkjfk)
 - (unsigned int)unsignedIntValue
 {
