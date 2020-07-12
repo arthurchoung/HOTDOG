@@ -358,6 +358,7 @@
 
 - (id)asEscapedString
 {
+//FIXME
     id results = nsarr();
     [results addObject:@"\""];
     int length = [self length];
@@ -383,7 +384,7 @@
             [results addObject:@"\\\\"];
         }
         else if (c < 127) {
-            [results addObject:nsfmt(@"%C", c)];
+            [results addObject:nsfmt(@"%c", c)];
         }
         else if (c < 256) {
             [results addObject:nsfmt(@"\\x%02x", c)];
