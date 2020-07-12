@@ -59,6 +59,7 @@ $ ./peeos
 
 The following executables must be in your PATH:
 
+  * clang
   * inotifywait
   * xrandr
   * ifconfig (used by Utils/printNetworkInfo)
