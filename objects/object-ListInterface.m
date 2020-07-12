@@ -452,6 +452,7 @@ NSLog(@"setAllStringFormat:'%@'", val);
     id _rightButtonDown;
     id _searchText;
     id _inotifywait;
+    Int4 _rect;
 }
 @end
 
@@ -647,21 +648,21 @@ NSLog(@"ListInterface dealloc inotifywait %@", _inotifywait);
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
 
-    if (mouseX < 0) {
+    if (mouseX < _rect.x) {
         return nil;
     }
-    if (mouseX >= [event intValueForKey:@"viewWidth"]) {
+    if (mouseX >= _rect.x+_rect.w) {
         return nil;
     }
-    if (mouseY < 0) {
+    if (mouseY < _rect.y) {
         return nil;
     }
-    if (mouseY >= [event intValueForKey:@"viewHeight"]) {
+    if (mouseY >= _rect.y+_rect.h) {
         return nil;
     }
     
     int cellHeight = _cellHeight;
-    int y = _objectOffsetY - cellHeight/4 + mouseY;
+    int y = _objectOffsetY - cellHeight/4 + mouseY - _rect.y;
     if (y < 0) {
         return nil;
     }
@@ -762,6 +763,7 @@ NSLog(@"rightClickMenu %@", rightClickMenu);
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+    _rect = r;
     _viewWidth = r.w;
     _viewHeight = r.h;
     [bitmap setColor:@"white"];

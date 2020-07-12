@@ -132,12 +132,13 @@ NSLog(@"target %@", target);
 {
     if ([obj respondsToSelector:@selector(bitmapWidth)]) {
         if ([obj respondsToSelector:@selector(bitmapHeight)]) {
+            int navigationBarHeight = [Definitions navigationBarHeight];
             int bitmapWidth = [obj bitmapWidth]; 
             int bitmapHeight = [obj bitmapHeight];
             int viewWidth = [event intValueForKey:@"viewWidth"];
             int viewHeight = [event intValueForKey:@"viewHeight"];
             int mouseX = [event intValueForKey:@"mouseX"];
-            int mouseY = [event intValueForKey:@"mouseY"];
+            int mouseY = [event intValueForKey:@"mouseY"] - navigationBarHeight;
             int adjustedX = (double)mouseX / ((double)viewWidth/(double)bitmapWidth);
             int adjustedY = (double)mouseY / ((double)viewHeight/(double)bitmapHeight);
             [event setValue:nsfmt(@"%d", adjustedX) forKey:@"mouseX"];
@@ -767,7 +768,6 @@ NSLog(@"context %@", _context);
     id obj = [_context valueForKey:@"object"];
     if ([obj respondsToSelector:@selector(handleScrollWheel:)]) {
         int navigationBarHeight = [Definitions navigationBarHeight];
-        [event setValue:nsfmt(@"%d", [event intValueForKey:@"mouseY"]-navigationBarHeight) forKey:@"mouseY"];
         [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - navigationBarHeight) forKey:@"viewHeight"];
         [obj handleScrollWheel:event];
     }
@@ -782,7 +782,6 @@ NSLog(@"context %@", _context);
         [self setValue:button forKey:@"buttonDown"];
         _buttonPassthrough = NO;
     } else {
-        [event setValue:nsfmt(@"%d", [event intValueForKey:@"mouseY"]-navigationBarHeight) forKey:@"mouseY"];
         [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - navigationBarHeight) forKey:@"viewHeight"];
         if ([obj respondsToSelector:@selector(handleMouseDown:)]) {
             [Definitions fixupEvent:event forBitmapObject:obj];
@@ -801,7 +800,6 @@ NSLog(@"context %@", _context);
         [self setValue:button forKey:@"rightButtonDown"];
         _buttonPassthrough = NO;
     } else {
-        [event setValue:nsfmt(@"%d", [event intValueForKey:@"mouseY"]-navigationBarHeight) forKey:@"mouseY"];
         [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - [Definitions navigationBarHeight]) forKey:@"viewHeight"];
         if ([obj respondsToSelector:@selector(handleRightMouseDown:)]) {
             [obj handleRightMouseDown:event];
@@ -828,7 +826,6 @@ NSLog(@"context %@", _context);
         }
     } else {
         int navigationBarHeight = [Definitions navigationBarHeight];
-        [event setValue:nsfmt(@"%d", [event intValueForKey:@"mouseY"]-navigationBarHeight) forKey:@"mouseY"];
         [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - navigationBarHeight) forKey:@"viewHeight"];
         if ([obj respondsToSelector:@selector(handleMouseUp:)]) {
             [Definitions fixupEvent:event forBitmapObject:obj];
@@ -866,7 +863,6 @@ NSLog(@"obj %@", obj);
         }
     } else {
         int navigationBarHeight = [Definitions navigationBarHeight];
-        [event setValue:nsfmt(@"%d", [event intValueForKey:@"mouseY"]+navigationBarHeight) forKey:@"mouseY"];
         [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - navigationBarHeight) forKey:@"viewHeight"];
         if ([obj respondsToSelector:@selector(handleRightMouseUp:)]) {
             [obj handleRightMouseUp:event];
@@ -896,7 +892,6 @@ NSLog(@"obj %@", obj);
         id button = [self buttonForMousePosEvent:event];
         [self setValue:button forKey:@"buttonHover"];
     } else {
-        [event setValue:nsfmt(@"%d", [event intValueForKey:@"mouseY"] - cellHeight) forKey:@"mouseY"];
         [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - cellHeight) forKey:@"viewHeight"];
         if ([obj respondsToSelector:@selector(handleMouseMoved:)]) {
             [Definitions fixupEvent:event forBitmapObject:obj];
