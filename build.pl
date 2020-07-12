@@ -136,6 +136,7 @@ clang -c -O3
     $cflags
     -DBUILD_FOUNDATION
     -DBUILD_FOR_LINUX
+    -DBUILD_WITH_GNU_PRINTF
     -fobjc-nonfragile-abi
     -fblocks
     -o $objectPath $sourcePath 2>>$logPath
