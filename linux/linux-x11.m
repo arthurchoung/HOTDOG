@@ -2146,7 +2146,7 @@ NSLog(@"Too much data and INCR not found\n");
 
     XGetWindowProperty(_display, target, prop, 0, size, False, AnyPropertyType,
                        &da, &di, &dul, &dul, &prop_ret);
-NSLog(@"%s", prop_ret);
+NSLog(@"prop_ret '%s'", (prop_ret) ? prop_ret : "(null)");
     id str = nscstr(prop_ret);
     fflush(stdout);
     XFree(prop_ret);
@@ -2216,12 +2216,12 @@ NSLog(@"handleX11SelectionRequest");
     XSelectionEvent ssev;
 
     char *name = XGetAtomName(_display, sev->target);
-NSLog(@"Send none for request target'%s'", name);
+NSLog(@"Send none for request target'%s'", (name) ? name : "(null)");
     if (name) {
         XFree(name);
     }
     name = XGetAtomName(_display, sev->property);
-NSLog(@"Send none for request property '%s'", name);
+NSLog(@"Send none for request property '%s'", (name) ? name : "(null)");
     if (name) {
         XFree(name);
     }
@@ -2244,7 +2244,7 @@ NSLog(@"Send none for request property '%s'", name);
     char *cstr = [str UTF8String];
 
     char *name = XGetAtomName(_display, sev->property);
-NSLog(@"Sending data to window 0x%lx property '%s'", sev->requestor, name);
+NSLog(@"Sending data to window 0x%lx property '%s'", sev->requestor, (name) ? name : "(null)");
     if (name)
         XFree(name);
 
@@ -2281,7 +2281,7 @@ NSLog(@"Targets:");
     for (i = 0; i < nitems; i++)
     {
         an = XGetAtomName(_display, targets[i]);
-NSLog(@"    '%s'\n", an);
+NSLog(@"    '%s'\n", (an) ? an : "(null)");
         if (an)
             XFree(an);
     }
