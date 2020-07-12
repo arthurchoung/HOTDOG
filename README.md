@@ -55,6 +55,25 @@ $ ./peeos
 
 
 
+## Dependencies
+
+The following executables must be in your PATH:
+
+  * inotifywait
+  * xrandr
+  * ifconfig (used by Utils/printNetworkInfo)
+
+(this list is probably incomplete)
+
+The following libraries must have headers available and be linkable:
+
+  * libX11
+  * libXext
+  * libXfixes
+  * libGL (Mesa should work)
+
+
+
 ## Legal
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
