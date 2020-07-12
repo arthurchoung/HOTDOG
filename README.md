@@ -57,12 +57,16 @@ $ ./peeos
 
 ## Dependencies
 
-The following executables must be in your PATH:
+The following executables must be in your PATH or at location if specified:
 
-  * clang
   * inotifywait
   * xrandr
   * ifconfig (used by Utils/printNetworkInfo)
+  * find (used by build.pl)
+  * clang
+  * /usr/bin/perl
+  * /bin/bash (used by Utils/printDateEverySecondForTimezone:text:)
+  * date (used by Utils/printDateEverySecondForTimezone:text:)
 
 (this list is probably incomplete)
 
@@ -72,6 +76,20 @@ The following libraries must have headers available and be linkable:
   * libXext
   * libXfixes
   * libGL (Mesa should work)
+  * libpthread
+  * libm
+
+These are optional:
+
+  * xterm
+  * mpv
+  * mupdf (used by Config/fileHandlers.csv)
+  * firefox (used by Config/rootWindowMenu.csv and Config/fileHandlers.csv)
+  * thunderbird (used by Config/rootWindowMenu.csv)
+  * x64 (used by Config/fileHandlers.csv)
+  * mupen64plus (used by Config/fileHandlers.csv)
+
+(this list is probably incomplete)
 
 
 
