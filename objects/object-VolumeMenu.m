@@ -233,6 +233,11 @@ NSLog(@"alsaStatus '%@'", line);
 {
     id obj = self;
     
+    Int4 rr = r;
+    r.x += 1;
+    r.y += 1;
+    r.w -= 3;
+    r.h -= 3;
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
     [bitmap setColor:@"black"];
@@ -246,10 +251,12 @@ NSLog(@"alsaStatus '%@'", line);
     volumeSliderRect.h -= 8;
     [self drawVolumeSliderInBitmap:bitmap rect:volumeSliderRect pct:sliderPct];
 
-    [bitmap drawHorizontalLineX:0 x:r.w-1 y:0];
-    [bitmap drawHorizontalLineX:0 x:r.w-1 y:r.h-1];
-    [bitmap drawVerticalLineX:0 y:0 y:r.h-1];
-    [bitmap drawVerticalLineX:r.w-1 y:0 y:r.h-1];
+    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y];
+    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-1];
+    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-2];
+    [bitmap drawVerticalLineX:rr.x y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawVerticalLineX:rr.x+rr.w-1 y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawVerticalLineX:rr.x+rr.w-2 y:rr.y y:rr.y+rr.h-1];
 }
 
 - (void)drawVolumeSliderInBitmap:(id)bitmap rect:(Int4)r pct:(double)pct

@@ -110,8 +110,8 @@
     Int4 r = outerRect;
     r.x += 1;
     r.y += 1;
-    r.w -= 2;
-    r.h -= 2;
+    r.w -= 3;
+    r.h -= 3;
     [bitmap setColor:@"black"];
     [bitmap fillRect:outerRect];
     [bitmap setColor:@"white"];

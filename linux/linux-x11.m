@@ -836,15 +836,20 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     e.xclient.data.l[1] = CurrentTime;
     XSendEvent(_display, win, False, NoEventMask, &e);
 }
-- (void)addShadowMaskToObjectWindow:(id)object
+- (void)addShadowMaskToObjectWindow:(id)dict
 {
-    id window = [object valueForKey:@"window"];
+    id object = [dict valueForKey:@"object"];
+    int hasShadow = [object intValueForKey:@"hasShadow"];
+    if (hasShadow < 1) {
+        return;
+    }
+    id window = [dict valueForKey:@"window"];
     if (!window) {
         return;
     }
     unsigned long win = [window unsignedLongValue];
-    int w = [object intValueForKey:@"w"];
-    int h = [object intValueForKey:@"h"];
+    int w = [dict intValueForKey:@"w"];
+    int h = [dict intValueForKey:@"h"];
     XGCValues xgcv;
     xgcv.foreground = WhitePixel(_display, DefaultScreen(_display));
     xgcv.line_width = 1;
@@ -854,8 +859,10 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     XSetForeground(_display, shape_gc, 1);
     XFillRectangle(_display, shape_pixmap, shape_gc, 0, 0, w, h);
     XSetForeground(_display, shape_gc, 0);
-    XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-1);
-    XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 0);
+    for (int i=0; i<hasShadow; i++) {
+        XDrawPoint(_display, shape_pixmap, shape_gc, i, h-1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, i);
+    }
     XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
     XFreeGC(_display, shape_gc);
     XFreePixmap(_display, shape_pixmap);
@@ -1204,11 +1211,6 @@ if ([monitor intValueForKey:@"height"] == 768) {
             XFreeGC(_display, gc);
             XDestroyImage(ximage);
         } else {
-            int hasShadow = [object intValueForKey:@"hasShadow"];
-            if (hasShadow) {
-                w -= 1;
-                h -= 1;
-            }
             id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:w height:h] autorelease];
             Int4 r = [Definitions rectWithX:x y:y w:w h:h];
             if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
@@ -1226,11 +1228,6 @@ if ([monitor intValueForKey:@"height"] == 768) {
 
             XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h);
             GC gc = XCreateGC(_display, win, 0, 0);
-            if (hasShadow) {
-                XSetForeground(_display, gc, _blackPixel);
-                XDrawLine(_display, win, gc, 0, h, w, h);
-                XDrawLine(_display, win, gc, w, 0, w, h);
-            }
             XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
             XFreeGC(_display, gc);
             XDestroyImage(ximage);

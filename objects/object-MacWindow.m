@@ -759,6 +759,19 @@
 "bbbbbbbbbbbbbbbb\n"
 ;
 }
++ (char *)cStringForMacWindowSelectionHorizontal
+{
+    return 
+"bw\n"
+;
+}
++ (char *)cStringForMacWindowSelectionVertical
+{
+    return 
+"b\n"
+"w\n"
+;
+}
 @end
 
 
@@ -964,6 +977,9 @@
 {
     int hasFocus = [context intValueForKey:@"hasFocus"];
 
+    Int4 rr = r;
+    r.w -= 1;
+    r.h -= 1;
     [self calculateRects:r];
     char *palette = [Definitions cStringForTitleBarPalette];
     int titleBarHeight = 20;
@@ -1025,11 +1041,34 @@
     } else {
         [bitmap setColor:@"#555555ff"];
     }
-    [bitmap drawLineX:r.x y:r.y x:r.x y:r.y+r.h-1];
-    [bitmap drawLineX:r.x+r.w-1 y:r.y x:r.x+r.w-1 y:r.y+r.h-1];
-    [bitmap drawLineX:r.x y:r.y x:r.x+r.w-1 y:r.y];
-    [bitmap drawLineX:r.x y:r.y+r.h-1 x:r.x+r.w-1 y:r.y+r.h-1];
+    [bitmap drawVerticalLineX:rr.x y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawVerticalLineX:rr.x+rr.w-1 y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawVerticalLineX:rr.x+rr.w-2 y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y];
+    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-1];
+    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-2 y:rr.y+rr.h-2];
 
+    if (_buttonDown == 't') {
+        char *palette = "b #000000\nw #ffffff\n";
+        char *h = [Definitions cStringForMacWindowSelectionHorizontal];
+        char *v = [Definitions cStringForMacWindowSelectionVertical];
+        [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y w:r.w+1 palette:palette];
+        [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x y:r.y+1 h:r.h+1-2];
+        [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w+1-1 y:r.y+1 h:r.h+1-2];
+        [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+r.h+1-1 w:r.w+1 palette:palette];
+    }
+    if (_buttonDown == 'r') {
+        char *palette = "b #000000\nw #ffffff\n";
+        char *h = [Definitions cStringForMacWindowSelectionHorizontal];
+        char *v = [Definitions cStringForMacWindowSelectionVertical];
+        [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y w:r.w palette:palette];
+        [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+18 w:r.w palette:palette];
+        [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x y:r.y+1 h:r.h-2];
+        [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-1 y:r.y+1 h:r.h-2];
+        [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-1-15 y:r.y+1 h:r.h-2];
+        [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+r.h-1 w:r.w palette:palette];
+        [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+r.h-1-15 w:r.w palette:palette];
+    }
 
 }
 - (void)handleMouseDown:(id)event

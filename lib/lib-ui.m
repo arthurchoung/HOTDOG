@@ -480,6 +480,24 @@
 "   bbbbb   \n"
 ;
 }
++ (void)drawInBitmap:(id)bitmap left:(unsigned char *)left palette:(unsigned char *)leftPalette middle:(unsigned char *)middle palette:(unsigned char *)middlePalette right:(unsigned char *)right palette:(unsigned char *)rightPalette x:(int)startX y:(int)startY w:(int)w
+{
+    int middleHeight = [Definitions heightForCString:middle];
+    int leftWidth = [Definitions widthForCString:left];
+    int middleWidth = [Definitions widthForCString:middle];
+    int rightWidth = [Definitions widthForCString:right];
+
+    [bitmap drawCString:left palette:leftPalette x:startX y:startY];
+
+    if (middleWidth) {
+        int x = leftWidth;
+        for (x=leftWidth; x<w-rightWidth; x+=middleWidth) {
+            [bitmap drawCString:middle palette:middlePalette x:startX+x y:startY];
+        }
+    }
+
+    [bitmap drawCString:right palette:rightPalette x:startX+w-rightWidth y:startY];
+}
 + (void)drawInBitmap:(id)bitmap left:(unsigned char *)left middle:(unsigned char *)middle right:(unsigned char *)right x:(int)startX y:(int)startY w:(int)w palette:(unsigned char *)palette
 {
     int middleHeight = [Definitions heightForCString:middle];
@@ -516,6 +534,18 @@
     }
 
     [bitmap drawCString:right palette:palette x:centeredRect.x+centeredRect.w-rightWidth y:centeredRect.y];
+}
++ (void)drawInBitmap:(id)bitmap top:(unsigned char *)top palette:(unsigned char *)topPalette middle:(unsigned char *)middle palette:(unsigned char *)middlePalette bottom:(unsigned char *)bottom palette:(unsigned char *)bottomPalette x:(int)startX y:(int)startY h:(int)h
+{
+    int heightForTop = [Definitions heightForCString:top];
+    int heightForMiddle = [Definitions heightForCString:middle];
+    int heightForBottom = [Definitions heightForCString:bottom];
+
+    [bitmap drawCString:top palette:topPalette x:startX y:startY];
+    for (int y=startY+heightForTop; y<startY+h-heightForBottom; y+=heightForMiddle) {
+        [bitmap drawCString:middle palette:middlePalette x:startX y:y];
+    }
+    [bitmap drawCString:bottom palette:bottomPalette x:startX y:startY+h-heightForBottom];
 }
 
 
