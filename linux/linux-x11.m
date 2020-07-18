@@ -490,7 +490,7 @@ exit(0);
     if ([object respondsToSelector:@selector(preferredHeight)]) {
         h = [object preferredHeight];
     }
-    [self runWindowManagerForObject:object x:0 y:19 w:w h:h];
+    [self runWindowManagerForObject:object x:0 y:20 w:w h:h];
 }
 + (id)setupWindowManagerForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h
 {
@@ -762,8 +762,8 @@ NSLog(@"Another window manager is running");
             continue;
         }
         int newY = attrs.y;
-        if (newY < _menuBarHeight-1) {
-            newY = _menuBarHeight-1;
+        if (newY < _menuBarHeight) {
+            newY = _menuBarHeight;
         }
         [self reparentWindow:win x:attrs.x y:newY w:attrs.width h:attrs.height];
     }
@@ -1889,8 +1889,8 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
             attrs.x = [monitor intValueForKey:@"x"];
         }
     }
-    if (attrs.y < _menuBarHeight-1) {
-        attrs.y = _menuBarHeight-1;
+    if (attrs.y < _menuBarHeight) {
+        attrs.y = _menuBarHeight;
     }
 
     id dict = [self reparentWindow:e->window x:attrs.x y:attrs.y w:attrs.width h:attrs.height];
@@ -2430,7 +2430,7 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
 //FIXME
     id dict = [self dictForObjectWindowClassName:@"BackgroundAgents"];
     if (dict) {
-        [self openWindowForExistingObjectWindow:dict x:0 y:_menuBarHeight-1 w:400 h:400];
+        [self openWindowForExistingObjectWindow:dict x:0 y:_menuBarHeight w:400 h:400];
     }
 }
 - (void)XReparentWindow:(unsigned long)child :(unsigned long)parent :(int)x :(int)y
