@@ -40,7 +40,6 @@ static char *bananaHighlightedPalette =
 
 static char *bananaPixels =
 ".................\n"
-".................\n"
 "........b........\n"
 ".......bwb.......\n"
 "......bwyyb......\n"

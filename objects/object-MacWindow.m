@@ -838,9 +838,9 @@
     int monitorWidth = [monitor intValueForKey:@"width"];
     int monitorHeight = [monitor intValueForKey:@"height"];
     int newX = monitorX;
-    int newY = menuBarHeight;
+    int newY = menuBarHeight-1;
     int newW = monitorWidth;
-    int newH = monitorHeight-menuBarHeight;
+    int newH = monitorHeight-(menuBarHeight-1);
     [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
     [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
 }
@@ -865,9 +865,9 @@
         monitorHeight = [monitor intValueForKey:@"height"];
     }
     int newX = monitorX;
-    int newY = menuBarHeight;
+    int newY = menuBarHeight-1;
     int newW = monitorWidth;
-    int newH = (monitorHeight-menuBarHeight)/2;
+    int newH = (monitorHeight-(menuBarHeight-1))/2;
     [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
     [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
 }
@@ -888,8 +888,8 @@
     if (monitor) {
         monitorHeight = [monitor intValueForKey:@"height"];
     }
-    int newY = menuBarHeight;
-    int newH = monitorHeight-menuBarHeight;
+    int newY = menuBarHeight-1;
+    int newH = monitorHeight-(menuBarHeight-1);
     [dict setValue:nsfmt(@"%d %d", oldX, newY) forKey:@"moveWindow"];
     [dict setValue:nsfmt(@"%d %d", oldW, newH) forKey:@"resizeWindow"];
 }
@@ -925,9 +925,9 @@
             monitorHeight = [monitor intValueForKey:@"height"];
         }
         int newX = monitorX;
-        int newY = menuBarHeight;
+        int newY = menuBarHeight-1;
         int newW = monitorWidth;
-        int newH = monitorHeight-menuBarHeight;
+        int newH = monitorHeight-(menuBarHeight-1);
         [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
         [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
     }
@@ -1155,8 +1155,8 @@
         if (newX < 0) {
             newX = 0;
         }
-        if (newY < menuBarHeight) {
-            newY = menuBarHeight;
+        if (newY < menuBarHeight-1) {
+            newY = menuBarHeight-1;
         }
 
         [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];

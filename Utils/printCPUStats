@@ -54,16 +54,16 @@ sub print_bar_chart
 {
     my @pcts = @_;
 
-    my $barHeight = 20;
+    my $barHeight = 16;
     my $spacing = 1;
     my $barWidth = 10;
 
-    my @heights = map { int ($_ * $barHeight) } @pcts;
+    my @heights = map { int ($_ * $barHeight) + 1 } @pcts;
 
-    print "pixels\n";
+    print "\npixels\n";
 
     my $y;
-    for ($y=20; $y>0; $y--) {
+    for ($y=18; $y>0; $y--) {
         my @arr = ();
         my $height;
         foreach $height (@heights) {

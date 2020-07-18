@@ -265,7 +265,7 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
         h = [obj preferredHeight];
     }
     id windowManager = [@"windowManager" valueForKey];
-    id menuDict = [windowManager openWindowForObject:obj x:x y:20 w:w+3 h:h+3];
+    id menuDict = [windowManager openWindowForObject:obj x:x y:19 w:w+3 h:h+3];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
 }
@@ -322,6 +322,8 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
 
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
+    [bitmap setColor:@"black"];
+    [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:r.y+19];
 
     id windowManager = [@"windowManager" valueForKey];
     int mouseRootX = [windowManager intValueForKey:@"mouseX"];
@@ -345,7 +347,7 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
                 monitorIndex++;
             }
             [bitmap setColorIntR:0 g:0 b:0 a:255];
-            [bitmap drawBitmapText:[text join:@""] x:monitorX+leftCornerWidth*2 y:5];
+            [bitmap drawBitmapText:[text join:@""] x:monitorX+leftCornerWidth*2 y:4];
         }
     }
 

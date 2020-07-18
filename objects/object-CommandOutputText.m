@@ -95,7 +95,7 @@
     if (!str) {
         str = @"No output";
     }
-    [bitmap drawBitmapText:str x:r.x y:r.y+4];
+    [bitmap drawBitmapText:str x:r.x y:r.y+3];
 }
 - (void)drawHighlightedInBitmap:(id)bitmap rect:(Int4)r
 {
@@ -104,7 +104,7 @@
         str = @"No output";
     }
     [bitmap setColorIntR:255 g:255 b:255 a:255];
-    [bitmap drawBitmapText:str x:r.x y:r.y+4];
+    [bitmap drawBitmapText:str x:r.x y:r.y+3];
 }
 
 @end

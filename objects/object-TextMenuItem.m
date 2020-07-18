@@ -62,13 +62,13 @@
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
     id str = [self str:_text];
-    [bitmap drawBitmapText:str x:r.x y:r.y+4];
+    [bitmap drawBitmapText:str x:r.x y:r.y+3];
 }
 - (void)drawHighlightedInBitmap:(id)bitmap rect:(Int4)r
 {
     id str = [self str:_text];
     [bitmap setColorIntR:255 g:255 b:255 a:255];
-    [bitmap drawBitmapText:str x:r.x y:r.y+4];
+    [bitmap drawBitmapText:str x:r.x y:r.y+3];
 }
 
 

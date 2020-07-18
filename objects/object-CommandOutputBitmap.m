@@ -71,6 +71,9 @@
                 break;
             }
             line = [line chomp];
+            if (![line length]) {
+                continue;
+            }
             [self setValue:line forKey:@"firstLine"];
         } else {
             id lines = [data readGroupOfLines];
