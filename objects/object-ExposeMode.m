@@ -101,8 +101,7 @@
 {
     id windowManager = [@"windowManager" valueForKey];
     id reparentClass = [[windowManager valueForKey:@"reparentClassName"] asClass];
-    id settings = [Definitions monitorConfig];
-    id monitors = [settings valueForKey:@"monitors"];
+    id monitors = [Definitions monitorConfig];
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
     id arr = nsarr();
     for (int i=0; i<[monitors count]; i++) {
