@@ -77,7 +77,7 @@ NSLog(@"DEALLOC AmigaMenuBar");
     }
     return NO;
 }
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
 {
     if (_closingIteration > 0) {
         _closingIteration--;
@@ -305,7 +305,7 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
     int mouseRootX = [windowManager intValueForKey:@"mouseX"];
     id mouseMonitor = [Definitions monitorForX:mouseRootX y:0];
 
-    id monitors = [[Definitions monitorConfig] valueForKey:@"monitors"];
+    id monitors = [Definitions monitorConfig];
     for (int monitorI=0; monitorI<[monitors count]; monitorI++) {
         id monitor = [monitors nth:monitorI];
         int monitorX = [monitor intValueForKey:@"x"];
