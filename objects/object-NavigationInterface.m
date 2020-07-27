@@ -700,10 +700,10 @@ NSLog(@"pushObject:%@ not allowed", obj);
     return NO;
 }
     
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
 {
     if (_animateIteration < _animateMaxIteration) {
-NSLog(@"performIteration animateIteration %d", _animateIteration);
+NSLog(@"beginIteration animateIteration %d", _animateIteration);
         _animateIteration++;
         if (_animateIteration >= _animateMaxIteration) {
             [_animateFromContext setValue:nil forKey:@"bitmap"];
@@ -721,8 +721,17 @@ NSLog(@"context %@", _context);
     }
     id obj = [_context valueForKey:@"object"];
     if (obj) {
-        if ([obj respondsToSelector:@selector(performIteration:)]) {
-            [obj performIteration:event];
+        if ([obj respondsToSelector:@selector(beginIteration:rect:)]) {
+            [obj beginIteration:event rect:r];
+        }
+    }
+}
+- (void)endIteration:(id)event
+{
+    id obj = [_context valueForKey:@"object"];
+    if (obj) {
+        if ([obj respondsToSelector:@selector(endIteration:)]) {
+            [obj endIteration:event];
         }
     }
 }
@@ -996,9 +1005,8 @@ NSLog(@"keyString '%@'", keyString);
 #ifdef BUILD_FOR_LINUX
 #ifdef BUILD_FOR_ANDROID
 #else
-            else if ([obj respondsToSelector:@selector(updateBitmap)]) {
+            else if ([obj respondsToSelector:@selector(pixelBytesRGBA8888)]) {
                 if (![[@"windowManager" valueForKey] valueForKey:@"openGLTexture"]) {
-                    [obj updateBitmap];
                     int bitmapWidth = [obj bitmapWidth];
                     int bitmapHeight = [obj bitmapHeight];
                     char *bytes = [obj pixelBytesRGBA8888];
