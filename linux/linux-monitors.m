@@ -90,8 +90,7 @@
 {
     id windowManager = [@"windowManager" valueForKey];
 
-    id config = [Definitions monitorConfig];
-    id monitors = [config valueForKey:@"monitors"];
+    id monitors = [Definitions monitorConfig];
     int index = 1;
     for (id monitor in monitors) {
         [Definitions showAlert:nsfmt(@"Monitor %d of %d (%@)", index, [monitors count], [monitor valueForKey:@"output"]) monitor:monitor];
@@ -155,8 +154,7 @@
 }
 + (void)setupMonitors
 {
-    id config = [Definitions monitorConfig];
-    id monitors = [config valueForKey:@"monitors"];
+    id monitors = [Definitions monitorConfig];
     for (id elt in monitors) {
         id output = [elt valueForKey:@"output"];
         id rightOf = [elt valueForKey:@"rightOf"];
@@ -184,8 +182,7 @@ NSLog(@"setupMonitors cmd %@", cmd);
 }
 + (id)monitorIndexNameForX:(int)x y:(int)y
 {
-    id config = [Definitions monitorConfig];
-    id monitors = [config valueForKey:@"monitors"];
+    id monitors = [Definitions monitorConfig];
     for (int index=0; index<[monitors count]; index++) {
         id elt = [monitors nth:index];
         int monitorX = [elt intValueForKey:@"x"];
@@ -201,8 +198,7 @@ NSLog(@"setupMonitors cmd %@", cmd);
 }
 + (int)monitorIndexForX:(int)x y:(int)y
 {
-    id config = [Definitions monitorConfig];
-    id monitors = [config valueForKey:@"monitors"];
+    id monitors = [Definitions monitorConfig];
     for (int index=0; index<[monitors count]; index++) {
         id elt = [monitors nth:index];
         int monitorX = [elt intValueForKey:@"x"];
@@ -218,8 +214,7 @@ NSLog(@"setupMonitors cmd %@", cmd);
 }
 + (id)monitorForX:(int)x y:(int)y
 {
-    id config = [Definitions monitorConfig];
-    id monitors = [config valueForKey:@"monitors"];
+    id monitors = [Definitions monitorConfig];
     for (id elt in monitors) {
         int monitorX = [elt intValueForKey:@"x"];
         int monitorWidth = [elt intValueForKey:@"width"];
@@ -236,8 +231,6 @@ NSLog(@"setupMonitors cmd %@", cmd);
 {
     id arr = [Definitions detectMonitors];
     int x = 0;
-    int lowestHeight = 0;
-    int highestHeight = 0;
     id prevElt = nil;
     for (id elt in arr) {
         id rotate = [elt valueForKey:@"rotate"];
@@ -251,22 +244,10 @@ NSLog(@"setupMonitors cmd %@", cmd);
         [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
         x += [elt intValueForKey:@"width"];
         int h = [elt intValueForKey:@"height"];
-        if (!lowestHeight || (h < lowestHeight)) {
-            lowestHeight = h;
-        }
-        if (!highestHeight || (h > highestHeight)) {
-            highestHeight = h;
-        }
         [elt setValue:[prevElt valueForKey:@"output"] forKey:@"rightOf"];
         prevElt = elt;
     }
-    [prevElt setValue:@"1" forKey:@"rightmost"];
-    id dict = nsdict();
-    [dict setValue:nsfmt(@"%d", x) forKey:@"totalWidth"];
-    [dict setValue:nsfmt(@"%d", lowestHeight) forKey:@"lowestHeight"];
-    [dict setValue:nsfmt(@"%d", highestHeight) forKey:@"highestHeight"];
-    [dict setValue:arr forKey:@"monitors"];
-    return dict;
+    return arr;
 }
 @end
 
