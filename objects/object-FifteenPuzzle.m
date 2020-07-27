@@ -602,7 +602,7 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
     }
     return (_flash) ? YES : NO;
 }
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
 {
     if (_flash > 0) {
         _flash--;
@@ -612,6 +612,7 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
     } else {
         [self automaticallyMovePiece];
     }
+    [self updateBitmap];
 }
 - (id)init
 {
