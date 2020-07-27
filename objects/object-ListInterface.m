@@ -297,7 +297,7 @@
 @implementation NSString(fjklswjfklsdjf)
 - (id)asListInterfaceForDirectoryReverseSorted
 {
-    return [self asListInterfaceWithMessage:@"asArrayReverseSortedWithKey:'displayName'"];
+    return [self asListInterfaceWithSortMessage:@"asArrayReverseSortedWithKey:'displayName'"];
 }
 @end
 
@@ -388,7 +388,7 @@ NSLog(@"setAllStringFormat:'%@'", val);
     [[vc navigationItem] setValue:[self lastPathComponent] forKey:@"title"];
     return vc;
 }
-- (id)asListInterfaceWithMessage:(id)message
+- (id)asListInterfaceWithSortMessage:(id)message
 {
     id arr = [self arrayFromPath];
     arr = [arr evaluateMessage:message];
@@ -416,7 +416,7 @@ NSLog(@"setAllStringFormat:'%@'", val);
     [scroll setupPath:self];
     return scroll;
 }
-- (id)asListInterfaceWithMessage:(id)message
+- (id)asListInterfaceWithSortMessage:(id)message
 {
     id scroll = [@"ListInterface" asInstance];
     [scroll setValue:message forKey:@"sortMessage"];
@@ -433,11 +433,22 @@ NSLog(@"setAllStringFormat:'%@'", val);
 
 @end
 
+@implementation Definitions(fjskdlfjklsdjfk)
++ (id)ListInterfaceWithMessage:(id)message observer:(id)observer
+{
+    id obj = [@"ListInterface" asInstance];
+    [obj setupMessage:message observer:observer];
+    return obj;
+}
+@end
+
 
 
 @interface ListInterface : IvarObject
 {
     id _headerFormat;
+    id _message;
+    id _observer;
     id _path;
     id _array;
     int _objectOffsetY;
@@ -491,6 +502,12 @@ NSLog(@"ListInterface dealloc inotifywait %@", _inotifywait);
     [self setValue:dict forKey:@"dict"];
     [self setValue:arr forKey:@"array"];
 }
+- (void)setupMessage:(id)message observer:(id)observer
+{
+    [self setValue:message forKey:@"message"];
+    [self setValue:observer forKey:@"observer"];
+    [self updateArray];
+}
 - (void)setupPath:(id)path
 {
     [self setValue:@"#{path|lastPathComponent}" forKey:@"headerFormat"];
@@ -508,7 +525,9 @@ NSLog(@"ListInterface dealloc inotifywait %@", _inotifywait);
 - (void)updateArray
 {
     id arr = nil;
-    if (_path) {
+    if (_message) {
+        arr = [@{} evaluateMessage:_message];
+    } else if (_path) {
         arr = [_path arrayFromPath];
     } else {
         arr = _array;
@@ -541,6 +560,9 @@ NSLog(@"ListInterface dealloc inotifywait %@", _inotifywait);
 
 - (int)fileDescriptor
 {
+    if (_observer) {
+        return [_observer fileDescriptor];
+    }
     if (_inotifywait) {
         return [_inotifywait fileDescriptor];
     }
@@ -548,14 +570,30 @@ NSLog(@"ListInterface dealloc inotifywait %@", _inotifywait);
 }
 - (void)handleFileDescriptor
 {
-    if (!_inotifywait) {
+    if (_observer) {
+        [_observer handleFileDescriptor];
+        id data = [_observer valueForKey:@"data"];
+        BOOL didReadLine = NO;
+        for(;;) {
+            id line = [data readLine];
+NSLog(@"line '%@'", line);
+            if (!line) {
+                break;
+            }
+            didReadLine = YES;
+        }
+        if (didReadLine) {
+            [self updateArray];
+        }
         return;
     }
-    [_inotifywait handleFileDescriptor];
-    id notifications = [_inotifywait valueForKey:@"notifications"];
-    if ([notifications count]) {
-        [_inotifywait setValue:nil forKey:@"notifications"];
-        [self updateArray];
+    if (_inotifywait) {
+        [_inotifywait handleFileDescriptor];
+        id notifications = [_inotifywait valueForKey:@"notifications"];
+        if ([notifications count]) {
+            [_inotifywait setValue:nil forKey:@"notifications"];
+            [self updateArray];
+        }
     }
 }
 
