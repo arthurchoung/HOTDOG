@@ -29,6 +29,9 @@
 
 #include <fcntl.h>
 
+// change name: parseCSV|asCSVUsingHeader
+// fix amiga buttons
+// inotifywait vs just check timestamp
 // cleanup performIteration/drawInBitmap for menus
 // xinput2 / xeyes
 // keyboard
@@ -550,6 +553,7 @@ exit(0);
     int _mouseY;
     id _openGLTexture;
     id _openGLObjectTexture;
+    Window _openGLWindow;
 }
 @end
 @implementation WindowManager
@@ -815,6 +819,27 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
      unsigned long objectWindow = [dict unsignedLongValueForKey:@"window"];
     XAddToSaveSet(_display, win);
     XSetWindowBorderWidth(_display, win, 0);
+
+    // set property WM_STATE
+    // seems to fix Wine wait_for_withdrawn_state
+    {
+        Atom atom = XInternAtom(_display, "WM_STATE", False);
+        unsigned long state[2];
+        state[0] = 1;
+        state[1] = None;
+        XChangeProperty(_display, win, atom, atom, 32, PropModeReplace, (unsigned char *)state, 2);
+    }
+
+    // set property _NET_FRAME_EXTENTS
+    // fixes Firefox form history popup window location
+    {
+        long propdata[4];
+        propdata[0] = leftBorder;
+        propdata[1] = rightBorder;
+        propdata[2] = topBorder;
+        propdata[3] = bottomBorder;
+        XChangeProperty(_display, win, XInternAtom(_display, "_NET_FRAME_EXTENTS", False), XA_CARDINAL, 32, PropModeReplace, &propdata[0], 4);
+    }
     XSelectInput(_display, win, PointerMotionMask|PropertyChangeMask);
     XReparentWindow(_display, win, objectWindow, leftBorder, topBorder);
     XMapWindow(_display, objectWindow);
@@ -1058,6 +1083,10 @@ NSLog(@"unparent object %@", dict);
 }
 - (unsigned long)openWindowWithName:(id)name x:(int)x y:(int)y w:(int)w h:(int)h
 {
+    return [self openWindowWithName:name x:x y:y w:w h:h overrideRedirect:NO];
+}
+- (unsigned long)openWindowWithName:(id)name x:(int)x y:(int)y w:(int)w h:(int)h overrideRedirect:(BOOL)overrideRedirect
+{
     XSetWindowAttributes setAttrs;
     setAttrs.colormap = XCreateColormap(_display, _rootWindow, _visualInfo.visual, AllocNone);
     if (_isWindowManager) {
@@ -1068,7 +1097,14 @@ NSLog(@"unparent object %@", dict);
     setAttrs.bit_gravity = NorthWestGravity;
     setAttrs.background_pixmap = None;
     setAttrs.border_pixel = 0;
-    Window win = XCreateWindow(_display, _rootWindow, x, y, w, h, 0, _visualInfo.depth, InputOutput, _visualInfo.visual, CWColormap|CWEventMask|CWBackPixmap|CWBorderPixel, &setAttrs);
+    unsigned long attrFlags = CWColormap|CWEventMask|CWBackPixmap|CWBorderPixel;
+    if (!_isWindowManager) {
+        if (overrideRedirect) {
+            setAttrs.override_redirect = True;
+            attrFlags |= CWOverrideRedirect;
+        }
+    }
+    Window win = XCreateWindow(_display, _rootWindow, x, y, w, h, 0, _visualInfo.depth, InputOutput, _visualInfo.visual, attrFlags, &setAttrs);
 
 
     if (!_isWindowManager) {
@@ -1079,12 +1115,15 @@ NSLog(@"unparent object %@", dict);
         Atom wm_delete_window = XInternAtom(_display, "WM_DELETE_WINDOW", 0);
         XSetWMProtocols(_display, win, &wm_delete_window, 1);
 
-        if ([Definitions setupOpenGLForDisplay:_display window:win visualInfo:&_visualInfo]) {
-            id texture = [@"GLTexture" asInstance];
-NSLog(@"x11 ALLOCATED textureID %d", [texture textureID]);
-            [self setValue:texture forKey:@"openGLTexture"];
-            id objectTexture = [@"GLTexture" asInstance];
-            [self setValue:objectTexture forKey:@"openGLObjectTexture"];
+        if (!_openGLTexture) {
+            if ([Definitions setupOpenGLForDisplay:_display window:win visualInfo:&_visualInfo]) {
+                id texture = [@"GLTexture" asInstance];
+    NSLog(@"x11 ALLOCATED textureID %d", [texture textureID]);
+                [self setValue:texture forKey:@"openGLTexture"];
+                id objectTexture = [@"GLTexture" asInstance];
+                [self setValue:objectTexture forKey:@"openGLObjectTexture"];
+                _openGLWindow = win;
+            }
         }
     }
 
@@ -1093,7 +1132,11 @@ NSLog(@"x11 ALLOCATED textureID %d", [texture textureID]);
     return win;
 }
 
-- (id)openWindowForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h
+- (id)openWindowForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h 
+{
+    return [self openWindowForObject:object x:x y:y w:w h:h overrideRedirect:NO];
+}
+- (id)openWindowForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h overrideRedirect:(BOOL)overrideRedirect
 {
     if (!object) {
         return nil;
@@ -1109,7 +1152,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
     }
 
 
-    Window win = [self openWindowWithName:[[object class] description] x:x y:y w:w h:h];
+    Window win = [self openWindowWithName:[[object class] description] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
 
 
     id dict = nsdict();
@@ -1247,7 +1290,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
             text = [bitmap fitBitmapString:text width:w-10];
             [bitmap drawBitmapText:text x:5 y:5];
         }
-        if (_openGLTexture) {
+        if (_openGLTexture && (win == _openGLWindow)) {
 //NSLog(@"openGLTexture texture %d", [_openGLTexture textureID]);
             int drawUsingNearestFilter = 1;
             [Definitions clearOpenGLForWidth:w height:h];
@@ -1264,9 +1307,6 @@ if ([monitor intValueForKey:@"height"] == 768) {
                     unsigned char *pixelBytes = [obj pixelBytesRGBA8888];
                     if (pixelBytes) {
                         int navigationBarHeight = [Definitions navigationBarHeight];
-                        if ([obj respondsToSelector:@selector(updateBitmap)]) {
-                            [obj updateBitmap];
-                        }
                         int bitmapWidth = [obj bitmapWidth];
                         int bitmapHeight = [obj bitmapHeight];
                         int bitmapStride = bitmapWidth*4;
@@ -1283,9 +1323,6 @@ if ([monitor intValueForKey:@"height"] == 768) {
                     if (pixelBytes) {
 NSLog(@"pixelBytesBGR565 %d", draw_GL_NEAREST);
                         int navigationBarHeight = [Definitions navigationBarHeight];
-                        if ([obj respondsToSelector:@selector(updateBitmap)]) {
-                            [obj updateBitmap];
-                        }
                         int bitmapWidth = [obj bitmapWidth];
                         int bitmapHeight = [obj bitmapHeight];
                         if (draw_GL_NEAREST) {
@@ -1393,23 +1430,6 @@ NSLog(@"no object windows, exiting");
                 }
             }
 
-            for (id elt in _objectWindows) {
-                id obj = [elt valueForKey:@"object"];
-                if ([obj respondsToSelector:@selector(performIteration:)]) {
-                    id dict = nsdict();
-                    [dict setValue:self forKey:@"windowManager"];
-                    [dict setValue:elt forKey:@"x11dict"];
-//                    int oldNeedsRedraw = [elt intValueForKey:@"needsRedraw"];
-//                    [elt setValue:@"1" forKey:@"needsRedraw"];
-                    [obj performIteration:dict];
-//                    if (![elt intValueForKey:@"needsRedraw"]) {
-//                        if (oldNeedsRedraw) {
-//                            [elt setValue:@"1" forKey:@"needsRedraw"];
-//                        }
-//                    }
-                }
-            }
-
             if (!_isWindowManager) {
                 time_t timestamp = time(0);
                 if (timestamp != _backgroundUpdateTimestamp) {
@@ -1427,6 +1447,16 @@ NSLog(@"no object windows, exiting");
                 }
             }
 
+            for (id elt in _objectWindows) {
+                id obj = [elt valueForKey:@"object"];
+                if ([obj respondsToSelector:@selector(beginIteration:rect:)]) {
+                    Int4 r = [Definitions rectWithX:[elt intValueForKey:@"x"] y:[elt intValueForKey:@"y"] w:[elt intValueForKey:@"w"] h:[elt intValueForKey:@"h"]];
+                    id dict = nsdict();
+                    [dict setValue:self forKey:@"windowManager"];
+                    [dict setValue:elt forKey:@"x11dict"];
+                    [obj beginIteration:dict rect:r];
+                }
+            }
 
             for (id elt in _objectWindows) {
                 if ([elt valueForKey:@"needsRedraw"]) {
@@ -1564,6 +1594,16 @@ NSLog(@"ClientMessage event %lu %@", e->window, dict);
                     }
                 } else {
 NSLog(@"received X event type %d", event.type);
+                }
+            }
+
+            for (id elt in _objectWindows) {
+                id obj = [elt valueForKey:@"object"];
+                if ([obj respondsToSelector:@selector(endIteration:)]) {
+                    id dict = nsdict();
+                    [dict setValue:self forKey:@"windowManager"];
+                    [dict setValue:elt forKey:@"x11dict"];
+                    [obj endIteration:dict];
                 }
             }
 
@@ -1798,7 +1838,7 @@ NSLog(@"PropertyChange event enter");
     XPropertyEvent *e = eptr;
     char *atom = XGetAtomName(_display, e->atom);
     if (atom) {
-NSLog(@"PropertyChange atom %s", atom);
+NSLog(@"PropertyChange atom %s state %d (PropertyNewValue %d PropertyDelete %d)", atom, e->state, PropertyNewValue, PropertyDelete);
         if (!strcmp(atom, "WM_NAME")) {
             id dict = [self dictForObjectChildWindow:e->window];
             char *windowNameReturn = NULL;
@@ -1807,6 +1847,31 @@ NSLog(@"PropertyChange atom %s", atom);
                 [dict setValue:name forKey:@"name"];
                 XFree(windowNameReturn);
                 [dict setValue:@"1" forKey:@"needsRedraw"];
+            }
+        } else if (!strcmp(atom, "WM_HINTS")) {
+            XWMHints *hints = XGetWMHints(_display, e->window);
+            if (hints) {
+NSLog(@"WM_HINTS flags %x", hints->flags);
+                if (hints->flags & StateHint) {
+NSLog(@"WM_HINTS initial_state %d", hints->initial_state);
+                }
+                XFree(hints);
+            }
+        } else if (!strcmp(atom, "_NET_WM_WINDOW_TYPE")) {
+            Atom da;
+            int di;
+            unsigned long dl;
+            unsigned char *prop_ret = NULL;
+            int status = XGetWindowProperty(_display, e->window, e->atom, 0L, sizeof(Atom), False, XA_ATOM, &da, &di, &dl, &dl, &prop_ret);
+
+            if ((status == Success) && prop_ret) {
+                Atom prop = ((Atom *)prop_ret)[0];
+
+                char *str = XGetAtomName(_display, prop);
+NSLog(@"_NET_WM_WINDOW_TYPE: %s\n", str);
+                if (str) {
+                    XFree(str);
+                }
             }
         }
         XFree(atom);
@@ -1852,6 +1917,7 @@ NSLog(@"handleX11ConfigureRequest: parent %x window %x x %d y %d w %d h %d", e->
     id dict = [self dictForObjectChildWindow:e->window];
     if (dict) {
 NSLog(@"handleX11ConfigureRequest dict: %@", dict);
+NSLog(@"changes x %d y %d width %d height %d", e->x, e->y, e->width, e->height);
         return;
     }
 
@@ -1913,6 +1979,16 @@ NSLog(@"handleX11DestroyNotify e->event %x e->window %x", e->event, e->window);
 {
     XUnmapEvent *e = eptr;
 NSLog(@"handleX11UnmapNotify e->event %x e->window %x", e->event, e->window);
+
+    // Seems to fix UAE file dialog
+    {
+        id dict = [self dictForObjectChildWindow:e->window];
+        if (dict) {
+            if (e->event == [dict unsignedLongValueForKey:@"window"]) {
+                [self unparentObjectWindow:dict];
+            }
+        }
+    }
 }
 
 
@@ -2521,7 +2597,6 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
 {
     XSync(_display, (discard) ? True : False);
 }
-
 @end
 
 
