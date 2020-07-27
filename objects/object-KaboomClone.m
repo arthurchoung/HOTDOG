@@ -361,7 +361,13 @@ char *bomb3Pixels =
 {
     return YES;
 }
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
+{
+    [self updateState];
+    [self updateBitmap];
+}
+
+- (void)updateState
 {
     {
         double n = sin(M_PI/180.0*_iteration);
