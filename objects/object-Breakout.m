@@ -229,7 +229,7 @@ NSLog(@"_width %d wallWidth %d rightWallWidth %d", _width, wallWidth, rightWallW
 {
     return YES;
 }
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
 {
     _paddleY = _height - 50;
     _ballX += _ballDeltaX;
@@ -323,8 +323,8 @@ NSLog(@"_width %d wallWidth %d rightWallWidth %d", _width, wallWidth, rightWallW
         _ballDeltaX = 0;
         _ballDeltaY = 0;
     }
-    [self updateBitmap];
     [self autoMove];
+    [self updateBitmap];
 }
 
 - (void)autoMove
