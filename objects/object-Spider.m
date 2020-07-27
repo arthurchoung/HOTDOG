@@ -540,7 +540,12 @@
     }
     return YES;
 }
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
+{
+    [self updateState];
+    [self updateBitmap];
+}
+- (void)updateState
 {
     if (_animateIndex >= _animateMaxIndex) {
         return;
