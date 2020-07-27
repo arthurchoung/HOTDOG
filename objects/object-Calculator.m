@@ -201,10 +201,11 @@ static char *calculatorPixels =
 }
 - (BOOL)shouldAnimate
 {
-    return YES;
+    return NO;
 }
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
 {
+    [self updateBitmap];
 }
 - (int)bitmapWidth
 {
