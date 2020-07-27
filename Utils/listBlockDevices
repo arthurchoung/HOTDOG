@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+import subprocess
+import json
+
+def asQuotedString(str):
+    if str == None:
+        return ""
+    str = str.replace('"', '\\"');
+    str = str.replace('\\', '\\\\');
+    return "\"%s\"" % (str)
+
+def asQuotedStringForKey(elt, key):
+    if key in elt:
+        return asQuotedString(elt[key])
+    return ""
+
+output = subprocess.check_output(['lsblk', '-f', '--list', '--paths', '--json'])
+obj = json.loads(output)
+obj = obj['blockdevices']
+keys = ['name', 'label', 'mountpoint', 'fstype', 'uuid', 'messageForRightClick']
+print(",".join(keys))
+for elt in obj:
+    if elt['mountpoint']:
+        elt['messageForRightClick'] = "execDir:'Config/blockDeviceUnmountMenu.csv'|parseFileAsCSV|asMenu";
+    tokens = map(lambda x: asQuotedStringForKey(elt, x), keys)
+    print(",".join(tokens))
+

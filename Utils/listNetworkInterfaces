@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+import subprocess
+import json
+
+def asQuotedString(str):
+    if str == None:
+        return ""
+    str = str.replace('"', '\\"');
+    str = str.replace('\\', '\\\\');
+    return "\"%s\"" % (str)
+
+output = subprocess.check_output(['ip', '-j', '-p', 'link', 'show'])
+obj = json.loads(output)
+keys = ['ifname', 'link_type', 'up', 'lowerUp', 'operstate', 'address']
+print(",".join(keys))
+for elt in obj:
+    if "UP" in elt['flags']:
+        elt['up'] = "1"
+    else:
+        elt['up'] = "0"
+    if "LOWER_UP" in elt['flags']:
+        elt['lowerUp'] = "1"
+    else:
+        elt['lowerUp'] = "0"
+    tokens = map(lambda x: asQuotedString(elt[x]), keys)
+    print(",".join(tokens))
+
