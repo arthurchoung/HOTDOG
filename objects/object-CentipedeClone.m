@@ -487,7 +487,12 @@ char *centipedePixels[8] = {
 {
     return YES;
 }
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
+{
+    [self updateState];
+    [self updateBitmap];
+}
+- (void)updateState
 {
     int playerWidth = [Definitions widthForCString:playerPixels];
     int mushroomWidth = [Definitions widthForCString:mushroomPixels];
