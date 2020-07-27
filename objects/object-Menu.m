@@ -47,6 +47,12 @@
 
 @implementation Menu
 
+- (void)dealloc
+{
+NSLog(@"dealloc Menu %@", self);
+    [super dealloc];
+}
+
 - (id)init
 {
     self = [super init];
@@ -89,7 +95,7 @@
     return NO;
 }
 
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
 {
     if (_closingIteration < 1) {
         return;
@@ -99,7 +105,7 @@
     if (_closingIteration == 0) {
         id message = [_selectedObject valueForKey:@"messageForClick"];
         if (message) {
-            [[Definitions namespace]  evaluateMessage:message];
+            [x11dict evaluateMessage:message];
         }
         [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
     }
