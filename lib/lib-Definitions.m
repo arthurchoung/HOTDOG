@@ -53,8 +53,6 @@ id nscstrn(char *str, int len)//$;
 {
     return (str) ? [[[NSMutableString alloc] initWithBytes:str length:len] autorelease] : nil;
 }
-id nsnull()//$;
-{ return [NSNull null]; }
 
 BOOL isnsarr(id obj)//$;
 {

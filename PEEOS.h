@@ -132,8 +132,6 @@ typedef struct {
 @end
 @interface NSValue : NSObject
 @end
-@interface NSNull : NSObject
-@end
 
 #endif
 

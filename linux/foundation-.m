@@ -1994,16 +1994,6 @@ NSLog(@"OUT OF MEMORY! NSDictionary -setValue:forKey:");
     return _contents;
 }
 @end
-@implementation NSNull
-+ (id)null
-{
-    static id obj = nil;
-    if (!obj) {
-        obj = [[NSNull alloc] init];
-    }
-    return obj;
-}
-@end
 
 #ifdef BUILD_WITH_GNU_PRINTF
 #include <printf.h>

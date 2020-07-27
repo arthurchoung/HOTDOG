@@ -516,7 +516,7 @@ NSLog(@"%@", err);
         return nscstr(cstring);
     }
     if (!*cstring) {
-        return nsnull();
+        return nil;
     }
     char *endptr;
     long lvalue = strtol(cstring, &endptr, 10);
@@ -573,7 +573,9 @@ NSLog(@"%@", err);
 {
     if ([_current count] || _stringIsQuoted) {
         id obj = [self convertCStringToObject:[[_current join:@""] UTF8String]];
-        [_cells addObject:obj];
+        if (obj) {
+            [_cells addObject:obj];
+        }
         [_current removeAllObjects];
     }
 }
@@ -724,10 +726,9 @@ NSLog(@"%@", err);
             if ([text isEqual:@")"]) {
                 [_parenthesis executeInstruction:[[[objc_getClass("ScriptToken") alloc] init] autorelease]];
                 id result = [_parenthesis valueForKey:@"recipient"];
-                if (!result) {
-                    result = nsnull();
+                if (result) {
+                    [_args addObject:result];
                 }
-                [_args addObject:result];
                 [self setValue:nil forKey:@"parenthesis"];
             } else {
                 [_parenthesis executeInstruction:instruction];

@@ -33,13 +33,6 @@
 
 @end
 
-@implementation NSNull(jfklsdjfklsdjkf)
-- (id)stringForCSVFile
-{
-    return @"";
-}
-@end
-
 @implementation NSArray(ieojfksdjfjsdf)
 - (id)asCSVWithKeys:(id)header
 {
@@ -50,9 +43,7 @@
             id key = [header nth:i];
             if (key) {
                 id val = [a nth:i];
-                if (val && (val != nsnull())) {
-                    [dict setValue:val forKey:key];
-                }
+                [dict setValue:val forKey:key];
             }
         }
         return dict;
@@ -79,24 +70,18 @@
     id temp = nsarr();
     {
         id obj = [keys joinAsCSV];
-        if (!obj) {
-            obj = nsnull();
-        }
         [results addObject:obj];
     }
     for (id elt in self) {
         for (id key in keys) {
             id val = [elt valueForKey:key];
             if (!val) {
-                val = nsnull();
+                val = @"";
             }
             [temp addObject:val];
         }
         {
             id obj = [temp joinAsCSV];
-            if (!obj) {
-                obj = nsnull();
-            }
             [results addObject:obj];
         }
         [temp removeAllObjects];
@@ -127,9 +112,6 @@
     id arr = nsarr();
     for (id elt in self) {
         id obj = [elt stringForCSVFile];
-        if (!obj) {
-            obj = nsnull();
-        }
         [arr addObject:obj];
     }
     return [arr join:@","];
@@ -154,7 +136,7 @@
         return nscstr(cstring);
     }
     if (!*cstring) {
-        return nsnull();
+        return @"";
     }
     
     return nscstr(cstring);

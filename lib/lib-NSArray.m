@@ -707,6 +707,10 @@
 
 - (id)mapArray:(id (^)(id arr))block
 {
+    return [self mapArray:block nullValue:@"(null)"];
+}
+- (id)mapArray:(id (^)(id arr))block nullValue:(id)nullValue
+{
     if (![self count]) {
         return nil;
     }
@@ -723,7 +727,7 @@
         }
         id obj = block(args);
         if (!obj) {
-            obj = nsnull();
+            obj = nullValue;
         }
         [results addObject:obj];
         i++;
@@ -732,11 +736,15 @@
 
 - (id)mapBlock:(id (^)(id obj))block
 {
+    return [self mapBlock:block nullValue:@"(null)"];
+}
+- (id)mapBlock:(id (^)(id obj))block nullValue:(id)nullValue
+{
     id results = nsarr();
     for (id elt in self) {
         id obj = block(elt);
         if (!obj) {
-            obj = nsnull();
+            obj = nullValue;
         }
         [results addObject:obj];
     }
@@ -756,11 +764,15 @@
 
 - (id)map:(id (^)(id obj))block
 {
+    return [self map:block nullValue:@"(null)"];
+}
+- (id)map:(id (^)(id obj))block nullValue:(id)nullValue
+{
     id results = nsarr();
     for (id elt in self) {
         id obj = block(elt);
         if (!obj) {
-            obj = nsnull();
+            obj = nullValue;
         }
         [results addObject:obj];
     }
@@ -768,6 +780,10 @@
 }
 
 - (id)mapPairs:(id (^)(id obj1, id obj2))block
+{
+    return [self mapPairs:block nullValue:@"(null)"];
+}
+- (id)mapPairs:(id (^)(id obj1, id obj2))block nullValue:(id)nullValue
 {
     id results = nsarr();
     id first = nil;
@@ -778,7 +794,7 @@
         }
         id val = block(first, obj);
         if (!val) {
-            val = nsnull();
+            val = nullValue;
         }
         [results addObject:val];
         first = nil;
@@ -787,12 +803,16 @@
 }
 - (id)mapIndex:(id (^)(int i, id obj))block
 {
+    return [self mapIndex:block nullValue:@"(null)"];
+}
+- (id)mapIndex:(id (^)(int i, id obj))block nullValue:(id)nullValue
+{
     id results = nsarr();
     int i = 0;
     for (id obj in self) {
         id val = block(i, obj);
         if (!val) {
-            val = nsnull();
+            val = nullValue;
         }
         [results addObject:val];
         i++;
@@ -811,10 +831,14 @@
 }
 - (id)mapMessage:(id)message
 {
+    return [self mapMessage:message nullValue:@"(null)"];
+}
+- (id)mapMessage:(id)message nullValue:(id)nullValue
+{
     id results = nsarr();
     for (id elt in self) {
         id obj = [elt evaluateMessage:message];
-        [results addObject:(obj) ? obj : nsnull()];
+        [results addObject:(obj) ? obj : nullValue];
     }
     return results;
 }

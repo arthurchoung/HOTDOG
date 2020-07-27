@@ -27,19 +27,23 @@
 
 #include "jsmn.h"
 
-static id parseObject(jsmntok_t *token, char *JSON_STRING);
-static id parseArray(jsmntok_t *token, char *JSON_STRING);
+static id parseObject(jsmntok_t *token, char *JSON_STRING, id nullValue);
+static id parseArray(jsmntok_t *token, char *JSON_STRING, id nullValue);
 
-static id parseToken(jsmntok_t *token, char *JSON_STRING)
+static id parseToken(jsmntok_t *token, char *JSON_STRING, id nullValue)
 {
     if (token->type == 1) {
-        return parseObject(token, JSON_STRING);
+        return parseObject(token, JSON_STRING, nullValue);
     } else if (token->type == 2) {
-        return parseArray(token, JSON_STRING);
+        return parseArray(token, JSON_STRING, nullValue);
     } else if (token->type == 3) {
         return nscstrn(JSON_STRING+token->start, token->end-token->start);
     } else if (token->type == 4) {
-        return nscstrn(JSON_STRING+token->start, token->end-token->start);
+        id str = nscstrn(JSON_STRING+token->start, token->end-token->start);
+        if ([str isEqual:@"null"]) {
+            return nullValue;
+        }
+        return str;
     } else {
         return @"none";
     }
@@ -53,7 +57,7 @@ static int numberOfTokens(jsmntok_t *token)
     }
     return count;
 }
-static id parseObject(jsmntok_t *token, char *JSON_STRING)
+static id parseObject(jsmntok_t *token, char *JSON_STRING, id nullValue)
 {
     id dict = nsdict();
     int index = 1;
@@ -66,7 +70,7 @@ NSLog(@"parseObject keytoken type %d size %d '%@'", keytoken->type, keytoken->si
                 jsmntok_t *valtoken = &token[index+1];
 NSLog(@"parseObject valtoken type %d size %d '%@'", valtoken->type, valtoken->size, nscstrn(JSON_STRING+valtoken->start, valtoken->end-valtoken->start));
                 id key = nscstrn(JSON_STRING+keytoken->start, keytoken->end-keytoken->start);
-                id val = parseToken(valtoken, JSON_STRING);
+                id val = parseToken(valtoken, JSON_STRING, nullValue);
                 [dict setValue:val forKey:key];
                 index += numberOfTokens(keytoken);
             } else {
@@ -81,14 +85,14 @@ NSLog(@"parseObject keytoken->type != 3");
     return dict;
 }
 
-static id parseArray(jsmntok_t *token, char *JSON_STRING)
+static id parseArray(jsmntok_t *token, char *JSON_STRING, id nullValue)
 {
     id arr = nsarr();
     int index = 1;
     for (int i=0; i<token->size; i++) {
         jsmntok_t *child = &token[index];
 NSLog(@"parseArray i %d type %d token->size %d", i, child->type, child->size);
-        id elt = parseToken(child, JSON_STRING);
+        id elt = parseToken(child, JSON_STRING, nullValue);
         if (elt) {
             [arr addObject:elt];
         } else {
@@ -110,12 +114,16 @@ NSLog(@"parseArray unable to parse token");
 @implementation NSObject(jfkldsjfjsdjf)
 - (id)decodeJSON
 {
+    return [self decodeJSONWithValueAsNull:@"null"];
+}
+- (id)decodeJSONWithValueAsNull:(id)nullValue
+{
 NSLog(@"decodeJSON");
     char *JSON_STRING = _contents;
     int i;
     int r;
     jsmn_parser p;
-    int ntokens = 500000;
+    int ntokens = 500000; //FIXME
     jsmntok_t *t; /* We expect no more than 128 tokens */
     t = [[[[NSMutableData alloc] initWithCapacity:sizeof(jsmntok_t)*ntokens] autorelease] bytes];
 //    t = malloc(sizeof(jsmntok_t)*ntokens);
@@ -137,7 +145,7 @@ for (int i=0; i<r; i++) {
 NSLog(@"stupid i %d type %d size %d numberOfTokens %d '%.*s'", i, t[i].type, t[i].size, numberOfTokens(&t[i]), t[i].end-t[i].start, JSON_STRING+t[i].start);
 }
 */
-        return parseToken(t, JSON_STRING);
+        return parseToken(t, JSON_STRING, nullValue);
     }
     return nil;
 }
@@ -152,13 +160,6 @@ NSLog(@"readFromFileAsJSON");
     return [jsonString decodeJSON];
 }
 
-@end
-
-@implementation NSNull(jfoierwjfsdkfjksdjf)
-- (id)encodeJSON
-{
-    return @"null";
-}
 @end
 
 @implementation NSString(iwojfosdfjksdjfksdjf)

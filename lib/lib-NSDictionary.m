@@ -73,11 +73,15 @@
 
 - (id)mapEachKeyValue:(id (^)(id obj1, id obj2))block
 {
+    return [self mapEachKeyValue:block nullValue:@"(null)"];
+}
+- (id)mapEachKeyValue:(id (^)(id obj1, id obj2))block nullValue:(id)nullValue
+{
     id results = nsarr();
     for (id key in [self allKeys]) {
         id obj = block(key, [self valueForKey:key]);
         if (!obj) {
-            obj = nsnull();
+            obj = nullValue;
         }
         [results addObject:obj];
     }
