@@ -36,7 +36,7 @@
 {
     return YES;
 }
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
 {
     _iteration++;
     _pct = (_iteration % 361) / 360.0;
@@ -823,7 +823,7 @@
 }
 - (void)moveToMonitor:(int)monitorNumber
 {
-    id monitors = [[Definitions monitorConfig] valueForKey:@"monitors"];
+    id monitors = [Definitions monitorConfig];
     id monitor = [monitors nth:monitorNumber];
     if (!monitor) {
         return;
