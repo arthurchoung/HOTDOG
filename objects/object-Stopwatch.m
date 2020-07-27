@@ -54,8 +54,9 @@
     _lapTextRect = r;
     _lapTextRect.y += _elapsedTextRect.h;
     _lapTextRect.h -= _elapsedTextRect.h;
+    _lapTextRect.h -= _startButtonRect.h;
 }
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
 {
 }
 
