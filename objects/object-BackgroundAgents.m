@@ -71,7 +71,7 @@ NSLog(@"DEALLOC BackgroundAgents");
     [super dealloc];
 }
 
-- (void)performIteration:(id)event
+- (void)beginIteration:(id)event rect:(Int4)r
 {
     time_t timestamp = [_configPath fileModificationTimestamp];
     if (timestamp != _configTimestamp) {
