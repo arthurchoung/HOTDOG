@@ -6,8 +6,8 @@ import json
 def asQuotedString(str):
     if str == None:
         return ""
-    str = str.replace('"', '\\"');
     str = str.replace('\\', '\\\\');
+    str = str.replace('"', '\\"');
     return "\"%s\"" % (str)
 
 output = subprocess.check_output(['ip', '-j', '-p', 'link', 'show'])
