@@ -4,6 +4,14 @@ $|=1;
 
 $path = "$ENV{'PEEOS_HOME'}/SerialTasks";
 
+sub asQuotedString
+{
+    my ($str) = @_;
+    $str =~ s/\\/\\\\/g;
+    $str =~ s/\"/\\\"/g;
+    return '"' . $str . '"';
+}
+
 $count = 1;
 for (;;) {
     $files = `ls -tr $path 2>/dev/null`;
@@ -16,7 +24,8 @@ for (;;) {
         next;
     }
     $file = "$path/$file";
-    system("sh \"$file\"");
+    $quotedFile = asQuotedString($file);
+    system("sh $quotedFile");
     unlink $file;
     $count = 1;
 }
