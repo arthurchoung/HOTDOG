@@ -95,7 +95,7 @@
             break;
         }
 NSLog(@"inotifywait line '%@'", line);
-        id tokens = [[line parseCSV] nth:0];
+        id tokens = [[line parseCSVFromStringNoHeader] nth:0];
 NSLog(@"inotifywait tokens '%@'", tokens);
         id path = [tokens nth:0];
         id attrib = [tokens nth:1];

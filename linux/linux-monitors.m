@@ -46,7 +46,7 @@
     id monitor = [Definitions monitorForX:mouseX y:mouseY];
     id name = [monitor valueForKey:@"output"];
     id path = [Definitions execDir:@"Config/monitors.csv"];
-    id monitors = [path parseFileAsCSV];
+    id monitors = [path parseCSVFromFile];
     id elt = [monitors objectWithValue:name forKey:@"output"];
     if (!elt) {
         elt = nsdict();
@@ -57,7 +57,7 @@
         [monitors addObject:elt];
     }
     [elt setValue:orientation forKey:@"rotate"];
-    [monitors writeToFileAsCSV:path];
+    [monitors writeCSVToFile:path];
     [Definitions setupMonitors];
 }
 + (void)showAlert:(id)text monitor:(int)monitor
@@ -115,7 +115,7 @@
     }
     id lines = [str split:@"\n"];
     id path = [Definitions execDir:@"Config/monitors.csv"];
-    id monitors = [path parseFileAsCSV];
+    id monitors = [path parseCSVFromFile];
     id results = nsarr();
     for (id line in lines) {
         if (![line containsString:@" connected "]) {

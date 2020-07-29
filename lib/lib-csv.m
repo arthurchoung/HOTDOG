@@ -34,7 +34,7 @@
 @end
 
 @implementation NSArray(ieojfksdjfjsdf)
-- (id)asCSVWithKeys:(id)header
+- (id)processCSVWithKeys:(id)header
 {
     id arr = self;
     arr = [arr mapBlock:^(id a) {
@@ -51,7 +51,7 @@
     return arr;
 }
 
-- (id)asCSVUsingHeader
+- (id)processCSVUsingHeader
 {
     id header = [self firstObject];
     if (!header) {
@@ -61,15 +61,15 @@
     if (![arr count]) {
         return nil;
     }
-    return [arr asCSVWithKeys:header];
+    return [arr processCSVWithKeys:header];
 }
 
-- (BOOL)writeToFileAsCSV:(id)path usingKeys:(id)keys
+- (BOOL)writeCSVToFile:(id)path keys:(id)keys
 {
     id results = nsarr();
     id temp = nsarr();
     {
-        id obj = [keys joinAsCSV];
+        id obj = [keys joinForCSVFile];
         [results addObject:obj];
     }
     for (id elt in self) {
@@ -81,7 +81,7 @@
             [temp addObject:val];
         }
         {
-            id obj = [temp joinAsCSV];
+            id obj = [temp joinForCSVFile];
             [results addObject:obj];
         }
         [temp removeAllObjects];
@@ -90,24 +90,14 @@
     return [[results join:@"\n"] writeToFile:path];
 }
 
-- (BOOL)writeAsCSVToFile:(id)path usingKeys:(id)keys
-{
-    return [self writeAsCSVToFile:path usingKeys:keys];
-}
-
-- (BOOL)writeToFileAsCSV:(id)path
+- (BOOL)writeCSVToFile:(id)path
 {
     id elt = [self firstObject];
     id keys = [[self allKeys] sort];
-    return [self writeToFileAsCSV:path usingKeys:keys];
+    return [self writeCSVToFile:path keys:keys];
 }
 
-- (BOOL)writeAsCSVToFile:(id)path
-{
-    return [self writeToFileAsCSV:path];
-}
-
-- (id)joinAsCSV
+- (id)joinForCSVFile
 {
     id arr = nsarr();
     for (id elt in self) {
@@ -250,18 +240,30 @@
     return nsfmt(@"\"%@\"", result);
 }
 
-- (id)parseCSV
+- (id)parseCSVFromStringNoHeader
 {
     id parser = [[[CSVParser alloc] init] autorelease];
     return [parser processString:self];
 }
-
-- (id)parseFileAsCSV
+- (id)parseCSVFromString
 {
-    return [[[self stringFromFile] parseCSV] asCSVUsingHeader];
+    id parser = [[[CSVParser alloc] init] autorelease];
+    id arr = [parser processString:self];
+    return [arr processCSVUsingHeader];
+}
+
+- (id)parseCSVFromFile
+{
+    return [[self stringFromFile] parseCSVFromString];
 }
 
 
 @end
 
+@implementation NSData(jfkldsjflksdjfklsdjf)
+- (id)parseCSVFromData
+{
+    return [[self asString] parseCSVFromString];
+}
+@end
 

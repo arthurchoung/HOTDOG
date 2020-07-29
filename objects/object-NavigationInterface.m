@@ -86,7 +86,7 @@ NSLog(@"target %@", target);
         while (classCursor) {
             id path = [Definitions execDir:nsfmt(@"ClassMenus/%s.csv", class_getName(classCursor))];
             NSLog(@"path %@", path);
-            classMenu = [path parseFileAsCSV];
+            classMenu = [path parseCSVFromFile];
             if (classMenu) {
                 break;
             }

@@ -305,7 +305,7 @@
 - (id)menuFromPath
 {
     id path = self;
-    id arr = [path parseFileAsCSV];
+    id arr = [path parseCSVFromFile];
     for (id elt in arr) {
         if (![elt valueForKey:@"drawChevron"]) {
             [elt setValue:@"1" forKey:@"drawChevron"];
@@ -337,7 +337,7 @@
             [elt setValue:@"#{displayName}" forKey:@"stringFormat"];
         }
     } else if ([path hasSuffix:@".csv"]) {
-        arr = [path parseFileAsCSV];
+        arr = [path parseCSVFromFile];
     }
     return arr;
 }

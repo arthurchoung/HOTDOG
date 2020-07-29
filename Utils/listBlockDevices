@@ -22,7 +22,7 @@ keys = ['name', 'label', 'mountpoint', 'fstype', 'uuid', 'messageForRightClick']
 print(",".join(keys))
 for elt in obj:
     if elt['mountpoint']:
-        elt['messageForRightClick'] = "execDir:'Config/blockDeviceUnmountMenu.csv'|parseFileAsCSV|asMenu";
+        elt['messageForRightClick'] = "execDir:'Config/blockDeviceUnmountMenu.csv'|parseCSVFromFile|asMenu";
     tokens = map(lambda x: asQuotedStringForKey(elt, x), keys)
     print(",".join(tokens))
 

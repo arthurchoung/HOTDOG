@@ -29,8 +29,6 @@
 
 #include <fcntl.h>
 
-// change name: parseCSV|asCSVUsingHeader
-// fix amiga buttons
 // inotifywait vs just check timestamp
 // cleanup performIteration/drawInBitmap for menus
 // xinput2 / xeyes
