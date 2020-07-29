@@ -383,8 +383,8 @@ first = NO;
             } else {
             }
         }
-        [bitmap drawCString:[Definitions cStringForAmigaTitleBarLowerButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-3 y:0];
-        [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-24-3 y:0];
+        [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-3 y:0];
+        [bitmap drawCString:[Definitions cStringForAmigaTitleBarLowerButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-24-3 y:0];
     }
 }
 @end

@@ -118,7 +118,7 @@
 "bbbbbbbbbbbbbbbbbbbbbbbb\n"
 ;
 }
-+ (char *)cStringForAmigaTitleBarRaiseButton
++ (char *)cStringForAmigaTitleBarLowerButton
 {
     return
 "XXooooooooooooooooooooooXX\n"
@@ -143,7 +143,7 @@
 "bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 ;
 }
-+ (char *)cStringForAmigaTitleBarLowerButton
++ (char *)cStringForAmigaTitleBarRaiseButton
 {
     return
 "XXooooooooooooooooooooooXX\n"
