@@ -62,24 +62,24 @@
 }
 - (void)setNilValueForKey
 {
-    [[Definitions namespace] setValue:nil forKeyPath:self];
+    [[Definitions namespace] setValue:nil forKey:self];
 }
 
 - (id)valueForKey
 {
-    id val = [[Definitions namespace] valueForKeyPath:self];
+    id val = [[Definitions namespace] valueForKey:self];
     return val;
 }
 
 - (int)intValueForKey
 {
-    id val = [[Definitions namespace] valueForKeyPath:self];
+    id val = [[Definitions namespace] valueForKey:self];
     return [val intValue];
 }
 
 - (double)doubleValueForKey
 {
-    id val = [[Definitions namespace] valueForKeyPath:self];
+    id val = [[Definitions namespace] valueForKey:self];
     return [val doubleValue];
 }
 
@@ -88,6 +88,6 @@
 @implementation NSObject(jfkldsjfklsdjkfljsdklfj)
 - (void)setAsValueForKey:(id)key
 {
-    [[Definitions namespace] setValue:self forKeyPath:key];
+    [[Definitions namespace] setValue:self forKey:key];
 }
 @end

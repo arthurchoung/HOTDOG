@@ -783,7 +783,7 @@ NSLog(@"%@", err);
                 [self setValue:cpu forKey:@"parenthesis"];
             } else {
                 if ([_selectorName length]) {
-                    id result = [_contextualObject valueForKeyPath:text];
+                    id result = [_contextualObject valueForKey:text];
                     if (!result) {
                         if ([Definitions respondsToSelector:@selector(interfaceValueForKey:)]) {
                             result = [Definitions interfaceValueForKey:text];

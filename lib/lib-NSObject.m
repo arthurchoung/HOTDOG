@@ -156,10 +156,6 @@
 {
     return [[self valueForKey:key] doubleValue];
 }
-- (double)doubleValueForKeyPath:(id)key
-{
-    return [[self valueForKeyPath:key] doubleValue];
-}
 - (long)longValueForKey:(id)key
 {
     return [[self valueForKey:key] longValue];
@@ -183,11 +179,11 @@
     id a = self;
     id b = compareObject;
     
-    id aa = [a valueForKeyPath:key];
+    id aa = [a valueForKey:key];
     if (!aa) {
         return -1;
     }
-    id bb = [b valueForKeyPath:key];
+    id bb = [b valueForKey:key];
     if (!bb) {
         return 1;
     }
@@ -249,11 +245,11 @@
 
 - (void)toggleBoolKey:(id)key
 {
-    id val = [self valueForKeyPath:key];
+    id val = [self valueForKey:key];
     NSLog(@"toggleBoolKey:%@ old val %@", key, val);
     val = ([val intValue]) ? @"0" : @"1";
-    [self setValue:val forKeyPath:key];
-    NSLog(@"new val %@", [self valueForKeyPath:key]);
+    [self setValue:val forKey:key];
+    NSLog(@"new val %@", [self valueForKey:key]);
 }
 
 - (id)str:(id)str
@@ -284,16 +280,6 @@
     id arr = nsarr();
     [arr addObject:self];
     return arr;
-}
-
-- (void)setAsValueForKey:(id)key inDictionary:(id)dict
-{
-    //    NSLog(@"setAsValueForKey:%@ self %@", key, self);
-    [dict setValue:self forKeyPath:key];
-}
-- (void)setAsValueForKey:(id)key context:(id)context
-{
-    [context setValue:self forKeyPath:key];
 }
 
 - (BOOL)numericallyGreaterThan:(double)val

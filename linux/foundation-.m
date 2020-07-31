@@ -489,36 +489,6 @@ NSLog(@"WARNING: no autorelease pool");
 {
     return nil;
 }
-- (void)setValue:(id)val forKeyPath:(id)keyPath
-{
-    id arr = [keyPath componentsSeparatedByString:@"."];
-    id cursor = self;
-    for (int i=0; i<[arr count]; i++) {
-        if (i == [arr count]-1) {
-            [cursor setValue:val forKey:[arr nth:i]];
-            return;
-        }
-        cursor = [cursor valueForKey:[arr nth:i]];
-        if (!cursor) {
-            return;
-        }
-    }
-}
-- (id)valueForKeyPath:(id)keyPath
-{
-    id arr = [keyPath componentsSeparatedByString:@"."];
-    id cursor = self;
-    for (int i=0; i<[arr count]; i++) {
-        if (i == [arr count]-1) {
-            return [cursor valueForKey:[arr nth:i]];
-        }
-        cursor = [cursor valueForKey:[arr nth:i]];
-        if (!cursor) {
-            return nil;
-        }
-    }
-    return nil;
-}
 @end
 
 

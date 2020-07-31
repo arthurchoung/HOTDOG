@@ -56,7 +56,7 @@
     BOOL isInterface = NO;
     if ([self isKindOfClass:[@"NavigationInterface" asClass]]) {
         isInterface = YES;
-        target = [self valueForKeyPath:@"context.object"];
+        target = [[self valueForKey:@"context"] valueForKey:@"object"];
     }
 
     id classMenu = [target classMenuForObject];
