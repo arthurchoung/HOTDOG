@@ -29,6 +29,8 @@
 
 #include <fcntl.h>
 
+// AmigaMenuBar highlight black/orange
+// AmigaRootWindow right click pass to menu bar
 // inotifywait vs just check timestamp
 // cleanup performIteration/drawInBitmap for menus
 // xinput2 / xeyes

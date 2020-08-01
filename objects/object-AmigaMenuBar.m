@@ -131,7 +131,7 @@ NSLog(@"DEALLOC AmigaMenuBar");
     }
     return nil;
 }
-- (void)handleMouseDown:(id)event
+- (void)handleRightMouseDown:(id)event
 {
     if (_buttonDown) {
         return;
@@ -147,7 +147,7 @@ NSLog(@"DEALLOC AmigaMenuBar");
     id dict = [self dictForX:mouseRootX];
     [self openRootMenu:dict x:mouseRootX];
 }
-- (void)handleMouseUp:(id)event
+- (void)handleRightMouseUp:(id)event
 {
 NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
     if (!_buttonDown) {
@@ -242,7 +242,7 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
         h = [obj preferredHeight];
     }
     id windowManager = [@"windowManager" valueForKey];
-    id menuDict = [windowManager openWindowForObject:obj x:x y:20 w:w+3 h:h+3];
+    id menuDict = [windowManager openWindowForObject:obj x:x y:18 w:w+3 h:h+3];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
 }
@@ -329,6 +329,16 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
 
     int mouseMonitorX = [mouseMonitor intValueForKey:@"x"];
     int mouseMonitorWidth = [mouseMonitor intValueForKey:@"width"];
+
+    if (!_buttonDown) {
+        id text = @"Workbench release.       1911192 free memory";
+        [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
+        [bitmap drawBitmapText:text x:mouseMonitorX+5 y:2];
+        [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-3 y:0];
+        [bitmap drawCString:[Definitions cStringForAmigaTitleBarLowerButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-24-3 y:0];
+        return;
+    }
+
 BOOL first = YES;
     for (id elt in _array) {
         Int4 r1 = r;
@@ -383,8 +393,8 @@ first = NO;
             } else {
             }
         }
-        [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-3 y:0];
-        [bitmap drawCString:[Definitions cStringForAmigaTitleBarLowerButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-24-3 y:0];
     }
+    [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-3 y:0];
+    [bitmap drawCString:[Definitions cStringForAmigaTitleBarLowerButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-24-3 y:0];
 }
 @end
