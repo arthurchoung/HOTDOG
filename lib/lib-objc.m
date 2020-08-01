@@ -26,6 +26,15 @@
 #import "PEEOS.h"
 
 @implementation NSObject(jfkldsjflksdlkjf)
++ (id)className
+{
+    return nsfmt(@"<%s>", object_getClassName(self));
+}
+- (id)className
+{
+    return nsfmt(@"%s", object_getClassName(self));
+}
+
 - (id)allIvars
 {
     static Class __NSObjectClass = nil;

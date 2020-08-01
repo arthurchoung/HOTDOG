@@ -28,7 +28,13 @@
 @implementation NSArray(jfkdlsjflksdjkf)
 - (id)asMenu
 {
-    id menu = [@"Menu" asInstance];
+    id className = @"Menu";
+    id windowManager = [@"windowManager" valueForKey];
+    id windowClassName = [windowManager valueForKey:@"reparentClassName"];
+    if ([windowClassName isEqual:@"AmigaWindow"]) {
+        className = @"AmigaMenu";
+    }
+    id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
     return menu;
 }

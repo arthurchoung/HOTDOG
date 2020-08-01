@@ -227,6 +227,14 @@ NSLog(@"OUT OF MEMORY! NSAutoreleasePool -addObject: newAlloc %d", newAlloc);
 
 
 @implementation NSConstantString
++ (id)className
+{
+    return @"<NSConstantString>";
+}
+- (id)className
+{
+    return @"NSConstantString";
+}
 + (Class)class
 {
     return self;
