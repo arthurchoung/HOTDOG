@@ -1026,7 +1026,7 @@
             int textX = backX + 7;
             if (hasFocus) {
                 [bitmap setColor:@"#eeeeeeff"];
-                [bitmap fillRect:[Definitions rectWithX:backX y:_titleBarTextRect.y+1 w:backWidth h:17]];
+                [bitmap fillRect:[Definitions rectWithX:backX y:_titleBarTextRect.y+2 w:backWidth h:15]];
                 [bitmap setColorIntR:0 g:0 b:0 a:255];
                 [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4];
             } else {
