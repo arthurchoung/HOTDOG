@@ -50,11 +50,11 @@
 
 
 
-static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned char *image, int width, int height)
+static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned char *image, int width, int height, int depth)
 {
     unsigned char *image32=(unsigned char *)malloc(width*height*4);
     memcpy(image32, image, width*height*4);
-    return XCreateImage(display, visual, 32, ZPixmap, 0, image32, width, height, 32, 0);
+    return XCreateImage(display, visual, depth, ZPixmap, 0, image32, width, height, 32, 0);
 }
 
 
@@ -686,6 +686,33 @@ NSLog(@"Another window manager is running");
     color->flags = DoRed|DoGreen|DoBlue;
     XAllocColor(_display, colormap, color);
 }
+- (void)setBackgroundForCString:(char *)cstr palette:(char *)palette
+{
+    int width = [Definitions widthForCString:cstr];
+    int height = [Definitions heightForCString:cstr];
+    if (!width || !height) {
+        return;
+    }
+    id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:width height:height] autorelease];
+    [bitmap drawCString:cstr palette:palette x:0 y:0];
+
+
+    int screen = DefaultScreen(_display);
+    int depth = DefaultDepth(_display, screen);
+    XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], width, height, depth);
+
+
+    Pixmap pixmap = XCreatePixmap(_display, _rootWindow, width, height, depth);
+    GC gc = XCreateGC(_display, pixmap, 0, 0);
+    XPutImage(_display, pixmap, gc, ximage, 0, 0, 0, 0, width, height);
+
+    XSetWindowBackgroundPixmap(_display, _rootWindow, pixmap);
+
+    XFreeGC(_display, gc);
+    XFreePixmap(_display, pixmap);
+    XDestroyImage(ximage);
+    XClearWindow(_display, _rootWindow);
+}
 - (void)setCheckerboardBackground
 {
     int screen = DefaultScreen(_display);
@@ -705,7 +732,6 @@ NSLog(@"Another window manager is running");
 
     XSetWindowBackgroundPixmap(_display, _rootWindow, pixmap);
 
-    XFreeColormap(_display, _colormap);
     XFreeGC(_display, gc);
     XFreePixmap(_display, pixmap);
     XClearWindow(_display, _rootWindow);
@@ -727,7 +753,6 @@ NSLog(@"Another window manager is running");
 
     XSetWindowBackgroundPixmap(_display, _rootWindow, pixmap);
 
-    XFreeColormap(_display, _colormap);
     XFreeGC(_display, gc);
     XFreePixmap(_display, pixmap);
     XClearWindow(_display, _rootWindow);
@@ -1248,7 +1273,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
                 XFreePixmap(_display, shape_pixmap);
             }
 
-            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h);
+            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, 32);
             GC gc = XCreateGC(_display, win, 0, 0);
             XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
             XFreeGC(_display, gc);
@@ -1269,7 +1294,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
                 [bitmap drawBitmapText:text x:r.x+5 y:r.y+5];
             }
 
-            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h);
+            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, 32);
             GC gc = XCreateGC(_display, win, 0, 0);
             XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
             XFreeGC(_display, gc);
@@ -1337,7 +1362,7 @@ NSLog(@"pixelBytesBGR565 %d", draw_GL_NEAREST);
             [Definitions openGLXSwapBuffersForDisplay:_display window:win];
         } else {
             GC gc = XCreateGC(_display, win, 0, 0);
-            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h);
+            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, 32);
             XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
             XDestroyImage(ximage);
             XFreeGC(_display, gc);
