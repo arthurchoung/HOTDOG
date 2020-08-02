@@ -809,150 +809,6 @@
     return self;
 }
 
-- (void)moveChildWindowBackAndForthForWine:(id)dict
-{
-    unsigned long childWindow = [dict unsignedLongValueForKey:@"childWindow"];
-    if (!childWindow) {
-        return;
-    }
-    int w = [dict intValueForKey:@"w"]-_leftBorder-_rightBorder;
-    int h = [dict intValueForKey:@"h"]-_topBorder-_bottomBorder;
-    id windowManager = [@"windowManager" valueForKey];
-    [windowManager XMoveResizeWindow:childWindow :_leftBorder-1 :_topBorder :w :h];
-    [windowManager XMoveResizeWindow:childWindow :_leftBorder :_topBorder :w :h];
-}
-- (void)moveToMonitor:(int)monitorNumber
-{
-    id monitors = [Definitions monitorConfig];
-    id monitor = [monitors nth:monitorNumber];
-    if (!monitor) {
-        return;
-    }
-    id windowManager = [@"windowManager" valueForKey];
-    id dict = [windowManager valueForKey:@"focusDict"];
-    if (!dict) {
-        return;
-    }
-    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
-    int monitorX = [monitor intValueForKey:@"x"];
-    int monitorWidth = [monitor intValueForKey:@"width"];
-    int monitorHeight = [monitor intValueForKey:@"height"];
-    int newX = monitorX;
-    int newY = menuBarHeight-1;
-    int newW = monitorWidth;
-    int newH = monitorHeight-(menuBarHeight-1);
-    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-    [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
-}
-- (void)maximizeTopHalf
-{
-    id windowManager = [@"windowManager" valueForKey];
-    id dict = [windowManager valueForKey:@"focusDict"];
-    if (!dict) {
-        return;
-    }
-    int rootWindowWidth = [windowManager intValueForKey:@"rootWindowWidth"];
-    int rootWindowHeight = [windowManager intValueForKey:@"rootWindowHeight"];
-    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
-    int oldX = [dict intValueForKey:@"x"];
-    int oldY = [dict intValueForKey:@"y"];
-    id monitor = [Definitions monitorForX:oldX y:oldY];
-    int monitorX = [monitor intValueForKey:@"x"];
-    int monitorWidth = rootWindowWidth;
-    int monitorHeight = rootWindowHeight;
-    if (monitor) {
-        monitorWidth = [monitor intValueForKey:@"width"];
-        monitorHeight = [monitor intValueForKey:@"height"];
-    }
-    int newX = monitorX;
-    int newY = menuBarHeight-1;
-    int newW = monitorWidth;
-    int newH = (monitorHeight-(menuBarHeight-1))/2;
-    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-    [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
-}
-- (void)maximizeHeight
-{
-    id windowManager = [@"windowManager" valueForKey];
-    id dict = [windowManager valueForKey:@"focusDict"];
-    if (!dict) {
-        return;
-    }
-    int rootWindowHeight = [windowManager intValueForKey:@"rootWindowHeight"];
-    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
-    int oldX = [dict intValueForKey:@"x"];
-    int oldY = [dict intValueForKey:@"y"];
-    int oldW = [dict intValueForKey:@"w"];
-    id monitor = [Definitions monitorForX:oldX y:oldY];
-    int monitorHeight = rootWindowHeight;
-    if (monitor) {
-        monitorHeight = [monitor intValueForKey:@"height"];
-    }
-    int newY = menuBarHeight-1;
-    int newH = monitorHeight-(menuBarHeight-1);
-    [dict setValue:nsfmt(@"%d %d", oldX, newY) forKey:@"moveWindow"];
-    [dict setValue:nsfmt(@"%d %d", oldW, newH) forKey:@"resizeWindow"];
-}
-- (void)handleMaximizeWindow:(id)event
-{
-    id dict = [event valueForKey:@"x11dict"];
-    int mouseRootX = [event intValueForKey:@"mouseRootX"];
-    int mouseRootY = [event intValueForKey:@"mouseRootY"];
-    unsigned long win = [dict unsignedLongValueForKey:@"window"];
-    id windowManager = [event valueForKey:@"windowManager"];
-    int rootWindowWidth = [windowManager intValueForKey:@"rootWindowWidth"];
-    int rootWindowHeight = [windowManager intValueForKey:@"rootWindowHeight"];
-    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
-    if ([dict valueForKey:@"revertMaximize"]) {
-        id revert = [dict valueForKey:@"revertMaximize"];
-        id tokens = [revert split:@" "];
-        int newX = [[tokens nth:0] intValue];
-        int newY = [[tokens nth:1] intValue];
-        int newW = [[tokens nth:2] intValue];
-        int newH = [[tokens nth:3] intValue];
-        [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-        [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
-        [dict setValue:nil forKey:@"revertMaximize"];
-    } else {
-        id attrs = [windowManager XGetWindowAttributes:win];
-        [dict setValue:attrs forKey:@"revertMaximize"];
-        id monitor = [Definitions monitorForX:mouseRootX y:mouseRootY];
-        int monitorX = [monitor intValueForKey:@"x"];
-        int monitorWidth = rootWindowWidth;
-        int monitorHeight = rootWindowHeight;
-        if (monitor) {
-            monitorWidth = [monitor intValueForKey:@"width"];
-            monitorHeight = [monitor intValueForKey:@"height"];
-        }
-        int newX = monitorX;
-        int newY = menuBarHeight-1;
-        int newW = monitorWidth;
-        int newH = monitorHeight-(menuBarHeight-1);
-        [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-        [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
-    }
-}
-- (void)handleCloseWindow:(id)event
-{
-    id x11dict = [event valueForKey:@"x11dict"];
-    if (!x11dict) {
-        return;
-    }
-    id windowManager = [event valueForKey:@"windowManager"];
-    id childWindow = [x11dict valueForKey:@"childWindow"];
-    if (childWindow) {
-        int didSendCloseEvent = [x11dict intValueForKey:@"didSendCloseEvent"];
-        if (didSendCloseEvent) {
-            [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
-        } else {
-            [windowManager sendCloseEventToWindow:[childWindow unsignedLongValue]];
-            [x11dict setValue:@"1" forKey:@"didSendCloseEvent"];
-        }
-    } else {
-        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
-    }
-}
-
 - (void)calculateRects:(Int4)r
 {
     char *titleBarMiddle = [Definitions cStringForActiveTitleBarMiddle];
@@ -1187,16 +1043,16 @@
 }
 - (void)handleMouseUp:(id)event
 {
+    id dict = [event valueForKey:@"x11dict"];
     if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
-        [self handleCloseWindow:event];
+        [dict x11CloseWindow];
     }
     if ((_buttonDown == 'm') && (_buttonHover == 'm')) {
-        [self handleMaximizeWindow:event];
+        [dict x11ToggleMaximizeWindow];
     }
     if (_buttonDown == 't') {
         /* this was added for Wine */
-        id dict = [event valueForKey:@"x11dict"];
-        [self moveChildWindowBackAndForthForWine:dict];
+        [dict x11MoveChildWindowBackAndForthForWine];
     }
 
     _buttonDown = 0;

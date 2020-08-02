@@ -770,42 +770,25 @@
 }
 - (void)handleMouseUp:(id)event
 {
+    id x11dict = [event valueForKey:@"x11dict"];
     if (_buttonDown == _buttonHover) {
         if (_buttonDown == 'c') {
-            [self handleCloseWindow:event];
+            [x11dict x11CloseWindow];
         }
         if (_buttonDown == 'l') {
             id windowManager = [event valueForKey:@"windowManager"];
-            id x11dict = [event valueForKey:@"x11dict"];
             [windowManager lowerObjectWindow:x11dict];
         }
         if (_buttonDown == 'r') {
             id windowManager = [event valueForKey:@"windowManager"];
-            id x11dict = [event valueForKey:@"x11dict"];
             [windowManager raiseObjectWindow:x11dict];
         }
     }
+    if (_buttonDown == 't') {
+        /* this was added for Wine */
+        [x11dict x11MoveChildWindowBackAndForthForWine];
+    }
     _buttonDown = _buttonHover = 0;
-}
-- (void)handleCloseWindow:(id)event
-{
-    id x11dict = [event valueForKey:@"x11dict"];
-    if (!x11dict) {
-        return;
-    }
-    id windowManager = [event valueForKey:@"windowManager"];
-    id childWindow = [x11dict valueForKey:@"childWindow"];
-    if (childWindow) {
-        int didSendCloseEvent = [x11dict intValueForKey:@"didSendCloseEvent"];
-        if (didSendCloseEvent) {
-            [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
-        } else {
-            [windowManager sendCloseEventToWindow:[childWindow unsignedLongValue]];
-            [x11dict setValue:@"1" forKey:@"didSendCloseEvent"];
-        }
-    } else {
-        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
-    }
 }
 @end
 
