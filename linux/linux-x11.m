@@ -1495,7 +1495,7 @@ NSLog(@"no object windows, exiting");
             FD_ZERO(&rfds);
             if (inotifywait) {
                 int fd = [inotifywait fileDescriptor];
-                if (fd != 1) {
+                if (fd != -1) {
                     FD_SET(fd, &rfds);
                     if (fd > maxFD) {
                         maxFD = fd;
