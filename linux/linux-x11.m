@@ -1141,13 +1141,15 @@ NSLog(@"unparent object %@", dict);
         XSetWMProtocols(_display, win, &wm_delete_window, 1);
 
         if (!_openGLTexture) {
-            if ([Definitions setupOpenGLForDisplay:_display window:win visualInfo:&_visualInfo]) {
-                id texture = [@"GLTexture" asInstance];
-    NSLog(@"x11 ALLOCATED textureID %d", [texture textureID]);
-                [self setValue:texture forKey:@"openGLTexture"];
-                id objectTexture = [@"GLTexture" asInstance];
-                [self setValue:objectTexture forKey:@"openGLObjectTexture"];
-                _openGLWindow = win;
+            if ([Definitions respondsToSelector:@selector(setupOpenGLForDisplay:window:visualInfo:)]) {
+                if ([Definitions setupOpenGLForDisplay:_display window:win visualInfo:&_visualInfo]) {
+                    id texture = [@"GLTexture" asInstance];
+        NSLog(@"x11 ALLOCATED textureID %d", [texture textureID]);
+                    [self setValue:texture forKey:@"openGLTexture"];
+                    id objectTexture = [@"GLTexture" asInstance];
+                    [self setValue:objectTexture forKey:@"openGLObjectTexture"];
+                    _openGLWindow = win;
+                }
             }
         }
     }
