@@ -13,6 +13,7 @@ Enter Expose Mode,"enterExposeMode"
 ,
 Enter Amiga Mode,"enterAmigaMode"
 Enter Mac Mode,"enterMacMode"
+Enter Mac Monochrome Mode,"enterMacMonochromeMode"
 Enter Mac Platinum Mode,"enterMacPlatinumMode"
 ,
 "'xrandrOutput'|setNilValueForKey","'xrandrOutput'|setNilValueForKey"
