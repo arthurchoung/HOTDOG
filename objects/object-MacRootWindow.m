@@ -26,14 +26,14 @@
 #import "PEEOS.h"
 
 @implementation Definitions(jfoiwejfklsdjfklsdjlkfjsdlkfj)
-+ (void)enterMacMode
++ (void)enterMacColorMode
 {
     id windowManager = [@"windowManager" valueForKey];
     [windowManager unparentAllWindows];
     [windowManager setCheckerboardBackground];
     id rootWindowObject = [@"MacRootWindow" asInstance];
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
-    [windowManager reparentAllWindows:@"MacWindow"];
+    [windowManager reparentAllWindows:@"MacColorWindow"];
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
     id menuBar = [windowManager openWindowForObject:[@"MacMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
     [windowManager setValue:menuBar forKey:@"menuBar"];

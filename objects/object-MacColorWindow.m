@@ -50,10 +50,10 @@
 
 @implementation Definitions(jfkdlsjfklsdjklfjsdfklsdjfs)
 
-+ (void)testAddMacWindow
++ (void)testAddMacColorWindow
 {
     id windowManager = [@"windowManager" valueForKey];
-    id obj = [@"MacWindow" asInstance];
+    id obj = [@"MacColorWindow" asInstance];
     int w = 200;
     int h = 100;
     [windowManager openWindowForObject:obj x:100 y:200 w:w h:h];
@@ -775,7 +775,7 @@
 @end
 
 
-@interface MacWindow : IvarObject
+@interface MacColorWindow : IvarObject
 {
     int _leftBorder;
     int _rightBorder;
@@ -795,7 +795,7 @@
     Int4 _maximizeButtonRect;
 }
 @end
-@implementation MacWindow
+@implementation MacColorWindow
 - (id)init
 {
     self = [super init];

@@ -479,7 +479,7 @@ exit(0);
     [backgroundAgentsDict setValue:backgroundAgents forKey:@"object"];
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
     [objectWindows addObject:backgroundAgentsDict];
-    [Definitions enterMacMode];
+    [Definitions enterMacColorMode];
     [windowManager runLoop];
     [@"windowManager" setNilValueForKey];
 }
