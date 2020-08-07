@@ -16,6 +16,10 @@ For more information, please visit http://peeos.org
 
 ![Atari ST Screenshot](Screenshots/peeos-screenshot-atarist.png)
 
+![Mac Classic Screenshot](Screenshots/peeos-screenshot-mac-classic.png)
+
+![Mac Platinum Screenshot](Screenshots/peeos-screenshot-mac-platinum.png)
+
 
 ## Overview
 
