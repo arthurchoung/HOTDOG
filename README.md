@@ -8,7 +8,7 @@ For more information, please visit http://peeos.org
 
 ## Screenshots
 
-![Mac Color Screenshot](Screenshots/peeos-screenshot-mac-color.png)
+![About Screenshot](Screenshots/peeos-screenshot-about.png)
 
 ![Amiga Screenshot](Screenshots/peeos-screenshot-amiga.png)
 
@@ -17,6 +17,8 @@ For more information, please visit http://peeos.org
 ![Atari ST Screenshot](Screenshots/peeos-screenshot-atarist.png)
 
 ![Mac Classic Screenshot](Screenshots/peeos-screenshot-mac-classic.png)
+
+![Mac Color Screenshot](Screenshots/peeos-screenshot-mac-color.png)
 
 ![Mac Platinum Screenshot](Screenshots/peeos-screenshot-mac-platinum.png)
 
