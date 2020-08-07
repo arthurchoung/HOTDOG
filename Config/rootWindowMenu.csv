@@ -13,7 +13,9 @@ Enter Expose Mode,"enterExposeMode"
 ,
 Enter Amiga Mode,"enterAmigaMode"
 Enter Mac Mode,"enterMacMode"
-Enter Mac Monochrome Mode,"enterMacMonochromeMode"
+Enter Mac Classic Mode,"enterMacClassicMode"
 Enter Mac Platinum Mode,"enterMacPlatinumMode"
+Enter Hot Dog Stand Mode,"enterHotDogStandMode"
+Enter Atari ST Mode,"enterAtariSTMode"
 ,
 "'xrandrOutput'|setNilValueForKey","'xrandrOutput'|setNilValueForKey"
