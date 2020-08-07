@@ -1,0 +1,68 @@
+palette
+b #000000
+. #ffffff
+
+highlightedPalette
+. #000000
+b #ffffff
+
+pixels
+                bbbbbbbbbb                
+                bbbbbbbbbb                
+      bbbbbbbbbbbb      bbbbbbbbbbbb      
+      bbbbbbbbbbbb      bbbbbbbbbbbb      
+  bbbbbb......bbbb......bbbb......bbbbbb  
+  bbbbbb......bbbb......bbbb......bbbbbb  
+bb......................................bb
+bb......................................bb
+bbbbbbbb..........................bbbbbbbb
+bbbbbbbb..........................bbbbbbbb
+  bb..bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..bb  
+  bb..bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..bb  
+  bb..................................bb  
+  bb..................................bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb....bb......bb..bb....bb  
+  bb..bb......bb....bb......bb..bb....bb  
+  bb..bb......bb....bbbb..bbbb..bb....bb  
+  bb..bb......bb....bbbb..bbbb..bb....bb  
+  bb..bb......bb......bbbbbb....bb....bb  
+  bb..bb......bb......bbbbbb....bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bb......bb........bb......bb....bb  
+  bb..bbbb....bb........bb....bbbb....bb  
+  bb..bbbb....bb........bb....bbbb....bb  
+  bbbb........bbbb....bbbb..........bbbb  
+  bbbb........bbbb....bbbb..........bbbb  
+    bbbbbb......................bbbbbb    
+    bbbbbb......................bbbbbb    
+        bbbbbbbbbbbbbbbbbbbbbbbbbb        
+        bbbbbbbbbbbbbbbbbbbbbbbbbb        
+

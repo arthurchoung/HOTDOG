@@ -8,24 +8,25 @@ For more information, please visit http://peeos.org
 
 ## Screenshots
 
-![Mac Screenshot](Screenshots/peeos-screenshot-1-mac.png)
+![Mac Color Screenshot](Screenshots/peeos-screenshot-mac-color.png)
 
-![Amiga Screenshot](Screenshots/peeos-screenshot-2-amiga.png)
+![Amiga Screenshot](Screenshots/peeos-screenshot-amiga.png)
 
+![Windows 3.1 Screenshot](Screenshots/peeos-screenshot-win31.png)
+
+![Atari ST Screenshot](Screenshots/peeos-screenshot-atarist.png)
 
 
 ## Overview
 
 The design goals of PEEOS include:
 
-  * Graphical user interface based on System 7.5 and earlier versions of Classic Mac OS
+  * Graphical user interface based on retro computer systems including Classic Mac, Amiga, Atari ST, and Windows 3.1
   * Custom lightweight Objective-C foundation
   * Bitmapped graphics, low DPI displays
   * No Unicode support by design
 
 At the moment it is based on Linux, mainly for the graphics drivers.
-
-Inspiration is mostly taken from Classic Mac OS 7.5 and earlier versions, NeXT, Mac OS X (up to perhaps Tiger), and iOS (up to 6). There is also an Amiga mode, just for fun.
 
 PEEOS uses a custom lightweight Objective-C foundation on top of the GNUstep Objective-C runtime. It does not use the GNUstep Foundation. The style of Objective-C is completely different from the one Apple uses, everything is basically **id**.
 
