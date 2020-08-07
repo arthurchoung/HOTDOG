@@ -527,9 +527,14 @@ exit(0);
     Cursor _leftPointerCursor;
     Cursor _leftSideCursor;
     Cursor _rightSideCursor;
+    Cursor _topSideCursor;
     Cursor _bottomSideCursor;
+    Cursor _topLeftCornerCursor;
+    Cursor _topRightCornerCursor;
     Cursor _bottomLeftCornerCursor;
     Cursor _bottomRightCornerCursor;
+    char _currentCursor;
+    
     int _xFixesEventBase;
     int _xFixesErrorBase;
     Colormap _colormap;
@@ -655,10 +660,13 @@ NSLog(@"Another window manager is running");
     _leftPointerCursor = XCreateFontCursor(_display, XC_left_ptr);
     _leftSideCursor = XCreateFontCursor(_display, XC_left_side);
     _rightSideCursor = XCreateFontCursor(_display, XC_right_side);
+    _topSideCursor = XCreateFontCursor(_display, XC_top_side);
     _bottomSideCursor = XCreateFontCursor(_display, XC_bottom_side);
+    _topLeftCornerCursor = XCreateFontCursor(_display, XC_top_left_corner);
+    _topRightCornerCursor = XCreateFontCursor(_display, XC_top_right_corner);
     _bottomLeftCornerCursor = XCreateFontCursor(_display, XC_bottom_left_corner);
     _bottomRightCornerCursor = XCreateFontCursor(_display, XC_bottom_right_corner);
-    XDefineCursor(_display, _rootWindow, _leftPointerCursor);
+    [self setX11Cursor:'5'];
 
     if (XFixesQueryExtension(_display, &_xFixesEventBase, &_xFixesErrorBase)) {
         XFixesSelectSelectionInput(_display, DefaultRootWindow(_display), XA_PRIMARY, XFixesSetSelectionOwnerNotifyMask);
@@ -890,7 +898,7 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
 {
     id object = [dict valueForKey:@"object"];
     int hasShadow = [object intValueForKey:@"hasShadow"];
-    if (hasShadow < 1) {
+    if (!hasShadow) {
         return;
     }
     id window = [dict valueForKey:@"window"];
@@ -909,9 +917,31 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     XSetForeground(_display, shape_gc, 1);
     XFillRectangle(_display, shape_pixmap, shape_gc, 0, 0, w, h);
     XSetForeground(_display, shape_gc, 0);
-    for (int i=0; i<hasShadow; i++) {
-        XDrawPoint(_display, shape_pixmap, shape_gc, i, h-1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, i);
+    if (hasShadow > 0) {
+        for (int i=0; i<hasShadow; i++) {
+            XDrawPoint(_display, shape_pixmap, shape_gc, i, h-1);
+            XDrawPoint(_display, shape_pixmap, shape_gc, w-1, i);
+        }
+    } else {
+        //FIXME
+        // Lower left corner for Atari ST
+        XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 1, h-1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-2);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 1, h-2);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-3);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 1, h-3);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-4);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 1, h-4);
+        // Upper right corner for Atari ST
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-4, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-4, 1);
     }
     XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
     XFreeGC(_display, shape_gc);
@@ -2623,6 +2653,34 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
 - (void)XSync:(BOOL)discard
 {
     XSync(_display, (discard) ? True : False);
+}
+- (void)setX11Cursor:(char)cursor
+{
+    if (cursor == _currentCursor) {
+        return;
+    }
+    _currentCursor = cursor;
+    if (cursor == '5') {
+        XDefineCursor(_display, _rootWindow, _leftPointerCursor);
+    } else if (cursor == '7') {
+        XDefineCursor(_display, _rootWindow, _topLeftCornerCursor);
+    } else if (cursor == '8') {
+        XDefineCursor(_display, _rootWindow, _topSideCursor);
+    } else if (cursor == '9') {
+        XDefineCursor(_display, _rootWindow, _topRightCornerCursor);
+    } else if (cursor == '4') {
+        XDefineCursor(_display, _rootWindow, _leftSideCursor);
+    } else if (cursor == '6') {
+        XDefineCursor(_display, _rootWindow, _rightSideCursor);
+    } else if (cursor == '1') {
+        XDefineCursor(_display, _rootWindow, _bottomLeftCornerCursor);
+    } else if (cursor == '2') {
+        XDefineCursor(_display, _rootWindow, _bottomSideCursor);
+    } else if (cursor == '3') {
+        XDefineCursor(_display, _rootWindow, _bottomRightCornerCursor);
+    } else {
+        XDefineCursor(_display, _rootWindow, _leftPointerCursor);
+    }
 }
 @end
 

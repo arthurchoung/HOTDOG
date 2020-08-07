@@ -136,6 +136,13 @@ NSLog(@"Out of memory!");
     return _bitmapStride;
 }
 
+- (void)useAtariSTFont
+{
+    _fontCStrings = [Definitions arrayOfCStringsForAtariSTFont];
+    _fontWidths = [Definitions arrayOfWidthsForAtariSTFont];
+    _fontHeights = [Definitions arrayOfHeightsForAtariSTFont];
+    _fontXSpacings = [Definitions arrayOfXSpacingsForAtariSTFont];
+}
 - (void)useTopazFont
 {
     _fontCStrings = [Definitions arrayOfCStringsForTopazFont];
@@ -170,6 +177,13 @@ NSLog(@"Out of memory!");
     _fontWidths = [Definitions arrayOfWidthsForGenevaFont];
     _fontHeights = [Definitions arrayOfHeightsForGenevaFont];
     _fontXSpacings = [Definitions arrayOfXSpacingsForGenevaFont];
+}
+- (void)useWinSystemFont
+{
+    _fontCStrings = [Definitions arrayOfCStringsForWinSystemFont];
+    _fontWidths = [Definitions arrayOfWidthsForWinSystemFont];
+    _fontHeights = [Definitions arrayOfHeightsForWinSystemFont];
+    _fontXSpacings = [Definitions arrayOfXSpacingsForWinSystemFont];
 }
 - (void)setColorIntR:(int)r g:(int)g b:(int)b a:(int)a
 {

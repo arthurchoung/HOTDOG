@@ -33,6 +33,10 @@
     id windowClassName = [windowManager valueForKey:@"reparentClassName"];
     if ([windowClassName isEqual:@"AmigaWindow"]) {
         className = @"AmigaMenu";
+    } else if ([windowClassName isEqual:@"HotDogStandWindow"]) {
+        className = @"HotDogStandMenu";
+    } else if ([windowClassName isEqual:@"AtariSTWindow"]) {
+        className = @"AtariSTMenu";
     }
     id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
