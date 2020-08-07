@@ -60,7 +60,7 @@
         }
     }
     if (highestWidth) {
-        return highestWidth + 8 + 16;
+        return highestWidth + 8 + 18;
     }
     return 1;
 }
@@ -122,7 +122,7 @@
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:cellRect];
                 [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
-                [bitmap drawBitmapText:text x:cellRect.x+4+16 y:cellRect.y];
+                [bitmap drawBitmapText:text x:cellRect.x+4+18 y:cellRect.y];
             } else {
                 [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
                 [bitmap drawHorizontalDashedLineX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
@@ -132,12 +132,12 @@
             if ([text length]) {
                 if ([messageForClick length]) {
                     [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
-                    [bitmap drawBitmapText:text x:cellRect.x+4+16 y:cellRect.y];
+                    [bitmap drawBitmapText:text x:cellRect.x+4+18 y:cellRect.y];
                 } else {
                     [bitmap setColor:@"black"];
                     [bitmap fillRect:cellRect];
                     [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
-                    [bitmap drawBitmapText:text x:cellRect.x+4+16 y:cellRect.y];
+                    [bitmap drawBitmapText:text x:cellRect.x+4+18 y:cellRect.y];
                 }
             } else {
                 [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];

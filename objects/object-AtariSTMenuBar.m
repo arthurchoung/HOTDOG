@@ -243,7 +243,7 @@ NSLog(@"AtariSTMenuBar handleMouseUp event %@", event);
         h = [obj preferredHeight];
     }
     id windowManager = [@"windowManager" valueForKey];
-    id menuDict = [windowManager openWindowForObject:obj x:x y:18 w:w+3 h:h+3];
+    id menuDict = [windowManager openWindowForObject:obj x:x-4 y:18 w:w+4 h:h+4];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
 }
@@ -353,6 +353,7 @@ if (first) {
 first = NO;
 } else {
         r2.y -= 4;
+        r2.h += 2;
 }
         id obj = [elt valueForKey:@"object"];
         int leftPadding = [elt intValueForKey:@"leftPadding"];
