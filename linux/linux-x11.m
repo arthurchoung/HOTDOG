@@ -538,8 +538,6 @@ exit(0);
     int _xFixesEventBase;
     int _xFixesErrorBase;
     Colormap _colormap;
-    unsigned long _blackPixel;
-    unsigned long _whitePixel;
     id _objectWindows;
 
     id _reparentClassName;
@@ -635,6 +633,8 @@ NSLog(@"XMatchVisualInfo failed");
         return NO;
     }
 
+    _colormap = XCreateColormap(_display, _rootWindow, _visualInfo.visual, AllocNone);
+
     _menuBarHeight = 20;
     [self setValue:nsarr() forKey:@"objectWindows"];
 
@@ -668,11 +668,6 @@ NSLog(@"Another window manager is running");
     if (XFixesQueryExtension(_display, &_xFixesEventBase, &_xFixesErrorBase)) {
         XFixesSelectSelectionInput(_display, DefaultRootWindow(_display), XA_PRIMARY, XFixesSetSelectionOwnerNotifyMask);
     }
-
-    _colormap = XCreateColormap(_display, _rootWindow, _visualInfo.visual, AllocNone);
-
-    _blackPixel = BlackPixel(_display, DefaultScreen(_display));
-    _whitePixel = WhitePixel(_display, DefaultScreen(_display));
 
     return YES;
 }
