@@ -538,9 +538,6 @@ exit(0);
     int _xFixesEventBase;
     int _xFixesErrorBase;
     Colormap _colormap;
-    XColor _colorMac1;
-    XColor _colorMac2;
-    XColor _colorAmiga;
     unsigned long _blackPixel;
     unsigned long _whitePixel;
     id _objectWindows;
@@ -574,7 +571,7 @@ exit(0);
     }
 
     XSetWindowAttributes setAttrs;
-    setAttrs.colormap = XCreateColormap(_display, _rootWindow, _visualInfo.visual, AllocNone);
+    setAttrs.colormap = _colormap;
 /*
     if (_isWindowManager) {
         setAttrs.event_mask = SubstructureRedirectMask|SubstructureNotifyMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|VisibilityChangeMask|KeyPressMask|KeyReleaseMask|StructureNotifyMask|FocusChangeMask|EnterWindowMask|LeaveWindowMask;
@@ -673,9 +670,6 @@ NSLog(@"Another window manager is running");
     }
 
     _colormap = XCreateColormap(_display, _rootWindow, _visualInfo.visual, AllocNone);
-    [self getX11Color:&_colorMac1 colormap:_colormap r:0x60 g:0x60 b:0x60];
-    [self getX11Color:&_colorMac2 colormap:_colormap r:0xa0 g:0xa0 b:0xa0];
-    [self getX11Color:&_colorAmiga colormap:_colormap r:0x00 g:0x55 b:0xaa];
 
     _blackPixel = BlackPixel(_display, DefaultScreen(_display));
     _whitePixel = WhitePixel(_display, DefaultScreen(_display));
@@ -719,50 +713,6 @@ NSLog(@"Another window manager is running");
     XFreeGC(_display, gc);
     XFreePixmap(_display, pixmap);
     XDestroyImage(ximage);
-    XClearWindow(_display, _rootWindow);
-}
-- (void)setCheckerboardBackground
-{
-    int screen = DefaultScreen(_display);
-    XGCValues gc_init;
-    gc_init.foreground = _blackPixel;
-    gc_init.background = _whitePixel;
-
-    Pixmap pixmap = XCreatePixmap(_display, _rootWindow, 2, 2, DefaultDepth(_display, screen));
-    GC gc = XCreateGC(_display, pixmap, GCForeground|GCBackground, &gc_init);
-
-    XSetForeground(_display, gc, _colorMac1.pixel);
-    XDrawPoint(_display, pixmap, gc, 0, 0);
-    XDrawPoint(_display, pixmap, gc, 1, 1);
-    XSetForeground(_display, gc, _colorMac2.pixel);
-    XDrawPoint(_display, pixmap, gc, 1, 0);
-    XDrawPoint(_display, pixmap, gc, 0, 1);
-
-    XSetWindowBackgroundPixmap(_display, _rootWindow, pixmap);
-
-    XFreeGC(_display, gc);
-    XFreePixmap(_display, pixmap);
-    XClearWindow(_display, _rootWindow);
-}
-- (void)setAmigaBackground
-{
-    int screen = DefaultScreen(_display);
-    XGCValues gc_init;
-    gc_init.foreground = _blackPixel;
-    gc_init.background = _whitePixel;
-
-    Pixmap pixmap = XCreatePixmap(_display, _rootWindow, 1, 2, DefaultDepth(_display, screen));
-    GC gc = XCreateGC(_display, pixmap, GCForeground|GCBackground, &gc_init);
-
-    XSetForeground(_display, gc, _colorAmiga.pixel);
-    XDrawPoint(_display, pixmap, gc, 0, 0);
-    XSetForeground(_display, gc, _blackPixel);
-    XDrawPoint(_display, pixmap, gc, 0, 1);
-
-    XSetWindowBackgroundPixmap(_display, _rootWindow, pixmap);
-
-    XFreeGC(_display, gc);
-    XFreePixmap(_display, pixmap);
     XClearWindow(_display, _rootWindow);
 }
 
@@ -1143,7 +1093,7 @@ NSLog(@"unparent object %@", dict);
 - (unsigned long)openWindowWithName:(id)name x:(int)x y:(int)y w:(int)w h:(int)h overrideRedirect:(BOOL)overrideRedirect
 {
     XSetWindowAttributes setAttrs;
-    setAttrs.colormap = XCreateColormap(_display, _rootWindow, _visualInfo.visual, AllocNone);
+    setAttrs.colormap = _colormap;
     if (_isWindowManager) {
         setAttrs.event_mask = SubstructureRedirectMask|SubstructureNotifyMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|VisibilityChangeMask|KeyPressMask|KeyReleaseMask|StructureNotifyMask|FocusChangeMask|EnterWindowMask|LeaveWindowMask;
     } else {

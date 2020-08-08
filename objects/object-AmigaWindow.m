@@ -38,7 +38,15 @@
 {
     id windowManager = [@"windowManager" valueForKey];
     [windowManager unparentAllWindows];
-    [windowManager setAmigaBackground];
+    char *backgroundCString =
+"a\n"
+"b\n"
+;
+    char *backgroundPalette =
+"a #0055aa\n"
+"b #000000\n"
+;
+    [windowManager setBackgroundForCString:backgroundCString palette:backgroundPalette];
     [windowManager reparentAllWindows:@"AmigaWindow"];
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
     id menuBar = [windowManager openWindowForObject:[@"AmigaMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];

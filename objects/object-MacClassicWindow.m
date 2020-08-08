@@ -30,7 +30,15 @@
 {
     id windowManager = [@"windowManager" valueForKey];
     [windowManager unparentAllWindows];
-    [windowManager setCheckerboardBackground];
+    char *backgroundCString =
+"ab\n"
+"ba\n"
+;
+    char *backgroundPalette =
+"a #606060\n"
+"b #a0a0a0\n"
+;
+    [windowManager setBackgroundForCString:backgroundCString palette:backgroundPalette];
     id rootWindowObject = [@"MacRootWindow" asInstance];
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
     [windowManager reparentAllWindows:@"MacClassicWindow"];
