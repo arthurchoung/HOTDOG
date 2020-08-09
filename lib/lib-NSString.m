@@ -88,25 +88,6 @@
     return [str destructiveReplaceCharactersNotInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890" withChar:' '];
 }
 
-- (id)parseAsSimpleDictionary
-{
-    id results = nsdict();
-    id pairs = [self split:@" "];
-    for (id elt in pairs) {
-        if (![elt containsString:@"="]) {
-            continue;
-        }
-        id tokens = [elt split:@"="];
-        id key = [tokens nth:0];
-        id val = [tokens nth:1];
-        if (![key length] || ![val length]) {
-            continue;
-        }
-        [results setValue:val forKey:key];
-    }
-    return results;
-}
-
 - (id)split:(id)sep
 {
     return [[self componentsSeparatedByString:sep] filterEmptyStrings];
