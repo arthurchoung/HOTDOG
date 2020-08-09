@@ -683,16 +683,10 @@ NSLog(@"Another window manager is running");
     color->flags = DoRed|DoGreen|DoBlue;
     XAllocColor(_display, colormap, color);
 }
-- (void)setBackgroundForCString:(char *)cstr palette:(char *)palette
+- (void)setBackgroundForBitmap:(id)bitmap
 {
-    int width = [Definitions widthForCString:cstr];
-    int height = [Definitions heightForCString:cstr];
-    if (!width || !height) {
-        return;
-    }
-    id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:width height:height] autorelease];
-    [bitmap drawCString:cstr palette:palette x:0 y:0];
-
+    int width = [bitmap bitmapWidth];
+    int height = [bitmap bitmapHeight];
 
     int screen = DefaultScreen(_display);
     int depth = DefaultDepth(_display, screen);
@@ -709,6 +703,18 @@ NSLog(@"Another window manager is running");
     XFreePixmap(_display, pixmap);
     XDestroyImage(ximage);
     XClearWindow(_display, _rootWindow);
+}
+- (void)setBackgroundForCString:(char *)cstr palette:(char *)palette
+{
+    int width = [Definitions widthForCString:cstr];
+    int height = [Definitions heightForCString:cstr];
+    if (!width || !height) {
+        return;
+    }
+    id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:width height:height] autorelease];
+    [bitmap drawCString:cstr palette:palette x:0 y:0];
+
+    [self setBackgroundForBitmap:bitmap];
 }
 
 - (void)cleanupChildProcesses
@@ -1323,7 +1329,6 @@ if ([monitor intValueForKey:@"height"] == 768) {
                 if ([obj respondsToSelector:@selector(pixelBytesBGR565)]) {
                     unsigned char *pixelBytes = [obj pixelBytesBGR565];
                     if (pixelBytes) {
-NSLog(@"pixelBytesBGR565 %d", draw_GL_NEAREST);
                         int navigationBarHeight = [Definitions navigationBarHeight];
                         int bitmapWidth = [obj bitmapWidth];
                         int bitmapHeight = [obj bitmapHeight];
