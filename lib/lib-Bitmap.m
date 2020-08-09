@@ -69,6 +69,7 @@ static int hexchartoint(char c)
     int *_fontWidths;
     int *_fontHeights;
     int *_fontXSpacings;
+    int _GL_NEAREST;
 }
 @end
 
@@ -118,6 +119,10 @@ NSLog(@"Out of memory!");
     return self;
 }
 
+- (unsigned char *)pixelBytesRGBA8888
+{
+    return _pixelBytes;
+}
 - (unsigned char *)pixelBytes
 {
     return _pixelBytes;
