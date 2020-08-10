@@ -1,5 +1,5 @@
 leftPadding,rightPadding,objectMessage,messageForClick
-4,4,"BananaPeel","execDir:'Config/rootWindowMenu.csv'|parseCSVFromFile|asMenu"
+4,4,"HotDog","execDir:'Config/rootWindowMenu.csv'|parseCSVFromFile|asMenu"
 4,4,"TextMenuItem:'Window'","execDir:'Config/windowMenu.csv'|parseCSVFromFile|asMenu"
 4,4,"TextMenuItem:'Mon #{monitorTitle}'","execDir:'Config/monitorMenu.csv'|parseCSVFromFile|asMenu"
 0,0,

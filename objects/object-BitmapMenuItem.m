@@ -25,6 +25,43 @@
 
 #import "PEEOS.h"
 
+static char *hotdogPalette =
+"b #000000\n"
+". #EECC99\n"
+"r #BB3333\n"
+;
+static char *hotdogHighlightedPalette =
+"b #FFFFFF\n"
+"r #EECC99\n"
+". #BB3333\n"
+;
+/*
+static char *hotdogHighlightedPalette =
+"b #FFFFFF\n"
+"r #E3C597\n"
+". #BE2E36\n"
+;
+*/
+
+static char *hotdogPixels =
+"    bb             \n"
+"   b..b            \n"
+" rrrr..b           \n"
+"rrbbrr..b          \n"
+"rb..brr..b         \n"
+"b....brr..bb       \n"
+"b.....brr...bb     \n"
+"b......brrr...bbb  \n"
+"b.......bbrrr....b \n"
+" b........bbrrrrr  \n"
+"  b.........bbbrrr \n"
+"   b...........brrr\n"
+"    bb.........brrr\n"
+"      bb.......brrr\n"
+"        bb....brrr \n"
+"          bbbb     \n"
+;
+
 static char *bananaPalette =
 "b #000000\n"
 "w #ffffff\n"
@@ -57,6 +94,18 @@ static char *bananaPixels =
 ;
 
 @implementation Definitions(jfkldsjlkfsjffjdkslfjdsklfjskdd)
++ (id)HotDog
+{
+    id pixels = nscstr(hotdogPixels);
+    id palette = nscstr(hotdogPalette);
+    id highlightedPalette = nscstr(hotdogHighlightedPalette);
+
+    id obj = [@"BitmapMenuItem" asInstance];
+    [obj setValue:pixels forKey:@"pixels"];
+    [obj setValue:palette forKey:@"palette"];
+    [obj setValue:highlightedPalette forKey:@"highlightedPalette"];
+    return obj;
+}
 + (id)BananaPeel
 {
     id pixels = nscstr(bananaPixels);
