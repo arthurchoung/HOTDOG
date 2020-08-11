@@ -1,8 +1,6 @@
-# PEEOS
+# HOT DOG Linux
 
-Personal Execution Environment Operating System
-
-For more information, please visit http://peeos.org
+For more information, please visit http://hotdoglinux.com
 
 
 
@@ -42,7 +40,7 @@ DesktopNames=xterm
 This allows you to change the window manager to a simple xterm by logging out,
 choosing the newly created xterm.desktop, then logging back in.
 
-From the xterm you can run the PEEOS window manager.
+From the xterm you can run the HOT DOG Linux window manager.
 
 You can customize this as you like.
 
@@ -55,7 +53,7 @@ for other versions as well.
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
 
-Email: arthur -at- peeos.org
+Email: arthur -at- hotdoglinux.com
 
 Released under the GNU General Public License, version 3.
 

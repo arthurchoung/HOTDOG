@@ -1,15 +1,15 @@
 /*
 
- PEEOS
+ HOT DOG Linux
 
  Copyright (c) 2020 Arthur Choung. All rights reserved.
 
- Email: arthur -at- peeos.org
+ Email: arthur -at- hotdoglinux.com
 
- This file is part of PEEOS.
+ This file is part of HOT DOG Linux.
 
- PEEOS is free software: you can redistribute it and/or modify it
- under the terms of the GNU General Public License as published by
+ HOT DOG Linux is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
@@ -23,7 +23,7 @@
 
  */
 
-#import "PEEOS.h"
+#import "HOTDOG.h"
 
 static char *hotdogPalette =
 "b #000000\n"

@@ -8,7 +8,7 @@ sub getExecPath
     for (;;) {
         my $dir = `dirname $path`;
         chomp $dir;
-        if (-e "$dir/PEEOS.h") {
+        if (-e "$dir/HOTDOG.h") {
             return $dir;
         }
         if (not -l $path) {
@@ -21,7 +21,7 @@ sub getExecPath
         }
         $path = $newpath;
     }
-    print "Error: PEEOS.h not found\n";
+    print "Error: HOTDOG.h not found\n";
     exit(1);
 }
 
@@ -156,7 +156,7 @@ sub linkSourcePaths
     my $objectFiles = join ' ', @arr;
 #    -pg
     my $cmd = <<EOF;
-clang -o $execPath/peeos
+clang -o $execPath/hotdog
     -fobjc-nonfragile-abi
     -fblocks
     $objectFiles

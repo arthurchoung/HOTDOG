@@ -1,18 +1,14 @@
-# PEEOS
+# HOT DOG Linux
 
-Personal Execution Environment Operating System
-
-For more information, please visit http://peeos.org
+For more information, please visit http://hotdoglinux.com
 
 
 
 ## Screenshots
 
-![About Screenshot](Screenshots/peeos-screenshot-about.png)
+![Windows 3.1 Screenshot](Screenshots/peeos-screenshot-win31.png)
 
 ![Amiga Screenshot](Screenshots/peeos-screenshot-amiga.png)
-
-![Windows 3.1 Screenshot](Screenshots/peeos-screenshot-win31.png)
 
 ![Atari ST Screenshot](Screenshots/peeos-screenshot-atarist.png)
 
@@ -25,22 +21,22 @@ For more information, please visit http://peeos.org
 
 ## Overview
 
-The design goals of PEEOS include:
+The design goals of HOT DOG Linux include:
 
-  * Graphical user interface based on retro computer systems including Classic Mac, Amiga, Atari ST, and Windows 3.1
+  * Graphical user interface based on retro computer systems including Windows 3.1 Hot Dog Stand, Amiga Workbench, Atari ST GEM, and Classic Mac
   * Custom lightweight Objective-C foundation
   * Bitmapped graphics, low DPI displays
   * No Unicode support by design
 
-At the moment it is based on Linux, mainly for the graphics drivers.
-
-PEEOS uses a custom lightweight Objective-C foundation on top of the GNUstep Objective-C runtime. It does not use the GNUstep Foundation. The style of Objective-C is completely different from the one Apple uses, everything is basically **id**.
+HOT DOG Linux uses a custom lightweight Objective-C foundation on top of the GNUstep Objective-C runtime. It does not use the GNUstep Foundation. The style of Objective-C is completely different from the one Apple uses, everything is basically **id**.
 
 By design, Unicode is not supported.
 
-Low DPI displays are preferred, since the graphics are bitmapped and fixed in size. The preferred aspect ratio for PEEOS is 4:3. 
+Low DPI displays are preferred, since the graphics are bitmapped and fixed in size. The preferred aspect ratio for HOT DOG Linux is 4:3. 
 
-PEEOS does not use Automatic Reference Counting. It causes problems with type-checking during compilation (it is too strict).
+HOT DOG Linux does not use Automatic Reference Counting. It causes problems with type-checking during compilation (it is too strict).
+
+HOT DOG Linux is an acryonym that stands for **H**orrible **O**bsolete **T**ypeface and **D**readful **O**nscreen **G**raphics for Linux.
 
 
 
@@ -54,11 +50,11 @@ $ perl build.pl
 
 To run the window manager:
 
-$ ./peeos runWindowManager
+$ ./hotdog runWindowManager
 
 To run the iPod style interface:
 
-$ ./peeos
+$ ./hotdog
 
 
 
@@ -104,7 +100,7 @@ These are optional:
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
 
-Email: arthur -at- peeos.org
+Email: arthur -at- hotdoglinux.com
 
 Released under the GNU General Public License, version 3.
 

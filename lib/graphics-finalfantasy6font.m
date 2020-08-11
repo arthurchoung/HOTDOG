@@ -1,4 +1,4 @@
-#import "PEEOS.h"
+#import "HOTDOG.h"
 
 @implementation Definitions(fjdklsjfkldskjf)
 + (char *)cStringForFinalFantasy6Font:(int)c

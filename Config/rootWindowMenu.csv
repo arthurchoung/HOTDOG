@@ -1,5 +1,5 @@
 displayName,messageForClick
-PEEOS,"[ 'peeos' ] | runCommandInBackground"
+HOT DOG,"[ 'hotdog' ] | runCommandInBackground"
 XTerm,"[ 'xterm' '-geometry' '80x50' '+bc' '+uc' ] | runCommandInBackground"
 Firefox,"[ 'firefox' ] | runCommandInBackground"
 Thunderbird,"[ 'thunderbird' ] | runCommandInBackground"
@@ -7,7 +7,7 @@ Thunderbird,"[ 'thunderbird' ] | runCommandInBackground"
 "Restart","[ 'performRestart' ]|runCommandInBackground"
 "Shutdown","[ 'performShutdown' ]|runCommandInBackground"
 ,
-"About PEEOS","'Personal Execution Environment Operating System (PEEOS)\\n\\nWritten by Arthur Choung\\n'|showAlert"
+"About HOT DOG","'Horrible Obsolete Typeface and Dreadful Onscreen Graphics for Linux (HOT DOG Linux)\\n\\nWritten by Arthur Choung\\n'|showAlert"
 ,
 Enter Expose Mode,"enterExposeMode"
 ,

@@ -1,15 +1,15 @@
 /*
 
- PEEOS
+ HOT DOG Linux
 
  Copyright (c) 2020 Arthur Choung. All rights reserved.
 
- Email: arthur -at- peeos.org
+ Email: arthur -at- hotdoglinux.com
 
- This file is part of PEEOS.
+ This file is part of HOT DOG Linux.
 
- PEEOS is free software: you can redistribute it and/or modify it
- under the terms of the GNU General Public License as published by
+ HOT DOG Linux is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
@@ -140,25 +140,25 @@ typedef struct {
 @interface Definitions : NSObject
 @end
 
-#import "PEEOS-lib.h"
-#import "PEEOS-objects.h"
+#import "HOTDOG-lib.h"
+#import "HOTDOG-objects.h"
 
 #ifdef BUILD_FOR_ANDROID
-#import "PEEOS-android.h"
+#import "HOTDOG-android.h"
 #endif
 
 #ifdef BUILD_FOR_LINUX
-#import "PEEOS-linux.h"
+#import "HOTDOG-linux.h"
 #endif
 
 #ifdef BUILD_FOR_OSX
-#import "PEEOS-osx.h"
-#import "PEEOS-osx-ios.h"
+#import "HOTDOG-osx.h"
+#import "HOTDOG-osx-ios.h"
 #endif
 
 #ifdef BUILD_FOR_IOS
-#import "PEEOS-ios.h"
-#import "PEEOS-osx-ios.h"
+#import "HOTDOG-ios.h"
+#import "HOTDOG-osx-ios.h"
 #endif
 
 

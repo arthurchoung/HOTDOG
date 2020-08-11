@@ -1,8 +1,6 @@
-# PEEOS
+# HOT DOG Linux
 
-Personal Execution Environment Operating System
-
-For more information, please visit http://peeos.org
+For more information, please visit http://hotdoglinux.com
 
 
 
@@ -19,7 +17,7 @@ Remove this line in build.pl:
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
 
-Email: arthur -at- peeos.org
+Email: arthur -at- hotdoglinux.com
 
 Released under the GNU General Public License, version 3.
 

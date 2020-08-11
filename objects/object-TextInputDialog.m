@@ -1,15 +1,15 @@
 /*
 
- PEEOS
+ HOT DOG Linux
 
  Copyright (c) 2020 Arthur Choung. All rights reserved.
 
- Email: arthur -at- peeos.org
+ Email: arthur -at- hotdoglinux.com
 
- This file is part of PEEOS.
+ This file is part of HOT DOG Linux.
 
- PEEOS is free software: you can redistribute it and/or modify it
- under the terms of the GNU General Public License as published by
+ HOT DOG Linux is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
@@ -23,7 +23,7 @@
 
  */
 
-#import "PEEOS.h"
+#import "HOTDOG.h"
 
 #ifdef BUILD_FOR_LINUX
 @implementation Definitions(fjdklsjflkdsjlkfdsljkfkjsd)
@@ -45,7 +45,7 @@
         quotedText = quotedTitle;
     }
     id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", quotedTitle, quotedText, 10, 10, 600, 400);
-    id cmd = @[ @"peeos", message ];
+    id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
     if (!outputData) {
         return nil;
@@ -67,7 +67,7 @@
     id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id quotedTitle = [[[self str:title] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", quotedTitle, quotedText, 10, 10, 600, 400);
-    id cmd = @[ @"peeos", message ];
+    id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
     if (!outputData) {
         return;
