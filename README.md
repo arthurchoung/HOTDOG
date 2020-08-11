@@ -36,7 +36,7 @@ Low DPI displays are preferred, since the graphics are bitmapped and fixed in si
 
 HOT DOG Linux does not use Automatic Reference Counting. It causes problems with type-checking during compilation (it is too strict).
 
-HOT DOG Linux is an acryonym that stands for **H**orrible **O**bsolete **T**ypeface and **D**readful **O**nscreen **G**raphics for Linux.
+HOT DOG Linux is an acronym that stands for **H**orrible **O**bsolete **T**ypeface and **D**readful **O**nscreen **G**raphics for Linux.
 
 
 
