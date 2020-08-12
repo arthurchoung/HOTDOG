@@ -6,17 +6,17 @@ For more information, please visit http://hotdoglinux.com
 
 ## Screenshots
 
-![Windows 3.1 Screenshot](Screenshots/peeos-screenshot-win31.png)
+![Windows 3.1 Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
-![Amiga Screenshot](Screenshots/peeos-screenshot-amiga.png)
+![Amiga Screenshot](Screenshots/hotdog-screenshot-amiga.png)
 
-![Atari ST Screenshot](Screenshots/peeos-screenshot-atarist.png)
+![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
 
-![Mac Classic Screenshot](Screenshots/peeos-screenshot-mac-classic.png)
+![Mac Classic Screenshot](Screenshots/hotdog-screenshot-mac-classic.png)
 
-![Mac Color Screenshot](Screenshots/peeos-screenshot-mac-color.png)
+![Mac Color Screenshot](Screenshots/hotdog-screenshot-mac-color.png)
 
-![Mac Platinum Screenshot](Screenshots/peeos-screenshot-mac-platinum.png)
+![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-mac-platinum.png)
 
 
 ## Overview
