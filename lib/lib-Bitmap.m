@@ -968,21 +968,24 @@ NSLog(@"Out of memory!");
         }
         unsigned char *q = strchr(p, '\n');
         if (!q) {
-            q = strchr(p, 0);
-            if (!q) {
+            int len = strlen(p);
+            if (len < 9) {
                 break;
             }
-        }
-        if (q - p != 9) {
-            p = q+1;
-            continue;
+            q = p+len;
+        } else {
+            q++;
+            if (q - p < 10) {
+                p = q;
+                continue;
+            }
         }
         unsigned char c = p[0];
         int r = hexchartoint(p[3])*16 + hexchartoint(p[4]);
         int g = hexchartoint(p[5])*16 + hexchartoint(p[6]);
         int b = hexchartoint(p[7])*16 + hexchartoint(p[8]);
         [self drawCString:str x:x y:y c:c r:r g:g b:b a:255];
-        p = q+1;
+        p = q;
     }
 }
 - (void)drawCString:(unsigned char *)str x:(int)x y:(int)y c:(unsigned char)c r:(int)r g:(int)g b:(int)b a:(int)a ix:(int)ix iy:(int)iy cx:(int)cx cy:(int)cy lx:(int)lx ly:(int)ly
