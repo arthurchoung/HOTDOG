@@ -12,11 +12,11 @@ For more information, please visit http://hotdoglinux.com
 
 ![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
 
-![Mac Classic Screenshot](Screenshots/hotdog-screenshot-mac-classic.png)
+![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
 
-![Mac Color Screenshot](Screenshots/hotdog-screenshot-mac-color.png)
+![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
 
-![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-mac-platinum.png)
+![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
 
 
 ## Overview
