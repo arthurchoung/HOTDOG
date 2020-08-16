@@ -240,6 +240,13 @@ NSLog(@"Out of memory!");
     _greenTimesAlpha = ((double)_g)*alpha;
     _blueTimesAlpha = ((double)_b)*alpha;
 }
+- (void)drawRectangleX:(int)x y:(int)y w:(int)w h:(int)h
+{
+    [self drawHorizontalLineX:x x:x+w-1 y:y];
+    [self drawHorizontalLineX:x x:x+w-1 y:y+h-1];
+    [self drawVerticalLineX:x y:y y:y+h-1];
+    [self drawVerticalLineX:x+w-1 y:y y:y+h-1];
+}
 - (void)drawRectangleX:(int)x1 y:(int)y1 x:(int)x2 y:(int)y2
 {
     [self drawHorizontalLineX:x1 x:x2 y:y1];

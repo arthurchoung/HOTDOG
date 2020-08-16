@@ -26,6 +26,10 @@
 #import "HOTDOG.h"
 
 @implementation NSObject(sdfdsfdsfsdfdsf)
+- (void)addToArray:(id)arr
+{
+    [arr addObject:self];
+}
 - (id)self
 {
     return self;
