@@ -73,6 +73,10 @@
     }
 }
 
+- (void)setFP:(void *)fp
+{
+    _fp = fp;
+}
 - (BOOL)openFile:(id)path mode:(id)mode
 {
     [self closeFile];
@@ -112,6 +116,13 @@
         return 0;
     }
     return fread(buf, 1, size, _fp);
+}
+- (int)writeBytes:(char *)buf size:(int)size
+{
+    if (!_fp) {
+        return 0;
+    }
+    return fwrite(buf, 1, size, _fp);
 }
 
 @end
@@ -161,12 +172,49 @@
         return (BOOL)(([[obj lastPathComponent] hasPrefix:@"."]) ? NO : YES);
     }];
 }
-- (BOOL)writeAsLinesToFile:(id)path
+- (BOOL)writeLinesToFile:(id)path
 {
-    id arr = [self mapBlock:^(id obj) {
-        return nsfmt(@"%@\n", obj);
-    }];
-    return [[arr join:@""] writeToFile:path];
+    char *cpath = [path UTF8String];
+    if (!cpath || !cpath[0]) {
+        return NO;
+    }
+    id basePath = [path stringByDeletingLastPathComponent];
+    if ([basePath length]) {
+        if (![basePath fileExists]) {
+            [basePath makeDirectory];
+        }
+    }
+    FILE *fp = fopen(cpath, "w");
+    if (!fp) {
+        return NO;
+    }
+    BOOL result = YES;
+    for (id elt in self) {
+        if (![elt respondsToSelector:@selector(UTF8String)]) {
+            result = NO;
+            break;
+        }
+        if (![elt respondsToSelector:@selector(length)]) {
+            result = NO;
+            break;
+        }
+        char *bytes = [elt UTF8String];
+        int len = [elt length];
+        if (len) {
+            if (fwrite(bytes, 1, len, fp) != len) {
+                result = NO;
+                break;
+            }
+        }
+        if (fwrite("\n", 1, 1, fp) != 1) {
+            result = NO;
+            break;
+        }
+    }
+
+    fclose(fp);
+
+    return result;
 }
 
 - (id)asFileArray
