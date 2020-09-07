@@ -44,6 +44,36 @@ NSLog(@"Unable to setenv HOTDOG_HOME=%@", execDir);
             [object pushObject:[Definitions mainMenuInterface]];
             [Definitions runWindowManagerForObject:object];
             [[Definitions mainInterface] setValue:nil forKey:@"context"];
+        } else if ((argc > 1) && !strcmp(argv[1], "open")) {
+            id arr = nsarr();
+            for (int i=2; i<argc; i++) {
+                id filePath = nscstr(argv[i]);
+                id displayName = filePath;
+                id dict = nsdict();
+                if ([filePath isDirectory]) {
+                    displayName = [displayName cat:@"/"];
+                    [dict setValue:@"directory" forKey:@"fileType"];
+                }
+                if ([filePath isFile]) {
+                    [dict setValue:@"file" forKey:@"fileType"];
+                }
+                [dict setValue:@"#{displayName}" forKey:@"stringFormat"];
+                [dict setValue:displayName forKey:@"displayName"];
+                [dict setValue:filePath forKey:@"filePath"];
+                [dict setValue:[filePath fileModificationDate] forKey:@"fileModificationDate"];
+                [dict setValue:nsfmt(@"%lu", [filePath fileSize]) forKey:@"fileSize"];
+                [arr addObject:dict];
+            }
+            id rootObject = [Definitions mainInterface];
+            if ([arr count]) {
+                [rootObject pushObject:[arr asListInterface]];
+            } else {
+                id object = [[[@"." contentsOfDirectory] asFileArray] asListInterface];
+                [object setValue:@"#{displayName}" forKey:@"stringFormat"];
+                [rootObject pushObject:object];
+            }
+            [Definitions runWindowManagerForObject:rootObject];
+            [[Definitions mainInterface] setValue:nil forKey:@"context"];
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
@@ -60,7 +90,7 @@ NSLog(@"Unable to setenv HOTDOG_HOME=%@", execDir);
                 }
             }
             id message = [args join:@" "];
-            NSLog(@"message %@", message);
+//NSLog(@"message %@", message);
             id object = [@{} evaluateMessage:message];
             if (object) {
                 [nsfmt(@"%@", object) writeToStandardOutput];
