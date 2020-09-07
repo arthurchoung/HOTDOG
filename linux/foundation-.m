@@ -2011,37 +2011,37 @@ NSLog(@"copyMethodsToNSConstantString class '%s' not found", className);
     unsigned int outCount = 0;
     Method *methods = class_copyMethodList(cls, &outCount);
     if (methods) {
-NSLog(@"copyMethodsToNSConstantString count %d", outCount);
+//NSLog(@"copyMethodsToNSConstantString count %d", outCount);
         for (int i=0; i<outCount; i++) {
             SEL sel = method_getName(methods[i]);
             char *name = sel_getName(sel);
             if (!strncmp(name, "init", 4)) {
-NSLog(@"i %d skipping sel '%s'", i, name);
+//NSLog(@"i %d skipping sel '%s'", i, name);
                 continue;
             }
             if (!strncmp(name, "destructive", 11)) {
-NSLog(@"i %d skipping sel '%s'", i, name);
+//NSLog(@"i %d skipping sel '%s'", i, name);
                 continue;
             }
             if (!strncmp(name, "append", 6)) {
-NSLog(@"i %d skipping sel '%s'", i, name);
+//NSLog(@"i %d skipping sel '%s'", i, name);
                 continue;
             }
             Method m = class_getInstanceMethod(objc_getClass("NSConstantString"), sel);
             if (m) {
-                NSLog(@"i %d method exists for %s in class %s", i, name, "NSConstantString");
+//                NSLog(@"i %d method exists for %s in class %s", i, name, "NSConstantString");
                 continue;
             }
             IMP imp = method_getImplementation(methods[i]);
             if (!imp) {
-                NSLog(@"i %d no implementation for %s in class %s", i, name, "NSString");
+//                NSLog(@"i %d no implementation for %s in class %s", i, name, "NSString");
                 continue;
             }
             imp = class_replaceMethod(objc_getClass("NSConstantString"), sel, imp, method_getTypeEncoding(methods[i]));
             if (imp) {
-                NSLog(@"i %d replaced implementation for %s in class %s", i, name, "NSConstantString");
+//                NSLog(@"i %d replaced implementation for %s in class %s", i, name, "NSConstantString");
             } else {
-                NSLog(@"i %d added implementation for %s in class %s", i, name, "NSConstantString");
+//                NSLog(@"i %d added implementation for %s in class %s", i, name, "NSConstantString");
             }
         }
         free(methods);
