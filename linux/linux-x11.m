@@ -29,6 +29,8 @@
 
 #include <fcntl.h>
 
+// Don't set focusDict to menuBar by default
+
 // AmigaMenuBar highlight black/orange
 // AmigaRootWindow right click pass to menu bar
 // inotifywait vs just check timestamp
@@ -2684,6 +2686,12 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
 {
     id dict = self;
     id windowManager = [@"windowManager" valueForKey];
+    id menuBar = [windowManager valueForKey:@"menuBar"];
+    if (dict == menuBar) {
+        [@"Which window should I move?" showAlert];
+        return;
+    }
+
     int rootWindowWidth = [windowManager intValueForKey:@"rootWindowWidth"];
     int rootWindowHeight = [windowManager intValueForKey:@"rootWindowHeight"];
     int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
@@ -2698,9 +2706,99 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
         monitorHeight = [monitor intValueForKey:@"height"];
     }
     int newX = monitorX;
-    int newY = menuBarHeight-1;
+    int newY = menuBarHeight;
     int newW = monitorWidth;
-    int newH = (monitorHeight-(menuBarHeight-1))/2;
+    int newH = ((monitorHeight-menuBarHeight)/2);
+    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+    [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
+}
+- (void)x11MaximizeBottomHalf
+{
+    id dict = self;
+    id windowManager = [@"windowManager" valueForKey];
+    id menuBar = [windowManager valueForKey:@"menuBar"];
+    if (dict == menuBar) {
+        [@"Which window should I move?" showAlert];
+        return;
+    }
+
+    int rootWindowWidth = [windowManager intValueForKey:@"rootWindowWidth"];
+    int rootWindowHeight = [windowManager intValueForKey:@"rootWindowHeight"];
+    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
+    int oldX = [dict intValueForKey:@"x"];
+    int oldY = [dict intValueForKey:@"y"];
+    id monitor = [Definitions monitorForX:oldX y:oldY];
+    int monitorX = [monitor intValueForKey:@"x"];
+    int monitorWidth = rootWindowWidth;
+    int monitorHeight = rootWindowHeight;
+    if (monitor) {
+        monitorWidth = [monitor intValueForKey:@"width"];
+        monitorHeight = [monitor intValueForKey:@"height"];
+    }
+    int newX = monitorX;
+    int newH = (monitorHeight-menuBarHeight)/2;
+    int newY = monitorHeight - newH;
+    int newW = monitorWidth;
+    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+    [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
+}
+- (void)x11MaximizeLeftHalf
+{
+    id dict = self;
+    id windowManager = [@"windowManager" valueForKey];
+    id menuBar = [windowManager valueForKey:@"menuBar"];
+    if (dict == menuBar) {
+        [@"Which window should I move?" showAlert];
+        return;
+    }
+
+    int rootWindowWidth = [windowManager intValueForKey:@"rootWindowWidth"];
+    int rootWindowHeight = [windowManager intValueForKey:@"rootWindowHeight"];
+    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
+    int oldX = [dict intValueForKey:@"x"];
+    int oldY = [dict intValueForKey:@"y"];
+    id monitor = [Definitions monitorForX:oldX y:oldY];
+    int monitorX = [monitor intValueForKey:@"x"];
+    int monitorWidth = rootWindowWidth;
+    int monitorHeight = rootWindowHeight;
+    if (monitor) {
+        monitorWidth = [monitor intValueForKey:@"width"];
+        monitorHeight = [monitor intValueForKey:@"height"];
+    }
+    int newX = monitorX;
+    int newY = menuBarHeight;
+    int newW = monitorWidth/2;
+    int newH = monitorHeight-menuBarHeight;
+    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+    [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
+}
+- (void)x11MaximizeRightHalf
+{
+    id dict = self;
+    id windowManager = [@"windowManager" valueForKey];
+    id menuBar = [windowManager valueForKey:@"menuBar"];
+    if (dict == menuBar) {
+        [@"Which window should I move?" showAlert];
+        return;
+    }
+
+    int rootWindowWidth = [windowManager intValueForKey:@"rootWindowWidth"];
+    int rootWindowHeight = [windowManager intValueForKey:@"rootWindowHeight"];
+    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
+    int oldX = [dict intValueForKey:@"x"];
+    int oldY = [dict intValueForKey:@"y"];
+    id monitor = [Definitions monitorForX:oldX y:oldY];
+    int monitorX = [monitor intValueForKey:@"x"];
+    int monitorWidth = rootWindowWidth;
+    int monitorHeight = rootWindowHeight;
+    if (monitor) {
+        monitorWidth = [monitor intValueForKey:@"width"];
+        monitorHeight = [monitor intValueForKey:@"height"];
+    }
+    int newW = monitorWidth/2;
+    int newX = monitorX+newW;
+    int newH = monitorHeight-menuBarHeight;
+    int newY = menuBarHeight;
     [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
     [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
 }
@@ -2718,8 +2816,11 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
     if (monitor) {
         monitorHeight = [monitor intValueForKey:@"height"];
     }
-    int newY = menuBarHeight-1;
-    int newH = monitorHeight-(menuBarHeight-1);
+    int newY = oldY;
+    if (oldY >= monitorHeight - 40) {
+        newY = menuBarHeight;
+    }
+    int newH = monitorHeight-newY;
     [dict setValue:nsfmt(@"%d %d", oldX, newY) forKey:@"moveWindow"];
     [dict setValue:nsfmt(@"%d %d", oldW, newH) forKey:@"resizeWindow"];
 }
