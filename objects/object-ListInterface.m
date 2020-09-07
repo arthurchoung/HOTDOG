@@ -447,6 +447,7 @@ NSLog(@"setAllStringFormat:'%@'", val);
 @interface ListInterface : IvarObject
 {
     id _headerFormat;
+    id _stringFormat;
     id _message;
     id _observer;
     id _path;
@@ -879,6 +880,9 @@ next:
     id text = nil;
     if (isnsdict(elt)) {
         id stringFormat = [elt valueForKey:@"stringFormat"];
+        if (!stringFormat) {
+            stringFormat = _stringFormat;
+        }
         if (stringFormat) {
             text = [elt str:stringFormat];
         } else {
