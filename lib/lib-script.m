@@ -172,6 +172,10 @@ static id callMethod(id target, struct objc_method *m, id args)
                 } else if (signature[0] == '@') {
                     id (*func)(id, SEL, id, id) = imp;
                     return func(target, sel, [args nth:0], [args nth:1]);
+                } else if (signature[0] == 'C') {
+                    unsigned char (*func)(id, SEL, id, id) = imp;
+                    unsigned char val = func(target, sel, [args nth:0], [args nth:1]);
+                    return nsfmt(@"%u", val);
                 }
             } else if (signature[5] == '@') {
                 if (signature[6] == 0) {
@@ -199,7 +203,11 @@ static id callMethod(id target, struct objc_method *m, id args)
                         }
                     } else if (signature[7] == '@') {
                         if (signature[8] == 0) {
-                            if (signature[0] == '@') {
+                            if (signature[0] == 'v') {
+                                void (*func)(id, SEL, id, id, id, id, id) = imp;
+                                func(target, sel, [args nth:0], [args nth:1], [args nth:2], [args nth:3], [args nth:4]);
+                                return target;
+                            } else if (signature[0] == '@') {
                                 id (*func)(id, SEL, id, id, id, id, id) = imp;
                                 return func(target, sel, [args nth:0], [args nth:1], [args nth:2], [args nth:3], [args nth:4]);
                             }
@@ -262,6 +270,13 @@ static id callMethod(id target, struct objc_method *m, id args)
                             }
                         }
                     }
+                }
+            }
+        } else if (signature[4] == 'd') {
+            if (signature[5] == 0) {
+                if (signature[0] == '@') {
+                    id (*func)(id, SEL, id, double) = imp;
+                    return func(target, sel, [args nth:0], [[args nth:1] doubleValue]);
                 }
             }
         } else if (signature[4] == 'l') {
