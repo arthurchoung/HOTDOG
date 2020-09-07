@@ -2657,12 +2657,18 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
 - (void)x11MoveToMonitor:(int)monitorNumber
 {
     id dict = self;
+    id windowManager = [@"windowManager" valueForKey];
+    id menuBar = [windowManager valueForKey:@"menuBar"];
+    if (dict == menuBar) {
+        [@"Which window should I move?" showAlert];
+        return;
+    }
+
     id monitors = [Definitions monitorConfig];
     id monitor = [monitors nth:monitorNumber];
     if (!monitor) {
         return;
     }
-    id windowManager = [@"windowManager" valueForKey];
     int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
     int monitorX = [monitor intValueForKey:@"x"];
     int monitorWidth = [monitor intValueForKey:@"width"];
