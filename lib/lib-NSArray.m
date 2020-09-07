@@ -59,7 +59,7 @@
 
 - (BOOL)writeToFile:(id)path
 {
-    return [self writeAsLinesToFile:path];
+    return [self writeLinesToFile:path];
 }
 
 - (id)filter:(BOOL (^)(id obj))block
