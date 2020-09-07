@@ -1,0 +1,178 @@
+<html>
+<head>
+<title>HOT DOG Linux</title>
+</head>
+<body style="background-color:yellow;">
+<div style="width:80%; margin:auto; background-color:white;border: 1px solid black;">
+<div style="border: 4px solid red;">
+<div style="border: 1px solid black; padding-left:1em; padding-right:1em;">
+<h1 align=center><img src="logo.png" style="padding-bottom:4px"> HOT DOG Linux <img src="logo.png" style="padding-bottom:4px"></h1>
+<hr style="clear:both">
+
+<h2>Overview</h2>
+
+<p>
+The design goals of HOT DOG Linux include:
+
+<ul>
+<li>Graphical user interface based on retro computer systems including Windows 3.1 Hot Dog Stand, Amiga Workbench, Atari ST GEM, and Classic Mac
+<li>Custom lightweight Objective-C foundation
+<li>Bitmapped graphics, low DPI displays
+<li>No Unicode support by design
+</ul>
+
+<p>
+HOT DOG Linux uses a custom lightweight Objective-C foundation on top of the GNUstep Objective-C runtime. It does not use the GNUstep Foundation. The style of Objective-C is completely different from the one Apple uses, everything is basically <b>id</b>.
+
+<p>
+By design, Unicode is not supported.
+
+<p>
+Low DPI displays are preferred, since the graphics are bitmapped and fixed in size. The preferred aspect ratio for HOT DOG Linux is 4:3. 
+
+<p>
+HOT DOG Linux does not use Automatic Reference Counting. It causes problems with type-checking during compilation (it is too strict).
+
+<p>
+HOT DOG Linux is an acronym that stands for <b>H</b>orrible <b>O</b>bsolete <b>T</b>ypeface and <b>D</b>readful <b>O</b>nscreen <b>G</b>raphics for Linux.
+
+<h2>Download</h2>
+
+<p>
+<a href="https://github.com/arthurchoung/HOTDOG">Github</a>
+
+<h2>Screenshots</h2>
+
+<p>
+Windows 3.1 Screenshot
+<p>
+<img src="hotdog-screenshot-win31.png">
+
+<p>
+Amiga Screenshot
+<p>
+<img src="hotdog-screenshot-amiga.png">
+
+<p>
+Atari ST Screenshot
+<p>
+<img src="hotdog-screenshot-atarist.png">
+
+<p>
+Mac Classic Screenshot
+<p>
+<img src="hotdog-screenshot-macclassic.png">
+
+<p>
+Mac Color Screenshot
+<p>
+<img src="hotdog-screenshot-maccolor.png">
+
+<p>
+Mac Platinum Screenshot
+<p>
+<img src="hotdog-screenshot-macplatinum.png">
+
+
+
+
+<h2>How to compile and run</h2>
+
+<pre>
+$ sh makeExternal.sh
+
+$ sh makeUtils.sh
+
+$ perl build.pl
+
+To run the window manager:
+
+$ ./hotdog runWindowManager
+
+To run the iPod style interface:
+
+$ ./hotdog
+</pre>
+
+
+
+<h2>Dependencies</h2>
+
+<p>
+The following executables must be in your PATH or at location if specified:
+
+<ul>
+<li>inotifywait
+<li>xrandr
+<li>ifconfig (used by Utils/printNetworkInfo)
+<li>find (used by build.pl)
+<li>clang
+<li>/usr/bin/perl
+<li>/bin/bash (used by Utils/printDateEverySecondForTimezone:text:)
+<li>date (used by Utils/printDateEverySecondForTimezone:text:)
+</ul>
+
+<p>
+(this list is probably incomplete)
+
+<p>
+The following libraries must have headers available and be linkable:
+
+<ul>
+<li>libX11
+<li>libXext
+<li>libXfixes
+<li>libGL (Mesa should work)
+<li>libpthread
+<li>libm
+</ul>
+
+<p>
+These are optional:
+
+<ul>
+<li>xterm
+<li>mpv
+<li>mupdf (used by Config/fileHandlers.csv)
+<li>firefox (used by Config/rootWindowMenu.csv and Config/fileHandlers.csv)
+<li>thunderbird (used by Config/rootWindowMenu.csv)
+<li>x64 (used by Config/fileHandlers.csv)
+<li>mupen64plus (used by Config/fileHandlers.csv)
+</ul>
+
+<p>
+(this list is probably incomplete)
+
+
+<h2>Legal</h2>
+
+<p>
+Copyright (c) 2020 Arthur Choung. All rights reserved.
+
+<p>
+Email: arthur -at- hotdoglinux.com
+
+<p>
+Released under the GNU General Public License, version 3.
+
+<p>
+For details on the license, refer to the LICENSE file.
+</div>
+</div>
+</div>
+
+<!--
+Key Concepts
+
+States and Transitions
+Regular Expressions
+Pushdown Automata
+Turing Machines
+
+-
+
+Human readable and editable text files
+Shared libraries are discouraged
+Executable programs are preferred with communication using stdio
+Network should not be accessed directly, but through executable program
+-->
