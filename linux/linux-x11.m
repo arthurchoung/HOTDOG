@@ -495,7 +495,7 @@ exit(0);
     if ([object respondsToSelector:@selector(preferredHeight)]) {
         h = [object preferredHeight];
     }
-    [self runWindowManagerForObject:object x:0 y:20 w:w h:h];
+    [self runWindowManagerForObject:object x:0 y:0 w:w h:h];
 }
 + (id)setupWindowManagerForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h
 {
