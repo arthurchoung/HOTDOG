@@ -74,6 +74,19 @@ NSLog(@"Unable to setenv HOTDOG_HOME=%@", execDir);
             }
             [Definitions runWindowManagerForObject:rootObject];
             [[Definitions mainInterface] setValue:nil forKey:@"context"];
+        } else if ((argc > 1) && !strcmp(argv[1], "show")) {
+            id args = nsarr();
+            for (int i=2; i<argc; i++) {
+                id str = nscstr(argv[i]);
+                [args addObject:str];
+            }
+            id message = [args join:@" "];
+//NSLog(@"message %@", message);
+            id object = [@{} evaluateMessage:message];
+            if (object) {
+                [Definitions runWindowManagerForObject:object];
+                [[Definitions mainInterface] setValue:nil forKey:@"context"];
+            }
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
