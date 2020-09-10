@@ -1722,7 +1722,7 @@ NSLog(@"received X event type %d", event.type);
 {
     XKeyEvent *e = eptr;
     int keysym = XLookupKeysym(e, 0);
-NSLog(@"keysym %d", keysym);
+NSLog(@"keysym %d mod1 %d mod2 %d mod3 %d mod4 %d mod5 %d", keysym, e->state&Mod1Mask, e->state&Mod2Mask, e->state&Mod3Mask, e->state&Mod4Mask, e->state&Mod5Mask);
     if (!_isWindowManager) {
         if (keysym == XK_Escape) {
             id dict = [self dictForObjectWindow:e->window];
@@ -1748,7 +1748,10 @@ NSLog(@"rootWindow keyString %@", keyString);
 NSLog(@"keyString %@", keyString);
         [event setValue:nsfmt(@"%d", keysym) forKey:@"keyCode"];
         if (e->state & Mod1Mask) {
-            [event setValue:@"1" forKey:@"keyMod1"];
+            [event setValue:@"1" forKey:@"altKey"];
+        }
+        if (e->state & Mod4Mask) {
+            [event setValue:@"1" forKey:@"windowsKey"];
         }
         [object handleKeyDown:event];
         [dict setValue:@"1" forKey:@"needsRedraw"];
@@ -1781,7 +1784,10 @@ NSLog(@"handleX11KeyRelease repeat");
         [event setValue:keyString forKey:@"keyString"];
         [event setValue:nsfmt(@"%d", keysym) forKey:@"keyCode"];
         if (e->state & Mod1Mask) {
-            [event setValue:@"1" forKey:@"keyMod1"];
+            [event setValue:@"1" forKey:@"altKey"];
+        }
+        if (e->state & Mod4Mask) {
+            [event setValue:@"1" forKey:@"windowsKey"];
         }
         [object handleKeyUp:event];
         [dict setValue:@"1" forKey:@"needsRedraw"];

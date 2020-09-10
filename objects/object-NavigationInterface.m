@@ -964,7 +964,7 @@ NSLog(@"keyString '%@'", keyString);
     if ([obj respondsToSelector:@selector(handleKeyDown:)]) {
         [obj handleKeyDown:event];
     } else {
-        if ([event intValueForKey:@"keyMod1"]) {
+        if ([event intValueForKey:@"altKey"]) {
             [obj handleClassMenuKeyEquivalent:[event valueForKey:@"keyString"]];
         } else {
             [obj handleClassMenuKeyDown:[event valueForKey:@"keyString"]];
