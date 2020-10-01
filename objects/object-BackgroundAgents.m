@@ -41,7 +41,7 @@
 {
     self = [super init];
     if (self) {
-        id windowFrame = [@"MacColorWindow" asInstance];
+        id windowFrame = [@"HotDogStandWindow" asInstance];
         [self setValue:windowFrame forKey:@"windowFrame"];
         _hasShadow = [windowFrame intValueForKey:@"hasShadow"];
         id configPath = [Definitions execDir:@"Config/backgroundAgents.csv"];
