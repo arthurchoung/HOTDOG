@@ -156,6 +156,14 @@
 {
     return [[self valueForKey:key] intValue];
 }
+- (int)intValueForKey:(id)key default:(int)def
+{
+    id val = [self valueForKey:key];
+    if (!val) {
+        return def;
+    }
+    return [val intValue];
+}
 - (double)doubleValueForKey:(id)key
 {
     return [[self valueForKey:key] doubleValue];
