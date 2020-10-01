@@ -34,7 +34,7 @@
 + (BOOL)confirmWithAlert:(id)text title:(id)title
 {
     id quotedText = [[text keepAlphanumericCharactersAndSpacesAndPunctuation] asQuotedString];
-    id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", quotedText, 10, 10, 600, 400);
+    id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedText, 600, 400);
     id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
     id output = [outputData asString];
@@ -52,7 +52,7 @@
         return;
     }
     id text = [firstChoice keepAlphanumericCharactersAndSpacesAndPunctuation];
-    id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", [text asQuotedString], 10, 10, 600, 400);
+    id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithWidth:%d height:%d|exit:0", [text asQuotedString], 600, 400);
     id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
     id output = [outputData asString];
@@ -64,7 +64,7 @@
 - (void)confirmWithAlert:(id)text title:(id)title continuation:(id)continuation
 {
     id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuation] asQuotedString];
-    id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", quotedText, 10, 10, 600, 400);
+    id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedText, 600, 400);
     id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
     id output = [outputData asString];
@@ -76,7 +76,7 @@
 {
     id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuation] asQuotedString];
     id quotedOkText = [[[self str:okText] keepAlphanumericCharactersAndSpacesAndPunctuation] asQuotedString];
-    id message = nsfmt(@"ConfirmationDialog:%@ okText:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", quotedText, quotedOkText, 10, 10, 600, 400);
+    id message = nsfmt(@"ConfirmationDialog:%@ okText:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedText, quotedOkText, 600, 400);
     id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
     id output = [outputData asString];
