@@ -354,6 +354,15 @@
     return path;
 }
 
+- (id)asRealPath
+{
+    char buf[PATH_MAX];
+    if (realpath([self UTF8String], buf)) {
+        return nscstr(buf);
+    }
+    return nil;
+}
+
 - (id)asUniquePath
 {
     if (![self fileExists]) {
