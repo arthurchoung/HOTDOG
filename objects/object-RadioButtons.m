@@ -27,6 +27,22 @@
 
 
 @implementation Definitions(fjkdsljflksdjlkfjlskdf)
++ (id)testRadioButtons:(id)filePath
+{
+    id arr = @[ @"One", @"Two", @"Three", @"Four", @"Five" ];
+
+    id val = [[filePath linesFromFile] nth:0];
+    int index = [arr findObject:val];
+    
+    id obj = [@"RadioButtons" asInstance];
+    [obj setValue:arr forKey:@"choices"];
+    [obj setValue:filePath forKey:@"filePath"];
+    if (index >= 0) {
+        [obj setValue:nsfmt(@"%d", index) forKey:@"selectedIndex"];
+    }
+    return obj;
+}
+
 + (char *)cStringForRadioButtonSelected
 {
     return
@@ -82,12 +98,25 @@
 
 @interface RadioButtons : IvarObject
 {
+    id _choices;
+    id _filePath;
     int _selectedIndex;
     int _downIndex;
     int _hoverIndex;
+    int _firstElementY;
 }
 @end
 @implementation RadioButtons
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _selectedIndex = -1;
+        _downIndex = -1;
+        _hoverIndex = -1;
+    }
+    return self;
+}
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
     [bitmap setColor:@"white"];
@@ -96,40 +125,63 @@
     char *button = [Definitions cStringForRadioButton];
     char *selected = [Definitions cStringForRadioButtonSelected];
     char *down = [Definitions cStringForRadioButtonDown];
-    for (int i=1; i<10; i++) {
-        int y = r.y+20*i;
+    int width = [Definitions widthForCString:button];
+    _firstElementY = r.y+5;
+    for (int i=0; i<[_choices count]; i++) {
+        int y = _firstElementY+20*i;
         char *str = button;
         if ((_downIndex == i) && (_hoverIndex == i)) {
             str = down;
         }
-        [bitmap drawCString:str x:20 y:y c:'b' r:0 g:0 b:0 a:255];
+        [bitmap drawCString:str x:10 y:y c:'b' r:0 g:0 b:0 a:255];
         if (_selectedIndex == i) {
-            [bitmap drawCString:selected x:20 y:y c:'b' r:0 g:0 b:0 a:255];
+            [bitmap drawCString:selected x:10 y:y c:'b' r:0 g:0 b:0 a:255];
         }
+        [bitmap drawBitmapText:[_choices nth:i] x:10+width+10 y:y];
     }
 }
 - (void)handleMouseDown:(id)event
 {
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
-    int index = mouseY / 20;
+    int y = mouseY - _firstElementY;
+    int index = y / 20;
     _downIndex = _hoverIndex = index;
 }
 - (void)handleMouseUp:(id)event
 {
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
-    int index = mouseY / 20;
-    _downIndex = 0;
+    int y = mouseY - _firstElementY;
+    int index = y / 20;
+    [self updateSelectedIndex];
+    _downIndex = -1;
     _hoverIndex = index;
-    _selectedIndex = index;
 }
 - (void)handleMouseMoved:(id)event
 {
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
-    int index = mouseY / 20;
+    int y = mouseY - _firstElementY;
+    int index = y / 20;
     _hoverIndex = index;
+}
+- (void)updateSelectedIndex
+{
+    if (_downIndex != _hoverIndex) {
+        return;
+        }
+    int index = _downIndex;
+    if (index < 0) {
+        return;
+    }
+    if (index >= [_choices count]) {
+        return;
+    }
+    _selectedIndex = index;
+    if (_filePath) {
+        [nsfmt(@"%@", [_choices nth:index]) writeToFile:_filePath];
+    }
 }
 @end
 
