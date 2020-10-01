@@ -26,6 +26,18 @@
 #import "HOTDOG.h"
 
 @implementation Definitions(fjeiowjfklsdjfkldsjlkfj)
++ (id)testCheckbox:(id)text path:(id)path
+{
+    id str = [path stringFromFile];
+    id obj = [@"Checkbox" asInstance];
+    [obj setValue:text forKey:@"text"];
+    if (str) {
+        [obj setValue:str forKey:@"checked"];
+    }
+    [obj setValue:path forKey:@"filePath"];
+    return obj;
+}
+
 + (char *)cStringForCheckbox
 {
     return
@@ -81,7 +93,9 @@
 
 @interface Checkbox : IvarObject
 {
+    id _text;
     BOOL _checked;
+    id _filePath;
     BOOL _down;
     BOOL _hover;
 }
@@ -97,8 +111,8 @@
     char *down = [Definitions cStringForCheckboxDown];
     int width = [Definitions widthForCString:button];
     int height = [Definitions heightForCString:button];
-    int x = (r.w - width) / 2;
-    int y = (r.h - height) / 2;
+    int x = 10;
+    int y = 5;
     char *str = button;
     if (_down && _hover) {
         str = down;
@@ -107,6 +121,13 @@
     if (_checked) {
         [bitmap drawCString:selected x:x y:y c:'b' r:0 g:0 b:0 a:255];
     }
+    if (!_text) {
+        return;
+    }
+    int textHeight = [bitmap bitmapHeightForText:_text];
+    x += width + 10;
+    y += 1;
+    [bitmap drawBitmapText:_text x:x y:y];
 }
 - (void)handleMouseDown:(id)event
 {
@@ -134,9 +155,16 @@
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
     if (_hover) {
-        _checked = (_checked) ? NO : YES;
+        [self setChecked:(_checked) ? NO : YES];
     }
     _down = NO;
+}
+- (void)setChecked:(BOOL)val
+{
+    _checked = val;
+    if (_filePath) {
+        [nsfmt(@"%d", _checked) writeToFile:_filePath];
+    }
 }
 @end
 
