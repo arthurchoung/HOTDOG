@@ -44,7 +44,7 @@
         quotedTitle = [text asQuotedString];
         quotedText = quotedTitle;
     }
-    id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", quotedTitle, quotedText, 10, 10, 600, 400);
+    id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedTitle, quotedText, 600, 400);
     id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
     if (!outputData) {
@@ -66,7 +66,7 @@
 {
     id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id quotedTitle = [[[self str:title] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
-    id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithX:%d y:%d width:%d height:%d|exit:0", quotedTitle, quotedText, 10, 10, 600, 400);
+    id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedTitle, quotedText, 600, 400);
     id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
     if (!outputData) {
