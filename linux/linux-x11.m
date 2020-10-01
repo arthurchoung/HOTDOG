@@ -209,6 +209,13 @@ static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
         }
     }
 
+    if (modifiers & Mod1Mask) {
+        switch(keyCode) {
+            case XK_Left: return @"altleft";
+            case XK_Right: return @"altright";
+        }
+    }
+
     if (modifiers & ControlMask) {
         switch(keyCode) {
             case XK_Left: return @"controlleft";
@@ -1152,11 +1159,11 @@ NSLog(@"unparent object %@", dict);
         return nil;
     }
     if (!h) {
-w = 576;
+w = 768.0 / 1.5;
 h = 768;
 id monitor = [Definitions monitorForX:0 y:0];
 if ([monitor intValueForKey:@"height"] == 768) {
-    w = 480;
+    w = 640.0 / 1.5;
     h = 640;
 }
     }
@@ -1723,7 +1730,29 @@ NSLog(@"received X event type %d", event.type);
     XKeyEvent *e = eptr;
     int keysym = XLookupKeysym(e, 0);
 NSLog(@"keysym %d mod1 %d mod2 %d mod3 %d mod4 %d mod5 %d", keysym, e->state&Mod1Mask, e->state&Mod2Mask, e->state&Mod3Mask, e->state&Mod4Mask, e->state&Mod5Mask);
-    if (!_isWindowManager) {
+    if (_isWindowManager) {
+        id keyString = [Definitions keyForXKeyCode:keysym modifiers:e->state];
+NSLog(@"keyString %@", keyString);
+        id hotKeys = [[Definitions execDir:@"Config/hotKeys.csv"] parseCSVFromFile];
+        if (e->state & Mod4Mask) { // windows key
+            for (id elt in hotKeys) {
+                id windowsKey = [elt valueForKey:@"windowsKey"];
+                if ([windowsKey isEqual:keyString]) {
+NSLog(@"match windows %@", elt);
+                }
+            }
+        } else {
+            for (id elt in hotKeys) {
+                id key = [elt valueForKey:@"key"];
+                if ([key isEqual:keyString]) {
+                    id message = [elt valueForKey:@"message"];
+                    if (message) {
+                        [@{} evaluateMessage:message];
+                    }
+                }
+            }
+        }
+    } else {
         if (keysym == XK_Escape) {
             id dict = [self dictForObjectWindow:e->window];
             [dict setValue:@"1" forKey:@"shouldCloseWindow"];
