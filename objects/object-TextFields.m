@@ -50,7 +50,6 @@
         id dict = nsdict();
         [dict setValue:@"#{selector}" forKey:@"stringFormat"];
         [dict setValue:obj forKey:@"selector"];
-        [dict setValue:@"1" forKey:@"drawChevron"];
         [dict setValue:@"selector|asTextFieldsForSelector" forKey:@"messageForClick"];
         return dict;
     }];

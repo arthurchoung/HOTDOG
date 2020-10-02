@@ -41,7 +41,8 @@ NSLog(@"Unable to setenv HOTDOG_HOME=%@", execDir);
         }
         if (argc == 1) {
             id object = [Definitions mainInterface];
-            [object pushObject:[Definitions mainMenuInterface]];
+            [[Definitions execDir:@"MainMenu"] changeDirectory];
+            [object pushObject:[Definitions ObjectInterface]];
             [Definitions runWindowManagerForObject:object];
             [[Definitions mainInterface] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "open")) {
@@ -68,8 +69,7 @@ NSLog(@"Unable to setenv HOTDOG_HOME=%@", execDir);
             if ([arr count]) {
                 [rootObject pushObject:[arr asListInterface]];
             } else {
-                id object = [[[@"." contentsOfDirectory] asFileArray] asListInterface];
-                [object setValue:@"#{displayName}" forKey:@"stringFormat"];
+                id object = [Definitions ObjectInterface];
                 [rootObject pushObject:object];
             }
             [Definitions runWindowManagerForObject:rootObject];
@@ -87,6 +87,11 @@ NSLog(@"Unable to setenv HOTDOG_HOME=%@", execDir);
                 [Definitions runWindowManagerForObject:object];
                 [[Definitions mainInterface] setValue:nil forKey:@"context"];
             }
+        } else if ((argc == 2) && !strcmp(argv[1], ".")) {
+            id object = [Definitions mainInterface];
+            [object pushObject:[Definitions ObjectInterface]];
+            [Definitions runWindowManagerForObject:object];
+            [[Definitions mainInterface] setValue:nil forKey:@"context"];
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {

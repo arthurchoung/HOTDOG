@@ -306,19 +306,6 @@
 {
     id path = self;
     id arr = [path parseCSVFromFile];
-    for (id elt in arr) {
-        if (![elt valueForKey:@"drawChevron"]) {
-            [elt setValue:@"1" forKey:@"drawChevron"];
-        }
-        if (![[elt valueForKey:@"stringFormat"] length]) {
-            [elt setValue:@"#{displayName}" forKey:@"stringFormat"];
-            id displayName = [elt valueForKey:@"displayName"];
-            id messageForClick = [elt valueForKey:@"messageForClick"];
-            if (![displayName length] && [messageForClick length]) {
-                [elt setValue:messageForClick forKey:@"displayName"];
-            }
-        }
-    }
     return arr;
 }
 - (id)arrayFromPath
@@ -329,12 +316,10 @@
         arr = [[[path contentsOfDirectoryWithFullPaths] filterDotFiles] asFileArray];
         for (id elt in arr) {
             if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
-                [elt setValue:@"1" forKey:@"drawChevron"];
                 [elt setValue:@"array|filePath|runDirHandler|pushToMainInterface" forKey:@"messageForClick"];
             } else {
                 [elt setValue:@"array|filePath|runFileHandler|pushToMainInterface" forKey:@"messageForClick"];
             }
-            [elt setValue:@"#{displayName}" forKey:@"stringFormat"];
         }
     } else if ([path hasSuffix:@".csv"]) {
         arr = [path parseCSVFromFile];
@@ -446,8 +431,10 @@ NSLog(@"setAllStringFormat:'%@'", val);
 
 @interface ListInterface : IvarObject
 {
+    id _currentDirectory;
     id _headerFormat;
-    id _stringFormat;
+    id _defaultMessageForClick;
+    id _defaultStringFormat;
     id _message;
     id _observer;
     id _path;
@@ -496,7 +483,6 @@ NSLog(@"ListInterface dealloc inotifywait %@", _inotifywait);
         [elt setValue:key forKey:@"key"];
         [elt setValue:val forKey:@"value"];
         [elt setValue:@"#{key}: #{value|description|stripNewlines|stripTabs}" forKey:@"stringFormat"];
-        [elt setValue:@"1" forKey:@"drawChevron"];
         [elt setValue:@"value" forKey:@"messageForClick"];
         [arr addObject:elt];
     }
@@ -758,11 +744,14 @@ NSLog(@"line '%@'", line);
             }
             id messageForClick = [elt valueForKey:@"messageForClick"];
 NSLog(@"messageForClick '%@'", messageForClick);
+            if (!messageForClick) {
+                messageForClick = _defaultMessageForClick;
+            }
             if (messageForClick) {
                 _index = [buttonDown intValue];
                 [self setValue:elt forKey:@"selectedObject"];
                 id result = [self evaluateMessage:messageForClick];
-                if ([elt intValueForKey:@"drawChevron"]) {
+                if ([elt intValueForKey:@"drawChevron" default:1]) {
                     [result pushToMainInterface];
                 }
                 NSLog(@"result %@", result);
@@ -881,15 +870,21 @@ next:
     if (isnsdict(elt)) {
         id stringFormat = [elt valueForKey:@"stringFormat"];
         if (!stringFormat) {
-            stringFormat = _stringFormat;
+            stringFormat = _defaultStringFormat;
         }
         if (stringFormat) {
             text = [elt str:stringFormat];
         } else {
-            text = [[elt allKeysAndValues] description];
+            text = [elt valueForKey:@"displayName"];
+            if (![text length]) {
+                text = [elt valueForKey:@"messageForClick"];
+            }
+            if (![text length]) {
+                text = [[elt allKeysAndValues] description];
 #ifdef BUILD_FOR_OSX
-            text = [text strip:@"\n"];
+                text = [text strip:@"\n"];
 #endif
+            }
         }
     } else {
         text = [elt description];
@@ -963,7 +958,7 @@ if (!leftText && !rightText && !leftAlignedText && !rightAlignedText) {
         [bitmap drawBitmapText:rightAlignedText rightAlignedInRect:rightRect];
     }
 }
-        if ([elt intValueForKey:@"drawChevron"]) {
+        if ([elt intValueForKey:@"drawChevron" default:1]) {
             [bitmap setColorIntR:255 g:255 b:255 a:255];
             [bitmap drawBitmapText:@">" rightAlignedInRect:r];
         }
@@ -1007,7 +1002,7 @@ if (!leftText && !rightText && !leftAlignedText && !rightAlignedText) {
         [bitmap drawBitmapText:rightAlignedText rightAlignedInRect:rightRect];
     }
 }
-        if ([elt intValueForKey:@"drawChevron"]) {
+        if ([elt intValueForKey:@"drawChevron" default:1]) {
             [bitmap setColorIntR:255 g:255 b:255 a:255];
             [bitmap drawBitmapText:@">" rightAlignedInRect:r];
         }
@@ -1051,7 +1046,7 @@ if (!leftText && !rightText && !leftAlignedText && !rightAlignedText) {
         [bitmap drawBitmapText:rightAlignedText rightAlignedInRect:rightRect];
     }
 }
-        if ([elt intValueForKey:@"drawChevron"]) {
+        if ([elt intValueForKey:@"drawChevron" default:1]) {
             [bitmap setColorIntR:0 g:0 b:0 a:255];
             [bitmap drawBitmapText:@">" rightAlignedInRect:r];
         }

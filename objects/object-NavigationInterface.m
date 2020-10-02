@@ -25,6 +25,57 @@
 
 #import "HOTDOG.h"
 
+@implementation Definitions(jfkdlsjfklsdjfklsf)
++ (id)ObjectInterface
+{
+    id loadMessage = @"loadMessage";
+    if ([loadMessage fileExists]) {
+        id message = [loadMessage stringFromFile];
+        id obj = [@{} evaluateMessage:message];
+        return obj;
+    } else {
+        return [Definitions ListInterface];
+    }
+}
++ (id)ListInterface
+{
+    id obj = [@"ListInterface" asInstance];
+    id currentDirectory = [@"." asRealPath];
+    [obj setValue:currentDirectory forKey:@"currentDirectory"];
+    id indexCSV = @"index.csv";
+    id indexJSON = @"index.json";
+    if ([indexCSV fileExists]) {
+        id arr = [indexCSV parseCSVFromFile];
+        [obj setValue:arr forKey:@"array"];
+    } else if ([indexJSON fileExists]) {
+        id arr = [indexJSON readFromFileAsJSON];
+        if ([arr isKindOfClass:[@"NSDictionary" asClass]]) {
+            arr = [arr asKeyValueArray];
+        }
+        [obj setValue:arr forKey:@"array"];
+    } else {
+        id arr = [@"." contentsOfDirectory];
+        arr = [arr asFileArray];
+        for (id elt in arr) {
+            if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
+                [elt setValue:@"array|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
+            } else {
+                [elt setValue:@"array|filePath|runFileHandler|pushToMainInterface" forKey:@"messageForClick"];
+            }
+        }
+        [obj setValue:arr forKey:@"array"];
+    }
+    id defaultStringFormat = [@"defaultStringFormat" stringFromFile];
+    [obj setValue:defaultStringFormat forKey:@"defaultStringFormat"];
+    id defaultMessageForClick = [@"defaultMessageForClick" stringFromFile];
+    [obj setValue:defaultMessageForClick forKey:@"defaultMessageForClick"];
+
+//    [self setValue:@"#{path|lastPathComponent}" forKey:@"headerFormat"];
+    
+    return obj;
+}
+@end
+
 @implementation NSArray(fjkdlsjfklsdlkjf)
 - (void)generateClassMenuNamesIfNecessary
 {
@@ -44,10 +95,6 @@
 - (void)handleClassMenuKeyDown:(id)str
 {
     [self handleClassMenuForKey:@"keyDown" value:str];
-}
-- (void)handleClassMenuKeyEquivalent:(id)str
-{
-    [self handleClassMenuForKey:@"keyEquivalent" value:str];
 }
 - (void)handleClassMenuForKey:(id)key value:(id)value
 {
@@ -627,6 +674,13 @@ NSLog(@"popToObject %@", [cursor valueForKey:@"object"]);
 {
     id previous = [_context valueForKey:@"previous"];
     if (previous) {
+        id previousObject = [previous valueForKey:@"object"];
+        if (previousObject) {
+            id currentDirectory = [previousObject valueForKey:@"currentDirectory"];
+            if (currentDirectory) {
+                [currentDirectory changeDirectory];
+            }
+        }
         [self transition:@"reverse" context:previous];
     }
 }
@@ -860,7 +914,7 @@ NSLog(@"obj %@", obj);
                 id menu = [obj classMenuForObject];
                 for (id choice in menu) {
                     [choice setValue:@"#{name}" forKey:@"stringFormat"];
-                    if ([choice intValueForKey:@"drawChevron"]) {
+                    if ([choice intValueForKey:@"drawChevron" default:1]) {
                         [choice setValue:@"message|evaluateMessageWithContext:previousObject" forKey:@"messageForClick"];
                     } else {
                         [choice setValue:@"message|evaluateMessageWithContext:previousObject ; mainInterface | popToObject:(selectedObject|previousObject)" forKey:@"messageForClick"];
@@ -964,11 +1018,7 @@ NSLog(@"keyString '%@'", keyString);
     if ([obj respondsToSelector:@selector(handleKeyDown:)]) {
         [obj handleKeyDown:event];
     } else {
-        if ([event intValueForKey:@"altKey"]) {
-            [obj handleClassMenuKeyEquivalent:[event valueForKey:@"keyString"]];
-        } else {
-            [obj handleClassMenuKeyDown:[event valueForKey:@"keyString"]];
-        }
+        [obj handleClassMenuKeyDown:[event valueForKey:@"keyString"]];
     }
 }
 - (void)handleKeyUp:(id)event

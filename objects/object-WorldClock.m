@@ -68,7 +68,6 @@
         [dict setValue:leftStringFormat forKey:@"leftStringFormat"];
         [dict setValue:rightStringFormat forKey:@"rightStringFormat"];
         if ([messageForClick length]) {
-            [dict setValue:@"1" forKey:@"drawChevron"];
             [dict setValue:messageForClick forKey:@"messageForClick"];
         }
         [results addObject:dict];
@@ -82,7 +81,6 @@
         id dict = [[elt mutableCopy] autorelease];
         [dict setValue:stringFormat forKey:@"stringFormat"];
         if ([messageForClick length]) {
-            [dict setValue:@"1" forKey:@"drawChevron"];
             [dict setValue:messageForClick forKey:@"messageForClick"];
         }
         [results addObject:dict];
