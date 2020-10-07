@@ -26,6 +26,10 @@
 #import "HOTDOG.h"
 
 @implementation NSString(jfksdljfklsdjfsdfjksdjfkdsjfksdjfkiji)
+- (void)addToArray:(id)arr
+{
+    [arr addObject:self];
+}
 
 - (BOOL)hasAnySuffix:(id)suffixes
 {
