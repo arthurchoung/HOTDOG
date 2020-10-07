@@ -36,6 +36,10 @@
 
 
 @implementation NSArray(sdsadff)
+- (void)addToArray:(id)arr
+{
+    [arr addObjectsFromArray:self];
+}
 - (id)asDictionaryGroupByKey:(id)groupKey
 {
     id results = nsdict();
