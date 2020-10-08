@@ -164,45 +164,24 @@ NSLog(@"CommandOutputBitmap handleMouseDown");
     int mouseRootX = [event intValueForKey:@"mouseRootX"];
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
     id x11dict = [event valueForKey:@"x11dict"];
-    id parentWindow = [x11dict valueForKey:@"parentWindow"];
-    if (parentWindow) {
-        id parentDict = [windowManager dictForObjectWindow:[parentWindow unsignedLongValue]];
-        [parentDict setValue:@"1" forKey:@"needsRedraw"];
-        int newX = mouseRootX - _buttonDownX - [parentDict intValueForKey:@"x"];
-        if (newX > [parentDict intValueForKey:@"w"]-[x11dict intValueForKey:@"w"]) {
-            newX = [parentDict intValueForKey:@"w"]-[x11dict intValueForKey:@"w"];
-        }
-        if (newX < 0) {
-            newX = 0;
-        }
-        int newY = mouseRootY - _buttonDownY - [parentDict intValueForKey:@"y"];
-        if (newY > [parentDict intValueForKey:@"h"]-[x11dict intValueForKey:@"h"]) {
-            newY = [parentDict intValueForKey:@"h"]-[x11dict intValueForKey:@"h"];
-        }
-        if (newY < 0) {
-            newY = 0;
-        }
-        [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-NSLog(@"DRAG x %d y %d", newX, newY);
-    } else {
-        int newX = mouseRootX - _buttonDownX;
-        if (newX < -1) {
-            newX = -1;
-        }
-        int newY = mouseRootY - _buttonDownY;
-        if (newY < 0) {
-            newY = 0;
-        }
-        id monitor = [Definitions monitorForX:newX y:newY];
-        int maxY = [monitor intValueForKey:@"height"] - 19;
-        if (newY < menuBarHeight) {
-            newY = menuBarHeight;
-        }
-        if (newY > maxY) {
-            newY = maxY;
-        }
-        [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+
+    int newX = mouseRootX - _buttonDownX;
+    if (newX < -1) {
+        newX = -1;
     }
+    int newY = mouseRootY - _buttonDownY;
+    if (newY < 0) {
+        newY = 0;
+    }
+    id monitor = [Definitions monitorForX:newX y:newY];
+    int maxY = [monitor intValueForKey:@"height"] - 19;
+    if (newY < menuBarHeight) {
+        newY = menuBarHeight;
+    }
+    if (newY > maxY) {
+        newY = maxY;
+    }
+    [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
 }
 - (void)handleMouseUp:(id)event
 {

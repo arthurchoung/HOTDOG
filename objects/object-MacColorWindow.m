@@ -1057,22 +1057,5 @@
 
     _buttonDown = 0;
 }
-- (void)handleDragAndDrop:(id)drag :(id)drop
-{
-    id windowManager = [@"windowManager" valueForKey];
-    if ([drag valueForKey:@"parentWindow"]) {
-        return;
-    }
-    int dragX = [drag intValueForKey:@"x"];
-    int dragY = [drag intValueForKey:@"y"];
-    int dropX = [drop intValueForKey:@"x"];
-    int dropY = [drop intValueForKey:@"y"];
-    int x = dragX-dropX;
-    int y = dragY-dropY;
-    [drag setValue:[drop valueForKey:@"window"] forKey:@"parentWindow"];
-    [drag setValue:nsfmt(@"%d", x) forKey:@"x"];
-    [drag setValue:nsfmt(@"%d", y) forKey:@"y"];
-    [windowManager XReparentWindow:[drag unsignedLongValueForKey:@"window"] :[drop unsignedLongValueForKey:@"window"] :x :y];
-}
 @end
 
