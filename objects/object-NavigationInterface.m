@@ -45,7 +45,7 @@
     id indexCSV = @"index.csv";
     id indexJSON = @"index.json";
     if ([indexCSV fileExists]) {
-        id arr = [indexCSV parseCSVFromFile];
+        id arr = [indexCSV parseCSVFile];
         [obj setValue:arr forKey:@"array"];
     } else if ([indexJSON fileExists]) {
         id arr = [indexJSON readFromFileAsJSON];
@@ -133,7 +133,7 @@ NSLog(@"target %@", target);
         while (classCursor) {
             id path = [Definitions execDir:nsfmt(@"ClassMenus/%s.csv", class_getName(classCursor))];
             NSLog(@"path %@", path);
-            classMenu = [path parseCSVFromFile];
+            classMenu = [path parseCSVFile];
             if (classMenu) {
                 break;
             }

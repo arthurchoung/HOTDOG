@@ -46,7 +46,7 @@
     id monitor = [Definitions monitorForX:mouseX y:mouseY];
     id name = [monitor valueForKey:@"output"];
     id path = [Definitions execDir:@"Config/monitors.csv"];
-    id monitors = [path parseCSVFromFile];
+    id monitors = [path parseCSVFile];
     id elt = [monitors objectWithValue:name forKey:@"output"];
     if (!elt) {
         elt = nsdict();
@@ -115,7 +115,7 @@
     }
     id lines = [str split:@"\n"];
     id path = [Definitions execDir:@"Config/monitors.csv"];
-    id monitors = [path parseCSVFromFile];
+    id monitors = [path parseCSVFile];
     id results = nsarr();
     for (id line in lines) {
         if (![line containsString:@" connected "]) {

@@ -252,7 +252,7 @@
     return [arr processCSVUsingHeader];
 }
 
-- (id)parseCSVFromFile
+- (id)parseCSVFile
 {
     return [[self stringFromFile] parseCSVFromString];
 }

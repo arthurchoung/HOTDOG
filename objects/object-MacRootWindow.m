@@ -96,7 +96,7 @@ NSLog(@"MacRootWindow handleMouseDown");
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
     id buttonDownWhich = [event valueForKey:@"buttonDownWhich"];
 
-    id obj = [[[Definitions execDir:@"Config/rootWindowMenu.csv"] parseCSVFromFile] asMenu];
+    id obj = [[[Definitions execDir:@"Config/rootWindowMenu.csv"] parseCSVFile] asMenu];
     int w = [obj preferredWidth];
     int h = [obj preferredHeight];
     id dict = [windowManager openWindowForObject:obj x:mouseRootX y:mouseRootY w:w+3 h:h+3];

@@ -28,7 +28,7 @@
 @implementation NSString(fjkdlsjfklsdjf)
 - (id)runDirHandler
 {
-    id handlers = [[Definitions execDir:@"Config/dirHandlers.csv"] parseCSVFromFile];
+    id handlers = [[Definitions execDir:@"Config/dirHandlers.csv"] parseCSVFile];
     for (id elt in handlers) {
         id suffix = [elt valueForKey:@"suffix"];
         if ([self hasSuffix:suffix]) {
@@ -41,7 +41,7 @@ NSLog(@"message '%@'", message);
 }
 - (id)runFileHandler
 {
-    id handlers = [[Definitions execDir:@"Config/fileHandlers.csv"] parseCSVFromFile];
+    id handlers = [[Definitions execDir:@"Config/fileHandlers.csv"] parseCSVFile];
     for (id elt in handlers) {
         id suffix = [elt valueForKey:@"suffix"];
         if ([self hasSuffix:suffix]) {

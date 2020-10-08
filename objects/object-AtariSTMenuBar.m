@@ -51,7 +51,7 @@
 
 - (void)updateMenuBar
 {
-    id arr = [_configPath parseCSVFromFile];
+    id arr = [_configPath parseCSVFile];
     if (!arr) {
         return;
     }

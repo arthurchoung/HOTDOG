@@ -1733,7 +1733,7 @@ NSLog(@"keysym %d mod1 %d mod2 %d mod3 %d mod4 %d mod5 %d", keysym, e->state&Mod
     if (_isWindowManager) {
         id keyString = [Definitions keyForXKeyCode:keysym modifiers:e->state];
 NSLog(@"keyString %@", keyString);
-        id hotKeys = [[Definitions execDir:@"Config/hotKeys.csv"] parseCSVFromFile];
+        id hotKeys = [[Definitions execDir:@"Config/hotKeys.csv"] parseCSVFile];
         if (e->state & Mod4Mask) { // windows key
             for (id elt in hotKeys) {
                 id windowsKey = [elt valueForKey:@"windowsKey"];

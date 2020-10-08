@@ -305,7 +305,7 @@
 - (id)menuFromPath
 {
     id path = self;
-    id arr = [path parseCSVFromFile];
+    id arr = [path parseCSVFile];
     return arr;
 }
 - (id)arrayFromPath
@@ -322,7 +322,7 @@
             }
         }
     } else if ([path hasSuffix:@".csv"]) {
-        arr = [path parseCSVFromFile];
+        arr = [path parseCSVFile];
     }
     return arr;
 }
