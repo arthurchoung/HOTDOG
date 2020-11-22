@@ -59,10 +59,11 @@ NSLog(@"message '%@'", message);
     unsigned long window = [obj unsignedLongValueForKey:@"window"];
     id cmd = nsarr();
     [cmd addObject:@"mpv"];
+[cmd addObject:@"--input-vo-keyboard=no"];
     [cmd addObject:@"--wid"];
     [cmd addObject:nsfmt(@"%lu", window)];
     [cmd addObject:self];
-    [cmd runCommandAndReturn:NO];
+    [cmd runCommandInBackground];
     return obj;
 }
 - (id)handleFileWithMAME
@@ -76,6 +77,24 @@ NSLog(@"message '%@'", message);
 @end
 
 @implementation NSArray(fjdklsfjlkdsjfklskdljfsd)
+- (void)shuffleFilesWithMPV
+{
+    id obj = [@"EmbeddedWindow" asInstance];
+    unsigned long window = [obj unsignedLongValueForKey:@"window"];
+    id cmd = nsarr();
+    [cmd addObject:@"mpv"];
+    [cmd addObject:@"--wid"];
+    [cmd addObject:nsfmt(@"%lu", window)];
+    [cmd addObject:@"--shuffle"];
+    for (id elt in self) {
+        id filePath = [elt valueForKey:@"filePath"];
+        if (filePath) {
+            [cmd addObject:filePath];
+        }
+    }
+    [cmd runCommandInBackground];
+    [obj pushToMainInterface];
+}
 - (void)handleFileWithMPVForIndex:(int)index makePlaylistWithSuffixes:(id)suffixes
 {
     id filePath = [[self nth:index] valueForKey:@"filePath"];
@@ -108,7 +127,7 @@ NSLog(@"message '%@'", message);
     [cmd addObject:@"--playlist-start"];
     [cmd addObject:nsfmt(@"%d", playlistIndex)];
     [cmd addObjectsFromArray:playlistArray];
-    [cmd runCommandAndReturn:NO];
+    [cmd runCommandInBackground];
     [obj pushToMainInterface];
 }
 @end
