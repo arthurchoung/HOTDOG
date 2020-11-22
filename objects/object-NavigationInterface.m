@@ -28,7 +28,7 @@
 @implementation Definitions(jfkdlsjfklsdjfklsf)
 + (id)ObjectInterface
 {
-    id loadMessage = @"loadMessage";
+    id loadMessage = @"00loadMessage";
     if ([loadMessage fileExists]) {
         id message = [loadMessage stringFromFile];
         id obj = [@{} evaluateMessage:message];
@@ -37,24 +37,60 @@
         return [Definitions ListInterface];
     }
 }
+#ifdef BUILD_FOR_IOS
++ (id)ListInterface
+{
+    id arr = [@"00index.csv" parseCSVFile];
+    if (!arr) {
+        arr = [@"00index.json" readFromFileAsJSON];
+        if ([arr isKindOfClass:[@"NSDictionary" asClass]]) {
+            arr = [arr asKeyValueArray];
+        }
+    }
+    if (!arr) {
+        arr = [@"." contentsOfDirectory];
+        arr = [arr asFileArray];
+        for (id elt in arr) {
+            if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
+                [elt setValue:@"selectedObject|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
+            } else {
+                [elt setValue:@"selectedObject|filePath|runFileHandler|pushToMainInterface" forKey:@"messageForClick"];
+            }
+        }
+    }
+    id preArr = [@"00preIndex.csv" parseCSVFile];
+    if (preArr) {
+        arr = [preArr arrayByAddingObjectsFromArray:arr];
+    }
+            
+    id obj = [arr asListInterface];
+    id currentDirectory = [@"." asRealPath];
+    [obj setValue:currentDirectory forKey:@"currentDirectory"];
+
+    id defaultStringFormat = [@"00defaultStringFormat" stringFromFile];
+    [obj setValue:defaultStringFormat forKey:@"defaultStringFormat"];
+    id defaultMessageForClick = [@"00defaultMessageForClick" stringFromFile];
+    [obj setValue:defaultMessageForClick forKey:@"defaultMessageForClick"];
+
+//    [self setValue:@"#{path|lastPathComponent}" forKey:@"headerFormat"];
+    
+    return obj;
+}
+#else
 + (id)ListInterface
 {
     id obj = [@"ListInterface" asInstance];
     id currentDirectory = [@"." asRealPath];
     [obj setValue:currentDirectory forKey:@"currentDirectory"];
-    id indexCSV = @"index.csv";
-    id indexJSON = @"index.json";
-    if ([indexCSV fileExists]) {
-        id arr = [indexCSV parseCSVFile];
-        [obj setValue:arr forKey:@"array"];
-    } else if ([indexJSON fileExists]) {
-        id arr = [indexJSON readFromFileAsJSON];
+    id arr = [@"00index.csv" parseCSVFile];
+    if (!arr) {
+        arr = [@"00index.json" readFromFileAsJSON];
         if ([arr isKindOfClass:[@"NSDictionary" asClass]]) {
             arr = [arr asKeyValueArray];
         }
-        [obj setValue:arr forKey:@"array"];
-    } else {
-        id arr = [@"." contentsOfDirectory];
+    }
+    if (!arr) {
+        arr = [@"." contentsOfDirectory];
         arr = [arr asFileArray];
         for (id elt in arr) {
             if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
@@ -63,17 +99,24 @@
                 [elt setValue:@"array|filePath|runFileHandler|pushToMainInterface" forKey:@"messageForClick"];
             }
         }
-        [obj setValue:arr forKey:@"array"];
     }
-    id defaultStringFormat = [@"defaultStringFormat" stringFromFile];
+    id preArr = [@"00preIndex.csv" parseCSVFile];
+    if (preArr) {
+        arr = [preArr arrayByAddingObjectsFromArray:arr];
+    }
+            
+    [obj setValue:arr forKey:@"array"];
+
+    id defaultStringFormat = [@"00defaultStringFormat" stringFromFile];
     [obj setValue:defaultStringFormat forKey:@"defaultStringFormat"];
-    id defaultMessageForClick = [@"defaultMessageForClick" stringFromFile];
+    id defaultMessageForClick = [@"00defaultMessageForClick" stringFromFile];
     [obj setValue:defaultMessageForClick forKey:@"defaultMessageForClick"];
 
 //    [self setValue:@"#{path|lastPathComponent}" forKey:@"headerFormat"];
     
     return obj;
 }
+#endif
 @end
 
 @implementation NSArray(fjkdlsjfklsdlkjf)
@@ -363,10 +406,6 @@ NSLog(@"target %@", target);
 {
     [[Definitions mainInterface] popObject];
 }
-+ (id)mainMenuInterface
-{
-    return [[[Definitions execDir:@"Config/mainMenu.csv"] menuFromPath] asListInterface];
-}
 
 + (int)navigationBarHeight
 {
@@ -413,7 +452,10 @@ NSLog(@"target %@", target);
     viewControllers = [viewControllers reverse];
     for (id elt in viewControllers) {
         if ([elt isKindOfClass:[@"ArrayViewController" asClass]]) {
-            id tv = [[elt view] tableView];
+            id tv = [elt view];
+            if ([tv valueForKey:@"tableView"]) {
+                tv = [tv valueForKey:@"tableView"];
+            }
             id arr = [elt valueForKey:@"array"];
             id indexPath = [tv indexPathForSelectedRow];
             if (indexPath) {
@@ -435,7 +477,10 @@ NSLog(@"target %@", target);
     viewControllers = [viewControllers reverse];
     for (id elt in viewControllers) {
         if ([elt isKindOfClass:[@"ArrayViewController" asClass]]) {
-            id tv = [[elt view] tableView];
+            id tv = [elt view];
+            if ([tv valueForKey:@"tableView"]) {
+                tv = [tv valueForKey:@"tableView"];
+            }
             id arr = [elt valueForKey:@"array"];
             id indexPath = [tv indexPathForSelectedRow];
             if (indexPath) {
