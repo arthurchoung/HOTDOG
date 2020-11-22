@@ -10,9 +10,17 @@ def asQuotedString(str):
     str = str.replace('"', '\\"');
     return "\"%s\"" % (str)
 
+def dhcpcdIsRunning(name):
+    try:
+        output = subprocess.check_output(['pgrep', '-fx', 'dhcpcd ' + name])
+        return 1
+    except subprocess.CalledProcessError as e:
+        pass
+    return 0
+
 output = subprocess.check_output(['ip', '-j', '-p', 'link', 'show'])
 obj = json.loads(output)
-keys = ['ifname', 'link_type', 'up', 'lowerUp', 'operstate', 'address']
+keys = ['ifname', 'link_type', 'up', 'lowerUp', 'operstate', 'address', 'dhcpcdIsRunning']
 print(",".join(keys))
 for elt in obj:
     if "UP" in elt['flags']:
@@ -23,6 +31,10 @@ for elt in obj:
         elt['lowerUp'] = "1"
     else:
         elt['lowerUp'] = "0"
+    elt['dhcpcdIsRunning'] = "0"
+    if 'ifname' in elt:
+        if dhcpcdIsRunning(elt['ifname']):
+            elt['dhcpcdIsRunning'] = "1"
     tokens = map(lambda x: asQuotedString(elt[x]), keys)
     print(",".join(tokens))
 
