@@ -28,9 +28,9 @@
 @implementation Definitions(fjkdlsfjlksdjkf)
 + (id)CommandOutputText:(id)cmd
 {
-    id pipe = [cmd runCommandAndReturnPipe];
+    id process = [cmd runCommandAndReturnProcess];
     id obj = [@"CommandOutputText" asInstance];
-    [obj setValue:pipe forKey:@"fileDescriptor"];
+    [obj setValue:process forKey:@"fileDescriptor"];
     return obj;
 }
 @end
