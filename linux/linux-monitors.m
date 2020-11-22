@@ -25,7 +25,53 @@
 
 #import "HOTDOG.h"
 
+
 @implementation Definitions(fjkdlsjfklsdjklfjsdf)
++ (void)rotateMonitor:(id)name orientation:(id)orientation
+{
+    id path = [Definitions execDir:@"Config/monitors.csv"];
+    id monitors = [path parseCSVFile];
+    id elt = [monitors objectWithValue:name forKey:@"output"];
+    if (!elt) {
+        elt = nsdict();
+        [elt setValue:name forKey:@"output"];
+        if (!monitors) {
+            monitors = nsarr();
+        }
+        [monitors addObject:elt];
+    }
+    [elt setValue:orientation forKey:@"rotate"];
+    [monitors writeCSVToFile:path];
+    [Definitions setupMonitors];
+}
++ (void)swapMonitors:(id)name1 :(id)name2
+{
+    id path = [Definitions execDir:@"Config/monitors.csv"];
+    id monitors = [path parseCSVFile];
+
+    int index1 = -1;
+    int index2 = -1;
+    for (int i=0; i<[monitors count]; i++) {
+        id elt = [monitors nth:i];
+        if ([name1 isEqual:[elt valueForKey:@"output"]]) {
+            index1 = i;
+        } else if ([name2 isEqual:[elt valueForKey:@"output"]]) {
+            index2 = i;
+        }
+    }
+    if ((index1 == -1) || (index2 == -1)) {
+        return;
+    }
+
+    id elt1 = [monitors nth:index1];
+    id elt2 = [monitors nth:index2];
+
+    [monitors replaceObjectAtIndex:index1 withObject:elt2];
+    [monitors replaceObjectAtIndex:index2 withObject:elt1];
+    
+    [monitors writeCSVToFile:path];
+    [Definitions setupMonitors];
+}
 + (id)monitorName
 {
     int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
