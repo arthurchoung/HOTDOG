@@ -240,6 +240,20 @@ NSLog(@"Out of memory!");
     _greenTimesAlpha = ((double)_g)*alpha;
     _blueTimesAlpha = ((double)_b)*alpha;
 }
+- (void)setColor:(id)color alphaInt:(int)alphaInt
+{
+    double alpha = ((double)alphaInt) / 255.0;
+    color = [color asColor];
+    _r = [color redInt];
+    _g = [color greenInt];
+    _b = [color blueInt];
+    _a = alpha*255.0;
+    _alphaDouble = alpha;
+    _oneMinusAlphaDouble = 1.0 - alpha;
+    _redTimesAlpha = ((double)_r)*alpha;
+    _greenTimesAlpha = ((double)_g)*alpha;
+    _blueTimesAlpha = ((double)_b)*alpha;
+}
 - (void)drawRectangleX:(int)x y:(int)y w:(int)w h:(int)h
 {
     [self drawHorizontalLineX:x x:x+w-1 y:y];
