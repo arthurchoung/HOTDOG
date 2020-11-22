@@ -595,42 +595,6 @@ exit(0);
 }
 @end
 @implementation WindowManager
-- (unsigned long)openEmbeddedWindowForObjectWindow:(id)x11dict
-{
-    if ([x11dict valueForKey:@"embeddedWindow"]) {
-        return [x11dict unsignedLongValueForKey:@"embeddedWindow"];
-    }
-
-    id window = [x11dict valueForKey:@"window"];
-    if (!window) {
-        return 0;
-    }
-
-    XSetWindowAttributes setAttrs;
-    setAttrs.colormap = _colormap;
-/*
-    if (_isWindowManager) {
-        setAttrs.event_mask = SubstructureRedirectMask|SubstructureNotifyMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|VisibilityChangeMask|KeyPressMask|KeyReleaseMask|StructureNotifyMask|FocusChangeMask|EnterWindowMask|LeaveWindowMask;
-    } else {
-        setAttrs.event_mask = ButtonPressMask|ButtonReleaseMask|PointerMotionMask|VisibilityChangeMask|KeyPressMask|KeyReleaseMask|StructureNotifyMask;
-    }
-*/
-    setAttrs.bit_gravity = NorthWestGravity;
-    setAttrs.background_pixmap = None;
-    setAttrs.border_pixel = 0;
-    int x = 0;
-    int y = [Definitions navigationBarHeight];
-    int w = [x11dict intValueForKey:@"w"];
-    int h = [x11dict intValueForKey:@"h"]-y;
-    Window win = XCreateWindow(_display, [window unsignedLongValue], x, y, w, h, 0, _visualInfo.depth, InputOutput, _visualInfo.visual, CWColormap|CWBackPixmap|CWBorderPixel, &setAttrs);
-
-
-    XMapWindow(_display, win);
-    XSync(_display, False);
-
-    [x11dict setValue:nsfmt(@"%lu", win) forKey:@"embeddedWindow"];
-    return win;
-}
 
 - (void)dealloc
 {

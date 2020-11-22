@@ -96,7 +96,8 @@
             if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
                 [elt setValue:@"array|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
             } else {
-                [elt setValue:@"array|filePath|runFileHandler|pushToMainInterface" forKey:@"messageForClick"];
+                [elt setValue:@"0" forKey:@"drawChevron"];
+                [elt setValue:@"array|filePath|runFileHandler" forKey:@"messageForClick"];
             }
         }
     }

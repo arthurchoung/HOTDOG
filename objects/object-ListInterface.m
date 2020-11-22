@@ -318,7 +318,7 @@
             if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
                 [elt setValue:@"array|filePath|runDirHandler|pushToMainInterface" forKey:@"messageForClick"];
             } else {
-                [elt setValue:@"array|filePath|runFileHandler|pushToMainInterface" forKey:@"messageForClick"];
+                [elt setValue:@"array|filePath|runFileHandler" forKey:@"messageForClick"];
             }
         }
     } else if ([path hasSuffix:@".csv"]) {
