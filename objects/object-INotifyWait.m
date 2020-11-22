@@ -55,7 +55,7 @@
             [files addObject:[elt lastPathComponent]];
         }
     }
-    id pipe = [cmd runCommandAndReturnPipe];
+    id pipe = [cmd runCommandAndReturnProcess];
     if (!pipe) {
         return nil;
     }
