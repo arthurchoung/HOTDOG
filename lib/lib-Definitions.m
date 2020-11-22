@@ -79,6 +79,11 @@ BOOL isnsstr(id obj)//$;
 
 @implementation Definitions
 
++ (void)setValue:(id)val forEnvironmentVariable:(id)key
+{
+    setenv([key UTF8String], [val UTF8String], 1);
+}
+
 + (id)processID
 {
     return nsfmt(@"%d", getpid());
