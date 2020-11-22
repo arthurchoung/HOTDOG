@@ -33,7 +33,7 @@
 }
 + (BOOL)confirmWithAlert:(id)text title:(id)title
 {
-    id quotedText = [[text keepAlphanumericCharactersAndSpacesAndPunctuation] asQuotedString];
+    id quotedText = [[text keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedText, 600, 400);
     id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
@@ -51,7 +51,7 @@
     if (!firstChoice) {
         return;
     }
-    id text = [firstChoice keepAlphanumericCharactersAndSpacesAndPunctuation];
+    id text = [firstChoice keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines];
     id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithWidth:%d height:%d|exit:0", [text asQuotedString], 600, 400);
     id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
@@ -63,7 +63,7 @@
 }
 - (void)confirmWithAlert:(id)text title:(id)title continuation:(id)continuation
 {
-    id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuation] asQuotedString];
+    id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedText, 600, 400);
     id cmd = @[ @"hotdog", message ];
     id outputData = [cmd runCommandAndReturnOutput];
@@ -74,7 +74,7 @@
 }
 - (void)confirmWithAlert:(id)text title:(id)title okText:(id)okText continuation:(id)continuation
 {
-    id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuation] asQuotedString];
+    id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id quotedOkText = [[[self str:okText] keepAlphanumericCharactersAndSpacesAndPunctuation] asQuotedString];
     id message = nsfmt(@"ConfirmationDialog:%@ okText:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedText, quotedOkText, 600, 400);
     id cmd = @[ @"hotdog", message ];
