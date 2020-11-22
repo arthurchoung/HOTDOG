@@ -225,7 +225,11 @@ static id callMethod(id target, struct objc_method *m, id args)
                 }
             } else if (signature[5] == 'i') {
                 if (signature[6] == 0) {
-                    if (signature[0] == '@') {
+                    if (signature[0] == 'v') {
+                        void (*func)(id, SEL, id, id, int) = imp;
+                        func(target, sel, [args nth:0], [args nth:1], [[args nth:2] intValue]);
+                        return target;
+                    } else if (signature[0] == '@') {
                         id (*func)(id, SEL, id, id, int) = imp;
                         return func(target, sel, [args nth:0], [args nth:1], [[args nth:2] intValue]);
                     }
