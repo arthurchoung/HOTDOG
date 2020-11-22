@@ -133,9 +133,9 @@
     self = [super init];
     if (self) {
         _hasShadow = 1;
-        id alsaStatus = [@[ @"printALSAStatus", @"1" ] runCommandAndReturnPipe];
+        id alsaStatus = [@[ @"printALSAStatus", @"1" ] runCommandAndReturnProcess];
         [self setValue:alsaStatus forKey:@"alsaStatus"];
-        id alsaVolume = [@[ @"setALSAVolume" ] runCommandAndReturnPipe];
+        id alsaVolume = [@[ @"setALSAVolume" ] runCommandAndReturnProcess];
         [self setValue:alsaVolume forKey:@"alsaVolume"];
         _volume = 0.0;
         _playbackSwitch = 0;
