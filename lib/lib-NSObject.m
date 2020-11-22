@@ -226,6 +226,48 @@
 }
 
 
+- (id)ifTrue:(id)ifMessage then:(id)thenMessage
+{
+    id result = [self evaluateMessage:ifMessage];
+    if ([result intValue]) {
+        return [self evaluateMessage:thenMessage];
+    }
+    return nil;
+}
+- (id)ifFalse:(id)ifMessage then:(id)thenMessage
+{
+    id result = [self evaluateMessage:ifMessage];
+    if (![result intValue]) {
+        return [self evaluateMessage:thenMessage];
+    }
+    return nil;
+}
+- (id)ifTrue:(id)ifMessage then:(id)thenMessage else:(id)elseMessage
+{
+    id result = [self evaluateMessage:ifMessage];
+    if ([result intValue]) {
+        return [self evaluateMessage:thenMessage];
+    } else {
+        return [self evaluateMessage:elseMessage];
+    }
+}
+- (id)ifFalse:(id)ifMessage then:(id)thenMessage else:(id)elseMessage
+{
+    id result = [self evaluateMessage:ifMessage];
+    if (![result intValue]) {
+        return [self evaluateMessage:thenMessage];
+    } else {
+        return [self evaluateMessage:elseMessage];
+    }
+}
+- (id)if:(id)ifMessage then:(id)thenMessage
+{
+    id result = [self evaluateMessage:ifMessage];
+    if ([result intValue]) {
+        return [self evaluateMessage:thenMessage];
+    }
+    return nil;
+}
 - (id)if:(id)ifMessage then:(id)thenMessage else:(id)elseMessage
 {
     id result = [self evaluateMessage:ifMessage];
