@@ -18,11 +18,9 @@ def asQuotedStringForKey(elt, key):
 output = subprocess.check_output(['lsblk', '-f', '--list', '--paths', '--json'])
 obj = json.loads(output)
 obj = obj['blockdevices']
-keys = ['name', 'label', 'mountpoint', 'fstype', 'uuid', 'messageForRightClick']
+keys = ['name', 'label', 'mountpoint', 'fstype', 'uuid']
 print(",".join(keys))
 for elt in obj:
-    if elt['mountpoint']:
-        elt['messageForRightClick'] = "execDir:'Config/blockDeviceUnmountMenu.csv'|parseCSVFile|asMenu";
     tokens = map(lambda x: asQuotedStringForKey(elt, x), keys)
     print(",".join(tokens))
 
