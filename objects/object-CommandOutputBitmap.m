@@ -30,9 +30,9 @@
 @implementation Definitions(fjkdlsfjlksdjdskfldsjkfljkf)
 + (id)CommandOutputBitmap:(id)cmd
 {
-    id pipe = [cmd runCommandAndReturnPipe];
+    id process = [cmd runCommandAndReturnProcess];
     id obj = [@"CommandOutputBitmap" asInstance];
-    [obj setValue:pipe forKey:@"fileDescriptor"];
+    [obj setValue:process forKey:@"fileDescriptor"];
     return obj;
 }
 @end
