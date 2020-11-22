@@ -59,6 +59,27 @@ static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned c
     return XCreateImage(display, visual, depth, ZPixmap, 0, image32, width, height, 32, 0);
 }
 
+@implementation Definitions(fjdklsjfkldsjklfjs)
++ (void)x11FixupEvent:(id)eventDict forBitmapObject:(id)object
+{
+    if ([object respondsToSelector:@selector(bitmapWidth)]) {
+        if ([object respondsToSelector:@selector(bitmapHeight)]) {
+            int bitmapWidth = [object bitmapWidth]; 
+            int bitmapHeight = [object bitmapHeight];
+            int viewWidth = [eventDict intValueForKey:@"viewWidth"];
+            int viewHeight = [eventDict intValueForKey:@"viewHeight"];
+            int mouseX = [eventDict intValueForKey:@"mouseX"];
+            int mouseY = [eventDict intValueForKey:@"mouseY"];
+            int adjustedX = (double)mouseX / ((double)viewWidth/(double)bitmapWidth);
+            int adjustedY = (double)mouseY / ((double)viewHeight/(double)bitmapHeight);
+            [eventDict setValue:nsfmt(@"%d", adjustedX) forKey:@"mouseX"];
+            [eventDict setValue:nsfmt(@"%d", adjustedY) forKey:@"mouseY"];
+            [eventDict setValue:nsfmt(@"%d", bitmapWidth) forKey:@"viewWidth"];
+            [eventDict setValue:nsfmt(@"%d", bitmapHeight) forKey:@"viewHeight"];
+        }
+    }
+}
+@end
 
 @implementation NSObject(fkldsjflksdjf)
 - (void)showInWindow
@@ -206,6 +227,7 @@ static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
             case XK_bracketleft: return @"{";
             case XK_bracketright: return @"}";
             case XK_minus: return @"_";
+            case XK_Return: return @"shiftreturn";
         }
     }
 
@@ -521,6 +543,13 @@ exit(0);
     [windowManager runLoop];
 }
 @end
+@implementation NSObject(fjdklsfjkldsjfklsdjkljf)
+- (void)runWindowManagerForObject
+{
+    [Definitions runWindowManagerForObject:self];
+}
+@end
+
 
 @interface WindowManager : IvarObject
 {
@@ -1349,6 +1378,35 @@ if ([monitor intValueForKey:@"height"] == 768) {
                         [Definitions drawOpenGLTextureID:[_openGLObjectTexture textureID] x:0 y:0 w:w h:h-navigationBarHeight inW:w h:h];
                     }
                 }
+            } else {
+                int draw_GL_NEAREST = [object intValueForKey:@"GL_NEAREST"];
+                if ([object respondsToSelector:@selector(pixelBytesRGBA8888)]) {
+                    unsigned char *pixelBytes = [object pixelBytesRGBA8888];
+                    if (pixelBytes) {
+                        int bitmapWidth = [object bitmapWidth];
+                        int bitmapHeight = [object bitmapHeight];
+                        int bitmapStride = bitmapWidth*4;
+                        if (draw_GL_NEAREST) {
+                            [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLObjectTexture textureID] bytes:pixelBytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight bitmapStride:bitmapStride];
+                        } else {
+                            [Definitions drawToOpenGLTextureID:[_openGLObjectTexture textureID] bytes:pixelBytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight bitmapStride:bitmapStride];
+                        }
+                        [Definitions drawOpenGLTextureID:[_openGLObjectTexture textureID] x:0 y:0 w:w h:h inW:w h:h];
+                    }
+                }
+                if ([object respondsToSelector:@selector(pixelBytesBGR565)]) {
+                    unsigned char *pixelBytes = [object pixelBytesBGR565];
+                    if (pixelBytes) {
+                        int bitmapWidth = [object bitmapWidth];
+                        int bitmapHeight = [object bitmapHeight];
+                        if (draw_GL_NEAREST) {
+                            [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLObjectTexture textureID] pixels565:pixelBytes width:bitmapWidth height:bitmapHeight];
+                        } else {
+                            [Definitions drawToOpenGLTextureID:[_openGLObjectTexture textureID] pixels565:pixelBytes width:bitmapWidth height:bitmapHeight];
+                        }
+                        [Definitions drawOpenGLTextureID:[_openGLObjectTexture textureID] x:0 y:0 w:w h:h inW:w h:h];
+                    }
+                }
             }
             [Definitions openGLXSwapBuffersForDisplay:_display window:win];
         } else {
@@ -1441,7 +1499,7 @@ NSLog(@"_displayFD %d", _displayFD);
                 }
             } else {
                 if (![_objectWindows count]) {
-NSLog(@"no object windows, exiting");
+NSLog(@"no object windows, exiting pid %d", getpid());
                     break;
                 }
             }
@@ -2077,6 +2135,9 @@ NSLog(@"rootWindow object %@", _rootWindowObject);
             int w = [dict intValueForKey:@"w"];
             int h = [dict intValueForKey:@"h"];
             id eventDict = [self dictForButtonEvent:e w:w h:h x11dict:dict];
+
+            [Definitions x11FixupEvent:eventDict forBitmapObject:object];
+
             if (e->button == 1) {
                 if ([object respondsToSelector:@selector(handleMouseDown:)]) {
                     [object handleMouseDown:eventDict];
@@ -2165,11 +2226,13 @@ NSLog(@"ButtonRelease window %x", e->window);
     if (e->button == 1) {
         if ([object respondsToSelector:@selector(handleMouseUp:)]) {
             id event = [self dictForButtonEvent:e w:w h:h x11dict:dict];
+            [Definitions x11FixupEvent:event forBitmapObject:object];
             [object handleMouseUp:event];
         }
     } else if (e->button == 3) {
         if ([object respondsToSelector:@selector(handleRightMouseUp:)]) {
             id event = [self dictForButtonEvent:e w:w h:h x11dict:dict];
+            [Definitions x11FixupEvent:event forBitmapObject:object];
             [object handleRightMouseUp:event];
         }
     }
@@ -2204,6 +2267,7 @@ NSLog(@"ButtonRelease window %x", e->window);
                 int w = [x11dict intValueForKey:@"w"];
                 int h = [x11dict intValueForKey:@"h"];
                 id eventDict = [self generateEventDictRootX:e->x_root rootY:e->y_root x:e->x_root-x y:e->y_root-y w:w h:h x11dict:x11dict];
+                [Definitions x11FixupEvent:eventDict forBitmapObject:object];
                 [object handleMouseMoved:eventDict];
             }
             [x11dict setValue:@"1" forKey:@"needsRedraw"];
@@ -2218,6 +2282,7 @@ NSLog(@"ButtonRelease window %x", e->window);
             int h = [x11dict intValueForKey:@"h"];
             if ([object respondsToSelector:@selector(handleMouseMoved:)]) {
                 id eventDict = [self generateEventDictRootX:e->x_root rootY:e->y_root x:e->x y:e->y w:w h:h x11dict:x11dict];
+                [Definitions x11FixupEvent:eventDict forBitmapObject:object];
                 [object handleMouseMoved:eventDict];
             }
             [x11dict setValue:@"1" forKey:@"needsRedraw"];
