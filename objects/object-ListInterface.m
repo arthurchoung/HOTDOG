@@ -438,6 +438,7 @@ NSLog(@"setAllStringFormat:'%@'", val);
     id _message;
     id _observer;
     id _path;
+    id _dict;
     id _array;
     int _objectOffsetY;
     id _buttonHover;
