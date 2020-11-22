@@ -39,6 +39,9 @@ int main(int argc, char **argv)
         if (setenv("HOTDOG_HOME", [execDir UTF8String], 1) != 0) {
 NSLog(@"Unable to setenv HOTDOG_HOME=%@", execDir);
         }
+        if (setenv("SUDO_ASKPASS", [[Definitions execDir:@"Utils/getPassword"] UTF8String], 1) != 0) {
+NSLog(@"Unable to setenv SUDO_ASKPASS");
+        }
         if (argc == 1) {
             id object = [Definitions mainInterface];
             [[Definitions execDir:@"MainMenu"] changeDirectory];
@@ -88,9 +91,14 @@ NSLog(@"Unable to setenv HOTDOG_HOME=%@", execDir);
                 [[Definitions mainInterface] setValue:nil forKey:@"context"];
             }
         } else if ((argc == 2) && !strcmp(argv[1], ".")) {
-            id object = [Definitions mainInterface];
-            [object pushObject:[Definitions ObjectInterface]];
-            [Definitions runWindowManagerForObject:object];
+            id obj = [Definitions ObjectInterface];
+            if ([obj isKindOfClass:[@"ListInterface" asClass]]) {
+                id nav = [Definitions mainInterface];
+                [nav pushObject:obj];
+                [Definitions runWindowManagerForObject:nav];
+            } else {
+                [Definitions runWindowManagerForObject:obj];
+            }
             [[Definitions mainInterface] setValue:nil forKey:@"context"];
         } else {
             id args = nsarr();
