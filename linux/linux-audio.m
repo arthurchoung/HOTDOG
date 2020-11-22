@@ -41,7 +41,7 @@
     _numberOfChannels = channels;
     _bitsPerChannel = bitsPerChannel;
     
-    id aplay = [@[@"aplay", @"-t", @"raw", @"-r", nsfmt(@"%d", sampleRate), @"-c", nsfmt(@"%d", channels), @"-f", @"S16_LE", @"-"] runCommandAndReturnPipe];
+    id aplay = [@[@"aplay", @"-t", @"raw", @"-r", nsfmt(@"%d", sampleRate), @"-c", nsfmt(@"%d", channels), @"-f", @"S16_LE", @"-"] runCommandAndReturnProcess];
     [self setValue:aplay forKey:@"aplay"];
 }   
 
