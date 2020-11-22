@@ -138,7 +138,6 @@
 }
 - (int)nthChar:(int)index
 {
-    NSLog(@"nthChar:%d", index);
     int len = [self length];
     if (index < 0) {
         return 0;
