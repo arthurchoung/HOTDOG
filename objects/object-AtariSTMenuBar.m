@@ -39,6 +39,22 @@
 
 @implementation AtariSTMenuBar
 
+- (void)flashIndex:(int)index duration:(int)duration
+{
+    if (_closingIteration > 0) {
+        return;
+    }
+    if (_selectedDict) {
+        return;
+    }
+
+    id dict = [_array nth:index];
+    if (dict) {
+        [self setValue:dict forKey:@"selectedDict"];
+        _closingIteration = duration;
+    }
+}
+
 - (id)init
 {
     self = [super init];
@@ -86,8 +102,6 @@ NSLog(@"DEALLOC AtariSTMenuBar");
             _buttonDown = NO;
             [self setValue:nil forKey:@"menuDict"];
             [self setValue:nil forKey:@"selectedDict"];
-        } else {
-            [x11dict setValue:nil forKey:@"needsRedraw"];
         }
         return;
     }
@@ -358,7 +372,7 @@ first = NO;
         id obj = [elt valueForKey:@"object"];
         int leftPadding = [elt intValueForKey:@"leftPadding"];
         int rightPadding = [elt intValueForKey:@"rightPadding"];
-        if (_buttonDown && (_selectedDict == elt)) {
+        if ((_buttonDown || (_closingIteration > 0)) && (_selectedDict == elt)) {
             if ([obj respondsToSelector:@selector(drawHighlightedInBitmap:rect:)]) {
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:r2];
