@@ -72,6 +72,41 @@
     [monitors writeCSVToFile:path];
     [Definitions setupMonitors];
 }
++ (id)previousMonitorName
+{
+    int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
+    int index = [Definitions monitorIndexForX:x y:0];
+    if (index >= 1) {
+        id monitors = [Definitions monitorConfig];
+        id elt = [monitors nth:index-1];
+        return [elt valueForKey:@"output"];
+    }
+    return nil;
+}
++ (id)nextMonitorName
+{
+    int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
+    int index = [Definitions monitorIndexForX:x y:0];
+    id monitors = [Definitions monitorConfig];
+    id elt = [monitors nth:index+1];
+    return [elt valueForKey:@"output"];
+}
++ (id)currentMonitor
+{
+    int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
+    return [Definitions monitorForX:x y:0];
+}
++ (id)currentMonitorName
+{
+    int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
+    id result = [Definitions monitorForX:x y:0];
+    return [result valueForKey:@"output"];
+}
++ (int)currentMonitorIndex
+{
+    int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
+    return [Definitions monitorIndexForX:x y:0];
+}
 + (id)monitorName
 {
     int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
