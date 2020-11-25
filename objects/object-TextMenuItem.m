@@ -48,7 +48,7 @@
     if (w) {
         return w;
     }
-    return 1;
+    return 10;
 }
 - (int)preferredWidthForBitmap:(id)bitmap
 {
@@ -57,7 +57,7 @@
     if (w) {
         return w;
     }
-    return 1;
+    return 10;
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
