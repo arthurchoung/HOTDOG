@@ -29,15 +29,7 @@
 
 #include <fcntl.h>
 
-// Don't set focusDict to menuBar by default
-
-// AmigaMenuBar highlight black/orange
-// AmigaRootWindow right click pass to menu bar
 // inotifywait vs just check timestamp
-// cleanup performIteration/drawInBitmap for menus
-// xinput2 / xeyes
-// keyboard
-// animation
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -60,6 +52,11 @@ static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned c
 }
 
 @implementation Definitions(fjdklsjfkldsjklfjs)
++ (id)currentWindow
+{
+    id windowManager = [@"windowManager" valueForKey];
+    return [windowManager valueForKey:@"focusDict"];
+}
 + (void)x11FixupEvent:(id)eventDict forBitmapObject:(id)object
 {
     if ([object respondsToSelector:@selector(bitmapWidth)]) {
@@ -174,45 +171,36 @@ static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
 
 + (id)keyForXKeyCode:(unsigned int)keyCode modifiers:(unsigned int)modifiers
 {
+    id str = [Definitions simpleKeyForXKeyCode:keyCode modifiers:modifiers];
+    
+    if (modifiers & ShiftMask) {
+        str = nsfmt(@"shift-%@", str);
+    }
+
+    if (modifiers & Mod1Mask) {
+        str = nsfmt(@"alt-%@", str);
+    }
+
+    if (modifiers & ControlMask) {
+        str = nsfmt(@"control-%@", str);
+    }
+
+    if (modifiers & Mod4Mask) {
+        str = nsfmt(@"meta-%@", str);
+    }
+
+    return str;
+}
+
++ (id)simpleKeyForXKeyCode:(unsigned int)keyCode modifiers:(unsigned int)modifiers
+{
     if (modifiers & ShiftMask) {
         switch(keyCode) {
-            case XK_a: return @"A";
-            case XK_b: return @"B";
-            case XK_c: return @"C";
-            case XK_d: return @"D";
-            case XK_e: return @"E";
-            case XK_f: return @"F";
-            case XK_g: return @"G";
-            case XK_h: return @"H";
-            case XK_i: return @"I";
-            case XK_j: return @"J";
-            case XK_k: return @"K";
-            case XK_l: return @"L";
-            case XK_m: return @"M";
-            case XK_n: return @"N";
-            case XK_o: return @"O";
-            case XK_p: return @"P";
-            case XK_q: return @"Q";
-            case XK_r: return @"R";
-            case XK_s: return @"S";
-            case XK_t: return @"T";
-            case XK_u: return @"U";
-            case XK_v: return @"V";
-            case XK_w: return @"W";
-            case XK_x: return @"X";
-            case XK_y: return @"Y";
-            case XK_z: return @"Z";
             case XK_period: return @">";
             case XK_comma: return @"<";
             case XK_equal: return @"+";
             case XK_semicolon: return @":";
             case XK_backslash: return @"|";
-            case XK_Left: return @"shiftleft";
-            case XK_Up: return @"shiftup";
-            case XK_Right: return @"shiftright";
-            case XK_Down: return @"shiftdown";
-            case XK_BackSpace: return @"shiftbackspace";
-            case XK_Tab: return @"shifttab";
             case XK_grave: return @"~";
             case XK_0: return @")";
             case XK_1: return @"!";
@@ -227,24 +215,8 @@ static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
             case XK_bracketleft: return @"{";
             case XK_bracketright: return @"}";
             case XK_minus: return @"_";
-            case XK_Return: return @"shiftreturn";
         }
     }
-
-    if (modifiers & Mod1Mask) {
-        switch(keyCode) {
-            case XK_Left: return @"altleft";
-            case XK_Right: return @"altright";
-        }
-    }
-
-    if (modifiers & ControlMask) {
-        switch(keyCode) {
-            case XK_Left: return @"controlleft";
-            case XK_Right: return @"controlright";
-        }
-    }
-
 
     switch(keyCode) {
         case XK_BackSpace: return @"backspace";
@@ -503,6 +475,7 @@ exit(0);
         [windowManager cleanup];
         return;
     }
+[windowManager grabHotKeys];
     id backgroundAgentsDict = nsdict();
     id backgroundAgents = [@"BackgroundAgents" asInstance];
     [backgroundAgentsDict setValue:@"BackgroundAgents" forKey:@"name"];
@@ -595,6 +568,34 @@ exit(0);
 }
 @end
 @implementation WindowManager
+- (void)grabHotKeys
+{
+    XGrabKey(_display, AnyKey, Mod4Mask, _rootWindow, True, GrabModeAsync, GrabModeSync);
+
+    XGrabKey(_display, AnyKey, ShiftMask|Mod4Mask, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, AnyKey, ControlMask|Mod4Mask, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, AnyKey, Mod1Mask|Mod4Mask, _rootWindow, True, GrabModeAsync, GrabModeSync);
+
+    XGrabKey(_display, AnyKey, ShiftMask|ControlMask|Mod4Mask, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, AnyKey, ShiftMask|Mod1Mask|Mod4Mask, _rootWindow, True, GrabModeAsync, GrabModeSync);
+
+    XGrabKey(_display, AnyKey, ControlMask|Mod1Mask|Mod4Mask, _rootWindow, True, GrabModeAsync, GrabModeSync);
+
+    XGrabKey(_display, AnyKey, ShiftMask|ControlMask|Mod1Mask|Mod4Mask, _rootWindow, True, GrabModeAsync, GrabModeSync);
+
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F1), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F2), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F3), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F4), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F5), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F6), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F7), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F8), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F9), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F10), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F11), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+    XGrabKey(_display, XKeysymToKeycode(_display, XK_F12), AnyModifier, _rootWindow, True, GrabModeAsync, GrabModeSync);
+}
 
 - (void)dealloc
 {
@@ -1076,7 +1077,7 @@ NSLog(@"unparent object %@", dict);
         return;
     }
 
-    Window win = [self openWindowWithName:[[object class] description] x:x y:y w:w h:h];
+    Window win = [self openWindowWithName:[object className] x:x y:y w:w h:h];
 
     [dict setValue:nsfmt(@"%lu", win) forKey:@"window"];
     [dict setValue:nsfmt(@"%d", x) forKey:@"x"];
@@ -1162,7 +1163,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
     }
 
 
-    Window win = [self openWindowWithName:[[object class] description] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
+    Window win = [self openWindowWithName:[object className] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
 
 
     id dict = nsdict();
@@ -1394,6 +1395,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
         dict = _menuBar;
     }
     [self setValue:dict forKey:@"focusDict"];
+    [_menuBar setValue:@"1" forKey:@"needsRedraw"];
     if (dict) {
         if (raiseWindow) {
             [self raiseObjectWindow:dict];
@@ -1754,26 +1756,33 @@ NSLog(@"received X event type %d", event.type);
 NSLog(@"keysym %d mod1 %d mod2 %d mod3 %d mod4 %d mod5 %d", keysym, e->state&Mod1Mask, e->state&Mod2Mask, e->state&Mod3Mask, e->state&Mod4Mask, e->state&Mod5Mask);
     if (_isWindowManager) {
         id keyString = [Definitions keyForXKeyCode:keysym modifiers:e->state];
-NSLog(@"keyString %@", keyString);
-        id hotKeys = [[Definitions execDir:@"Config/hotKeys.csv"] parseCSVFile];
-        if (e->state & Mod4Mask) { // windows key
-            for (id elt in hotKeys) {
-                id windowsKey = [elt valueForKey:@"windowsKey"];
-                if ([windowsKey isEqual:keyString]) {
-NSLog(@"match windows %@", elt);
-                }
+NSLog(@"hotkey keyString %@", keyString);
+        id hotKeyFiles = [[Definitions execDir:@"Config/hotKeyFiles.csv"] parseCSVFile];
+        for (id hotKeyFile in hotKeyFiles) {
+            id path = [hotKeyFile valueForKey:@"path"];
+            if (!path) {
+                continue;
             }
-        } else {
-            for (id elt in hotKeys) {
-                id key = [elt valueForKey:@"key"];
-                if ([key isEqual:keyString]) {
-                    id message = [elt valueForKey:@"message"];
+            id menu = [[Definitions execDir:path] parseCSVFile];
+            for (id elt in menu) {
+                id hotKey = [[elt valueForKey:@"hotKey"] lowercaseString];
+                if ([keyString isEqual:hotKey]) {
+                    id message = [elt valueForKey:@"messageForClick"];
                     if (message) {
-                        [@{} evaluateMessage:message];
+                        id flashMessage = [hotKeyFile valueForKey:@"flashMessage"];
+                        if (flashMessage) {
+                            [self evaluateMessage:flashMessage];
+                        }
+                        [self evaluateMessage:message];
+                        XAllowEvents(_display, AsyncKeyboard, CurrentTime);
+                        return;
                     }
                 }
             }
         }
+
+        XAllowEvents(_display, ReplayKeyboard, CurrentTime);
+        return;
     } else {
         if (keysym == XK_Escape) {
             id dict = [self dictForObjectWindow:e->window];
@@ -2866,7 +2875,7 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
     [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
     [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
 }
-- (void)x11MaximizeHeight
+- (void)x11FillToHeightOfMonitor
 {
     id dict = self;
     id windowManager = [@"windowManager" valueForKey];
@@ -2940,6 +2949,32 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
         int newY = menuBarHeight-1;
         int newW = monitorWidth;
         int newH = monitorHeight-(menuBarHeight-1);
+        [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
+    }
+}
+- (void)x11MoveToMonitorDelta:(int)delta
+{
+    id dict = self;
+    unsigned long win = [dict unsignedLongValueForKey:@"window"];
+    id windowManager = [@"windowManager" valueForKey];
+    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
+
+    int midX = [dict intValueForKey:@"x"] + [dict intValueForKey:@"w"]/2;
+    int midY = [dict intValueForKey:@"y"] + [dict intValueForKey:@"h"]/2;
+    int monitorIndex = [Definitions monitorIndexForX:midX y:midY];
+
+    id monitors = [Definitions monitorConfig];
+    monitorIndex += delta;
+    id monitor = [monitors nth:monitorIndex];
+    int monitorX = [monitor intValueForKey:@"x"];
+    int monitorWidth = [monitor intValueForKey:@"width"];
+    int monitorHeight = [monitor intValueForKey:@"height"];
+    int newX = monitorX;
+    int newY = menuBarHeight-1;
+    int newW = monitorWidth;
+    int newH = monitorHeight-(menuBarHeight-1);
+    if ((newW > 0) && (newH > 0)) {
         [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
         [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
     }
