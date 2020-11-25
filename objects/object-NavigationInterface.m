@@ -615,7 +615,6 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
     id _buttonDown;
     id _buttonHover;
     id _context;
-    id _inputString;
     id _rightButtonDown;
     int _animateIteration;
     int _animateMaxIteration;
@@ -1015,51 +1014,6 @@ NSLog(@"obj %@", obj);
     if (!obj) {
         return;
     }
-    id keyString = [event valueForKey:@"keyString"];
-NSLog(@"keyString '%@'", keyString);
-    if (!_inputString) {
-        if ([keyString isEqual:@":"]) {
-            [self setValue:@"" forKey:@"inputString"];
-            return;
-        }
-    } else {
-        if ([keyString isEqual:@"shiftbackspace"]) {
-            [self setValue:nil forKey:@"inputString"];
-            return;
-        } else if ([keyString isEqual:@"backspace"]) {
-            if ([_inputString length]) {
-                [self setValue:[_inputString stringToIndex:-1] forKey:@"inputString"];
-            } else {
-                [self setValue:nil forKey:@"inputString"];
-            }
-            return;
-        } else if ([keyString isEqual:@"return"]) {
-            id result = nil;
-            if ([_inputString length]) {
-                if ([obj isKindOfClass:[@"ListInterface" asClass]]) {
-                    if ([_inputString hasPrefix:@"~"]) {
-                        [self setValue:[_inputString stringFromIndex:1] forKey:@"inputString"];
-                    } else {
-                        obj = [obj valueForKey:@"array"];
-                    }
-                }
-                result = [obj evaluateMessage:_inputString];
-            }
-            [self setValue:nil forKey:@"inputString"];
-            if (obj == result) {
-            } else {
-                [result pushToMainInterface];
-            }
-            return;
-        } else if ([keyString isEqual:@"space"]) {
-            [self setValue:nsfmt(@"%@ ", _inputString) forKey:@"inputString"];
-            return;
-        } else if ([keyString length] == 1) {
-            [self setValue:nsfmt(@"%@%@", _inputString, keyString) forKey:@"inputString"];
-            return;
-        }
-    }
-    
 
     if ([obj respondsToSelector:@selector(handleKeyDown:)]) {
         [obj handleKeyDown:event];
@@ -1134,13 +1088,6 @@ NSLog(@"keyString '%@'", keyString);
 
 
 
-    if (_inputString) {
-        Int4 boxRect = [Definitions rectWithX:r.x y:r.h/2.0 w:r.w h:20.0];
-        [bitmap setColor:@"cyan"];
-        [bitmap fillRect:boxRect];
-        [bitmap setColorIntR:0 g:0 b:0 a:255];
-        [bitmap drawBitmapText:_inputString centeredInRect:boxRect];
-    }
 }
 - (void)drawNavigationBarInBitmap:(id)bitmap rect:(Int4)rect title:(id)title backButton:(id)backButton forwardButton:(id)forwardButton
 {
