@@ -26,10 +26,23 @@
 #import "HOTDOG.h"
 
 @implementation Definitions(jfewjfsdjflksdjfkljsdklf)
++ (void)toggleExposeMode
+{
+    id windowManager = [@"windowManager" valueForKey];
+    id rootObject = [windowManager valueForKey:@"rootWindowObject"];
+    if (![rootObject isKindOfClass:[@"ExposeRootWindow" asClass]]) {
+        [Definitions enterExposeMode];
+    } else {
+        [Definitions exitExposeMode];
+    }
+}
 + (void)enterExposeMode
 {
     id windowManager = [@"windowManager" valueForKey];
     id oldRootWindowObject = [windowManager valueForKey:@"rootWindowObject"];
+    if ([oldRootWindowObject isKindOfClass:[@"ExposeRootWindow" asClass]]) {
+        return;
+    }
 
     id rootObject = [@"ExposeRootWindow" asInstance];
     [rootObject setValue:oldRootWindowObject forKey:@"oldRootWindowObject"];
@@ -46,6 +59,10 @@
 {
     id windowManager = [@"windowManager" valueForKey];
     id rootObject = [windowManager valueForKey:@"rootWindowObject"];
+    if (![rootObject isKindOfClass:[@"ExposeRootWindow" asClass]]) {
+        return;
+    }
+
     id oldRootWindowObject = [rootObject valueForKey:@"oldRootWindowObject"];
     [windowManager setValue:oldRootWindowObject forKey:@"rootWindowObject"];
     id dict = [windowManager dictForObjectWindowClassName:@"ExposeWindow"];
