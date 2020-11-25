@@ -39,6 +39,22 @@
 
 @implementation AmigaMenuBar
 
+- (void)flashIndex:(int)index duration:(int)duration
+{
+    if (_closingIteration > 0) {
+        return;
+    }
+    if (_selectedDict) {
+        return;
+    }
+
+    id dict = [_array nth:index];
+    if (dict) {
+        [self setValue:dict forKey:@"selectedDict"];
+        _closingIteration = duration;
+    }
+}
+
 - (id)init
 {
     self = [super init];
@@ -86,8 +102,6 @@ NSLog(@"DEALLOC AmigaMenuBar");
             _buttonDown = NO;
             [self setValue:nil forKey:@"menuDict"];
             [self setValue:nil forKey:@"selectedDict"];
-        } else {
-            [x11dict setValue:nil forKey:@"needsRedraw"];
         }
         return;
     }
@@ -330,7 +344,7 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
     int mouseMonitorX = [mouseMonitor intValueForKey:@"x"];
     int mouseMonitorWidth = [mouseMonitor intValueForKey:@"width"];
 
-    if (!_buttonDown) {
+    if (!_buttonDown && (_closingIteration <= 0)) {
         id text = @"Workbench release.       1911192 free memory";
         [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
         [bitmap drawBitmapText:text x:mouseMonitorX+5 y:2];
@@ -364,20 +378,14 @@ first = NO;
         id obj = [elt valueForKey:@"object"];
         int leftPadding = [elt intValueForKey:@"leftPadding"];
         int rightPadding = [elt intValueForKey:@"rightPadding"];
-        if (_buttonDown && (_selectedDict == elt)) {
-            if ([obj respondsToSelector:@selector(drawHighlightedInBitmap:rect:)]) {
+        if ((_buttonDown || (_closingIteration > 0)) && (_selectedDict == elt)) {
+            if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:r2];
-
                 Int4 r3 = r2;
                 r3.x += leftPadding;
                 r3.w -= leftPadding+rightPadding;
-                [obj drawHighlightedInBitmap:bitmap rect:r3];
-            } else if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
-                Int4 r3 = r2;
-                r3.x += leftPadding;
-                r3.w -= leftPadding+rightPadding;
-                [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
+                [bitmap setColorIntR:0xff g:0x88 b:0x00 a:0xff];
                 [obj drawInBitmap:bitmap rect:r3];
             } else {
             }
