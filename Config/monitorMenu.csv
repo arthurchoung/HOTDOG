@@ -1,6 +1,9 @@
 displayName,stringFormat,messageForClick
-,"#{monitorName}"
-"Portrait (left)",,"'windowManager'|valueForKey|rotateCurrentMonitor:'left'"
-"Portrait (right)",,"'windowManager'|valueForKey|rotateCurrentMonitor:'right'"
-"Landscape (normal)",,"'windowManager'|valueForKey|rotateCurrentMonitor:'normal'"
-"Landscape (inverted)",,"'windowManager'|valueForKey|rotateCurrentMonitor:'inverted'"
+,"#{currentMonitorName}"
+"Portrait (left)",,"rotateCurrentMonitor:'left'"
+"Portrait (right)",,"rotateCurrentMonitor:'right'"
+"Landscape (normal)",,"rotateCurrentMonitor:'normal'"
+"Landscape (inverted)",,"rotateCurrentMonitor:'inverted'"
+,,
+"Move Monitor Left",,"swapMonitors:(currentMonitorName) :(previousMonitorName)"
+"Move Monitor Right",,"swapMonitors:(currentMonitorName) :(nextMonitorName)"
