@@ -32,6 +32,7 @@
     int _mouseY;
     id _array;
     id _selectedObject;
+    id _contextualObject;
 }
 @end
 
@@ -48,6 +49,7 @@
 - (int)preferredWidth
 {
     int highestWidth = 0;
+    int highestRightWidth = 0;
     for (id elt in _array) {
         id displayName = [elt valueForKey:@"displayName"];
         if (displayName) {
@@ -56,6 +58,16 @@
                 highestWidth = w;
             }
         }
+        id hotKey = [elt valueForKey:@"hotKey"];
+        if (hotKey) {
+            int w = [Definitions bitmapWidthForText:hotKey];
+            if (w > highestRightWidth) {
+                highestRightWidth = w;
+            }
+        }
+    }
+    if (highestWidth && highestRightWidth) {
+        return highestWidth + 8 + 12 + highestRightWidth + 26;
     }
     if (highestWidth) {
         return highestWidth + 8 + 12;
@@ -113,6 +125,8 @@
         if (!text) {
             text = [elt valueForKey:@"displayName"];
         }
+        id rightText = [elt valueForKey:@"hotKey"];
+
         id messageForClick = [elt valueForKey:@"messageForClick"];
         if ([messageForClick length] && [Definitions isX:_mouseX y:_mouseY insideRect:cellRect]) {
             if ([text length]) {
@@ -120,6 +134,10 @@
                 [bitmap fillRect:cellRect];
                 [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
                 [bitmap drawBitmapText:text x:cellRect.x+4+12 y:cellRect.y+2];
+                if ([rightText length]) {
+                    int w = [bitmap bitmapWidthForText:rightText];
+                    [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-6-w y:cellRect.y+2];
+                }
             } else {
                 [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
                 [bitmap drawHorizontalDashedLineX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
@@ -130,6 +148,10 @@
                 if ([messageForClick length]) {
                     [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
                     [bitmap drawBitmapText:text x:cellRect.x+4+12 y:cellRect.y+2];
+                    if ([rightText length]) {
+                        int w = [bitmap bitmapWidthForText:rightText];
+                        [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-6-w y:cellRect.y+2];
+                    }
                 } else {
                     [bitmap setColor:@"black"];
                     [bitmap fillRect:cellRect];
@@ -158,7 +180,11 @@ NSLog(@"Menu handleMouseUp");
     if (_selectedObject) {
         id message = [_selectedObject valueForKey:@"messageForClick"];
         if (message) {
-            [[Definitions namespace]  evaluateMessage:message];
+            id context = _contextualObject;
+            if (!context) {
+                context = [Definitions namespace];
+            }
+            [context  evaluateMessage:message];
         }
     }
 }
