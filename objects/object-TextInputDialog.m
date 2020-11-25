@@ -253,6 +253,19 @@ NSLog(@"text '%@'", text);
             _cursorPos++;
             _cursorBlink = 1;
         }
+    } else if ([str hasPrefix:@"shift-"] && ([str length] == 7)) {
+        if (![buf length]) {
+            [_buffers replaceObjectAtIndex:_currentField withObject:[[str stringFromIndex:6] uppercaseString]];
+            _cursorPos = 1;
+            _cursorBlink = 1;
+        } else {
+            id left = [buf stringToIndex:_cursorPos];
+            id right = [buf stringFromIndex:_cursorPos];
+            id newBuf = nsfmt(@"%@%@%@", left, [[str stringFromIndex:6] uppercaseString], right);
+            [_buffers replaceObjectAtIndex:_currentField withObject:newBuf];
+            _cursorPos++;
+            _cursorBlink = 1;
+        }
     } else if ([str isEqual:@"left"]) {
         if (_cursorPos - 1 >= 0) {
             _cursorPos--;
@@ -283,7 +296,7 @@ NSLog(@"text '%@'", text);
             _cursorPos = [[_buffers nth:_currentField] length];
             _cursorBlink = 2;
         }
-    } else if ([str isEqual:@"shifttab"]) {
+    } else if ([str isEqual:@"shift-tab"]) {
         if ([_fields count] > 1) {
             _currentField--;
             if (_currentField < 0) {
