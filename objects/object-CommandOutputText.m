@@ -33,6 +33,12 @@
     [obj setValue:process forKey:@"fileDescriptor"];
     return obj;
 }
++ (id)CommandOutputText:(id)cmd lineMessage:(id)lineMessage
+{
+    id obj = [Definitions CommandOutputText:cmd];
+    [obj setValue:lineMessage forKey:@"lineMessage"];
+    return obj;
+}
 @end
 
 @interface CommandOutputText : IvarObject
@@ -40,6 +46,7 @@
     id _fileDescriptor;
     id _lastLine;
     int _maxWidth;
+    id _lineMessage;
 }
 @end
 @implementation CommandOutputText
@@ -60,6 +67,9 @@
                 break;
             }
             [self setValue:line forKey:@"lastLine"];
+            if (_lineMessage) {
+                [line evaluateMessage:_lineMessage];
+            }
         }
     }
 }
