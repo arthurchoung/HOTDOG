@@ -40,6 +40,7 @@
     }
     id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
+    [menu setValue:[@"windowManager" valueForKey] forKey:@"contextualObject"];
     return menu;
 }
 @end
@@ -74,6 +75,7 @@ NSLog(@"dealloc Menu %@", self);
 - (int)preferredWidth
 {
     int highestWidth = 0;
+    int highestRightWidth = 0;
     for (id elt in _array) {
         id displayName = [elt valueForKey:@"displayName"];
         if (displayName) {
@@ -82,6 +84,16 @@ NSLog(@"dealloc Menu %@", self);
                 highestWidth = w;
             }
         }
+        id hotKey = [elt valueForKey:@"hotKey"];
+        if (hotKey) {
+            int w = [Definitions bitmapWidthForText:hotKey];
+            if (w > highestRightWidth) {
+                highestRightWidth = w;
+            }
+        }
+    }
+    if (highestWidth && highestRightWidth) {
+        return highestWidth + 8 + highestRightWidth + 26;
     }
     if (highestWidth) {
         return highestWidth + 8;
@@ -151,6 +163,7 @@ NSLog(@"dealloc Menu %@", self);
         if (!text) {
             text = [elt valueForKey:@"displayName"];
         }
+        id rightText = [elt valueForKey:@"hotKey"];
         id messageForClick = [elt valueForKey:@"messageForClick"];
         if ([messageForClick length] && [Definitions isX:_mouseX y:_mouseY insideRect:cellRect]) {
             if ([text length]) {
@@ -165,6 +178,10 @@ NSLog(@"dealloc Menu %@", self);
                 }
                 [bitmap setColorIntR:255 g:255 b:255 a:255];
                 [bitmap drawBitmapText:text x:cellRect.x+4 y:cellRect.y+4];
+                if ([rightText length]) {
+                    int w = [bitmap bitmapWidthForText:rightText];
+                    [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-w y:cellRect.y+4];
+                }
             } else {
                 [bitmap setColor:@"black"];
                 [bitmap drawHorizontalDashedLineX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
@@ -175,6 +192,10 @@ NSLog(@"dealloc Menu %@", self);
                 if ([messageForClick length]) {
                     [bitmap setColor:@"black"];
                     [bitmap drawBitmapText:text x:cellRect.x+4 y:cellRect.y+4];
+                    if ([rightText length]) {
+                        int w = [bitmap bitmapWidthForText:rightText];
+                        [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-w y:cellRect.y+4];
+                    }
                 } else {
                     [bitmap setColor:@"black"];
                     [bitmap fillRect:cellRect];
