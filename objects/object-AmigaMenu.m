@@ -48,6 +48,7 @@
 - (int)preferredWidth
 {
     int highestWidth = 0;
+    int highestRightWidth = 0;
     for (id elt in _array) {
         id displayName = [elt valueForKey:@"displayName"];
         if (displayName) {
@@ -56,6 +57,16 @@
                 highestWidth = w;
             }
         }
+        id hotKey = [elt valueForKey:@"hotKey"];
+        if (hotKey) {
+            int w = [Definitions bitmapWidthForText:hotKey];
+            if (w > highestRightWidth) {
+                highestRightWidth = w;
+            }
+        }
+    }
+    if (highestWidth && highestRightWidth) {
+        return highestWidth + 8 + highestRightWidth + 26;
     }
     if (highestWidth) {
         return highestWidth + 8;
@@ -112,6 +123,7 @@
         if (!text) {
             text = [elt valueForKey:@"displayName"];
         }
+        id rightText = [elt valueForKey:@"hotKey"];
         Int4 r2 = cellRect;
         r2.x += 2;
         r2.w -= 4;
@@ -122,6 +134,10 @@
                 [bitmap fillRect:r2];
                 [bitmap setColorIntR:0xff g:0x88 b:0x00 a:0xff];
                 [bitmap drawBitmapText:text x:r2.x+4 y:r2.y+4];
+                if ([rightText length]) {
+                    int w = [bitmap bitmapWidthForText:rightText];
+                    [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-w y:cellRect.y+4];
+                }
             } else {
                 [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
                 [bitmap drawHorizontalDashedLineX:r2.x x:r2.x+r2.w y:r2.y+r2.h/2 dashLength:1];
@@ -132,6 +148,10 @@
                 if ([messageForClick length]) {
                     [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
                     [bitmap drawBitmapText:text x:r2.x+4 y:r2.y+4];
+                    if ([rightText length]) {
+                        int w = [bitmap bitmapWidthForText:rightText];
+                        [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-w y:cellRect.y+4];
+                    }
                 } else {
                     [bitmap setColor:@"black"];
                     [bitmap fillRect:r2];
