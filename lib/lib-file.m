@@ -32,6 +32,13 @@
 #include <time.h>
 #include <dirent.h>
 
+@implementation Definitions(jfdosjfkldsjfklsdjklfjk)
++ (id)currentDirName
+{
+    return [[@"." asRealPath] lastPathComponent];
+}
+@end
+
 @implementation Definitions(fjdkslfjklsdf)
 + (void)testFilePointer
 {
