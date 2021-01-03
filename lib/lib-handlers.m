@@ -57,6 +57,7 @@ NSLog(@"message '%@'", message);
 {
     id cmd = nsarr();
     [cmd addObject:@"mpv"];
+    [cmd addObject:@"--hwdec=auto"];
     [cmd addObject:self];
     [cmd runCommandInBackground];
     return nil;
