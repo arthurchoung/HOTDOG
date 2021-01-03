@@ -134,7 +134,13 @@
     [Definitions drawAlertBorderInBitmap:bitmap rect:r];
     char *palette = "b #000000\n. #ffffff\n";
     [bitmap drawCString:[Definitions cStringForBitmapMessageIcon] palette:palette x:28 y:28];
-    Int4 okButtonRect = [Definitions rectWithX:r.w-88 y:r.h-21-28 w:70 h:28];
+//    Int4 okButtonRect = [Definitions rectWithX:r.w-88 y:r.h-21-28 w:70 h:28];
+    int okTextWidth = [bitmap bitmapWidthForText:_okText];
+    if (okTextWidth < 44) {
+        okTextWidth = 44;
+    }
+
+    Int4 okButtonRect = [Definitions rectWithX:r.w-okTextWidth-26-18 y:r.h-21-28 w:okTextWidth+26 h:28];
     _rects[0] = okButtonRect;
     if ((_buttonDown == 1) && (_buttonDown == _buttonHover)) {
         char *palette = ". #000000\nb #000000\nw #ffffff\n";
@@ -147,7 +153,7 @@
         [bitmap setColorIntR:0 g:0 b:0 a:255];
         [bitmap drawBitmapText:_okText centeredInRect:okButtonRect];
     }
-    Int4 cancelButtonRect = [Definitions rectWithX:r.w-88-70-35 y:r.h-21-28 w:70 h:28];
+    Int4 cancelButtonRect = [Definitions rectWithX:okButtonRect.x-70-35 y:r.h-21-28 w:70 h:28];
     _rects[1] = cancelButtonRect;
     _numberOfRects = 2;
     if ((_buttonDown == 2) && (_buttonDown == _buttonHover)) {
