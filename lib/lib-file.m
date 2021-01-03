@@ -32,6 +32,27 @@
 #include <time.h>
 #include <dirent.h>
 
+@implementation Definitions(jfkdlsjklfjsdklfljksdf)
++ (id)linesFromStandardInput
+{
+    id results = nsarr();
+    char buf[16384];
+    while (fgets(buf, 16384, stdin)) {
+@autoreleasepool {
+        id line = nscstr(buf);
+            if (![line hasSuffix:@"\n"]) {
+NSLog(@"ERROR: line too long");
+exit(0);
+            }
+        line = [line chomp];
+        [results addObject:line];
+}
+    }
+//NSLog(@"results %@", [results join:@""]);
+    return results;
+}
+@end
+
 @implementation Definitions(jfdosjfkldsjfklsdjklfjk)
 + (id)currentDirName
 {
