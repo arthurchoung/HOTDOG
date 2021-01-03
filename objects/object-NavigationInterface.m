@@ -1051,38 +1051,46 @@ NSLog(@"obj %@", obj);
             title = (headerFormat) ? [obj str:headerFormat] : nsfmt(@"%@", [obj class]);
             if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
                 [obj drawInBitmap:bitmap rect:r1];
+                goto end;
             }
 #ifdef BUILD_FOR_LINUX
 #ifdef BUILD_FOR_ANDROID
 #else
-            else if ([obj respondsToSelector:@selector(pixelBytesRGBA8888)]) {
+            if ([obj respondsToSelector:@selector(pixelBytesRGBA8888)]) {
                 if (![[@"windowManager" valueForKey] valueForKey:@"openGLTexture"]) {
-                    int bitmapWidth = [obj bitmapWidth];
-                    int bitmapHeight = [obj bitmapHeight];
                     char *bytes = [obj pixelBytesRGBA8888];
-                    [bitmap drawBytes:bytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight x:r.x y:navigationBarHeight+r.y w:r.w h:r.h-navigationBarHeight]; // I think the y: calculation is wrong
+                    if (bytes) {
+                        int bitmapWidth = [obj bitmapWidth];
+                        int bitmapHeight = [obj bitmapHeight];
+                        [bitmap drawBytes:bytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight x:r.x y:navigationBarHeight+r.y w:r.w h:r.h-navigationBarHeight]; // I think the y: calculation is wrong
+                        goto end;
+                    }
                 }
             }
-            else if ([obj respondsToSelector:@selector(pixelBytesBGR565)]) {
+
+            if ([obj respondsToSelector:@selector(pixelBytesBGR565)]) {
                 if (![[@"windowManager" valueForKey] valueForKey:@"openGLTexture"]) {
-                    int bitmapWidth = [obj bitmapWidth];
-                    int bitmapHeight = [obj bitmapHeight];
                     char *bytes = [obj pixelBytesBGR565];
-                    [bitmap drawBytes565:bytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight x:r.x y:navigationBarHeight+r.y w:r.w h:r.h-navigationBarHeight]; // I think the y: calculation is wrong
+                    if (bytes) {
+                        int bitmapWidth = [obj bitmapWidth];
+                        int bitmapHeight = [obj bitmapHeight];
+                        [bitmap drawBytes565:bytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight x:r.x y:navigationBarHeight+r.y w:r.w h:r.h-navigationBarHeight]; // I think the y: calculation is wrong
+                        goto end;
+                    }
                 }
             }
 #endif
 #endif
-            else {
-                [bitmap setColor:@"white"];
-                [bitmap fillRect:r1];
-                [bitmap setColor:@"black"];
-                id text = [obj description];
-                text = [bitmap fitBitmapString:text width:r1.w-10];
-                [bitmap drawBitmapText:text x:r1.x+5 y:r1.y+5];
-            }
+
+            [bitmap setColor:@"white"];
+            [bitmap fillRect:r1];
+            [bitmap setColor:@"black"];
+            id text = [obj description];
+            text = [bitmap fitBitmapString:text width:r1.w-10];
+            [bitmap drawBitmapText:text x:r1.x+5 y:r1.y+5];
         }
     }
+end:
 
     [self drawNavigationBarInBitmap:bitmap rect:r title:title backButton:([_context valueForKey:@"previous"]) ? @"Back" : nil forwardButton:nil];
 
