@@ -48,29 +48,33 @@ NSLog(@"glXCreateContext failed");
     
     glXMakeCurrent(display, win, glContext);
 
-    PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT;
     PFNGLXSWAPINTERVALMESAPROC glXSwapIntervalMESA;
-    PFNGLXSWAPINTERVALSGIPROC glXSwapIntervalSGI;
+    glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESAPROC)glXGetProcAddress((const GLubyte *)"glXSwapIntervalMESA");
+    if (glXSwapIntervalMESA != NULL) {
+NSLog(@"glXSwapIntervalMESA");
+        glXSwapIntervalMESA(1);
+        return YES;
+    }
 
+    PFNGLXSWAPINTERVALSGIPROC glXSwapIntervalSGI;
+    glXSwapIntervalSGI = (PFNGLXSWAPINTERVALSGIPROC)glXGetProcAddress((const GLubyte *)"glXSwapIntervalSGI");
+    if (glXSwapIntervalSGI != NULL) {
+NSLog(@"glXSwapIntervalSGI");
+        glXSwapIntervalSGI(1);
+        return YES;
+    }
+
+/*
+    PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT;
     glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress((const GLubyte *)"glXSwapIntervalEXT");
     if (glXSwapIntervalEXT != NULL) {
 NSLog(@"glXSwapIntervalEXT");
         glXSwapIntervalEXT(display, win, 1);
-    } else {
-        glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESAPROC)glXGetProcAddress((const GLubyte *)"glXSwapIntervalMESA");
-        if (glXSwapIntervalMESA != NULL) {
-NSLog(@"glXSwapIntervalMESA");
-            glXSwapIntervalMESA(1);
-        } else {
-            glXSwapIntervalSGI = (PFNGLXSWAPINTERVALSGIPROC)glXGetProcAddress((const GLubyte *)"glXSwapIntervalSGI");
-            if (glXSwapIntervalSGI != NULL) {
-NSLog(@"glXSwapIntervalSGI");
-                glXSwapIntervalSGI(1);
-            }
-        }
+        return YES;
     }
+*/
 
-
+NSLog(@"Unable to get glXSwapIntervalMESA or glXSwapIntervalSGI");
     return YES;
 }
 + (void)clearOpenGLForWidth:(int)width height:(int)height
