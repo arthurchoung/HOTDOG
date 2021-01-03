@@ -308,6 +308,14 @@ NSLog(@"writeString result %d", result);
     int result = write(_infd, [data bytes], [data length]);
 NSLog(@"write result %d", result);
 }
+- (void)writeBytes:(unsigned char *)bytes length:(int)length
+{
+    if (_infd == -1) {
+        return;
+    }
+    int result = write(_infd, bytes, length);
+//NSLog(@"write result %d", result);
+}
 
 - (void)closeInput
 {
