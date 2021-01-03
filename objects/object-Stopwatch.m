@@ -49,6 +49,15 @@
 @end
 @implementation Stopwatch
 
+- (int)preferredWidth
+{
+    return 300;
+}
+- (int)preferredHeight
+{
+    return 130;
+}
+
 - (BOOL)shouldAnimate
 {
 #ifdef BUILD_FOR_LINUX
