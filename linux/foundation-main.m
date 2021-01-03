@@ -49,6 +49,22 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             [Definitions runWindowManagerForObject:object];
             [[Definitions mainInterface] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "open")) {
+            if (argc > 2) {
+                id filePath = nscstr(argv[2]);
+                if ([filePath isDirectory]) {
+                    chdir(argv[2]);
+                }
+            }
+            id obj = [Definitions ObjectInterface];
+            if ([obj isKindOfClass:[@"ListInterface" asClass]]) {
+                id nav = [Definitions mainInterface];
+                [nav pushObject:obj];
+                [Definitions runWindowManagerForObject:nav];
+            } else {
+                [Definitions runWindowManagerForObject:obj];
+            }
+            [[Definitions mainInterface] setValue:nil forKey:@"context"];
+        } else if ((argc > 1) && !strcmp(argv[1], "list")) {
             id arr = nsarr();
             for (int i=2; i<argc; i++) {
                 id filePath = nscstr(argv[i]);
@@ -100,6 +116,23 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                 [Definitions runWindowManagerForObject:obj];
             }
             [[Definitions mainInterface] setValue:nil forKey:@"context"];
+        } else if ((argc > 1) && !strcmp(argv[1], "lines")) {
+            id lines = nil;
+            if (argc > 2) {
+                lines = [nscstr(argv[2]) linesFromFile];
+                if (!lines) {
+NSLog(@"unable to read file '%s'", argv[2]);
+exit(1);
+                }
+            } else {
+                lines = [Definitions linesFromStandardInput];
+            }
+            if (lines) {
+                id nav = [Definitions mainInterface];
+                id obj = [lines asListInterface];
+                [nav pushObject:obj];
+                [Definitions runWindowManagerForObject:nav];
+            }
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
