@@ -199,6 +199,14 @@ static char *calculatorPixels =
     }
     return self;
 }
+- (int)preferredWidth
+{
+    return _width*2;
+}
+- (int)preferredHeight
+{
+    return _height*2;
+}
 - (BOOL)shouldAnimate
 {
     return NO;
