@@ -5,5 +5,5 @@ displayName,stringFormat,messageForClick
 "Landscape (normal)",,"rotateCurrentMonitor:'normal'"
 "Landscape (inverted)",,"rotateCurrentMonitor:'inverted'"
 ,,
-"Move Monitor Left",,"swapMonitors:(currentMonitorName) :(previousMonitorName)"
-"Move Monitor Right",,"swapMonitors:(currentMonitorName) :(nextMonitorName)"
+"Move Monitor Left",,"swapMonitors:(currentMonitorName) :(nextMonitorName)"
+"Move Monitor Right",,"swapMonitors:(currentMonitorName) :(previousMonitorName)"
