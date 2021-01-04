@@ -16,6 +16,7 @@ Remove this line in build.pl:
 
 (after fresh sys install)
 
+```
 vi /boot/extlinux.conf (remove nomodeset)
 vi /etc/apk/repositories (uncomment edge/main and edge/community, comment out both v3.12/main and v3.12/community or whatever the version is)
 apk update
@@ -60,6 +61,7 @@ cd
 vi .xinitrc (exec xterm)
 startx
 HOTDOG/hotdog runWindowManager
+```
 
 
 ## Legal
