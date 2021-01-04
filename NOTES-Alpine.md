@@ -30,6 +30,7 @@ apk add perl
 apk add clang
 apk add gcc
 apk add git
+apk add inotify-tools
 apk add xterm
 apk add xrandr
 apk add musl-dev
