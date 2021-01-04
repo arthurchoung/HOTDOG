@@ -1,21 +1,21 @@
-displayName,messageForClick
-HOT DOG,"[ 'hotdog' ] | runCommandInBackground"
-XTerm,"[ 'xterm' '-geometry' '80x50' '+bc' '+uc' ] | runCommandInBackground"
-Firefox,"[ 'firefox' ] | runCommandInBackground"
-Thunderbird,"[ 'thunderbird' ] | runCommandInBackground"
+hotKey,displayName,messageForClick
+,HOT DOG,"[ 'hotdog' ] | runCommandInBackground"
+,XTerm,"[ 'xterm' '-geometry' '80x50' '+bc' '+uc' ] | runCommandInBackground"
+,Firefox,"[ 'firefox' ] | runCommandInBackground"
+,Thunderbird,"[ 'thunderbird' ] | runCommandInBackground"
 ,
-"Restart","[ 'performRestart' ]|runCommandInBackground"
-"Shutdown","[ 'performShutdown' ]|runCommandInBackground"
+,Stopwatch,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(execDir:'MainMenu/Stopwatch')|runCommandInBackground"
 ,
-"About HOT DOG","'Horrible Obsolete Typeface and Dreadful Onscreen Graphics for Linux (HOT DOG Linux)\\n\\nWritten by Arthur Choung\\n'|showAlert"
+,"Restart","[ 'performRestart' ]|runCommandInBackground"
+,"Shutdown","[ 'performShutdown' ]|runCommandInBackground"
 ,
-Enter Expose Mode,"enterExposeMode"
+,"About HOT DOG","'Horrible Obsolete Typeface and Dreadful Onscreen Graphics for Linux (HOT DOG Linux)\\n\\nWritten by Arthur Choung\\n'|showAlert"
 ,
-Enter Amiga Mode,"enterAmigaMode"
-Enter Mac Classic Mode,"enterMacClassicMode"
-Enter Mac Color Mode,"enterMacColorMode"
-Enter Mac Platinum Mode,"enterMacPlatinumMode"
-Enter Hot Dog Stand Mode,"enterHotDogStandMode"
-Enter Atari ST Mode,"enterAtariSTMode"
+,Enter Amiga Mode,"enterAmigaMode"
+,Enter Mac Classic Mode,"enterMacClassicMode"
+,Enter Mac Color Mode,"enterMacColorMode"
+,Enter Mac Platinum Mode,"enterMacPlatinumMode"
+,Enter Hot Dog Stand Mode,"enterHotDogStandMode"
+,Enter Atari ST Mode,"enterAtariSTMode"
 ,
-"'xrandrOutput'|setNilValueForKey","'xrandrOutput'|setNilValueForKey"
+,"'xrandrOutput'|setNilValueForKey","'xrandrOutput'|setNilValueForKey"
