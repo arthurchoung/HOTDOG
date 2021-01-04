@@ -1,8 +1,8 @@
 leftPadding,rightPadding,objectMessage,messageForClick
 4,4,"HotDog","execDir:'Config/rootWindowMenu.csv'|parseCSVFile|asMenu"
 4,4,"TextMenuItem:'Window'","execDir:'Config/windowMenu.csv'|parseCSVFile|asMenu"
-4,4,"TextMenuItem:'Mon #{monitorTitle}'","execDir:'Config/monitorMenu.csv'|parseCSVFile|asMenu"
 0,0,
+4,4,"TextMenuItem:'Mon #{monitorTitle}'","execDir:'Config/monitorMenu.csv'|parseCSVFile|asMenu"
 4,4,"CommandOutputText:['printALSAStatus' ]","'VolumeMenu'|asInstance"
 4,4,"CommandOutputText:['printBatteryStatus' ]"
 4,4,"CommandOutputBitmap:['printCPUStats' ]"
