@@ -5,6 +5,7 @@ suffix,message
 .m4v,"handleFileWithMPV"
 .mkv,"handleFileWithMPV"
 .avi,"handleFileWithMPV"
+.webm,"handleFileWithMPV"
 .wav
 .json,"readFromFileAsJSON"
 .pdf,"NSArray|addObject:'mupdf'|addObject:(self)|runCommandInBackground|returnNil"
