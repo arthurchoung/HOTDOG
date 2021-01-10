@@ -17,10 +17,10 @@ Remove this line in build.pl:
 (after fresh sys install)
 
 ```
-vi /boot/extlinux.conf (remove nomodeset)
 vi /etc/apk/repositories (uncomment edge/main and edge/community, comment out both v3.12/main and v3.12/community or whatever the version is)
 apk update
 apk upgrade --update-cache --available
+vi /boot/extlinux.conf (remove nomodeset)
 sync
 reboot
 
@@ -37,7 +37,7 @@ apk add musl-dev
 apk add libx11-dev
 apk add mesa-dev
 
-apk add mesa-dri-swrast # for virtual box
+apk add mesa-dri-swrast # for qemu / virtual box
 
 apk add alsa-utils
 apk add alsa-utils-doc
