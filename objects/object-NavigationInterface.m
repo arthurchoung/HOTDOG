@@ -58,7 +58,7 @@
             }
         }
     }
-    id preArr = [@"00preIndex.csv" parseCSVFile];
+    id preArr = [@"00preindex.csv" parseCSVFile];
     if (preArr) {
         arr = [preArr arrayByAddingObjectsFromArray:arr];
     }
@@ -82,39 +82,7 @@
     id obj = [@"ListInterface" asInstance];
     id currentDirectory = [@"." asRealPath];
     [obj setValue:currentDirectory forKey:@"currentDirectory"];
-    id arr = [@"00index.csv" parseCSVFile];
-    if (!arr) {
-        arr = [@"00index.json" readFromFileAsJSON];
-        if ([arr isKindOfClass:[@"NSDictionary" asClass]]) {
-            arr = [arr asKeyValueArray];
-        }
-    }
-    if (!arr) {
-        arr = [@"." contentsOfDirectory];
-        arr = [arr asFileArray];
-        for (id elt in arr) {
-            if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
-                [elt setValue:@"array|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
-            } else {
-                [elt setValue:@"0" forKey:@"drawChevron"];
-                [elt setValue:@"array|filePath|runFileHandler" forKey:@"messageForClick"];
-            }
-        }
-    }
-    id preArr = [@"00preIndex.csv" parseCSVFile];
-    if (preArr) {
-        arr = [preArr arrayByAddingObjectsFromArray:arr];
-    }
-            
-    [obj setValue:arr forKey:@"array"];
-
-    id defaultStringFormat = [@"00defaultStringFormat" stringFromFile];
-    [obj setValue:defaultStringFormat forKey:@"defaultStringFormat"];
-    id defaultMessageForClick = [@"00defaultMessageForClick" stringFromFile];
-    [obj setValue:defaultMessageForClick forKey:@"defaultMessageForClick"];
-
-//    [self setValue:@"#{path|lastPathComponent}" forKey:@"headerFormat"];
-    
+    [obj updateFromCurrentDirectory];
     return obj;
 }
 #endif
