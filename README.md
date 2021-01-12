@@ -62,7 +62,6 @@ $ ./hotdog
 
 The following executables must be in your PATH or at location if specified:
 
-  * inotifywait
   * xrandr
   * ifconfig (used by Utils/printNetworkInfo)
   * find (used by build.pl)
