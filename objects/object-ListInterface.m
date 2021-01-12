@@ -294,12 +294,6 @@
 ;
 }
 @end
-@implementation NSString(fjklswjfklsdjf)
-- (id)asListInterfaceForDirectoryReverseSorted
-{
-    return [self asListInterfaceWithSortMessage:@"asArrayReverseSortedWithKey:'displayName'"];
-}
-@end
 
 @implementation NSString(fjkldsjfklsdjfksdljf)
 - (id)menuFromPath
@@ -308,6 +302,7 @@
     id arr = [path parseCSVFile];
     return arr;
 }
+#ifdef BUILD_FOR_IOS
 - (id)arrayFromPath
 {
     id path = self;
@@ -316,7 +311,7 @@
         arr = [[[path contentsOfDirectoryWithFullPaths] filterDotFiles] asFileArray];
         for (id elt in arr) {
             if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
-                [elt setValue:@"array|filePath|runDirHandler|pushToMainInterface" forKey:@"messageForClick"];
+                [elt setValue:@"array|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
             } else {
                 [elt setValue:@"array|filePath|runFileHandler" forKey:@"messageForClick"];
             }
@@ -326,6 +321,7 @@
     }
     return arr;
 }
+#endif
 @end
 
 @implementation NSArray(fjkdsljlfksdjf)
@@ -342,12 +338,6 @@ NSLog(@"setAllStringFormat:'%@'", val);
 
 @implementation NSArray(fjkdslfjklsdjf)
 #ifdef BUILD_FOR_IOS
-- (id)iosAsListInterface
-{
-    id scroll = [@"ListInterface" asInstance];
-    [scroll setup:self];
-    return scroll;
-}
 - (id)asListInterface
 {
     id vc = [self asArrayViewController];
@@ -388,32 +378,6 @@ NSLog(@"setAllStringFormat:'%@'", val);
     [[vc navigationItem] setValue:[self lastPathComponent] forKey:@"title"];
     return vc;
 }
-- (id)iosAsListInterface
-{
-    id scroll = [@"ListInterface" asInstance];
-    [scroll setupPath:self];
-    return scroll;
-}
-#else
-- (id)asListInterfaceForPath
-{
-    id scroll = [@"ListInterface" asInstance];
-    [scroll setupPath:self];
-    return scroll;
-}
-- (id)asListInterfaceWithSortMessage:(id)message
-{
-    id scroll = [@"ListInterface" asInstance];
-    [scroll setValue:message forKey:@"sortMessage"];
-    [scroll setupPath:self];
-    return scroll;
-}
-- (id)asListInterface
-{
-    id scroll = [@"ListInterface" asInstance];
-    [scroll setupPath:self];
-    return scroll;
-}
 #endif
 
 @end
@@ -437,7 +401,6 @@ NSLog(@"setAllStringFormat:'%@'", val);
     id _defaultStringFormat;
     id _message;
     id _observer;
-    id _path;
     id _dict;
     id _array;
     int _objectOffsetY;
@@ -451,18 +414,13 @@ NSLog(@"setAllStringFormat:'%@'", val);
     id _sortMessage;
     id _rightButtonDown;
     id _searchText;
-    id _inotifywait;
     Int4 _rect;
+    time_t _currentDirectoryTimestamp;
 }
 @end
 
 @implementation ListInterface
 
-- (void)dealloc
-{
-NSLog(@"ListInterface dealloc inotifywait %@", _inotifywait);
-    [super dealloc];
-}
 - (id)init
 {
     self = [super init];
@@ -496,27 +454,51 @@ NSLog(@"ListInterface dealloc inotifywait %@", _inotifywait);
     [self setValue:observer forKey:@"observer"];
     [self updateArray];
 }
-- (void)setupPath:(id)path
-{
-    [self setValue:@"#{path|lastPathComponent}" forKey:@"headerFormat"];
-    [self setValue:path forKey:@"path"];
-    id inotifywait = [Definitions INotifyWait:path];
-    [self setValue:inotifywait forKey:@"inotifywait"];
-    [self updateArray];
-}
 
 - (void)updateSearchText:(id)text
 {
     [self setValue:text forKey:@"searchText"];
     [self updateArray];
 }
+- (void)updateFromCurrentDirectory
+{
+    _currentDirectoryTimestamp = [@"." fileModificationTimestamp];
+    id arr = [@"00index.csv" parseCSVFile];
+    if (!arr) {
+        arr = [@"00index.json" readFromFileAsJSON];
+        if ([arr isKindOfClass:[@"NSDictionary" asClass]]) {
+            arr = [arr asKeyValueArray];
+        }
+    }
+    if (!arr) {
+        arr = [@"." contentsOfDirectory];
+        arr = [arr asFileArray];
+        for (id elt in arr) {
+            if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
+                [elt setValue:@"array|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
+            } else {
+                [elt setValue:@"0" forKey:@"drawChevron"];
+                [elt setValue:@"array|filePath|runFileHandler" forKey:@"messageForClick"];
+            }
+        }
+    }
+    id preArr = [@"00preindex.csv" parseCSVFile];
+    if (preArr) {
+        arr = [preArr arrayByAddingObjectsFromArray:arr];
+    }
+            
+    [self setValue:arr forKey:@"array"];
+
+    id defaultStringFormat = [@"00defaultStringFormat" stringFromFile];
+    [self setValue:defaultStringFormat forKey:@"defaultStringFormat"];
+    id defaultMessageForClick = [@"00defaultMessageForClick" stringFromFile];
+    [self setValue:defaultMessageForClick forKey:@"defaultMessageForClick"];
+}
 - (void)updateArray
 {
     id arr = nil;
     if (_message) {
         arr = [@{} evaluateMessage:_message];
-    } else if (_path) {
-        arr = [_path arrayFromPath];
     } else {
         arr = _array;
     }
@@ -551,9 +533,6 @@ NSLog(@"ListInterface dealloc inotifywait %@", _inotifywait);
     if (_observer) {
         return [_observer fileDescriptor];
     }
-    if (_inotifywait) {
-        return [_inotifywait fileDescriptor];
-    }
     return -1;
 }
 - (void)handleFileDescriptor
@@ -575,12 +554,15 @@ NSLog(@"line '%@'", line);
         }
         return;
     }
-    if (_inotifywait) {
-        [_inotifywait handleFileDescriptor];
-        id notifications = [_inotifywait valueForKey:@"notifications"];
-        if ([notifications count]) {
-            [_inotifywait setValue:nil forKey:@"notifications"];
-            [self updateArray];
+}
+
+- (void)beginIteration:(id)event rect:(Int4)r
+{
+    if (_currentDirectoryTimestamp) {
+        time_t timestamp = [@"." fileModificationTimestamp];
+        if (timestamp != _currentDirectoryTimestamp) {
+            _currentDirectoryTimestamp = timestamp;
+            [self updateFromCurrentDirectory];
         }
     }
 }
