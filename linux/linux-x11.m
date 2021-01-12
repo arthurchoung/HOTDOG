@@ -29,8 +29,6 @@
 
 #include <fcntl.h>
 
-// inotifywait vs just check timestamp
-
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
@@ -41,8 +39,6 @@
 #include <X11/cursorfont.h>
 #include <X11/extensions/shape.h>
 #include <X11/extensions/Xfixes.h>
-
-
 
 static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned char *image, int width, int height, int depth)
 {
@@ -568,6 +564,11 @@ exit(0);
     Window _openGLWindow;
 
     BOOL _panOversizedWindow;
+
+    id _alertsPath;
+    time_t _alertsTimestamp;
+    id _desktopPath;
+    time_t _desktopTimestamp;
 }
 @end
 @implementation WindowManager
@@ -1443,7 +1444,6 @@ if ([monitor intValueForKey:@"height"] == 768) {
 {
     id alertsPath = [Definitions execDir:@"Alerts"];
     id desktopPath = [Definitions execDir:@"Desktop"];
-    id inotifywait = nil;
 
 NSLog(@"_displayFD %d", _displayFD);
 
@@ -1454,9 +1454,12 @@ NSLog(@"_displayFD %d", _displayFD);
         if (![desktopPath fileExists]) {
             [desktopPath makeDirectory];
         }
+        [self setValue:alertsPath forKey:@"alertsPath"];
+        _alertsTimestamp = [_alertsPath fileModificationTimestamp];
         [self handleAlertsPath];
+        [self setValue:desktopPath forKey:@"desktopPath"];
+        _desktopTimestamp = [_desktopPath fileModificationTimestamp];
         [self handleDesktopPath];
-        inotifywait = [Definitions INotifyWait:@[ alertsPath, desktopPath ]];
     }
 
     for (;;) {
@@ -1511,15 +1514,6 @@ NSLog(@"no object windows, exiting pid %d", getpid());
             fd_set rfds;
             int maxFD=0;
             FD_ZERO(&rfds);
-            if (inotifywait) {
-                int fd = [inotifywait fileDescriptor];
-                if (fd != -1) {
-                    FD_SET(fd, &rfds);
-                    if (fd > maxFD) {
-                        maxFD = fd;
-                    }
-                }
-            }
             for (id elt in _objectWindows) {
                 id obj = [elt valueForKey:@"object"];
                 if (obj) {
@@ -1728,21 +1722,18 @@ NSLog(@"received X event type %d", event.type);
                 }
             }
 
-            if (inotifywait) {
-                int fd = [inotifywait fileDescriptor];
-                if (fd != -1) {
-                    if (FD_ISSET(fd, &rfds)) {
-                        [inotifywait handleFileDescriptor];
-                        id notifications = [inotifywait valueForKey:@"notifications"];
-                        for(id path in notifications) {
-                            if ([path hasPrefix:alertsPath]) {
-                                [self handleAlertsPath];
-                            } else if ([path hasPrefix:desktopPath]) {
-                                [self handleDesktopPath];
-                            }
-                        }
-                        [inotifywait setValue:nil forKey:@"notifications"];
-                    }
+            if (_alertsPath) {
+                time_t timestamp = [_alertsPath fileModificationTimestamp];
+                if (timestamp != _alertsTimestamp) {
+                    _alertsTimestamp = timestamp;
+                    [self handleAlertsPath];
+                }
+            }
+            if (_desktopPath) {
+                time_t timestamp = [_desktopPath fileModificationTimestamp];
+                if (timestamp != _desktopTimestamp) {
+                    _desktopTimestamp = timestamp;
+                    [self handleDesktopPath];
                 }
             }
 
@@ -2472,11 +2463,14 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
 
 - (void)handleAlertsPath
 {
+    if (!_alertsPath) {
+        return;
+    }
     id dict = [self dictForObjectWindowClassName:@"BitmapMessageAlert"];
     if (dict) {
         return;
     }
-    id arr = [[[Definitions execDir:@"Alerts"] contentsOfDirectoryWithFullPaths] asFileArray];
+    id arr = [[_alertsPath contentsOfDirectoryWithFullPaths] asFileArray];
     arr = [arr asArraySortedWithKey:@"fileModificationDate"];
     for (id elt in arr) {
         id filePath = [elt valueForKey:@"filePath"];
