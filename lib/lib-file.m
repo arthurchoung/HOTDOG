@@ -38,15 +38,13 @@
     id results = nsarr();
     char buf[16384];
     while (fgets(buf, 16384, stdin)) {
-@autoreleasepool {
-        id line = nscstr(buf);
+        id line = nsfmt(@"%s", buf);
             if (![line hasSuffix:@"\n"]) {
 NSLog(@"ERROR: line too long");
 exit(0);
             }
-        line = [line chomp];
+        [line destructiveChomp];
         [results addObject:line];
-}
     }
 //NSLog(@"results %@", [results join:@""]);
     return results;
