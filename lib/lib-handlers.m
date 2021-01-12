@@ -26,19 +26,6 @@
 #import "HOTDOG.h"
 
 @implementation NSString(fjkdlsjfklsdjf)
-- (id)runDirHandler
-{
-    id handlers = [[Definitions execDir:@"Config/dirHandlers.csv"] parseCSVFile];
-    for (id elt in handlers) {
-        id suffix = [elt valueForKey:@"suffix"];
-        if ([self hasSuffix:suffix]) {
-            id message = [elt valueForKey:@"message"];
-NSLog(@"message '%@'", message);
-            return [self evaluateMessage:message];
-        }
-    }
-    return [self asListInterface];
-}
 - (id)runFileHandler
 {
     id handlers = [[Definitions execDir:@"Config/fileHandlers.csv"] parseCSVFile];
@@ -58,6 +45,7 @@ NSLog(@"message '%@'", message);
     id cmd = nsarr();
     [cmd addObject:@"mpv"];
     [cmd addObject:@"--hwdec=auto"];
+    [cmd addObject:@"--force-window=yes"];
     [cmd addObject:self];
     [cmd runCommandInBackground];
     return nil;
@@ -77,6 +65,8 @@ NSLog(@"message '%@'", message);
 {
     id cmd = nsarr();
     [cmd addObject:@"mpv"];
+    [cmd addObject:@"--hwdec=auto"];
+    [cmd addObject:@"--force-window=yes"];
     [cmd addObject:@"--shuffle"];
     for (id elt in self) {
         id filePath = [elt valueForKey:@"filePath"];
@@ -111,6 +101,8 @@ NSLog(@"message '%@'", message);
     }
     id cmd = nsarr();
     [cmd addObject:@"mpv"];
+    [cmd addObject:@"--hwdec=auto"];
+    [cmd addObject:@"--force-window=yes"];
     [cmd addObject:@"--playlist-start"];
     [cmd addObject:nsfmt(@"%d", playlistIndex)];
     [cmd addObjectsFromArray:playlistArray];
