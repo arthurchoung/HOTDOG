@@ -62,13 +62,17 @@
     if ((count == 3) || (count == 4)) {
         BOOL isDouble = ([[tokens nth:0] containsString:@"."]) ? YES : NO;
         if (isDouble) {
-            tokens = [tokens mapBlock:^(id obj) {
-                return [obj doubleAs8BitHex];
-            }];
+            id mapArr = nsarr();
+            for (id elt in tokens) {
+                [mapArr addObject:[elt doubleAs8BitHex]];
+            }
+            tokens = mapArr;
         } else {
-            tokens = [tokens mapBlock:^(id obj) {
-                return [obj intAs8BitHex];
-            }];
+            id mapArr = nsarr();
+            for (id elt in tokens) {
+                [mapArr addObject:[elt intAs8BitHex]];
+            }
+            tokens = mapArr;
         }
         return nsfmt(@"#%@", [tokens join:@""]);
     }
