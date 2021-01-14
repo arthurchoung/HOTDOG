@@ -426,12 +426,13 @@ char *bomb3Pixels =
                 _score++;
             }
         }
-        [self setValue:[_bombs filter:^(id obj) {
-            if (![obj intValueForKey:@"caught"]) {
-                return YES;
+        id keepBombs = nsarr();
+        for (id bomb in _bombs) {
+            if (![bomb intValueForKey:@"caught"]) {
+                [keepBombs addObject:bomb];
             }
-            return NO;
-        }] forKey:@"bombs"];
+        }
+        [self setValue:keepBombs forKey:@"bombs"];
     }
 }
 
