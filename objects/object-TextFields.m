@@ -46,14 +46,15 @@
 {
     id arr = [Definitions classMethods];
     arr = [arr asSortedArray];
-    arr = [arr mapBlock:^(id obj) {
+    id mapArr = nsarr();
+    for (id elt in arr) {
         id dict = nsdict();
         [dict setValue:@"#{selector}" forKey:@"stringFormat"];
-        [dict setValue:obj forKey:@"selector"];
+        [dict setValue:elt forKey:@"selector"];
         [dict setValue:@"selector|asTextFieldsForSelector" forKey:@"messageForClick"];
-        return dict;
-    }];
-    return arr;
+        [mapArr addObject:dict];
+    }
+    return mapArr;
 }
 + (id)testTextFields
 {
@@ -170,9 +171,10 @@
 - (void)handleKeyDown:(id)event
 {
     if (!_buffers) {
-        id arr = [_fields mapBlock:^(id obj) {
-            return @"";
-        }];
+        id arr = nsarr();
+        for (id elt in _fields) {
+            [arr addObject:@""];
+        }
         [self setValue:arr forKey:@"buffers"];
     }
     id buf = [_buffers nth:_currentField];
