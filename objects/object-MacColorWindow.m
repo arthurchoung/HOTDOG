@@ -48,7 +48,7 @@
 }
 @end
 
-@implementation Definitions(jfkdlsjfklsdjklfjsdfklsdjfs)
+@implementation Definitions(jfkdlsvmncmjfklsdjklfjsdfklsdjfs)
 
 + (void)testAddMacColorWindow
 {
@@ -60,7 +60,7 @@
 }
 @end
 
-@implementation Definitions(fjkdlsjfiowejfklsdjfklsdkljf)
+@implementation Definitions(fjkdeifjdclsjfiowejfklsdjfklsdkljf)
 + (void)drawActiveTitleBarInBitmap:(id)bitmap rect:(Int4)r
 {
     char *palette = [Definitions cStringForTitleBarPalette];
