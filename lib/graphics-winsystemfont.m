@@ -1,6 +1,6 @@
 #import "HOTDOG.h"
 
-@implementation Definitions(fjdklsjfkldskjf)
+@implementation Definitions(fjdklsjfkldskjfurijvicx)
 + (int *)arrayOfXSpacingsForWinSystemFont
 {
     static int xspacings[256];
