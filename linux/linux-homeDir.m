@@ -25,7 +25,7 @@
 
 #import "HOTDOG.h"
 
-@implementation Definitions(fjkdsljfklsdjf)
+@implementation Definitions(fjkdsljfklsdjfueirwieofj)
 + (id)homeDir
 {
     char *home = getenv("HOME");
