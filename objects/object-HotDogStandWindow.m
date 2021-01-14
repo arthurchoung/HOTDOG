@@ -25,7 +25,7 @@
 
 #import "HOTDOG.h"
 
-@implementation Definitions(jfoiwejfklsdjfklsdjlkfjsdlkfj)
+@implementation Definitions(jfovcnvieiwejfklsdjfklsdjlkfjsdlkfj)
 + (void)enterHotDogStandMode
 {
     id windowManager = [@"windowManager" valueForKey];
@@ -40,7 +40,7 @@
     [windowManager setInputFocus:nil];
 }
 @end
-@implementation Definitions(fjkdlsjfiowejfklsdjfklsdkljf)
+@implementation Definitions(fjkencinidlsjfiowejfklsdjfklsdkljf)
 
 + (char *)cStringForHotDogStandHasFocusPalette
 {
