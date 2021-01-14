@@ -308,7 +308,7 @@
     id path = self;
     id arr = nil;
     if ([path isDirectory]) {
-        arr = [[[path contentsOfDirectoryWithFullPaths] filterDotFiles] asFileArray];
+        arr = [[path contentsOfDirectoryWithFullPaths] asFileArray];
         for (id elt in arr) {
             if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
                 [elt setValue:@"array|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
@@ -498,7 +498,7 @@ NSLog(@"setAllStringFormat:'%@'", val);
 {
     id arr = nil;
     if (_message) {
-        arr = [@{} evaluateMessage:_message];
+        arr = [nsdict() evaluateMessage:_message];
     } else {
         arr = _array;
     }
@@ -509,7 +509,8 @@ NSLog(@"setAllStringFormat:'%@'", val);
         arr = [arr evaluateMessage:_sortMessage];
     }
     if ([_searchText length]) {
-        arr = [arr filter:^(id elt) {
+        id keepArr = nsarr();
+        for (id elt in arr) {
             id text = nil;
             if ([elt valueForKey:@"stringFormat"]) {
                 text = [elt str:[elt valueForKey:@"stringFormat"]];
@@ -520,10 +521,10 @@ NSLog(@"setAllStringFormat:'%@'", val);
             }
             text = [text lowercaseString];
             if ([text containsString:_searchText]) {
-                return YES;
+                [keepArr addObject:elt];
             }
-            return NO;
-        }];
+        }
+        arr = keepArr;
     }
     [self setValue:arr forKey:@"array"];
 }
