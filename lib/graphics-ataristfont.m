@@ -1,6 +1,6 @@
 #import "HOTDOG.h"
 
-@implementation Definitions(fjdklsjfkldskjf)
+@implementation Definitions(fjdklsjfkldsjfsdifjikdiikjf)
 + (int *)arrayOfXSpacingsForAtariSTFont
 {
     static int xspacings[256];
