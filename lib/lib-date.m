@@ -645,112 +645,120 @@ check_minute:
 }
 @end
 
+static int l(char *p, int idx)
+{
+    return (int)(*(p+idx));
+}
+
+static int d(char *p, int idx)
+{
+    return isdigit(l(p, idx));
+}
+
+static int c(char *p, int idx, int c)
+{
+    return (l(p, idx) == c) ? 1 : 0;
+}
+
+static int n(char *p, int idx)
+{
+    return l(p, idx) - '0';
+}
+
 @implementation NSString(fjklwpeofjksdjf)
 - (id)parseDateComponents
 {
     char *p = [self UTF8String];
-    int (^l)(int idx) = ^(int idx) {
-        return (int)(*(p+idx));
-    };
-    int (^d)(int idx) = ^(int idx) {
-        return isdigit(l(idx));
-    };
-    int (^c)(int idx, int c) = ^(int idx, int c) {
-        return (l(idx) == c) ? 1 : 0;
-    };
-    int (^n)(int idx) = ^(int idx) {
-        return l(idx) - '0';
-    };
-    if (d(0) && d(1) && d(2) && d(3) && (c(4, '-') || c(4, '.') || c(4, '/')) && d(5) && d(6) && (c(7, '-') || c(7, '.') || c(7, '/')) && d(8) && d(9) && c(10, 0)) {
-        int year = n(0)*1000 + n(1)*100 + n(2)*10 + n(3);
-        int month = n(5)*10 + n(6);
-        int day = n(8)*10 + n(9);
+    if (d(p, 0) && d(p, 1) && d(p, 2) && d(p, 3) && (c(p, 4, '-') || c(p, 4, '.') || c(p, 4, '/')) && d(p, 5) && d(p, 6) && (c(p, 7, '-') || c(p, 7, '.') || c(p, 7, '/')) && d(p, 8) && d(p, 9) && c(p, 10, 0)) {
+        int year = n(p, 0)*1000 + n(p, 1)*100 + n(p, 2)*10 + n(p, 3);
+        int month = n(p, 5)*10 + n(p, 6);
+        int day = n(p, 8)*10 + n(p, 9);
         return [Definitions year:year month:month day:day];
     }
-    if (d(0) && d(1) && d(2) && d(3) && c(4, '-') && d(5) && d(6) && c(7, 0)) {
-        int year = n(0)*1000 + n(1)*100 + n(2)*10 + n(3);
-        int month = n(5)*10 + n(6);
+    if (d(p, 0) && d(p, 1) && d(p, 2) && d(p, 3) && c(p, 4, '-') && d(p, 5) && d(p, 6) && c(p, 7, 0)) {
+        int year = n(p, 0)*1000 + n(p, 1)*100 + n(p, 2)*10 + n(p, 3);
+        int month = n(p, 5)*10 + n(p, 6);
         return [Definitions year:year month:month];
     }
-    if (d(0) && d(1) && d(2) && d(3) && c(4, 0)) {
-        int year = n(0)*1000 + n(1)*100 + n(2)*10 + n(3);
+    if (d(p, 0) && d(p, 1) && d(p, 2) && d(p, 3) && c(p, 4, 0)) {
+        int year = n(p, 0)*1000 + n(p, 1)*100 + n(p, 2)*10 + n(p, 3);
         return [Definitions year:year];
     }
-    if (d(0) && d(1) && c(2, '/') && d(3) && d(4) && c(5, '/') && d(6) && d(7) && d(8) && d(9) && c(10, 0)) {
-        int year = n(6)*1000 + n(7)*100 + n(8)*10 + n(9);
-        int month = n(0)*10 + n(1);
-        int day = n(3)*10 + n(4);
+    if (d(p, 0) && d(p, 1) && c(p, 2, '/') && d(p, 3) && d(p, 4) && c(p, 5, '/') && d(p, 6) && d(p, 7) && d(p, 8) && d(p, 9) && c(p, 10, 0)) {
+        int year = n(p, 6)*1000 + n(p, 7)*100 + n(p, 8)*10 + n(p, 9);
+        int month = n(p, 0)*10 + n(p, 1);
+        int day = n(p, 3)*10 + n(p, 4);
         return [Definitions year:year month:month day:day];
     }
     
-    if (d(0) && d(1) && d(2) && d(3) && c(4, '-') && d(5) && d(6) && c(7, '-') && d(8) && d(9)
-        && c(10, ' ')
-        && d(11) && d(12) && c(13, ':') && d(14) && d(15) && c(16, 0))
+    if (d(p, 0) && d(p, 1) && d(p, 2) && d(p, 3) && c(p, 4, '-') && d(p, 5) && d(p, 6) && c(p, 7, '-') && d(p, 8) && d(p, 9)
+        && c(p, 10, ' ')
+        && d(p, 11) && d(p, 12) && c(p, 13, ':') && d(p, 14) && d(p, 15) && c(p, 16, 0))
     {
-        int year = n(0)*1000 + n(1)*100 + n(2)*10 + n(3);
-        int month = n(5)*10 + n(6);
-        int day = n(8)*10 + n(9);
-        int hour = n(11)*10 + n(12);
-        int minute = n(14)*10 + n(15);
+        int year = n(p, 0)*1000 + n(p, 1)*100 + n(p, 2)*10 + n(p, 3);
+        int month = n(p, 5)*10 + n(p, 6);
+        int day = n(p, 8)*10 + n(p, 9);
+        int hour = n(p, 11)*10 + n(p, 12);
+        int minute = n(p, 14)*10 + n(p, 15);
         return [Definitions year:year month:month day:day hour:hour minute:minute second:0];
     }
     
     
-    if (d(0) && d(1) && d(2) && d(3) && c(4, '-') && d(5) && d(6) && c(7, '-') && d(8) && d(9)
-        && c(10, ' ')
-        && d(11) && d(12) && c(13, ':') && d(14) && d(15) && c(16, ':') && d(17) && d(18))
+    if (d(p, 0) && d(p, 1) && d(p, 2) && d(p, 3) && c(p, 4, '-') && d(p, 5) && d(p, 6) && c(p, 7, '-') && d(p, 8) && d(p, 9)
+        && c(p, 10, ' ')
+        && d(p, 11) && d(p, 12) && c(p, 13, ':') && d(p, 14) && d(p, 15) && c(p, 16, ':') && d(p, 17) && d(p, 18))
     {
-        int year = n(0)*1000 + n(1)*100 + n(2)*10 + n(3);
-        int month = n(5)*10 + n(6);
-        int day = n(8)*10 + n(9);
-        int hour = n(11)*10 + n(12);
-        int minute = n(14)*10 + n(15);
-        int second = n(17)*10 + n(18);
+        int year = n(p, 0)*1000 + n(p, 1)*100 + n(p, 2)*10 + n(p, 3);
+        int month = n(p, 5)*10 + n(p, 6);
+        int day = n(p, 8)*10 + n(p, 9);
+        int hour = n(p, 11)*10 + n(p, 12);
+        int minute = n(p, 14)*10 + n(p, 15);
+        int second = n(p, 17)*10 + n(p, 18);
         return [Definitions year:year month:month day:day hour:hour minute:minute second:second];
     }
-    if (d(0) && d(1) && d(2) && d(3) && c(4, '-') && d(5) && d(6) && c(7, '-') && d(8) && d(9)
-        && c(10, 'T')
-        && d(11) && d(12) && c(13, ':') && d(14) && d(15) && c(16, ':') && d(17) && d(18)
-        && c(19, '.')
-        && d(20) && d(21) && d(22) && d(23) && d(24) && d(25)
-        && c(26, 'Z'))
+    if (d(p, 0) && d(p, 1) && d(p, 2) && d(p, 3) && c(p, 4, '-') && d(p, 5) && d(p, 6) && c(p, 7, '-') && d(p, 8) && d(p, 9)
+        && c(p, 10, 'T')
+        && d(p, 11) && d(p, 12) && c(p, 13, ':') && d(p, 14) && d(p, 15) && c(p, 16, ':') && d(p, 17) && d(p, 18)
+        && c(p, 19, '.')
+        && d(p, 20) && d(p, 21) && d(p, 22) && d(p, 23) && d(p, 24) && d(p, 25)
+        && c(p, 26, 'Z'))
     {
-        int year = n(0)*1000 + n(1)*100 + n(2)*10 + n(3);
-        int month = n(5)*10 + n(6);
-        int day = n(8)*10 + n(9);
-        int hour = n(11)*10 + n(12);
-        int minute = n(14)*10 + n(15);
-        int second = n(17)*10 + n(18);
+        int year = n(p, 0)*1000 + n(p, 1)*100 + n(p, 2)*10 + n(p, 3);
+        int month = n(p, 5)*10 + n(p, 6);
+        int day = n(p, 8)*10 + n(p, 9);
+        int hour = n(p, 11)*10 + n(p, 12);
+        int minute = n(p, 14)*10 + n(p, 15);
+        int second = n(p, 17)*10 + n(p, 18);
         return [Definitions year:year month:month day:day hour:hour minute:minute second:second];
     }
-    if (d(0) && d(1) && d(2) && d(3) && c(4, '-') && d(5) && d(6) && c(7, '-') && d(8) && d(9)
-        && c(10, 'T')
-        && d(11) && d(12) && c(13, ':') && d(14) && d(15) && c(16, ':') && d(17) && d(18)
-        && c(19, '+')
-        && d(20) && d(21) && c(22, ':') && d(23) && d(24)
-        && c(25, 0))
+    if (d(p, 0) && d(p, 1) && d(p, 2) && d(p, 3) && c(p, 4, '-') && d(p, 5) && d(p, 6) && c(p, 7, '-') && d(p, 8) && d(p, 9)
+        && c(p, 10, 'T')
+        && d(p, 11) && d(p, 12) && c(p, 13, ':') && d(p, 14) && d(p, 15) && c(p, 16, ':') && d(p, 17) && d(p, 18)
+        && c(p, 19, '+')
+        && d(p, 20) && d(p, 21) && c(p, 22, ':') && d(p, 23) && d(p, 24)
+        && c(p, 25, 0))
     {
-        int year = n(0)*1000 + n(1)*100 + n(2)*10 + n(3);
-        int month = n(5)*10 + n(6);
-        int day = n(8)*10 + n(9);
-        int hour = n(11)*10 + n(12);
-        int minute = n(14)*10 + n(15);
-        int second = n(17)*10 + n(18);
+        int year = n(p, 0)*1000 + n(p, 1)*100 + n(p, 2)*10 + n(p, 3);
+        int month = n(p, 5)*10 + n(p, 6);
+        int day = n(p, 8)*10 + n(p, 9);
+        int hour = n(p, 11)*10 + n(p, 12);
+        int minute = n(p, 14)*10 + n(p, 15);
+        int second = n(p, 17)*10 + n(p, 18);
         return [Definitions year:year month:month day:day hour:hour minute:minute second:second];
     }
-    if (d(0) && d(1) && d(2) && d(3) && c(4, '-') && d(5) && d(6) && c(7, '-') && d(8) && d(9)
-        && c(10, 'T')
-        && d(11) && d(12) && c(13, ':') && d(14) && d(15) && c(16, ':') && d(17) && d(18)
-        && c(19, '.')
-        && d(20) && d(21) && d(22) && d(23) && d(24) && d(25) && d(26) && d(27) && d(28)
-        && c(29, 'Z'))
+    if (d(p, 0) && d(p, 1) && d(p, 2) && d(p, 3) && c(p, 4, '-') && d(p, 5) && d(p, 6) && c(p, 7, '-') && d(p, 8) && d(p, 9)
+        && c(p, 10, 'T')
+        && d(p, 11) && d(p, 12) && c(p, 13, ':') && d(p, 14) && d(p, 15) && c(p, 16, ':') && d(p, 17) && d(p, 18)
+        && c(p, 19, '.')
+        && d(p, 20) && d(p, 21) && d(p, 22) && d(p, 23) && d(p, 24) && d(p, 25) && d(p, 26) && d(p, 27) && d(p, 28)
+        && c(p, 29, 'Z'))
     {
-        int year = n(0)*1000 + n(1)*100 + n(2)*10 + n(3);
-        int month = n(5)*10 + n(6);
-        int day = n(8)*10 + n(9);
-        int hour = n(11)*10 + n(12);
-        int minute = n(14)*10 + n(15);
-        int second = n(17)*10 + n(18);
+        int year = n(p, 0)*1000 + n(p, 1)*100 + n(p, 2)*10 + n(p, 3);
+        int month = n(p, 5)*10 + n(p, 6);
+        int day = n(p, 8)*10 + n(p, 9);
+        int hour = n(p, 11)*10 + n(p, 12);
+        int minute = n(p, 14)*10 + n(p, 15);
+        int second = n(p, 17)*10 + n(p, 18);
         return [Definitions year:year month:month day:day hour:hour minute:minute second:second];
     }
     
@@ -760,27 +768,15 @@ check_minute:
 - (id)parseTimeComponents
 {
     char *p = [self UTF8String];
-    int (^l)(int idx) = ^(int idx) {
-        return (int)(*(p+idx));
-    };
-    int (^d)(int idx) = ^(int idx) {
-        return isdigit(l(idx));
-    };
-    int (^c)(int idx, int c) = ^(int idx, int c) {
-        return (l(idx) == c) ? 1 : 0;
-    };
-    int (^n)(int idx) = ^(int idx) {
-        return l(idx) - '0';
-    };
-    if (d(0) && d(1) && c(2, ':') && d(3) && d(4) && c(5, ':') && d(6) && d(7) && c(8, 0)) {
-        int h = n(0)*10 + n(1);
-        int m = n(3)*10 + n(4);
-        int s = n(6)*10 + n(7);
+    if (d(p, 0) && d(p, 1) && c(p, 2, ':') && d(p, 3) && d(p, 4) && c(p, 5, ':') && d(p, 6) && d(p, 7) && c(p, 8, 0)) {
+        int h = n(p, 0)*10 + n(p, 1);
+        int m = n(p, 3)*10 + n(p, 4);
+        int s = n(p, 6)*10 + n(p, 7);
         return [Definitions hour:h minute:m second:s];
     }
-    if (d(0) && d(1) && (c(2, ':') || c(2, '.')) && d(3) && d(4) && c(5, 0)) {
-        int h = n(0)*10 + n(1);
-        int m = n(3)*10 + n(4);
+    if (d(p, 0) && d(p, 1) && (c(p, 2, ':') || c(p, 2, '.')) && d(p, 3) && d(p, 4) && c(p, 5, 0)) {
+        int h = n(p, 0)*10 + n(p, 1);
+        int m = n(p, 3)*10 + n(p, 4);
         return [Definitions hour:h minute:m second:0];
     }
     return nil;
