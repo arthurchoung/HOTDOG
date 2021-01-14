@@ -182,22 +182,6 @@ exit(0);
     return [[self encodeJSON] writeToFile:path];
 }
 
-- (id)filterHiddenFiles
-{
-    return [self filter:^(id obj) {
-        if ([[obj lastPathComponent] hasPrefix:@"."]) {
-            return NO;
-        }
-        return YES;
-    }];
-}
-
-- (id)filterDotFiles
-{
-    return [self filter:^(id obj) {
-        return (BOOL)(([[obj lastPathComponent] hasPrefix:@"."]) ? NO : YES);
-    }];
-}
 - (BOOL)writeLinesToFile:(id)path
 {
     char *cpath = [path UTF8String];
@@ -243,13 +227,27 @@ exit(0);
     return result;
 }
 
+static int qsort_asFileArray(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    int val = [a compare:b key:@"fileType"];
+    if (val == 0) {
+        val = [a compare:b key:@"displayName"];
+    }
+    return val;
+}
+
 - (id)asFileArray
 {
-    id arr = self;
-    arr = [arr filter:^(id obj) {
-        return (BOOL)(([obj hasPrefix:@"."]) ? NO : YES);
-    }];
-    arr = [arr map:^(id filePath) {
+    id keepArr = nsarr();
+    for (id elt in self) {
+        if (![[elt lastPathComponent] hasPrefix:@"."]) {
+            [keepArr addObject:elt];
+        }
+    }
+    id arr = nsarr();
+    for (id filePath in keepArr) {
         id dict = nsdict();
         id displayName = [filePath lastPathComponent];
         if ([filePath isDirectory]) {
@@ -263,15 +261,9 @@ exit(0);
         [dict setValue:filePath forKey:@"filePath"];
         [dict setValue:[filePath fileModificationDate] forKey:@"fileModificationDate"];
         [dict setValue:nsfmt(@"%lu", [filePath fileSize]) forKey:@"fileSize"];
-        return dict;
-    }];
-    arr = [arr asArraySortedWithBlock:^(id a, id b) {
-        int val = [a compare:b key:@"fileType"];
-        if (val == 0) {
-            val = [a compare:b key:@"displayName"];
-        }
-        return val;
-    }];
+        [arr addObject:dict];
+    }
+    arr = [arr asArraySortedWithFunction:qsort_asFileArray argument:nil];
     return arr;
 }
 
@@ -515,10 +507,11 @@ exit(0);
 
 - (id)contentsOfDirectoryWithFullPaths
 {
-    id arr = [self contentsOfDirectory];
-    return [arr map:^(id obj) {
-        return [self stringByAppendingPathComponent:obj];
-    }];
+    id arr = nsarr();
+    for (id obj in [self contentsOfDirectory]) {
+        [arr addObject:[self stringByAppendingPathComponent:obj]];
+    }
+    return arr;
 }
 
 - (BOOL)moveToFile:(id)dst
