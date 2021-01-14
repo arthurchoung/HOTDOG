@@ -31,7 +31,7 @@
     id loadMessage = @"00loadMessage";
     if ([loadMessage fileExists]) {
         id message = [loadMessage stringFromFile];
-        id obj = [@{} evaluateMessage:message];
+        id obj = [nsdict() evaluateMessage:message];
         return obj;
     } else {
         return [Definitions ListInterface];
