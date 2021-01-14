@@ -1,6 +1,6 @@
 #import "HOTDOG.h"
 
-@implementation Definitions(fjdklsjfkldskjf)
+@implementation Definitions(fjdklsjfkldskjeuriefjdif)
 + (char *)cStringForFinalFantasy6Font:(int)c
 {
     static char *bitmaps[128];
