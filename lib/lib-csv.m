@@ -36,8 +36,8 @@
 @implementation NSArray(ieojfksdjfjsdf)
 - (id)processCSVWithKeys:(id)header
 {
-    id arr = self;
-    arr = [arr mapBlock:^(id a) {
+    id arr = nsarr();
+    for (id a in self) {
         id dict = nsdict();
         for (int i=0; i<[header count]; i++) {
             id key = [header nth:i];
@@ -46,8 +46,8 @@
                 [dict setValue:val forKey:key];
             }
         }
-        return dict;
-    }];
+        [arr addObject:dict];
+    }
     return arr;
 }
 
