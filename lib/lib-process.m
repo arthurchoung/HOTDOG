@@ -95,25 +95,37 @@
 
 - (void)runCommandWithSudoInBackground
 {
-    id cmd = [@[ @"sudo", @"-A" ] arrayByAddingObjectsFromArray:self];
+    id cmd = nsarr();
+    [cmd addObject:@"sudo"];
+    [cmd addObject:@"-A"];
+    [cmd arrayByAddingObjectsFromArray:self];
     id process = [cmd runCommandAndReturnProcess];
     [process setValue:@"0" forKey:@"pid"];
 }
 - (id)runCommandWithSudoAndReturnOutput
 {
-    id cmd = [@[ @"sudo", @"-A" ] arrayByAddingObjectsFromArray:self];
+    id cmd = nsarr();
+    [cmd addObject:@"sudo"];
+    [cmd addObject:@"-A"];
+    [cmd arrayByAddingObjectsFromArray:self];
     id process = [cmd runCommandAndReturnProcess];
     return [process readAllDataFromOutputThenCloseAndWait];
 }
 - (id)runCommandWithSudoAndReturnError
 {
-    id cmd = [@[ @"sudo", @"-A" ] arrayByAddingObjectsFromArray:self];
+    id cmd = nsarr();
+    [cmd addObject:@"sudo"];
+    [cmd addObject:@"-A"];
+    [cmd arrayByAddingObjectsFromArray:self];
     id process = [cmd runCommandAndReturnProcess];
     return [process readAllDataFromErrorThenCloseAndWait];
 }
 - (id)runCommandWithSudoAndReturnProcess
 {
-    id cmd = [@[ @"sudo", @"-A" ] arrayByAddingObjectsFromArray:self];
+    id cmd = nsarr();
+    [cmd addObject:@"sudo"];
+    [cmd addObject:@"-A"];
+    [cmd arrayByAddingObjectsFromArray:self];
     id process = [cmd runCommandAndReturnProcess];
     return process;
 }
@@ -139,11 +151,6 @@ NSLog(@"runAsArgumentsForCommandAndReturnOutput %@ self %@", command, self);
 {
     id process = [self runCommandAndReturnProcess];
     return [process readAllDataFromOutputThenCloseAndWait];
-}
-
-- (id)runCommandAndReturnProcess
-{
-    return [self runCommandAndReturnProcess];
 }
 
 - (int)runCommandInBackground
