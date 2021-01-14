@@ -80,7 +80,7 @@
             if (!lines) {
                 break;
             }
-            id arr = @[ @"pixels", @"palette", @"highlightedPalette", @"messageForDoubleClick", @"messageForDragAndDrop" ];
+            id arr = [@"pixels palette highlightedPalette messageForDoubleClick messageForDragAndDrop" split];
             if ([arr containsObject:_firstLine]) {
                 [self setValue:lines forKey:_firstLine];
                 [self setValue:nil forKey:@"firstLine"];
@@ -206,7 +206,7 @@ NSLog(@"CommandOutputBitmap handleMouseDown");
         } else {
             id messageForDragAndDrop = [object valueForKey:@"messageForDragAndDrop"];
             if (messageForDragAndDrop) {
-                [@{} evaluateMessage:messageForDragAndDrop];
+                [nsdict() evaluateMessage:messageForDragAndDrop];
             }
         }
     }
@@ -225,7 +225,7 @@ NSLog(@"CommandOutputBitmap handleMouseDown");
             if (selectedTimestamp) {
                 if ([timestamp doubleValue]-[selectedTimestamp doubleValue] <= 0.3) {
                     if ([_messageForDoubleClick length]) {
-                        [@{} evaluateMessage:_messageForDoubleClick];
+                        [nsdict() evaluateMessage:_messageForDoubleClick];
                     } else {
                         [@"doubleClick" showAlert];
                     }
