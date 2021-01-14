@@ -83,6 +83,7 @@ typedef struct Int4 Int4;
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <stdint.h>
 
 id object_copy(id obj, size_t size);
 
