@@ -1,6 +1,6 @@
 #import "HOTDOG.h"
 
-@implementation Definitions(fjdklsjfkldskjf)
+@implementation Definitions(fjdklsjfkldskewiuriewurijf)
 + (id)testChicagoFont
 {
     int *arr = [Definitions arrayOfHeightsForChicagoFont];
