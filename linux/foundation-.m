@@ -27,7 +27,9 @@
 
 #import <objc/objc.h>
 #import <objc/Object.h>
-#ifdef BUILD_WITH_GNUSTEP_RUNTIME
+#ifndef BUILD_WITH_GNUSTEP_RUNTIME
+#import <objc/message.h>
+#else
 #import <objc/hooks.h>
 #endif
 
@@ -49,7 +51,6 @@ static Class __NSStringClass = nil;
 static Class __NSMutableStringClass = nil;
 static Class __NSObjectClass = nil;
 
-#ifdef BUILD_WITH_GNUSTEP_RUNTIME
 static IMP my_objc_msg_forward2(id receiver, SEL sel)
 {
 LOG("objc_msg_forward2 receiver %p class '%s' selector '%s'\n", receiver, object_getClassName(receiver), sel_getName(sel));
@@ -57,6 +58,7 @@ exit(0);
     return NULL;
 }
 
+#ifdef BUILD_WITH_GNUSTEP_RUNTIME
 static long long nil_method(id self, SEL _cmd) { return 0; }
 static struct objc_slot nil_slot = { Nil, Nil, 0, 1, (IMP)nil_method };
 
@@ -2056,8 +2058,8 @@ NSLog(@"copyMethodsToNSConstantString class '%s' not found", className);
 
 void HOTDOG_initialize()
 {
-#ifdef BUILD_WITH_GNUSTEP_RUNTIME
     __objc_msg_forward2 = my_objc_msg_forward2;
+#ifdef BUILD_WITH_GNUSTEP_RUNTIME
     __objc_msg_forward3 = my_objc_msg_forward3;
 #endif
     __NSConstantStringClass = objc_getClass("NSConstantString");
