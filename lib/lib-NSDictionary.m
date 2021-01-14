@@ -29,9 +29,10 @@
 
 - (id)asString
 {
-    id arr = [[self allKeys] mapBlock:^(id obj) {
-        return nsfmt(@"%@ %@", obj, [self valueForKey:obj]);
-    }];
+    id arr = nsarr();
+    for (id obj in [self allKeys]) {
+        [arr addObject:nsfmt(@"%@ %@", obj, [self valueForKey:obj])];
+    }
     return [arr join:@"\n"];
 }
 
@@ -39,7 +40,6 @@
 {
     NSLog(@"toNSLog: %@", [self allKeysAndValues]);
 }
-
 
 - (id)allKeysAndValues
 {
@@ -56,7 +56,6 @@
     return arr;
 }
 
-
 - (id)asKeyValueArray
 {
     id results = nsarr();
@@ -70,39 +69,9 @@
     return results;
 }
 
-
-- (id)mapEachKeyValue:(id (^)(id obj1, id obj2))block
-{
-    return [self mapEachKeyValue:block nullValue:@"(null)"];
-}
-- (id)mapEachKeyValue:(id (^)(id obj1, id obj2))block nullValue:(id)nullValue
-{
-    id results = nsarr();
-    for (id key in [self allKeys]) {
-        id obj = block(key, [self valueForKey:key]);
-        if (!obj) {
-            obj = nullValue;
-        }
-        [results addObject:obj];
-    }
-    return results;
-}
-
-- (void)forEachKeyValue:(void (^)(id obj1, id obj2))block
-{
-    for (id key in [self allKeys]) {
-        block(key, [self valueForKey:key]);
-    }
-}
-
 - (int)length
 {
     return [self count];
 }
-
-
-
-
-
 
 @end
