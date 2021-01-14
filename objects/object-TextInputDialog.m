@@ -26,7 +26,7 @@
 #import "HOTDOG.h"
 
 #ifdef BUILD_FOR_LINUX
-@implementation Definitions(fjdklsjflkdsjlkfdsljkfkjsd)
+@implementation Definitions(fjdklsjflkdsjlkfdsljkfkjsdmvcxki)
 + (id)inputNumberWithAlert:(id)text
 {
     return [self inputTextWithAlert:text];
@@ -45,7 +45,9 @@
         quotedText = quotedTitle;
     }
     id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedTitle, quotedText, 600, 400);
-    id cmd = @[ @"hotdog", message ];
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:message];
     id outputData = [cmd runCommandAndReturnOutput];
     if (!outputData) {
         return nil;
@@ -67,7 +69,9 @@
     id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id quotedTitle = [[[self str:title] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedTitle, quotedText, 600, 400);
-    id cmd = @[ @"hotdog", message ];
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:message];
     id outputData = [cmd runCommandAndReturnOutput];
     if (!outputData) {
         return;
@@ -83,12 +87,14 @@
 @end
 #endif
 
-@implementation Definitions(jfldslkfjdslkjf)
+@implementation Definitions(jfldslkfjdslkjfzkvjbvie)
 + (id)TextInputDialog:(id)text field:(id)field
 {
     id obj = [@"TextInputDialog" asInstance];
     [obj setValue:text forKey:@"text"];
-    [obj setValue:@[ field ] forKey:@"fields"];
+    id fields = nsarr();
+    [fields addObject:field];
+    [obj setValue:fields forKey:@"fields"];
     return obj;
 }
 + (int)preferredHeightForTextInputDialog:(id)text width:(int)width
@@ -233,9 +239,10 @@ NSLog(@"text '%@'", text);
 - (void)handleKeyDown:(id)event
 {
     if (!_buffers) {
-        id arr = [_fields mapBlock:^(id obj) {
-            return @"";
-        }];
+        id arr = nsarr();
+        for (id elt in _fields) {
+            [arr addObject:@""];
+        }
         [self setValue:arr forKey:@"buffers"];
     }
     id buf = [_buffers nth:_currentField];
