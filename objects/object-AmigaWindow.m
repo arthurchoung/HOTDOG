@@ -25,7 +25,7 @@
 
 #import "HOTDOG.h"
 
-@implementation Definitions(ifjeowjfkldsjfkldsjkflsjdlkf)
+@implementation Definitions(ifjeowjfkldsjfkldsjkflsjdlkfjdifieqf)
 + (void)testAddAmigaWindow
 {
     id windowManager = [@"windowManager" valueForKey];
@@ -54,7 +54,7 @@
     [windowManager setInputFocus:nil];
 }
 @end
-@implementation Definitions(fjkdlsjfiowejfklsdjfklsdkljf)
+@implementation Definitions(fjkdlsjfiowejfklsdjfklsdkljfvjjidfj)
 
 + (char *)cStringForAmigaPalette
 {
