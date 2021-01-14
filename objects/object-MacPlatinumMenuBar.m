@@ -26,7 +26,7 @@
 #import "HOTDOG.h"
 
 
-@implementation Definitions(jfoiwejfklsdjfklsdjlkfjsdlkfj)
+@implementation Definitions(jfoiwernfjejfklsdjfklsdjlkfjsdlkfj)
 + (void)enterMacPlatinumMode
 {
     char *cstr = [Definitions cStringForMacPlatinumBackground];
@@ -45,7 +45,7 @@
 }
 @end
 
-@implementation Definitions(fjklesjkfljskdlfjklsdjfklsd)
+@implementation Definitions(fjkieifjdlesjkfljskdlfjklsdjfklsd)
 + (char *)cStringForMacPlatinumMenuBarPalette
 {
     return
