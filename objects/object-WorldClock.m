@@ -139,7 +139,7 @@
 + (id)testWorldClock
 {
     id str = @"timezoneTable|asArraySortedWithKey:'TZ'|asArrayWithLeftStringFormat:'#{TZ2}' rightStringFormat:'#{TZ|currentDateTimeForTimeZoneWithFormat:\"%I:%M:%S %p\"}' messageForClick:''|asDictionaryGroupByKey:'TZ1'|asKeyValueArray|asArrayWithStringFormat:'#{key}' messageForClick:'selectedObject|value'";
-    return [@{} evaluateMessage:str];
+    return [nsdict() evaluateMessage:str];
 }
 
 @end
