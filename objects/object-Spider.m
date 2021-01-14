@@ -300,17 +300,30 @@
 @implementation Spider
 + (id)classMenu
 {
-    id menu = @[
-@{ @"message": @"toggleBoolKey:'showOverlayText'", @"keyDown":@"z" },
-@{ @"message":@"writeStateToFile:(homeDir:'testspider.dat')" },
-@{ @"message":@"readStateFromFile:(homeDir:'testspider.dat')" },
-@{ @"message":@"fixmeMoveComplete" },
-@{ @"message":@"fixmeMoveDeck" }
-];
+    id menu = nsarr();
+    id dict;
+    dict = nsdict();
+    [dict setValue:@"toggleBoolKey:'showOverlayText'" forKey:@"message"];
+    [dict setValue:@"z" forKey:@"keyDown"];
+    [menu addObject:dict];
+    dict = nsdict();
+    [dict setValue:@"writeStateToFile:(homeDir:'testspider.dat')" forKey:@"message"];
+    [menu addObject:dict];
+    dict = nsdict();
+    [dict setValue:@"readStateFromFile:(homeDir:'testspider.dat')" forKey:@"message"];
+    [menu addObject:dict];
+    dict = nsdict();
+    [dict setValue:@"fixmeMoveComplete" forKey:@"message"];
+    [menu addObject:dict];
+    dict = nsdict();
+    [dict setValue:@"fixmeMoveDeck" forKey:@"message"];
+    [menu addObject:dict];
 #ifdef BUILD_FOR_IOS
-    menu = [menu mapBlock:^(id obj) {
-        return [[obj mutableCopy] autorelease];
-    }];
+    id mapArr = nsarr();
+    for (id elt in menu) {
+        [mapArr addObject:[[elt mutableCopy] autorelease]];
+    }
+    menu = mapArr;
 #endif
     return menu;
 }
@@ -412,10 +425,12 @@
 {
     id topmostCards = [self ranksOfTopmostCards];
     id facedownCards = [self ranksOfFacedownCards];
-    id results = [facedownCards mapBlock:^(id obj) {
+    id results = nsarr();
+    for (id obj in facedownCards) {
         int facedownCard = [obj intValue];
         if (facedownCard < 0) {
-            return @"0";
+            [results addObject:@"0"];
+            continue;
         }
         for (id elt in topmostCards) {
             int topmostCard = [elt intValue];
@@ -423,11 +438,14 @@
                 continue;
             }
             if (topmostCard-1 == facedownCard) {
-                return @"1";
+                [results addObject:@"1"];
+                goto endloop;
             }
         }
-        return @"0";
-    }];
+        [results addObject:@"0"];
+endloop:
+        ;
+    }
     return results;
 }
     
@@ -448,14 +466,15 @@
 - (id)textForTopmostCards
 {
     char *cardRanks = "A23456789TJQK";
-    id results = [self ranksOfTopmostCards];
-    results = [results mapBlock:^(id obj) {
-        int rank = [obj intValue];
+    id results = nsarr();
+    for (id elt in [self ranksOfTopmostCards]) {
+        int rank = [elt intValue];
         if (rank == -1) {
-            return (id)@"-";
+            [results addObject:@"-"];
+            continue;
         }
-        return nsfmt(@"%c", cardRanks[rank]);
-    }];
+        [results addObject:nsfmt(@"%c", cardRanks[rank])];
+    }
     return [results join:@" "];
 }
 - (id)ranksOfFacedownCards
@@ -481,10 +500,10 @@
 - (id)textForFacedownCards
 {
     char *cardRanks = "A23456789TJQK";
-    id arr = [self ranksOfFacedownCards];
-    arr = [arr mapBlock:^(id obj) {
-        return nsfmt(@"%c", cardRanks[[obj intValue]]);
-    }];
+    id arr = nsarr();
+    for (id elt in [self ranksOfFacedownCards]) {
+        [arr addObject:nsfmt(@"%c", cardRanks[[elt intValue]])];
+    }
     return [arr asProbabilityDistributionText];
 }
 - (id)textForFaceupCards
