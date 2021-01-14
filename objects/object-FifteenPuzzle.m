@@ -586,10 +586,15 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
 @implementation FifteenPuzzle
 + (id)classMenu
 {
-    return @[
-        @{ @"message" : @"scramble" },
-        @{ @"message" : @"solve" }
-    ];
+    id arr = nsarr();
+    id dict;
+    dict = nsdict();
+    [dict setValue:@"scramble" forKey:@"message"];
+    [arr addObject:dict];
+    dict = nsdict();
+    [dict setValue:@"solve" forKey:@"message"];
+    [arr addObject:dict];
+    return arr;
 }
 
 - (BOOL)shouldAnimate
@@ -947,7 +952,7 @@ NSLog(@"move %@", move);
 - (void)scramble
 {
     for (int i=0; i<16*1000; i++) {
-        id moves = @[ @"u", @"d", @"l", @"r" ];
+        id moves = [@"u d l r" split];
         id move = [moves randomObject];
         [self movePiece:move];
     }
