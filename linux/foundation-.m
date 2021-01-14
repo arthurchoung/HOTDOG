@@ -27,7 +27,9 @@
 
 #import <objc/objc.h>
 #import <objc/Object.h>
+#ifdef BUILD_WITH_GNUSTEP_RUNTIME
 #import <objc/hooks.h>
+#endif
 
 #ifdef BUILD_WITH_GNU_PRINTF
 #else
@@ -47,6 +49,7 @@ static Class __NSStringClass = nil;
 static Class __NSMutableStringClass = nil;
 static Class __NSObjectClass = nil;
 
+#ifdef BUILD_WITH_GNUSTEP_RUNTIME
 static IMP my_objc_msg_forward2(id receiver, SEL sel)
 {
 LOG("objc_msg_forward2 receiver %p class '%s' selector '%s'\n", receiver, object_getClassName(receiver), sel_getName(sel));
@@ -63,6 +66,7 @@ LOG("objc_msg_forward3 receiver %p class '%s' selector '%s'\n", receiver, object
 exit(0);
     return &nil_slot;
 }
+#endif
 
 void NSLog(id formatString, ...)///$;
 {
@@ -1610,21 +1614,21 @@ NSLog(@"OUT OF MEMORY! NSArray -addObject:");
 }
 int qsort_compare_helper(void *a, void *b, void *arg)
 {
-    int (^block)(id a, id b) = arg;
-    return block(*((id *)a), *((id *)b));
+    int (*func)(id a, id b) = arg;
+    return func(*((id *)a), *((id *)b));
 }
-- (id)destructiveSortArrayWithBlock:(void *)block
+- (id)destructiveSortArrayWithFunction:(void *)func argument:(void *)arg
 {
 #ifdef BUILD_WITH_GNU_QSORT_R
-    qsort_r(_contents, _length, sizeof(id), qsort_compare_helper, block);
+    qsort_r(_contents, _length, sizeof(id), func, arg);
 #else
-    foundation_qsort_r(_contents, _length, sizeof(id), qsort_compare_helper, block);
+    foundation_qsort_r(_contents, _length, sizeof(id), func, arg);
 #endif
     return self;
 }
-- (id)asArraySortedWithBlock:(void *)block
+- (id)asArraySortedWithFunction:(void *)func argument:(void *)arg
 {
-    return [[[self copy] autorelease] destructiveSortArrayWithBlock:block];
+    return [[[self copy] autorelease] destructiveSortArrayWithFunction:func argument:arg];
 }
 - (id)description
 {
@@ -2052,8 +2056,10 @@ NSLog(@"copyMethodsToNSConstantString class '%s' not found", className);
 
 void HOTDOG_initialize()
 {
+#ifdef BUILD_WITH_GNUSTEP_RUNTIME
     __objc_msg_forward2 = my_objc_msg_forward2;
     __objc_msg_forward3 = my_objc_msg_forward3;
+#endif
     __NSConstantStringClass = objc_getClass("NSConstantString");
     if (!__NSConstantStringClass) {
 LOG("ERROR! missing NSConstantString\n");
@@ -2082,9 +2088,11 @@ fprintf(stderr, "ERROR! register_printf_function\n");
     }
 #endif
 
-    @autoreleasepool {
-        nscstr(@"Initialize NSString for forwarding NSConstantString");
-        copyMethodsToNSConstantString("NSString");
-    }
+    id pool = [[NSAutoreleasePool alloc] init];
+
+    nscstr(@"Initialize NSString for forwarding NSConstantString");
+    copyMethodsToNSConstantString("NSString");
+
+    [pool drain];
 }
 
