@@ -22,7 +22,7 @@ The design goals of HOT DOG Linux include:
 </ul>
 
 <p>
-HOT DOG Linux uses a custom lightweight Objective-C foundation on top of the GNUstep Objective-C runtime. It does not use the GNUstep Foundation. The style of Objective-C is completely different from the one Apple uses, everything is basically <b>id</b>.
+HOT DOG Linux uses a custom lightweight Objective-C foundation on top of the GCC Objective-C runtime. The style of Objective-C is completely different from the one Apple uses, everything is basically <b>id</b>.
 
 <p>
 By design, Unicode is not supported.
@@ -79,8 +79,6 @@ Mac Platinum Screenshot
 <h2>How to compile and run</h2>
 
 <pre>
-$ sh makeExternal.sh
-
 $ sh makeUtils.sh
 
 $ perl build.pl
@@ -105,14 +103,14 @@ The following executables must be in your PATH or at location if specified:
 <li>xrandr
 <li>ifconfig (used by Utils/printNetworkInfo)
 <li>find (used by build.pl)
-<li>clang
+<li>gcc
 <li>/usr/bin/perl
 <li>/bin/bash (used by Utils/printDateEverySecondForTimezone:text:)
 <li>date (used by Utils/printDateEverySecondForTimezone:text:)
 </ul>
 
 <p>
-(this list is probably incomplete)
+(this list might be incomplete)
 
 <p>
 The following libraries must have headers available and be linkable:
@@ -122,8 +120,8 @@ The following libraries must have headers available and be linkable:
 <li>libXext
 <li>libXfixes
 <li>libGL (Mesa should work)
-<li>libpthread
 <li>libm
+<li>libobjc (GCC Runtime)
 </ul>
 
 <p>
@@ -140,7 +138,7 @@ These are optional:
 </ul>
 
 <p>
-(this list is probably incomplete)
+(this list might be incomplete)
 
 
 <h2>Legal</h2>
