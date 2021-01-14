@@ -75,47 +75,6 @@ static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned c
 }
 @end
 
-@implementation NSObject(fkldsjflksdjf)
-- (void)showInWindow
-{
-    [self forkAndShowInXWindow];
-}
-
-- (void)forkAndShowInXWindow
-{
-    [Definitions forkAndRunBlock:^{
-        [self showInXWindow];
-    }];
-}
-- (int)forkAndEvaluateMessage:(id)message
-{
-    return [Definitions forkAndRunBlock:^{
-        id result = [self evaluateMessage:message];
-        [result showInXWindow];
-    }];
-}
-@end
-@implementation Definitions(fjdkslfjklsdf)
-+ (int)forkAndRunBlock:(void (^)())block
-{
-    pid_t pid = fork();
-    if (pid == -1) {
-        perror("fork");
-        return 0;
-    } else if (pid == 0) {
-        /* child */
-        block();
-        _exit(0);
-    } else {
-        /* parent */
-//        int status;
-//        waitpid(pid, &status, 0);
-        return pid;
-    }
-}
-@end
-
-
 static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
                            Window winRoot, int press,
                            int keycode, int modifiers)
@@ -494,7 +453,7 @@ exit(0);
     if ([object respondsToSelector:@selector(preferredHeight)]) {
         h = [object preferredHeight];
     }
-    [self runWindowManagerForObject:object x:0 y:0 w:w h:h];
+    [Definitions runWindowManagerForObject:object x:0 y:0 w:w h:h];
 }
 + (id)setupWindowManagerForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h
 {
@@ -1166,9 +1125,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
 }
     }
 
-
     Window win = [self openWindowWithName:[object className] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
-
 
     id dict = nsdict();
     [dict setValue:nsfmt(@"%lu", win) forKey:@"window"];
@@ -1463,7 +1420,7 @@ NSLog(@"_displayFD %d", _displayFD);
     }
 
     for (;;) {
-        @autoreleasepool {
+        id pool = [[NSAutoreleasePool alloc] init];
             if (_isWindowManager) {
                 if (__receivedExitSignal) {
                     [self unparentAllWindows];
@@ -1739,7 +1696,8 @@ NSLog(@"received X event type %d", event.type);
 
             [self cleanupChildProcesses];
             XFlush(_display);
-        }
+
+        [pool drain];
     }
 }
 
@@ -2510,21 +2468,23 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
 - (void)handleDesktopPath
 {
     id contents = [[Definitions execDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
-    id closeList = [_objectWindows keepBlock:^(id dict) {
+    id closeList = nsarr();
+    for (id dict in _objectWindows) {
         id filePath = [dict valueForKey:@"filePath"];
         if (!filePath) {
-            return NO;
+            continue;
         }
         if ([contents containsObject:filePath]) {
             id timestamp = nsfmt(@"%ld", (long long)[filePath fileModificationTimestamp]);
             if ([[dict valueForKey:@"fileTimestamp"] isEqual:timestamp]) {
-                return NO;
+                continue;
             } else {
-                return YES;
+                [closeList addObject:dict];
+                continue;
             }
         }
-        return YES;
-    }];
+        [closeList addObject:dict];
+    }
     for (id dict in closeList) {
         [dict setValue:@"1" forKey:@"shouldCloseWindow"];
     }
