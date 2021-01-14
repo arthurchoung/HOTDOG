@@ -1,6 +1,6 @@
 #import "HOTDOG.h"
 
-@implementation Definitions(fjdklsjfkldskjf)
+@implementation Definitions(fjdklsjfkljfiewjfijidskjf)
 + (int *)arrayOfXSpacingsForTopazFont
 {
     static int xspacings[256];
