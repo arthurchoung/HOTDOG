@@ -35,7 +35,7 @@
 
 #ifdef BUILD_FOR_LINUX
 
-@implementation Definitions(fjkdlsjfkldsjfkldsjklfjlsd)
+@implementation Definitions(fjkdlsjfkldsjfkldsjklfwejffjdkjfkdjlsd)
 + (void)showAlert:(id)text
 {
     id path = [[Definitions execDir:@"Alerts/alert.txt"] asUniquePath];
@@ -56,7 +56,7 @@
 #endif
 
 
-@implementation Definitions(jfldslkfjdslkjf)
+@implementation Definitions(jfldslkfjdslknvmcnxmjf)
 + (char *)cStringForBitmapMessageIcon
 {
     return
