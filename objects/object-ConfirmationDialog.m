@@ -35,7 +35,9 @@
 {
     id quotedText = [[text keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedText, 600, 400);
-    id cmd = @[ @"hotdog", message ];
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:message];
     id outputData = [cmd runCommandAndReturnOutput];
     id output = [outputData asString];
     if ([output isEqual:@"OK"]) {
@@ -53,7 +55,9 @@
     }
     id text = [firstChoice keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines];
     id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithWidth:%d height:%d|exit:0", [text asQuotedString], 600, 400);
-    id cmd = @[ @"hotdog", message ];
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:message];
     id outputData = [cmd runCommandAndReturnOutput];
     id output = [outputData asString];
     if ([output isEqual:@"OK"]) {
@@ -65,7 +69,9 @@
 {
     id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id message = nsfmt(@"ConfirmationDialog:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedText, 600, 400);
-    id cmd = @[ @"hotdog", message ];
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:message];
     id outputData = [cmd runCommandAndReturnOutput];
     id output = [outputData asString];
     if ([output isEqual:@"OK"]) {
@@ -77,7 +83,9 @@
     id quotedText = [[[self str:text] keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines] asQuotedString];
     id quotedOkText = [[[self str:okText] keepAlphanumericCharactersAndSpacesAndPunctuation] asQuotedString];
     id message = nsfmt(@"ConfirmationDialog:%@ okText:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedText, quotedOkText, 600, 400);
-    id cmd = @[ @"hotdog", message ];
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:message];
     id outputData = [cmd runCommandAndReturnOutput];
     id output = [outputData asString];
     if ([output isEqual:okText]) {
