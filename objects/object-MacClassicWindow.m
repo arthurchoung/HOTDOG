@@ -25,7 +25,7 @@
 
 #import "HOTDOG.h"
 
-@implementation Definitions(jfoiwejfklsdjfklsdjlkfjsdlkfj)
+@implementation Definitions(jfoiwcciiejfklsdjfklsdjlkfjsdlkfj)
 + (void)enterMacClassicMode
 {
     id windowManager = [@"windowManager" valueForKey];
@@ -48,7 +48,7 @@
     [windowManager setInputFocus:nil];
 }
 @end
-@implementation Definitions(fjkdlsjfiowejfklsdjfklsdkljf)
+@implementation Definitions(fjkdlemdisjfiowejfklsdjfklsdkljf)
 + (char *)cStringForMacClassicInactiveTitleBarLeft
 {
     return
