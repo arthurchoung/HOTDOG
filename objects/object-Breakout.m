@@ -165,13 +165,12 @@ char *ballPixels =
     _rightWallRect = [Definitions rectWithX:_width-rightWallWidth y:20 w:rightWallWidth h:_height-20];
 NSLog(@"_width %d wallWidth %d rightWallWidth %d", _width, wallWidth, rightWallWidth);
     _topWallRect = [Definitions rectWithX:0 y:20 w:_width h:7];
-    id brickPalettes = @[
-        @"b #ff0000\n",
-        @"b #ff7f00\n",
-        @"b #ffff00\n",
-        @"b #00ff00\n",
-        @"b #ffffbf\n",
-    ];
+    id brickPalettes = nsarr();
+    [brickPalettes addObject:@"b #ff0000\n"];
+    [brickPalettes addObject:@"b #ff7f00\n"];
+    [brickPalettes addObject:@"b #ffff00\n"];
+    [brickPalettes addObject:@"b #00ff00\n"];
+    [brickPalettes addObject:@"b #ffffbf\n"];
     int brickHeight = [Definitions heightForCString:brickMiddlePixels];
     id arr = nsarr();
     for (int j=0; j<[brickPalettes length]; j++) {
@@ -307,12 +306,14 @@ NSLog(@"_width %d wallWidth %d rightWallWidth %d", _width, wallWidth, rightWallW
             }
         }
     }
-    [self setValue:[_bricks filter:^(id obj) {
-        if ([obj intValueForKey:@"hit"] > 7) {
-            return NO;
+    id keepBricks = nsarr();
+    for (id brick in _bricks) {
+        if ([brick intValueForKey:@"hit"] > 7) {
+        } else {
+            [keepBricks addObject:brick];
         }
-        return YES;
-    }] forKey:@"bricks"];
+    }
+    [self setValue:keepBricks forKey:@"bricks"];
     if (![_bricks length]) {
         [self setupBricks];
         [self setupBall];
