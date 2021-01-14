@@ -29,7 +29,7 @@
 @implementation Definitions(fjkdsljflksdjlkfjlskdf)
 + (id)testRadioButtons:(id)filePath
 {
-    id arr = @[ @"One", @"Two", @"Three", @"Four", @"Five" ];
+    id arr = [@"One Two Three Four Five" split];
 
     id val = [[filePath linesFromFile] nth:0];
     int index = [arr findObject:val];
