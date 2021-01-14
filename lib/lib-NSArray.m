@@ -66,16 +66,6 @@
     return [self writeLinesToFile:path];
 }
 
-- (id)filter:(BOOL (^)(id obj))block
-{
-    id results = nsarr();
-    for (id elt in self) {
-        if (block(elt)) {
-            [results addObject:elt];
-        }
-    }
-    return results;
-}
 - (id)nth:(int)n
 {
     if (n < 0) {
@@ -108,13 +98,13 @@
 }
 - (id)filterEmptyStrings
 {
-    return [self filter:^(id obj) {
-        if ([obj length]) {
-            return YES;
-        } else {
-            return NO;
+    id keepArr = nsarr();
+    for (id elt in self) {
+        if ([elt length]) {
+            [keepArr addObject:elt];
         }
-    }];
+    }
+    return keepArr;
 }
 - (id)join:(id)obj
 {
@@ -161,84 +151,255 @@
 
 - (id)removeIfContainsString:(id)string
 {
-    return [self filter:^(id obj) {
-        return (BOOL)(([obj containsString:string]) ? NO : YES);
-    }];
+    id keepArr = nsarr();
+    for (id elt in self) {
+        if (![elt containsString:string]) {
+            [keepArr addObject:elt];
+        }
+    }
+    return keepArr;
 }
 
 - (id)keepIfKey:(id)key startsWith:(id)string
 {
-    return [self filter:^(id obj) {
-        id val = [obj valueForKey:key];
-        if (!val) {
-            return NO;
-        }
+    id keepArr = nsarr();
+    for (id elt in self) {
+        id val = [elt valueForKey:key];
         if ([val startsWith:string]) {
-            return YES;
-        } else {
-            return NO;
+            [keepArr addObject:elt];
         }
-    }];
+    }
+    return keepArr;
 }
 - (id)keepIfKey:(id)key equals:(id)string
 {
-    return [self filter:^(id obj) {
-        id val = [obj valueForKey:key];
-        if (!val) {
-            return NO;
-        }
+    id keepArr = nsarr();
+    for (id elt in self) {
+        id val = [elt valueForKey:key];
         if ([val isEqual:string]) {
-            return YES;
-        } else {
-            return NO;
+            [keepArr addObject:elt];
         }
-    }];
+    }
+    return keepArr;
 }
 
 - (id)keepIfContainsString:(id)string
 {
-    return [self filter:^(id obj) {
-        return [obj containsString:string];
-    }];
+    id keepArr = nsarr();
+    for (id elt in self) {
+        if ([elt containsString:string]) {
+            [keepArr addObject:elt];
+        }
+    }
+    return keepArr;
 }
 
 - (id)keepPrefix:(id)prefix
 {
-    return [self filter:^(id obj) {
-        return [obj hasPrefix:prefix];
-    }];
+    id keepArr = nsarr();
+    for (id elt in self) {
+        if ([elt hasPrefix:prefix]) {
+            [keepArr addObject:elt];
+        }
+    }
+    return keepArr;
 }
 - (id)keepSuffix:(id)suffix
 {
-    return [self filter:^(id obj) {
-        return [obj hasSuffix:suffix];
-    }];
+    id keepArr = nsarr();
+    for (id elt in self) {
+        if ([elt hasSuffix:suffix]) {
+            [keepArr addObject:elt];
+        }
+    }
+    return keepArr;
+}
+
+static int qsort_asArraySortedWithKey(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    id key = arg;
+    return (int)[a compare:b key:key];
 }
 
 - (id)asArraySortedWithKey:(id)key
 {
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        return (int)[a compare:b key:key];
-    }];
+    return [self asArraySortedWithFunction:qsort_asArraySortedWithKey argument:key];
+}
+
+- (id)sortedWithKey:(id)key
+{
+    return [self asArraySortedWithFunction:qsort_asArraySortedWithKey argument:key];
+}
+
+static int qsort_asArrayReverseSortedWithKey(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    id key = arg;
+    return (int)[a reverseCompare:b key:key];
 }
 
 - (id)asArrayReverseSortedWithKey:(id)key
 {
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        return (int)[a reverseCompare:b key:key];
-    }];
+    return [self asArraySortedWithFunction:qsort_asArrayReverseSortedWithKey argument:key];
 }
+
+- (id)reverseSortedWithKey:(id)key
+{
+    return [self asArraySortedWithFunction:qsort_asArrayReverseSortedWithKey argument:key];
+}
+
+static int qsort_asArrayReverseSortedWithKeys(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    id keys = arg;
+    for (id key in keys) {
+        int cmp = [a reverseCompare:b key:key];
+        if (cmp != 0) {
+            return cmp;
+        }
+    }
+    return 0;
+}
+
 - (id)asArrayReverseSortedWithKeys:(id)keys
 {
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        for (id key in keys) {
-            int cmp = [a reverseCompare:b key:key];
-            if (cmp != 0) {
-                return cmp;
-            }
-        }
+    return [self asArraySortedWithFunction:qsort_asArrayReverseSortedWithKeys argument:keys];
+}
+
+static int qsort_asReverseSortedArray(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    return (int)[a reverseCompare:b];
+}
+
+- (id)reverseSort
+{
+    return [self asArraySortedWithFunction:qsort_asReverseSortedArray argument:nil];
+}
+
+- (id)asReverseSortedArray
+{
+    return [self asArraySortedWithFunction:qsort_asReverseSortedArray argument:nil];
+}
+
+static int qsort_asSortedArray(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    return (int)[a compare:b];
+}
+
+- (id)asSortedArray
+{
+    return [self asArraySortedWithFunction:qsort_asSortedArray argument:nil];
+}
+
+- (id)sort
+{
+    return [self asArraySortedWithFunction:qsort_asSortedArray argument:nil];
+}
+
+static int qsort_numericSortWithKey(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    id key = arg;
+    double aa = [[a valueForKey:key] doubleValue];
+    double bb = [[b valueForKey:key] doubleValue];
+    if (aa < bb) {
+        return -1;
+    }
+    if (aa > bb) {
+        return 1;
+    }
+    return 0;
+}
+
+- (id)numericSortForKey:(id)key
+{
+    return [self asArraySortedWithFunction:qsort_numericSortWithKey argument:key];
+}
+
+static int qsort_reverseNumericSortWithKey(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    id key = arg;
+    double aa = [[a valueForKey:key] doubleValue];
+    double bb = [[b valueForKey:key] doubleValue];
+    if (aa < bb) {
+        return 1;
+    }
+    if (aa > bb) {
+        return -1;
+    }
+    return 0;
+}
+
+- (id)reverseNumericSortForKey:(id)key
+{
+    return [self asArraySortedWithFunction:qsort_reverseNumericSortWithKey argument:key];
+}
+
+- (id)numericKeySort
+{
+    return [self numericSortForKey:@"key"];
+}
+
+- (id)numericValueSort
+{
+    return [self numericSortForKey:@"value"];
+}
+
+- (id)reverseNumericValueSort
+{
+    return [self reverseNumericSortForKey:@"value"];
+}
+
+static int qsort_numericSort(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    double aa = [a doubleValue];
+    double bb = [b doubleValue];
+    if (aa < bb) {
+        return -1;
+    } else if (aa > bb) {
+        return 1;
+    } else {
         return 0;
-    }];
+    }
+}
+
+- (id)numericSort
+{
+    return [self asArraySortedWithFunction:qsort_numericSort argument:nil];
+}
+
+static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
+{
+    id a = *((id *)aptr);
+    id b = *((id *)bptr);
+    double aa = [a doubleValue];
+    double bb = [b doubleValue];
+    if (aa < bb) {
+        return 1;
+    } else if (aa > bb) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
+
+- (id)reverseNumericSort
+{
+    return [self asArraySortedWithFunction:qsort_reverseNumericSort argument:nil];
 }
 
 - (id)asDictionary
@@ -258,9 +419,13 @@
 
 - (id)keepObjectsEqualTo:(id)objectToKeep
 {
-    return [self filter:^(id obj) {
-        return (BOOL)(([obj isEqual:objectToKeep]) ? YES : NO);
-    }];
+    id keepArr = nsarr();
+    for (id elt in self) {
+        if ([elt isEqual:objectToKeep]) {
+            [keepArr addObject:elt];
+        }
+    }
+    return keepArr;
 }
 
 - (id)asStringForKeys:(id)keys titleKeys:(id)titleKeys
@@ -268,37 +433,43 @@
     int minLength = 4;
     id results = nsarr();
     
-    id titleArr = [titleKeys mapBlock:^(id obj) {
-        return [[[self valueForKey:obj] uniq] join:@""];
-    }];
+    id titleArr = nsarr();
+    for (id obj in titleKeys) {
+        [titleArr addObject:[[[self valueForKey:obj] uniq] join:@""]];
+    }
     id title = [titleArr join:@"  "];
     if (title) {
         [results addObject:title];
         [results addObject:@""];
     }
     
-    id header = [[keys mapBlock:^(id key) {
+    id header = nsarr();
+    for (id key in keys) {
         int len = [key length];
         if (len < minLength) {
             len = minLength;
         }
-        return nsfmt(@"%-*s", len, [key UTF8String]);
-    }] join:@"  "];
+        [header addObject:nsfmt(@"%-*s", len, [key UTF8String])];
+    }
+    header = [header join:@"  "];
     
-    id arr = [self mapBlock:^(id obj) {
-        return [[keys mapBlock:^(id key) {
+    id arr = nsarr();
+    for (id obj in self) {
+        id mapArr = nsarr();
+        for (id key in keys) {
             int len = [key length];
             if (len < minLength) {
                 len = minLength;
             }
             id val = [obj valueForKey:key];
             if ([val isKindOfClass:[@"NSNumber" asClass]]) {
-                return nsfmt(@"%-*d", len, [[obj valueForKey:key] intValue]);
+                [mapArr addObject:nsfmt(@"%-*d", len, [[obj valueForKey:key] intValue])];
             } else {
-                return nsfmt(@"%-*.*@", len, len, val);
+                [mapArr addObject:nsfmt(@"%-*.*@", len, len, val)];
             }
-        }] join:@"  "];
-    }];
+        }
+        [arr addObject:[mapArr join:@"  "]];
+    }
     [results addObject:header];
     [results addObjectsFromArray:arr];
     return [results join:@"\n"];
@@ -571,128 +742,14 @@
 
 - (id)keepIfTrue:(id)message
 {
-    return [self filter:^(id obj) {
-        return [[obj evaluateMessage:message] boolValue];
-    }];
-}
-
-
-
-
-
-- (id)asReverseSortedArray
-{
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        return (int)[a reverseCompare:b];
-    }];
-}
-
-- (id)asSortedArray
-{
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        return (int)[a compare:b];
-    }];
-}
-
-
-- (id) sort
-{
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        return (int)[a compare:b];
-    }];
-}
-
-- (id)numericSortForKey:(id)key
-{
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        double aa = [[a valueForKey:key] doubleValue];
-        double bb = [[b valueForKey:key] doubleValue];
-        if (aa < bb) {
-            return -1;
+    id keepArr = nsarr();
+    for (id elt in self) {
+        if ([[elt evaluateMessage:message] boolValue]) {
+            [keepArr addObject:elt];
         }
-        if (aa > bb) {
-            return 1;
-        }
-        return 0;
-    }];
+    }
+    return keepArr;
 }
-- (id)reverseNumericSortForKey:(id)key
-{
-    id results = [self asArraySortedWithBlock:^(id a, id b) {
-        double aa = [[a valueForKey:key] doubleValue];
-        double bb = [[b valueForKey:key] doubleValue];
-        if (aa > bb) {
-            return -1;
-        }
-        if (aa < bb) {
-            return 1;
-        }
-        return 0;
-    }];
-    results = [[results mutableCopy] autorelease];
-    return results;
-}
-- (id)numericKeySort
-{
-    return [self numericSortForKey:@"key"];
-}
-- (id)numericValueSort
-{
-    return [self numericSortForKey:@"value"];
-}
-- (id)reverseNumericValueSort
-{
-    return [self reverseNumericSortForKey:@"value"];
-}
-
-- (id)reverseSort
-{
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        int val = [a compare:b];
-        if (val < 0) {
-            return 1;
-        }
-        if (val > 0) {
-            return -1;
-        }
-        return 0;
-    }];
-}
-
-- (id)numericSort
-{
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        double aa = [a doubleValue];
-        double bb = [b doubleValue];
-        if (aa < bb) {
-            return -1;
-        } else if (aa > bb) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }];
-}
-- (id)reverseNumericSort
-{
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        double aa = [a doubleValue];
-        double bb = [b doubleValue];
-        if (aa > bb) {
-            return -1;
-        } else if (aa < bb) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }];
-}
-
-- (id)sort:(int (^)(id a, id b))block
-{
-    return [self asArraySortedWithBlock:block];
-}
-
 
 - (int)length
 {
@@ -709,120 +766,6 @@
     return [self lastObject];
 }
 
-- (id)mapArray:(id (^)(id arr))block
-{
-    return [self mapArray:block nullValue:@"(null)"];
-}
-- (id)mapArray:(id (^)(id arr))block nullValue:(id)nullValue
-{
-    if (![self count]) {
-        return nil;
-    }
-    id results = nsarr();
-    int i = 0;
-    for(;;) {
-        id args = nsarr();
-        for (id arr in self) {
-            id elt = [arr nth:i];
-            if (!elt) {
-                return results;
-            }
-            [args addObject:elt];
-        }
-        id obj = block(args);
-        if (!obj) {
-            obj = nullValue;
-        }
-        [results addObject:obj];
-        i++;
-    }
-}
-
-- (id)mapBlock:(id (^)(id obj))block
-{
-    return [self mapBlock:block nullValue:@"(null)"];
-}
-- (id)mapBlock:(id (^)(id obj))block nullValue:(id)nullValue
-{
-    id results = nsarr();
-    for (id elt in self) {
-        id obj = block(elt);
-        if (!obj) {
-            obj = nullValue;
-        }
-        [results addObject:obj];
-    }
-    return results;
-}
-
-- (id)keepBlock:(BOOL (^)(id obj))block
-{
-    id results = nsarr();
-    for (id elt in self) {
-        if (block(elt)) {
-            [results addObject:elt];
-        }
-    }
-    return results;
-}
-
-- (id)map:(id (^)(id obj))block
-{
-    return [self map:block nullValue:@"(null)"];
-}
-- (id)map:(id (^)(id obj))block nullValue:(id)nullValue
-{
-    id results = nsarr();
-    for (id elt in self) {
-        id obj = block(elt);
-        if (!obj) {
-            obj = nullValue;
-        }
-        [results addObject:obj];
-    }
-    return results;
-}
-
-- (id)mapPairs:(id (^)(id obj1, id obj2))block
-{
-    return [self mapPairs:block nullValue:@"(null)"];
-}
-- (id)mapPairs:(id (^)(id obj1, id obj2))block nullValue:(id)nullValue
-{
-    id results = nsarr();
-    id first = nil;
-    for (id obj in self) {
-        if (!first) {
-            first = obj;
-            continue;
-        }
-        id val = block(first, obj);
-        if (!val) {
-            val = nullValue;
-        }
-        [results addObject:val];
-        first = nil;
-    }
-    return results;
-}
-- (id)mapIndex:(id (^)(int i, id obj))block
-{
-    return [self mapIndex:block nullValue:@"(null)"];
-}
-- (id)mapIndex:(id (^)(int i, id obj))block nullValue:(id)nullValue
-{
-    id results = nsarr();
-    int i = 0;
-    for (id obj in self) {
-        id val = block(i, obj);
-        if (!val) {
-            val = nullValue;
-        }
-        [results addObject:val];
-        i++;
-    }
-    return results;
-}
 - (id)keep:(id)message
 {
     id results = nsarr();
@@ -849,47 +792,13 @@
 - (void)forEachMessage:(id)message
 {
     for (id elt in self) {
-        @autoreleasepool {
-            [elt evaluateMessage:message];
-        }
+        id pool = [[NSAutoreleasePool alloc] init];
+
+        [elt evaluateMessage:message];
+
+        [pool drain];
     }
 }
-
-- (void)loopIndex:(void (^)(int i, id obj))block
-{
-    int i = 0;
-    for (id obj in self) {
-        block(i, obj);
-        i++;
-    }
-}
-- (void)reverseLoopIndex:(int (^)(int i, id obj))block
-{
-    int count = [self count];
-    for (int i=count-1; i>=0; i--) {
-        id elt = [self objectAtIndex:i];
-        if (elt) {
-            if (!block(i, elt)) {
-                break;
-            }
-        }
-    }
-}
-
-- (void)loopPairs:(void (^)(id obj1, id obj2))block
-{
-    id first = nil;
-    for (id obj in self) {
-        if (!first) {
-            first = obj;
-            continue;
-        }
-        block(first, obj);
-        first = nil;
-    }
-}
-
-
 
 - (id)allKeys
 {
@@ -904,40 +813,6 @@
     }
     return [results allKeys];
 }
-
-
-
-
-- (id)reverseSortedWithKey:(id)key
-{
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        id aa = [a valueForKey:key];
-        if (!aa) {
-            return 1;
-        }
-        id bb = [b valueForKey:key];
-        if (!bb) {
-            return -1;
-        }
-        return (int)[bb compare:aa];
-    }];
-}
-
-- (id)sortedWithKey:(id)key
-{
-    return [self asArraySortedWithBlock:^(id a, id b) {
-        id aa = [a valueForKey:key];
-        if (!aa) {
-            return -1;
-        }
-        id bb = [b valueForKey:key];
-        if (!bb) {
-            return 1;
-        }
-        return (int)[aa compare:bb];
-    }];
-}
-
 
 - (id)subarrayToIndex:(int)index
 {
