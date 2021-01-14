@@ -37,14 +37,19 @@ my $logsPath = "$buildPath/Logs";
 sub cflagsForFile
 {
     my ($path) = @_;
+    my $objcflags = '-std=c99 -fconstant-string-class=NSConstantString';
     if ($path =~ m/\/external\/tidy-html5-5.6.0\//) {
         return "-I$execPath/external/tidy-html5-5.6.0/include -I$execPath/external/tidy-html5-5.6.0/src";
     }
-    if ($path eq "$execPath/lib/lib-htmltidy.m") {
-        return "-I$execPath/external/tidy-html5-5.6.0/include";
+    if ($path eq "$execPath/misc/lib-htmltidy.m") {
+        return "$objcflags -I$execPath/external/tidy-html5-5.6.0/include";
     }
     if ($path eq "$execPath/misc/misc-gmime.m") {
-        return `pkg-config --cflags gmime-3.0`;
+        my $flags = `pkg-config --cflags gmime-3.0`;
+        return "$objcflags $flags";
+    }
+    if ($path =~ m/\.m$/) {
+        return '-std=c99 -fconstant-string-class=NSConstantString';
     }
     return '';
 }
@@ -100,9 +105,9 @@ find -L
     $execPath/linux/
 	$execPath/lib/
     $execPath/objects/
+    $execPath/jsmn
     $execPath/misc/
-    $execPath/external/jsmn
-    $execPath/external/tidy-html5-5.6.0/src
+    $execPath/external/tidy-html5-5.6.0/src/
 EOF
     $cmd =~ s/\n/ /g;
     my @lines = `$cmd`;
@@ -123,11 +128,10 @@ sub compileSourcePath
 #    -Werror=objc-method-access
 #clang -c -O0 -g -pg
 	my $cmd = <<EOF;
-clang -c -O3
+gcc -c -O3 
     -Werror=implicit-function-declaration
     -Werror=return-type
-    -I$execPath/external/libobjc2/build/include
-    -I$execPath/external/jsmn
+    -I$execPath/jsmn
     -I$execPath
     -I$execPath/linux
     -I$execPath/lib
@@ -137,8 +141,7 @@ clang -c -O3
     -DBUILD_FOUNDATION
     -DBUILD_FOR_LINUX
     -DBUILD_WITH_GNU_PRINTF
-    -fobjc-nonfragile-abi
-    -fblocks
+    -DBUILD_WITH_GNU_QSORT_R
     -o $objectPath $sourcePath 2>>$logPath
 EOF
 
@@ -156,12 +159,9 @@ sub linkSourcePaths
     my $objectFiles = join ' ', @arr;
 #    -pg
     my $cmd = <<EOF;
-clang -o $execPath/hotdog
-    -fobjc-nonfragile-abi
-    -fblocks
+gcc -o $execPath/hotdog
     $objectFiles
-    $execPath/external/libobjc2/build/*.o
-    -lpthread
+    -lobjc
     -lm
     $ldflags
 EOF
