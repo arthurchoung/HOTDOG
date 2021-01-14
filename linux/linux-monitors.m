@@ -182,7 +182,7 @@
 {
     id str = [@"xrandrOutput" valueForKey];
     if (!str) {
-        str = [[@[ @"xrandr" ] runCommandAndReturnOutput] asString];
+        str = [[[@"xrandr" split] runCommandAndReturnOutput] asString];
         [str setAsValueForKey:@"xrandrOutput"];
     }
     if (!str) {
