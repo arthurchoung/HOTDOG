@@ -41,7 +41,18 @@
     _numberOfChannels = channels;
     _bitsPerChannel = bitsPerChannel;
     
-    id aplay = [@[@"aplay", @"-t", @"raw", @"-r", nsfmt(@"%d", sampleRate), @"-c", nsfmt(@"%d", channels), @"-f", @"S16_LE", @"-"] runCommandAndReturnProcess];
+    id cmd = nsarr();
+    [cmd addObject:@"aplay"];
+    [cmd addObject:@"-t"];
+    [cmd addObject:@"raw"];
+    [cmd addObject:@"-r"];
+    [cmd addObject:nsfmt(@"%d", sampleRate)];
+    [cmd addObject:@"-c"];
+    [cmd addObject:nsfmt(@"%d", channels)];
+    [cmd addObject:@"-f"];
+    [cmd addObject:@"S16_LE"];
+    [cmd addObject:@"-"];
+    id aplay = [cmd runCommandAndReturnProcess];
     [self setValue:aplay forKey:@"aplay"];
 }   
 
