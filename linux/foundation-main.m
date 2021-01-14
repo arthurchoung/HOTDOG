@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     HOTDOG_initialize();
 
 
-	@autoreleasepool {
+    id pool = [[NSAutoreleasePool alloc] init];
 
 #ifdef BUILD_FOR_ANDROID
 #else
@@ -101,7 +101,7 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             }
             id message = [args join:@" "];
 //NSLog(@"message %@", message);
-            id object = [@{} evaluateMessage:message];
+            id object = [nsdict() evaluateMessage:message];
             if (object) {
                 [Definitions runWindowManagerForObject:object];
                 [[Definitions mainInterface] setValue:nil forKey:@"context"];
@@ -150,7 +150,7 @@ exit(1);
             }
             id message = [args join:@" "];
 //NSLog(@"message %@", message);
-            id object = [@{} evaluateMessage:message];
+            id object = [nsdict() evaluateMessage:message];
             if (object) {
                 [nsfmt(@"%@", object) writeToStandardOutput];
             }
@@ -179,6 +179,7 @@ exit(1);
 #endif
 */
 
-	}
+	[pool drain];
+
     return 0;
 }
