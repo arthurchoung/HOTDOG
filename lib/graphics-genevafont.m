@@ -1,6 +1,6 @@
 #import "HOTDOG.h"
 
-@implementation Definitions(fjdklsjfkldskjf)
+@implementation Definitions(fjdklsjfkldskjeuriwef)
 + (int *)arrayOfXSpacingsForGenevaFont
 {
     static int xspacings[256];
