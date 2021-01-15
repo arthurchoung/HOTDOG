@@ -98,7 +98,7 @@
     id cmd = nsarr();
     [cmd addObject:@"sudo"];
     [cmd addObject:@"-A"];
-    [cmd arrayByAddingObjectsFromArray:self];
+    [cmd addObjectsFromArray:self];
     id process = [cmd runCommandAndReturnProcess];
     [process setValue:@"0" forKey:@"pid"];
 }
@@ -107,7 +107,7 @@
     id cmd = nsarr();
     [cmd addObject:@"sudo"];
     [cmd addObject:@"-A"];
-    [cmd arrayByAddingObjectsFromArray:self];
+    [cmd addObjectsFromArray:self];
     id process = [cmd runCommandAndReturnProcess];
     return [process readAllDataFromOutputThenCloseAndWait];
 }
@@ -116,7 +116,7 @@
     id cmd = nsarr();
     [cmd addObject:@"sudo"];
     [cmd addObject:@"-A"];
-    [cmd arrayByAddingObjectsFromArray:self];
+    [cmd addObjectsFromArray:self];
     id process = [cmd runCommandAndReturnProcess];
     return [process readAllDataFromErrorThenCloseAndWait];
 }
@@ -125,7 +125,7 @@
     id cmd = nsarr();
     [cmd addObject:@"sudo"];
     [cmd addObject:@"-A"];
-    [cmd arrayByAddingObjectsFromArray:self];
+    [cmd addObjectsFromArray:self];
     id process = [cmd runCommandAndReturnProcess];
     return process;
 }
