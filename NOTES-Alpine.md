@@ -67,9 +67,8 @@ vi build.pl (remove -DBUILD_WITH_GNU_PRINTF and -DBUILD_WITH_GNU_QSORT_R)
 perl build.pl
 
 cd
-vi .xinitrc (add line 'exec xterm')
+vi .xinitrc (add line 'exec xterm -e $HOME/HOTDOG/hotdog runWindowManager')
 startx
-HOTDOG/hotdog runWindowManager
 ```
 
 
