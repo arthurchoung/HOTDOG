@@ -3,10 +3,10 @@
 set -x
 
 cd Utils
-clang -o printALSAStatus printALSAStatus.c -lasound
-clang -o setALSAMute: setALSAMute:.c -lasound
-clang -o setALSAVolume setALSAVolume.c -lasound
-clang -o monitorBlockDevices monitorBlockDevices.c
-clang -o monitorNetworkInterfaces monitorNetworkInterfaces.c
-clang -o monitorMonitors monitorMonitors.c
+gcc -o printALSAStatus printALSAStatus.c -lasound
+gcc -o setALSAMute: setALSAMute:.c -lasound
+gcc -o setALSAVolume setALSAVolume.c -lasound
+gcc -o monitorBlockDevices monitorBlockDevices.c
+gcc -o monitorNetworkInterfaces monitorNetworkInterfaces.c
+gcc -o monitorMonitors monitorMonitors.c
 
