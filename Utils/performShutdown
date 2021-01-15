@@ -1,3 +1,3 @@
 #!/bin/bash
 
-$HOTDOG_HOME/hotdog "confirmWithAlert:'Shutdown?' title:'Shutdown?' okText:'Shutdown' continuation:[['shutdown' '-h' 'now']|runCommandWithSudoInBackground]"
+$HOTDOG_HOME/hotdog "confirmWithAlert:'Shutdown?' title:'Shutdown?' okText:'Shutdown' continuation:[['poweroff']|runCommandWithSudoInBackground]"
