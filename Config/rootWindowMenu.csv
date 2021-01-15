@@ -1,8 +1,6 @@
 hotKey,displayName,messageForClick
 ,HOT DOG,"[ 'hotdog' ] | runCommandInBackground"
 ,XTerm,"[ 'xterm' '-geometry' '80x50' '+bc' '+uc' ] | runCommandInBackground"
-,Firefox,"[ 'firefox' ] | runCommandInBackground"
-,Thunderbird,"[ 'thunderbird' ] | runCommandInBackground"
 ,
 ,Stopwatch,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(execDir:'MainMenu/Stopwatch')|runCommandInBackground"
 ,
