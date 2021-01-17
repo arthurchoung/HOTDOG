@@ -184,6 +184,11 @@ NSLog(@"No NSAutoreleasePool!");
     }
     if (__autoreleasePoolStack[__autoreleasePoolIndex-1] != self) {
 NSLog(@"WRONG NSAutoreleasePool!");
+NSLog(@"self %p", self);
+NSLog(@"__autoreleasePoolIndex %d", __autoreleasePoolIndex);
+for (int i=0; i<__autoreleasePoolIndex; i++) {
+NSLog(@"__autoreleasePoolStack[%d] %p", i, __autoreleasePoolStack[i]);
+}
         exit(0);
     }
     for (int i=0; i<_nobjs; i++) {
@@ -319,6 +324,35 @@ NSLog(@"OUT OF MEMORY! NSAutoreleasePool -addObject: newAlloc %d", newAlloc);
 {
     return nil;
 }
+#ifndef BUILD_WITH_GNUSTEP_RUNTIME
+- (BOOL)isEqual:(id)obj
+{
+    if (!obj) {
+        return NO;
+    }
+    if (obj == self) {
+        return YES;
+    }
+    char *cstr = ((NSObject *)obj)->_contents;
+    if (!cstr) {
+        return NO;
+    }
+/*
+    if (_length != ((NSObject *)obj)->_length) {
+        return NO;
+    }
+    Class cls = object_getClass(obj);
+    if ((cls != __NSConstantStringClass) && (cls != __NSStringClass) && (cls != __NSMutableStringClass)) {
+        return NO;
+    }
+
+*/
+    if (!strcmp(_contents, cstr)) {
+        return YES;
+    }
+    return NO;
+}
+#endif
 @end
 
 
@@ -2005,7 +2039,7 @@ int print_objc_object_arginfo(struct printf_info *info, size_t n, int *argtypes)
 
 void copyMethodsToNSConstantString(char *className)
 {
-    static BOOL initialized = 0;
+    static BOOL initialized = NO;
     if (initialized) {
         return;
     }
@@ -2029,10 +2063,6 @@ NSLog(@"copyMethodsToNSConstantString class '%s' not found", className);
 //NSLog(@"i %d skipping sel '%s'", i, name);
                 continue;
             }
-            if (!strncmp(name, "append", 6)) {
-//NSLog(@"i %d skipping sel '%s'", i, name);
-                continue;
-            }
             Method m = class_getInstanceMethod(objc_getClass("NSConstantString"), sel);
             if (m) {
 //                NSLog(@"i %d method exists for %s in class %s", i, name, "NSConstantString");
@@ -2040,12 +2070,12 @@ NSLog(@"copyMethodsToNSConstantString class '%s' not found", className);
             }
             IMP imp = method_getImplementation(methods[i]);
             if (!imp) {
-//                NSLog(@"i %d no implementation for %s in class %s", i, name, "NSString");
+                NSLog(@"i %d no implementation for %s in class %s", i, name, "NSString");
                 continue;
             }
             imp = class_replaceMethod(objc_getClass("NSConstantString"), sel, imp, method_getTypeEncoding(methods[i]));
             if (imp) {
-//                NSLog(@"i %d replaced implementation for %s in class %s", i, name, "NSConstantString");
+                NSLog(@"i %d replaced implementation for %s in class %s", i, name, "NSConstantString");
             } else {
 //                NSLog(@"i %d added implementation for %s in class %s", i, name, "NSConstantString");
             }
