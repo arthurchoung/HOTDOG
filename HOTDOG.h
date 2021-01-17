@@ -103,12 +103,18 @@ typedef struct {
 @end
 @interface NSConstantString : Object
 {
+#ifndef BUILD_WITH_GUNSTEP_RUNTIME
+@public
+#endif
     char *_contents;
     int _length;
 }
 @end
 @interface NSObject : Object
 {
+#ifndef BUILD_WITH_GUNSTEP_RUNTIME
+@public
+#endif
     char *_contents;
     int _length;
     int _alloc;
