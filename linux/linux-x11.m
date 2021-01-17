@@ -2488,6 +2488,14 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
     for (id dict in closeList) {
         [dict setValue:@"1" forKey:@"shouldCloseWindow"];
     }
+
+
+    int monitorWidth = _rootWindowWidth;
+    int monitorHeight = _rootWindowHeight;
+
+
+    int maxWidth = 16;
+    int cursorX = 10;
     int cursorY = 30;
     for (id path in contents) {
         id dict = [self dictForObjectFilePath:path];
@@ -2515,7 +2523,15 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
             if ([obj respondsToSelector:@selector(preferredHeight)]) {
                 h = [obj preferredHeight];
             }
-            [self openWindowForObject:obj x:10 y:cursorY w:w h:h];
+            if (w > maxWidth) {
+                maxWidth = w;
+            }
+            if (cursorY + h >= monitorHeight) {
+                cursorY = 30;
+                cursorX += maxWidth + 10;
+                maxWidth = 16;
+            }
+            [self openWindowForObject:obj x:cursorX y:cursorY w:w h:h];
             cursorY += h+10;
             dict = [self dictForObject:obj];
             [dict setValue:@"1" forKey:@"isIcon"];
