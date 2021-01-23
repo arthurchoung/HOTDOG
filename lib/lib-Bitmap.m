@@ -119,6 +119,14 @@ NSLog(@"Out of memory!");
     return self;
 }
 
+- (BOOL)GL_NEAREST
+{
+    if (_GL_NEAREST) {
+        return YES;
+    }
+    return NO;
+}
+
 - (unsigned char *)pixelBytesRGBA8888
 {
     return _pixelBytes;
