@@ -176,7 +176,6 @@ static char *calculatorPixels =
 
 @interface Calculator : IvarObject
 {
-    int _GL_NEAREST;
     char _operator;
     id _firstValue;
     id _value;
@@ -192,12 +191,15 @@ static char *calculatorPixels =
 {
     self = [super init];
     if (self) {
-        _GL_NEAREST = 1;
         _width = [Definitions widthForCString:calculatorPixels];
         _height = [Definitions heightForCString:calculatorPixels];
         _bitmap = [[[@"Bitmap" asClass] alloc] initWithWidth:_width height:_height];
     }
     return self;
+}
+- (BOOL)GL_NEAREST
+{
+    return YES;
 }
 - (int)preferredWidth
 {
