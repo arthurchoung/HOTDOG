@@ -25,10 +25,55 @@
 
 #import "HOTDOG.h"
 
-#include "graphics-cards.h"
-
 #define NUMBER_OF_PILES 10
 #define NUMBER_OF_CARDS 104
+
+static char *card_icon_palette_normal = 
+"b #000000\n"
+"o #808080\n"
+"O #c0c0c0\n"
+"X #2020a0\n"
+". #ffffff\n"
+"* #000000\n"
+;
+static char *card_icon_palette_outline = 
+"b #ffffff\n"
+;
+static char *card_icon =
+"     bbbbbbbbbbb        \n"
+"    bOOOOOOOOOOObb      \n"
+"    bOOOOOOOOOOOOOb     \n"
+"     bbbbbbbbbbbbbbb    \n"
+"      bOOOOOOOOOOOObo   \n"
+"    bbbbbbbbbbbbOOOboo  \n"
+"   b............bOOboo  \n"
+"   b..*......*..bOOboo  \n"
+"   b.***....***.bOOboo  \n"
+"   b.***....***.bObboo  \n"
+"   b..*......*..bbOObo  \n"
+"  bbbbbb..bbbbbbbOOOOb  \n"
+" bbOOOOb..bOOOOObbOOboo \n"
+"bObObbbObbObbbbObObboooo\n"
+"bObObXXXXXXXXXbObOObooo \n"
+" bbObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObXXXXXXXXXbObOOboo  \n"
+"  bObbbbbbbbbbbObObooo  \n"
+"  bOOOOOOOOOOOOObbooo   \n"
+"  bbbbbbbbbbbbbbbooo    \n"
+;
+//"    ooooooooooooooo     \n"
+//"    oooooooooooooo      \n"
+//;
 
 @implementation Definitions(fjkdlsjflksdjklfjfksdjf)
 + (id)writeAllCardsToFiles
@@ -113,144 +158,6 @@
         arr = [arr asShuffledArray];
     }
     return arr;
-}
-+ (char *)pixelsForEmptyCard
-{
-    return card_empty;
-}
-+ (char *)pixelsForCard:(int)index
-{
-    if (index < 0) {
-        return card_back;
-    }
-    if (index > 51) {
-        return "";
-    }
-    char *cardRanks = "A23456789TJQK";
-    char *cardSuits = "cdhs";
-    int rank = index % 13;
-    int suit = index / 13;
-    if (suit == 0) {
-        if (rank == 0) {
-            return card_Ac;
-        } else if (rank == 1) {
-            return card_2c;
-        } else if (rank == 2) {
-            return card_3c;
-        } else if (rank == 3) {
-            return card_4c;
-        } else if (rank == 4) {
-            return card_5c;
-        } else if (rank == 5) {
-            return card_6c;
-        } else if (rank == 6) {
-            return card_7c;
-        } else if (rank == 7) {
-            return card_8c;
-        } else if (rank == 8) {
-            return card_9c;
-        } else if (rank == 9) {
-            return card_Tc;
-        } else if (rank == 10) {
-            return card_Jc;
-        } else if (rank == 11) {
-            return card_Qc;
-        } else if (rank == 12) {
-            return card_Kc;
-        }
-    } else if (suit == 1) {
-        if (rank == 0) {
-            return card_Ad;
-        } else if (rank == 1) {
-            return card_2d;
-        } else if (rank == 2) {
-            return card_3d;
-        } else if (rank == 3) {
-            return card_4d;
-        } else if (rank == 4) {
-            return card_5d;
-        } else if (rank == 5) {
-            return card_6d;
-        } else if (rank == 6) {
-            return card_7d;
-        } else if (rank == 7) {
-            return card_8d;
-        } else if (rank == 8) {
-            return card_9d;
-        } else if (rank == 9) {
-            return card_Td;
-        } else if (rank == 10) {
-            return card_Jd;
-        } else if (rank == 11) {
-            return card_Qd;
-        } else if (rank == 12) {
-            return card_Kd;
-        }
-    } else if (suit == 2) {
-        if (rank == 0) {
-            return card_Ah;
-        } else if (rank == 1) {
-            return card_2h;
-        } else if (rank == 2) {
-            return card_3h;
-        } else if (rank == 3) {
-            return card_4h;
-        } else if (rank == 4) {
-            return card_5h;
-        } else if (rank == 5) {
-            return card_6h;
-        } else if (rank == 6) {
-            return card_7h;
-        } else if (rank == 7) {
-            return card_8h;
-        } else if (rank == 8) {
-            return card_9h;
-        } else if (rank == 9) {
-            return card_Th;
-        } else if (rank == 10) {
-            return card_Jh;
-        } else if (rank == 11) {
-            return card_Qh;
-        } else if (rank == 12) {
-            return card_Kh;
-        }
-    } else if (suit == 3) {
-        if (rank == 0) {
-            return card_As;
-        } else if (rank == 1) {
-            return card_2s;
-        } else if (rank == 2) {
-            return card_3s;
-        } else if (rank == 3) {
-            return card_4s;
-        } else if (rank == 4) {
-            return card_5s;
-        } else if (rank == 5) {
-            return card_6s;
-        } else if (rank == 6) {
-            return card_7s;
-        } else if (rank == 7) {
-            return card_8s;
-        } else if (rank == 8) {
-            return card_9s;
-        } else if (rank == 9) {
-            return card_Ts;
-        } else if (rank == 10) {
-            return card_Js;
-        } else if (rank == 11) {
-            return card_Qs;
-        } else if (rank == 12) {
-            return card_Ks;
-        }
-    }
-    return "";
-}
-+ (char *)paletteForCard:(int)index
-{
-    if (index < 0) {
-        return card_back_palette;
-    }
-    return card_palette;
 }
 + (id)textForCard:(int)index
 {
