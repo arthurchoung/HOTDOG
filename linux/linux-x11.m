@@ -1424,11 +1424,13 @@ NSLog(@"_displayFD %d", _displayFD);
             if (_isWindowManager) {
                 if (__receivedExitSignal) {
                     [self unparentAllWindows];
+                    [pool drain];
                     break;
                 }
             } else {
                 if (![_objectWindows count]) {
 NSLog(@"no object windows, exiting pid %d", getpid());
+                    [pool drain];
                     break;
                 }
             }
