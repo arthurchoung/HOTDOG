@@ -71,6 +71,8 @@
     [obj setValue:defaultStringFormat forKey:@"defaultStringFormat"];
     id defaultMessageForClick = [@"00defaultMessageForClick" stringFromFile];
     [obj setValue:defaultMessageForClick forKey:@"defaultMessageForClick"];
+    id headerFormat = [@"00headerFormat" stringFromFile];
+    [obj setValue:headerFormat forKey:@"headerFormat"];
 
 //    [self setValue:@"#{path|lastPathComponent}" forKey:@"headerFormat"];
     
