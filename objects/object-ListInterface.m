@@ -493,6 +493,8 @@ NSLog(@"setAllStringFormat:'%@'", val);
     [self setValue:defaultStringFormat forKey:@"defaultStringFormat"];
     id defaultMessageForClick = [@"00defaultMessageForClick" stringFromFile];
     [self setValue:defaultMessageForClick forKey:@"defaultMessageForClick"];
+    id headerFormat = [@"00headerFormat" stringFromFile];
+    [self setValue:headerFormat forKey:@"headerFormat"];
 }
 - (void)updateArray
 {
