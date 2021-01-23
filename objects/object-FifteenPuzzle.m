@@ -565,7 +565,6 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
 
 @interface FifteenPuzzle : IvarObject
 {
-    int _GL_NEAREST;
     int _x[16];
     int _y[16];
     int _flash;
@@ -597,6 +596,11 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
     return arr;
 }
 
+- (BOOL)GL_NEAREST
+{
+    return YES;
+}
+
 - (BOOL)shouldAnimate
 {
     if (_transitionCurrentFrame < _transitionMaxFrame) {
@@ -623,7 +627,6 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
 {
     self = [super init];
     if (self) {
-        _GL_NEAREST = 1;
         _bitmap = [[[@"Bitmap" asClass] alloc] initWithWidth:[self bitmapWidth] height:[self bitmapHeight]];
         for (int i=0; i<16; i++) {
             int y = i/4;
