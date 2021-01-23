@@ -62,13 +62,13 @@ static id parseObject(jsmntok_t *token, char *JSON_STRING, id nullValue)
     id dict = nsdict();
     int index = 1;
     for (int i=0; i<token->size; i++) {
-NSLog(@"parseObject i %d type %d token->size %d", i, token->type, token->size);
+//NSLog(@"parseObject i %d type %d token->size %d", i, token->type, token->size);
         jsmntok_t *keytoken = &token[index];
-NSLog(@"parseObject keytoken type %d size %d '%@'", keytoken->type, keytoken->size, nscstrn(JSON_STRING+keytoken->start, keytoken->end-keytoken->start));
+//NSLog(@"parseObject keytoken type %d size %d '%@'", keytoken->type, keytoken->size, nscstrn(JSON_STRING+keytoken->start, keytoken->end-keytoken->start));
         if (keytoken->type == 3) {
             if (keytoken->size == 1) {
                 jsmntok_t *valtoken = &token[index+1];
-NSLog(@"parseObject valtoken type %d size %d '%@'", valtoken->type, valtoken->size, nscstrn(JSON_STRING+valtoken->start, valtoken->end-valtoken->start));
+//NSLog(@"parseObject valtoken type %d size %d '%@'", valtoken->type, valtoken->size, nscstrn(JSON_STRING+valtoken->start, valtoken->end-valtoken->start));
                 id key = nscstrn(JSON_STRING+keytoken->start, keytoken->end-keytoken->start);
                 id val = parseToken(valtoken, JSON_STRING, nullValue);
                 [dict setValue:val forKey:key];
@@ -91,7 +91,7 @@ static id parseArray(jsmntok_t *token, char *JSON_STRING, id nullValue)
     int index = 1;
     for (int i=0; i<token->size; i++) {
         jsmntok_t *child = &token[index];
-NSLog(@"parseArray i %d type %d token->size %d", i, child->type, child->size);
+//NSLog(@"parseArray i %d type %d token->size %d", i, child->type, child->size);
         id elt = parseToken(child, JSON_STRING, nullValue);
         if (elt) {
             [arr addObject:elt];
@@ -118,7 +118,7 @@ NSLog(@"parseArray unable to parse token");
 }
 - (id)decodeJSONWithValueAsNull:(id)nullValue
 {
-NSLog(@"decodeJSON");
+//NSLog(@"decodeJSON");
     char *JSON_STRING = _contents;
     int i;
     int r;
