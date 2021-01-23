@@ -359,14 +359,14 @@
     int knobYOffset = (r.h - heightForKnob)/2.0;
 
     unsigned char *palette = "b #000000\n. #ffffff\n";
-    [bitmap drawCString:left palette:palette x:r.x y:r.y+r.h-1-middleYOffset];
+    [bitmap drawCString:left palette:palette x:r.x y:r.y-middleYOffset];
     int x;
     for (x=widthForLeft; x<r.w-widthForRight; x+=widthForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y+r.h-1-middleYOffset];
+        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y-middleYOffset];
     }
-    [bitmap drawCString:right palette:palette x:r.x+x y:r.y+r.h-1-middleYOffset];
+    [bitmap drawCString:right palette:palette x:r.x+x y:r.y-middleYOffset];
     int knobX = widthForLeft + (int)(r.w-widthForLeft-widthForRight-widthForKnob) * pct;
-    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y+r.h-1-knobYOffset];
+    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y-knobYOffset];
 }
 + (unsigned char *)cStringForBitmapSliderLeft
 {
