@@ -60,16 +60,18 @@ static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned c
         if ([object respondsToSelector:@selector(bitmapHeight)]) {
             int bitmapWidth = [object bitmapWidth]; 
             int bitmapHeight = [object bitmapHeight];
-            int viewWidth = [eventDict intValueForKey:@"viewWidth"];
-            int viewHeight = [eventDict intValueForKey:@"viewHeight"];
-            int mouseX = [eventDict intValueForKey:@"mouseX"];
-            int mouseY = [eventDict intValueForKey:@"mouseY"];
-            int adjustedX = (double)mouseX / ((double)viewWidth/(double)bitmapWidth);
-            int adjustedY = (double)mouseY / ((double)viewHeight/(double)bitmapHeight);
-            [eventDict setValue:nsfmt(@"%d", adjustedX) forKey:@"mouseX"];
-            [eventDict setValue:nsfmt(@"%d", adjustedY) forKey:@"mouseY"];
-            [eventDict setValue:nsfmt(@"%d", bitmapWidth) forKey:@"viewWidth"];
-            [eventDict setValue:nsfmt(@"%d", bitmapHeight) forKey:@"viewHeight"];
+            if (bitmapWidth && bitmapHeight) {
+                int viewWidth = [eventDict intValueForKey:@"viewWidth"];
+                int viewHeight = [eventDict intValueForKey:@"viewHeight"];
+                int mouseX = [eventDict intValueForKey:@"mouseX"];
+                int mouseY = [eventDict intValueForKey:@"mouseY"];
+                int adjustedX = (double)mouseX / ((double)viewWidth/(double)bitmapWidth);
+                int adjustedY = (double)mouseY / ((double)viewHeight/(double)bitmapHeight);
+                [eventDict setValue:nsfmt(@"%d", adjustedX) forKey:@"mouseX"];
+                [eventDict setValue:nsfmt(@"%d", adjustedY) forKey:@"mouseY"];
+                [eventDict setValue:nsfmt(@"%d", bitmapWidth) forKey:@"viewWidth"];
+                [eventDict setValue:nsfmt(@"%d", bitmapHeight) forKey:@"viewHeight"];
+            }
         }
     }
 }
@@ -448,10 +450,16 @@ exit(0);
     int w = 640-3;
     int h = 0;
     if ([object respondsToSelector:@selector(preferredWidth)]) {
-        w = [object preferredWidth];
+        int preferredWidth = [object preferredWidth];
+        if (preferredWidth) {
+            w = preferredWidth;
+        }
     }
     if ([object respondsToSelector:@selector(preferredHeight)]) {
-        h = [object preferredHeight];
+        int preferredHeight = [object preferredHeight];
+        if (preferredHeight) {
+            h = preferredHeight;
+        }
     }
     [Definitions runWindowManagerForObject:object x:0 y:0 w:w h:h];
 }
@@ -1274,7 +1282,10 @@ if ([monitor intValueForKey:@"height"] == 768) {
             [Definitions drawOpenGLTextureID:[_openGLTexture textureID]];
             if ([object isKindOfClass:[@"NavigationInterface" asClass]]) {
                 id obj = [[object valueForKey:@"context"] valueForKey:@"object"];
-                int draw_GL_NEAREST = [obj intValueForKey:@"GL_NEAREST"];
+                int draw_GL_NEAREST = 0;
+                if ([obj respondsToSelector:@selector(GL_NEAREST)]) {
+                    draw_GL_NEAREST = [obj GL_NEAREST];
+                }
                 if ([obj respondsToSelector:@selector(pixelBytesRGBA8888)]) {
                     unsigned char *pixelBytes = [obj pixelBytesRGBA8888];
                     if (pixelBytes) {
@@ -1305,7 +1316,10 @@ if ([monitor intValueForKey:@"height"] == 768) {
                     }
                 }
             } else {
-                int draw_GL_NEAREST = [object intValueForKey:@"GL_NEAREST"];
+                int draw_GL_NEAREST = 0;
+                if ([object respondsToSelector:@selector(GL_NEAREST)]) {
+                    draw_GL_NEAREST = [object GL_NEAREST];
+                }
                 if ([object respondsToSelector:@selector(pixelBytesRGBA8888)]) {
                     unsigned char *pixelBytes = [object pixelBytesRGBA8888];
                     if (pixelBytes) {
@@ -2519,11 +2533,17 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
             }
             int w = 16;
             if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                w = [obj preferredWidth];
+                int preferredWidth = [obj preferredWidth];
+                if (preferredWidth) {
+                    w = preferredWidth;
+                }
             }
             int h = 16;
             if ([obj respondsToSelector:@selector(preferredHeight)]) {
-                h = [obj preferredHeight];
+                int preferredHeight = [obj preferredHeight];
+                if (preferredHeight) {
+                    h = preferredHeight;
+                }
             }
             if (w > maxWidth) {
                 maxWidth = w;
