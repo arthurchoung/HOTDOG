@@ -1,26 +1,22 @@
-#!/usr/bin/python
+#!/usr/bin/perl
 
-import subprocess
-import json
+use JSON;
 
-def asQuotedString(str):
-    if str == None:
-        return ""
-    str = str.replace('\\', '\\\\');
-    str = str.replace('"', '\\"');
-    return "\"%s\"" % (str)
+sub asQuotedString
+{
+    my ($str) = @_;
+    $str =~ s/\\/\\\\/g;
+    $str =~ s/\"/\\\"/g;
+    return '"' . $str . '"';
+}
 
-def asQuotedStringForKey(elt, key):
-    if key in elt:
-        return asQuotedString(elt[key])
-    return ""
-
-output = subprocess.check_output(['lsblk', '-f', '--list', '--paths', '--json'])
-obj = json.loads(output)
-obj = obj['blockdevices']
-keys = ['name', 'label', 'mountpoint', 'fstype', 'uuid']
-print(",".join(keys))
-for elt in obj:
-    tokens = map(lambda x: asQuotedStringForKey(elt, x), keys)
-    print(",".join(tokens))
-
+$output = `lsblk -f --list --paths --json`;
+$result = decode_json($output);
+$blockdevices = $result->{'blockdevices'};
+$keys = 'name,label,mountpoint,fstype,uuid';
+print "$keys\n";
+foreach $elt (@$blockdevices) {
+    @tokens = map { ($elt->{$_}) ? asQuotedString($elt->{$_}) : '' } split ',', $keys;
+    print join ',', @tokens;
+    print "\n";
+}
