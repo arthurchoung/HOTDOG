@@ -182,10 +182,6 @@
 {
     id str = [@"xrandrOutput" valueForKey];
     if (!str) {
-        str = [[[@"xrandr" split] runCommandAndReturnOutput] asString];
-        [str setAsValueForKey:@"xrandrOutput"];
-    }
-    if (!str) {
         id dict = nsdict();
         [dict setValue:@"default" forKey:@"output"];
         [dict setValue:@"1024" forKey:@"width"];
@@ -235,6 +231,8 @@
 }
 + (void)setupMonitors
 {
+    id str = [[[@"xrandr" split] runCommandAndReturnOutput] asString];
+    [str setAsValueForKey:@"xrandrOutput"];
     id monitors = [Definitions monitorConfig];
     for (id elt in monitors) {
         id output = [elt valueForKey:@"output"];
@@ -259,7 +257,8 @@
 NSLog(@"setupMonitors cmd %@", cmd);
         [cmd runCommandAndReturnOutput];
     }
-    [@"xrandrOutput" setNilValueForKey];
+    str = [[[@"xrandr" split] runCommandAndReturnOutput] asString];
+    [str setAsValueForKey:@"xrandrOutput"];
 }
 + (id)monitorIndexNameForX:(int)x y:(int)y
 {
