@@ -69,18 +69,6 @@ sub ldflagsForFile
     if ($path eq "$execPath/misc/misc-pcre.m") {
         return '-lpcre';
     }
-    if ($path eq "$execPath/misc/misc-sox.m") {
-        return '-lfftw3';
-    }
-    if ($path eq "$execPath/misc/misc-jpeg.m") {
-        return '-ljpeg';
-    }
-    if ($path eq "$execPath/misc/misc-png.m") {
-        return '-lpng';
-    }
-    if ($path eq "$execPath/misc/misc-libz.m") {
-        return '-lz';
-    }
     if ($path eq "$execPath/misc/object-nes.m") {
         return '-ldl';
     }
