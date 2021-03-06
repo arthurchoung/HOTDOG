@@ -782,7 +782,7 @@ NSLog(@"beginIteration animateIteration %d", _animateIteration);
             [self setValue:nil forKey:@"animateToContext"];
 NSLog(@"context %@", _context);
 #ifdef BUILD_FOR_OSX
-[[[NSApp keyWindow] contentView] configureLayers];
+//[[[NSApp keyWindow] contentView] configureLayers];
 [[NSApp keyWindow] updateClassMenuItems];
 #endif
         }
