@@ -596,7 +596,7 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
     return arr;
 }
 
-- (BOOL)GL_NEAREST
+- (BOOL)glNearest
 {
     return YES;
 }
