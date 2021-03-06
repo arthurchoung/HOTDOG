@@ -353,6 +353,16 @@ NSLog(@"setAllStringFormat:'%@'", val);
 #endif
 @end
 
+@implementation NSDictionary(jfkdlsjflkdsjkfljdsklfjiemim)
+- (id)asListInterface
+{
+    id scroll = [@"ListInterface" asInstance];
+    [scroll setupDict:self];
+    return scroll;
+}
+@end
+
+
 
 @implementation NSString(fjksdlfjklsdjfklsdjf)
 #ifdef BUILD_FOR_IOS
@@ -467,7 +477,8 @@ NSLog(@"setAllStringFormat:'%@'", val);
     if (!arr) {
         arr = [@"00index.json" readFromFileAsJSON];
         if ([arr isKindOfClass:[@"NSDictionary" asClass]]) {
-            arr = [arr asKeyValueArray];
+            [self setupDict:arr];
+            arr = _array;
         }
     }
     if (!arr) {
