@@ -208,6 +208,67 @@ NSLog(@"unable to open /dev/null");
         return childpid;
     }
 }
+- (int)runCommandInBackgroundAndWriteStringToStandardInput:(id)str
+{
+    NSLog(@"runCommandInBackgroundAndWriteStringToStandardInput: %@", self);
+    if ([self count] < 1) {
+        return nil;
+    }
+    
+    int fdzero[2];
+    pid_t   childpid;
+    
+    pipe(fdzero);
+    
+    if((childpid = fork()) == -1)
+    {
+        perror("fork");
+        return nil;
+    }
+    
+    if(childpid == 0)
+    {
+
+        close(fdzero[1]);
+        dup2(fdzero[0], STDIN_FILENO);
+        close(fdzero[0]);
+
+        int argc = [self count];
+        char **argv = malloc(sizeof(char *)*(argc+1));
+        for (int i=0; i<argc; i++) {
+            if (i == 0) {
+                id elt = [self nth:0];
+                if ([elt hasPrefix:@"/"]) {
+                    argv[0] = [elt UTF8String];
+                    continue;
+                }
+                id path = [elt findInPath];
+                if (path) {
+                    argv[0] = [path UTF8String];
+                } else {
+                    argv[0] = [elt UTF8String];
+                }
+            } else {
+                argv[i] = [[self nth:i] UTF8String];
+            }
+        }
+        argv[argc] = 0;
+        execv(argv[0], argv);
+        free(argv);
+        _exit(0);
+    }
+    else
+    {
+        close(fdzero[0]);
+
+        int len = [str length];
+        int result = write(fdzero[1], [str UTF8String], len);
+        close(fdzero[1]);
+
+        return childpid;
+    }
+}
+
 @end
 
 
@@ -361,6 +422,15 @@ NSLog(@"write result %d", result);
     [self waitForExitStatus];
     return data;
 }
+- (id)readAllDataFromOutputThenClose
+{
+    if (_outfd == -1) {
+        return nil;
+    }
+    id data = [self readAllData:_outfd];
+    [self closeOutput];
+    return data;
+}
 - (id)readAllDataFromOutputThenCloseAndWait
 {
     if (_outfd == -1) {
@@ -370,6 +440,14 @@ NSLog(@"write result %d", result);
     [self closeOutput];
     [self waitForExitStatus];
     return data;
+}
+
+- (id)readDataFromOutput
+{
+    if (_outfd == -1) {
+        return nil;
+    }
+    return [self readData:_outfd];
 }
 
 - (id)readData:(int)fd
