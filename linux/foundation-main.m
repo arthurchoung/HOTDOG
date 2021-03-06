@@ -64,7 +64,7 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                 [Definitions runWindowManagerForObject:obj];
             }
             [[Definitions mainInterface] setValue:nil forKey:@"context"];
-        } else if ((argc > 1) && !strcmp(argv[1], "list")) {
+        } else if ((argc > 1) && !strcmp(argv[1], "ls")) {
             id arr = nsarr();
             for (int i=2; i<argc; i++) {
                 id filePath = nscstr(argv[i]);
@@ -125,7 +125,9 @@ NSLog(@"unable to read file '%s'", argv[2]);
 exit(1);
                 }
             } else {
+NSLog(@"check1");
                 lines = [Definitions linesFromStandardInput];
+NSLog(@"lines %@", lines);
             }
             if (lines) {
                 id nav = [Definitions mainInterface];
@@ -133,6 +135,31 @@ exit(1);
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "json")) {
+            id json = nil;
+            if (argc > 2) {
+                json = [nscstr(argv[2]) readFromFileAsJSON];
+                if (!json) {
+NSLog(@"unable to read file '%s'", argv[2]);
+exit(1);
+                }
+            } else {
+                id data = [Definitions dataFromStandardInput];
+                json = [[data asString] decodeJSON];
+            }
+            if (json) {
+                id nav = [Definitions mainInterface];
+                id obj = [json asListInterface];
+                [nav pushObject:obj];
+                [Definitions runWindowManagerForObject:nav];
+            }
+        } else if ((argc > 1) && !strcmp(argv[1], "ipod")) {
+            id ipod = [@"IpodInterface" asInstance];
+            [ipod setAsValueForKey:@"IpodInterface"];
+            id home = [@"HomeScreen" asInstance];
+            [ipod setValue:home forKey:@"object"];
+            [ipod goToLockScreen];
+            [Definitions runWindowManagerForObject:ipod];
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
