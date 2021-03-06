@@ -23,14 +23,34 @@
 
  */
 
+#ifdef BUILD_FOR_OSX
+//typedef long long __m128i;
+//typedef double __m128d;
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+
 #ifndef BUILD_FOUNDATION
 #import <Foundation/Foundation.h>
 #endif
 
 #ifdef BUILD_FOR_OSX
-#import <objc/runtime.h>
 #import <AppKit/AppKit.h>
 #import <WebKit/WebKit.h>
+#define CGFloat float
+#include <unistd.h>
+#import <objc/objc-runtime.h>
+char *class_getName(Class cls);
+int class_getInstanceSize(Class cls);
+Class class_getSuperclass(Class cls);
+char *ivar_getName(Ivar ivar);
+int ivar_getOffset(Ivar ivar);
+char *ivar_getTypeEncoding(Ivar ivar);
+Ivar *class_copyIvarList(Class cls, unsigned int *outCount);
+SEL method_getName(Method m);
+IMP method_getImplementation(Method m);
+void method_getReturnType(Method m, char *buf, int bufsize);
+id object_getClass(id obj);
 #endif
 
 #ifdef BUILD_FOR_IOS
