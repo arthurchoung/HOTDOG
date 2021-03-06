@@ -132,7 +132,9 @@ static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
     id str = [Definitions simpleKeyForXKeyCode:keyCode modifiers:modifiers];
     
     if (modifiers & ShiftMask) {
-        str = nsfmt(@"shift-%@", str);
+        if ([str length] > 1) {
+            str = nsfmt(@"shift-%@", str);
+        }
     }
 
     if (modifiers & Mod1Mask) {
@@ -173,6 +175,32 @@ static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
             case XK_bracketleft: return @"{";
             case XK_bracketright: return @"}";
             case XK_minus: return @"_";
+            case XK_a: return @"A";
+            case XK_b: return @"B";
+            case XK_c: return @"C";
+            case XK_d: return @"D";
+            case XK_e: return @"E";
+            case XK_f: return @"F";
+            case XK_g: return @"G";
+            case XK_h: return @"H";
+            case XK_i: return @"I";
+            case XK_j: return @"J";
+            case XK_k: return @"K";
+            case XK_l: return @"L";
+            case XK_m: return @"M";
+            case XK_n: return @"N";
+            case XK_o: return @"O";
+            case XK_p: return @"P";
+            case XK_q: return @"Q";
+            case XK_r: return @"R";
+            case XK_s: return @"S";
+            case XK_t: return @"T";
+            case XK_u: return @"U";
+            case XK_v: return @"V";
+            case XK_w: return @"W";
+            case XK_x: return @"X";
+            case XK_y: return @"Y";
+            case XK_z: return @"Z";
         }
     }
 
@@ -1283,8 +1311,8 @@ if ([monitor intValueForKey:@"height"] == 768) {
             if ([object isKindOfClass:[@"NavigationInterface" asClass]]) {
                 id obj = [[object valueForKey:@"context"] valueForKey:@"object"];
                 int draw_GL_NEAREST = 0;
-                if ([obj respondsToSelector:@selector(GL_NEAREST)]) {
-                    draw_GL_NEAREST = [obj GL_NEAREST];
+                if ([obj respondsToSelector:@selector(glNearest)]) {
+                    draw_GL_NEAREST = [obj glNearest];
                 }
                 if ([obj respondsToSelector:@selector(pixelBytesRGBA8888)]) {
                     unsigned char *pixelBytes = [obj pixelBytesRGBA8888];
@@ -1317,8 +1345,8 @@ if ([monitor intValueForKey:@"height"] == 768) {
                 }
             } else {
                 int draw_GL_NEAREST = 0;
-                if ([object respondsToSelector:@selector(GL_NEAREST)]) {
-                    draw_GL_NEAREST = [object GL_NEAREST];
+                if ([object respondsToSelector:@selector(glNearest)]) {
+                    draw_GL_NEAREST = [object glNearest];
                 }
                 if ([object respondsToSelector:@selector(pixelBytesRGBA8888)]) {
                     unsigned char *pixelBytes = [object pixelBytesRGBA8888];
@@ -1951,6 +1979,8 @@ NSLog(@"PropertyChange event exit");
 {
     XVisibilityEvent *e = eptr;
 NSLog(@"VisibilityNotify window %x state %d", e->window, e->state);
+    id dict = [self dictForObjectWindow:e->window];
+    [dict setValue:@"1" forKey:@"needsRedraw"];
 }
 - (void)handleX11ConfigureRequest:(void *)eptr
 {
@@ -2023,6 +2053,7 @@ NSLog(@"handleX11DestroyNotify e->event %x e->window %x", e->event, e->window);
     XUnmapEvent *e = eptr;
 NSLog(@"handleX11UnmapNotify e->event %x e->window %x", e->event, e->window);
 
+    _panOversizedWindow = NO;
     // Seems to fix UAE file dialog
     {
         id dict = [self dictForObjectChildWindow:e->window];
