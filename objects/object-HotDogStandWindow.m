@@ -448,12 +448,14 @@
     char *titleBarMiddle = [Definitions cStringForHotDogStandActiveTitleBarMiddle];
     char *titleBarRight = [Definitions cStringForHotDogStandActiveTitleBarRight];
     int titleBarLeftWidth = [Definitions widthForCString:titleBarLeft];
+    int titleBarRightWidth = [Definitions widthForCString:titleBarRight];
     int titleBarHeight = [Definitions heightForCString:titleBarMiddle];
 
     _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:titleBarHeight];
     _titleBarTextRect = _titleBarRect;
     _titleBarTextRect.x = titleBarLeftWidth+4;
     _titleBarTextRect.w -= titleBarLeftWidth+4;
+    _titleBarTextRect.w -= titleBarRightWidth+4;
 
     _leftBorderRect = r;
     _leftBorderRect.y += titleBarHeight;
