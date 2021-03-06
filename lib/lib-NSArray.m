@@ -572,6 +572,21 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 {
     return [self subarrayFromIndex:index];
 }
+- (int)minInt
+{
+    BOOL first = YES;
+    int lowest = 0;
+    for (id elt in self) {
+        int val = [elt intValue];
+        if (first) {
+            lowest = val;
+            first = NO;
+        } else if (val < lowest) {
+            lowest = val;
+        }
+    }
+    return lowest;
+}
 - (double)minDouble
 {
     BOOL first = YES;
@@ -593,6 +608,21 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
     return [arr nth:0];
 }
 
+- (int)maxInt
+{
+    BOOL first = YES;
+    int highest = 0;
+    for (id elt in self) {
+        int val = [elt intValue];
+        if (first) {
+            highest = val;
+            first = NO;
+        } else if (val > highest) {
+            highest = val;
+        }
+    }
+    return highest;
+}
 - (double)maxDouble
 {
     BOOL first = YES;
