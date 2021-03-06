@@ -46,6 +46,7 @@ NSLog(@"message '%@'", message);
     [cmd addObject:@"mpv"];
     [cmd addObject:@"--hwdec=auto"];
     [cmd addObject:@"--force-window=yes"];
+    [cmd addObject:@"--volume-max=200"];
     [cmd addObject:self];
     [cmd runCommandInBackground];
     return nil;
