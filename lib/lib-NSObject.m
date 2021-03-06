@@ -152,6 +152,12 @@
     [self setValue:nsfmt(@"%d", val+1) forKey:key];
 }
 
+- (void)decrementKey:(id)key
+{
+    int val = [self intValueForKey:key];
+    [self setValue:nsfmt(@"%d", val-1) forKey:key];
+}
+
 - (int)intValueForKey:(id)key
 {
     return [[self valueForKey:key] intValue];
