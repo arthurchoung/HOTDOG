@@ -69,7 +69,7 @@ static int hexchartoint(char c)
     int *_fontWidths;
     int *_fontHeights;
     int *_fontXSpacings;
-    int _GL_NEAREST;
+    int _glNearest;
 }
 @end
 
@@ -119,9 +119,9 @@ NSLog(@"Out of memory!");
     return self;
 }
 
-- (BOOL)GL_NEAREST
+- (BOOL)glNearest
 {
-    if (_GL_NEAREST) {
+    if (_glNearest) {
         return YES;
     }
     return NO;
