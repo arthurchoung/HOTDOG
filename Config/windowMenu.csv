@@ -1,7 +1,7 @@
 hotKey,displayName,messageForClick
 "Meta-Left","Move To Previous Monitor","focusDict|x11MoveToMonitorDelta:-1"
 "Meta-Right","Move To Next Monitor","focusDict|x11MoveToMonitorDelta:1"
-"F8","Toggle Expose Mode","toggleExposeMode"
+"F9","Toggle Expose Mode","toggleExposeMode"
 "Meta-Up","Raise Window","raiseObjectWindow:focusDict"
 "Meta-Down","Lower Window","lowerObjectWindow:focusDict"
 "Meta-T","Top Half","focusDict|x11MaximizeTopHalf"
