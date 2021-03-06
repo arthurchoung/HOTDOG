@@ -25,7 +25,11 @@
 
 #import "HOTDOG.h"
 
+#ifdef BUILD_FOR_OSX
+#import <objc/objc-runtime.h>
+#else
 #import <objc/runtime.h>
+#endif
 
 #define OBJC_TYPE_BUFSIZE 500
 
@@ -80,10 +84,20 @@ static id callMethod(id target, struct objc_method *m, id args)
     method_getReturnType(m, typeBuffer, OBJC_TYPE_BUFSIZE);
     signature[signatureIndex++] = typeBuffer[0];
     
+#ifdef BUILD_FOR_OSX
+    for (int i=0; i<numberOfArguments; i++) {
+        char *argType = NULL;
+        int argOffset = 0;
+        method_getArgumentInfo(m, i, &argType, &argOffset);
+
+        signature[signatureIndex++] = argType[0];
+    }
+#else
     for (int i=0; i<numberOfArguments; i++) {
         method_getArgumentType(m, i, typeBuffer, OBJC_TYPE_BUFSIZE);
         signature[signatureIndex++] = typeBuffer[0];
     }
+#endif
 
     if (signature[1] != '@') {
         [@"Bad signature" pushToMainInterface];
@@ -339,6 +353,20 @@ static id callMethod(id target, struct objc_method *m, id args)
                         } else if (signature[0] == '@') {
                             id (*func)(id, SEL, int, int, int, int) = imp;
                             return func(target, sel, [[args nth:0] intValue], [[args nth:1] intValue], [[args nth:2] intValue], [[args nth:3] intValue]);
+                        }
+                    }
+                }
+            } else if (signature[5] == '@') {
+                if (signature[6] == 0) {
+                    if (signature[0] == '@') {
+                        id (*func)(id, SEL, int, int, id) = imp;
+                        return func(target, sel, [[args nth:0] intValue], [[args nth:1] intValue], [args nth:2]);
+                    }
+                } else if (signature[6] == '@') {
+                    if (signature[7] == 0) {
+                        if (signature[0] == '@') {
+                            id (*func)(id, SEL, int, int, id, id) = imp;
+                            return func(target, sel, [[args nth:0] intValue], [[args nth:1] intValue], [args nth:2], [args nth:3]);
                         }
                     }
                 }
