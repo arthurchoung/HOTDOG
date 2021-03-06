@@ -62,12 +62,6 @@ NSLog(@"ERROR! NSObject class not found");
         for (int i=0; i<outCount; i++) {
             char *type = ivar_getTypeEncoding(ivars[i]);
             [results addObject:nsfmt(@"%s %s", type, ivar_getName(ivars[i]))];
-            if (*type == '@') {
-                id val = object_getIvar(self, ivars[i]);
-                if (val) {
-                    [val autorelease];
-                }
-            }
         }
         free(ivars);
         cls = class_getSuperclass(cls);
@@ -75,6 +69,8 @@ NSLog(@"ERROR! NSObject class not found");
 
     return [results join:@"\n"];
 }
+
+#ifndef BUILD_FOR_OSX
 + (id)classMethods
 {
     unsigned int outCount = 0;
@@ -126,6 +122,7 @@ NSLog(@"ERROR! NSObject class not found");
     return results;
 }
 
+#endif
 @end
 
 
@@ -156,6 +153,7 @@ NSLog(@"Class not found '%@'", self);
     return sel_registerName([self UTF8String]);
 }
 
+#ifndef BUILD_FOR_OSX
 - (id)selectorsForClass
 {
     id selectors = nsarr();
@@ -187,6 +185,7 @@ NSLog(@"Class not found '%@'", self);
     }
     return [selectors sort];
 }
+#endif
 
 - (id)selectorKeywords
 {
@@ -208,6 +207,7 @@ NSLog(@"Class not found '%@'", self);
     return arr;
 }
 @end
+
 @implementation Definitions(fjieowjfklsdjkflsdfj)
 + (id)allClassNames
 {
