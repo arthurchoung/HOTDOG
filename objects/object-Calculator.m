@@ -197,7 +197,7 @@ static char *calculatorPixels =
     }
     return self;
 }
-- (BOOL)GL_NEAREST
+- (BOOL)glNearest
 {
     return YES;
 }
