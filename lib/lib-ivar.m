@@ -43,6 +43,7 @@
     [self autoreleaseIvars];
     [super dealloc];
 }
+
 - (void)autoreleaseIvars
 {
     static Class __NSObjectClass = nil;
@@ -66,10 +67,10 @@ NSLog(@"ERROR! NSObject class not found");
             for (int i=0; i<outCount; i++) {
                 char *type = ivar_getTypeEncoding(ivars[i]);
                 if (*type == '@') {
-                    id val = object_getIvar(self, ivars[i]);
+                    char *ivarPtr = ((char *)self) + ivar_getOffset(ivars[i]);
+                    id val = *((id *)ivarPtr);
                     if (val) {
                         [val autorelease];
-                        char *ivarPtr = ((char *)self) + ivar_getOffset(ivars[i]);
                         *((id *)ivarPtr) = 0;
                     }
                 }
