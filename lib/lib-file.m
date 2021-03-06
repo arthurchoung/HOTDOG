@@ -33,6 +33,18 @@
 #include <dirent.h>
 
 @implementation Definitions(jfkdlsjklfjsdklfljksdf)
++ (id)dataFromStandardInput
+{
+    id data = [NSMutableData data];
+    for(;;) {
+        char buf[4096];
+        int n = read(0, buf, 4096);
+        if (n <= 0) {
+            return data;
+        }
+        [data appendBytes:buf length:n];
+    }
+}
 + (id)linesFromStandardInput
 {
     id results = nsarr();
