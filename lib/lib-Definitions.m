@@ -125,7 +125,7 @@ BOOL isnsstr(id obj)//$;
 + (int)randomInt:(int)maximum
 {
 #ifdef BUILD_FOR_OSX
-    int n = arc4random_uniform(maximum);
+    int n = arc4random() % maximum;
 #endif
 #ifdef BUILD_FOR_IOS
     int n = arc4random_uniform(maximum);
