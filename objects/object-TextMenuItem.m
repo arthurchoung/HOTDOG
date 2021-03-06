@@ -62,11 +62,19 @@
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
     id str = [self str:_text];
+    int textW = [bitmap bitmapWidthForText:str];
+    if (textW > r.w) {
+        str = [bitmap fitBitmapString:str width:r.w];
+    }
     [bitmap drawBitmapText:str x:r.x y:r.y+3];
 }
 - (void)drawHighlightedInBitmap:(id)bitmap rect:(Int4)r
 {
     id str = [self str:_text];
+    int textW = [bitmap bitmapWidthForText:str];
+    if (textW > r.w) {
+        str = [bitmap fitBitmapString:str width:r.w];
+    }
     [bitmap setColorIntR:255 g:255 b:255 a:255];
     [bitmap drawBitmapText:str x:r.x y:r.y+3];
 }
