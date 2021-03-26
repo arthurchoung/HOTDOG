@@ -37,7 +37,8 @@
 - (id)processCSVWithKeys:(id)header
 {
     id arr = nsarr();
-    for (id a in self) {
+    for (int index=0; index<[self count]; index++) {
+        id a = [self nth:index];
         id dict = nsdict();
         for (int i=0; i<[header count]; i++) {
             id key = [header nth:i];
@@ -53,7 +54,7 @@
 
 - (id)processCSVUsingHeader
 {
-    id header = [self firstObject];
+    id header = [self nth:0];
     if (!header) {
         return nil;
     }
@@ -72,8 +73,10 @@
         id obj = [keys joinForCSVFile];
         [results addObject:obj];
     }
-    for (id elt in self) {
-        for (id key in keys) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
+        for (int j=0; j<[keys count]; j++) {
+            id key = [keys nth:j];
             id val = [elt valueForKey:key];
             if (!val) {
                 val = @"";
@@ -92,7 +95,7 @@
 
 - (BOOL)writeCSVToFile:(id)path
 {
-    id elt = [self firstObject];
+    id elt = [self nth:0];
     id keys = [[self allKeys] sort];
     return [self writeCSVToFile:path keys:keys];
 }
@@ -100,7 +103,8 @@
 - (id)joinForCSVFile
 {
     id arr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id obj = [elt stringForCSVFile];
         [arr addObject:obj];
     }
