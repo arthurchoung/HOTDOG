@@ -63,13 +63,15 @@
         BOOL isDouble = ([[tokens nth:0] containsString:@"."]) ? YES : NO;
         if (isDouble) {
             id mapArr = nsarr();
-            for (id elt in tokens) {
+            for (int i=0; i<[tokens count]; i++) {
+                id elt = [tokens nth:i];
                 [mapArr addObject:[elt doubleAs8BitHex]];
             }
             tokens = mapArr;
         } else {
             id mapArr = nsarr();
-            for (id elt in tokens) {
+            for (int i=0; i<[tokens count]; i++) {
+                id elt = [tokens nth:i];
                 [mapArr addObject:[elt intAs8BitHex]];
             }
             tokens = mapArr;
