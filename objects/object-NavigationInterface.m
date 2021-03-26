@@ -50,7 +50,8 @@
     if (!arr) {
         arr = [@"." contentsOfDirectory];
         arr = [arr asFileArray];
-        for (id elt in arr) {
+        for (int i=0; i<[arr count]; i++) {
+            id elt = [arr nth:i];
             if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
                 [elt setValue:@"selectedObject|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
             } else {
@@ -93,7 +94,8 @@
 @implementation NSArray(fjkdlsjfklsdlkjf)
 - (void)generateClassMenuNamesIfNecessary
 {
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id name = [elt valueForKey:@"name"];
         id message = [elt valueForKey:@"message"];
         if (![name length] && [message length]) {
@@ -388,6 +390,16 @@ NSLog(@"target %@", target);
 #ifdef BUILD_FOR_OSX
 + (id)mainInterface
 {
+    id obj = [@"mainInterface" valueForKey];
+    if (!obj) {
+        obj = [@"NavigationInterface" asInstance];
+        [obj setAsValueForKey:@"mainInterface"];
+    }
+    return obj;
+}
+/*
++ (id)mainInterface
+{
     id keyWindow = [NSApp keyWindow];
     id contentView = [keyWindow contentView];
     id obj = [contentView valueForKey:@"object"];
@@ -396,6 +408,7 @@ NSLog(@"target %@", target);
     }
     return [@"NavigationInterface" asInstance];
 }
+*/
 #endif
 #ifdef BUILD_FOR_IOS
 + (id)mainInterface
@@ -421,7 +434,8 @@ NSLog(@"target %@", target);
     id interface = [Definitions mainInterface];
     id viewControllers = [interface valueForKey:@"viewControllers"];
     viewControllers = [viewControllers reverse];
-    for (id elt in viewControllers) {
+    for (int i=0; i<[viewControllers count]; i++) {
+        id elt = [viewControllers nth:i];
         if ([elt isKindOfClass:[@"ArrayViewController" asClass]]) {
             id tv = [elt view];
             if ([tv valueForKey:@"tableView"]) {
@@ -446,7 +460,8 @@ NSLog(@"target %@", target);
     id interface = [Definitions mainInterface];
     id viewControllers = [interface valueForKey:@"viewControllers"];
     viewControllers = [viewControllers reverse];
-    for (id elt in viewControllers) {
+    for (int i=0; i<[viewControllers count]; i++) {
+        id elt = [viewControllers nth:i];
         if ([elt isKindOfClass:[@"ArrayViewController" asClass]]) {
             id tv = [elt view];
             if ([tv valueForKey:@"tableView"]) {
@@ -783,7 +798,7 @@ NSLog(@"beginIteration animateIteration %d", _animateIteration);
 NSLog(@"context %@", _context);
 #ifdef BUILD_FOR_OSX
 //[[[NSApp keyWindow] contentView] configureLayers];
-[[NSApp keyWindow] updateClassMenuItems];
+//[[NSApp keyWindow] updateClassMenuItems];
 #endif
         }
         return;
@@ -927,7 +942,8 @@ NSLog(@"context %@", _context);
 NSLog(@"handleRightClick:%@", rightButtonDown);
 NSLog(@"obj %@", obj);
                 id menu = [obj classMenuForObject];
-                for (id choice in menu) {
+                for (int i=0; i<[menu count]; i++) {
+                    id choice = [menu nth:i];
                     [choice setValue:@"#{name}" forKey:@"stringFormat"];
                     if ([choice intValueForKey:@"drawChevron" default:1]) {
                         [choice setValue:@"message|evaluateMessageWithContext:previousObject" forKey:@"messageForClick"];
@@ -1023,7 +1039,7 @@ NSLog(@"obj %@", obj);
                 [obj drawInBitmap:bitmap rect:r1];
                 goto end;
             }
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_OSX)
 #ifdef BUILD_FOR_ANDROID
 #else
             if ([obj respondsToSelector:@selector(pixelBytesRGBA8888)]) {
