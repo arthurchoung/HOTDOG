@@ -30,7 +30,8 @@
 {
     id arr = [[self allIvars] split:@"\n"];
     id results = nsarr();
-    for (id elt in arr) {
+    for (int i=0; i<[arr count]; i++) {
+        id elt = [arr nth:i];
         id tokens = [elt split:@" "];
         id key = [tokens nth:1];
         id val = [self valueForKey:[key stringFromIndex:1]];
@@ -47,7 +48,8 @@
     id arr = [Definitions classMethods];
     arr = [arr asSortedArray];
     id mapArr = nsarr();
-    for (id elt in arr) {
+    for (int i=0; i<[arr count]; i++) {
+        id elt = [arr nth:i];
         id dict = nsdict();
         [dict setValue:@"#{selector}" forKey:@"stringFormat"];
         [dict setValue:elt forKey:@"selector"];
@@ -172,7 +174,8 @@
 {
     if (!_buffers) {
         id arr = nsarr();
-        for (id elt in _fields) {
+        for (int i=0; i<[_fields count]; i++) {
+            id elt = [_fields nth:i];
             [arr addObject:@""];
         }
         [self setValue:arr forKey:@"buffers"];
