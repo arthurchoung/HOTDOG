@@ -33,7 +33,8 @@
 
 - (BOOL)hasAnySuffix:(id)suffixes
 {
-    for (id suffix in suffixes) {
+    for (int i=0; i<[suffixes count]; i++) {
+        id suffix = [suffixes nth:i];
         if ([self hasSuffix:suffix]) {
             return YES;
         }
