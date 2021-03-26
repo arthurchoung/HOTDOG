@@ -446,7 +446,9 @@ NSLog(@"setAllStringFormat:'%@'", val);
 - (void)setupDict:(id)dict
 {
     id arr = nsarr();
-    for (id key in [dict allKeys]) {
+    id allKeys = [dict allKeys];
+    for (int i=0; i<[allKeys count]; i++) {
+        id key = [allKeys nth:i];
         id val = [dict valueForKey:key];
         id elt = nsdict();
         [elt setValue:key forKey:@"key"];
@@ -484,12 +486,13 @@ NSLog(@"setAllStringFormat:'%@'", val);
     if (!arr) {
         arr = [@"." contentsOfDirectory];
         arr = [arr asFileArray];
-        for (id elt in arr) {
+        for (int i=0; i<[arr count]; i++) {
+            id elt = [arr nth:i];
             if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
-                [elt setValue:@"array|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
+                [elt setValue:@"selectedObject|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
             } else {
                 [elt setValue:@"0" forKey:@"drawChevron"];
-                [elt setValue:@"array|filePath|runFileHandler" forKey:@"messageForClick"];
+                [elt setValue:@"selectedObject|filePath|runFileHandler" forKey:@"messageForClick"];
             }
         }
     }
@@ -523,7 +526,8 @@ NSLog(@"setAllStringFormat:'%@'", val);
     }
     if ([_searchText length]) {
         id keepArr = nsarr();
-        for (id elt in arr) {
+        for (int i=0; i<[arr count]; i++) {
+            id elt = [arr nth:i];
             id text = nil;
             if ([elt valueForKey:@"stringFormat"]) {
                 text = [elt str:[elt valueForKey:@"stringFormat"]];
