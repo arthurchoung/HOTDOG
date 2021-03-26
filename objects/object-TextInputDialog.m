@@ -240,7 +240,8 @@ NSLog(@"text '%@'", text);
 {
     if (!_buffers) {
         id arr = nsarr();
-        for (id elt in _fields) {
+        for (int i=0; i<[_fields count]; i++) {
+            id elt = [_fields nth:i];
             [arr addObject:@""];
         }
         [self setValue:arr forKey:@"buffers"];
