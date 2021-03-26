@@ -50,7 +50,8 @@
     id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:1 height:1] autorelease];
     [bitmap useAtariSTFont];
     int highestWidth = 0;
-    for (id elt in _array) {
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
         id displayName = [elt valueForKey:@"displayName"];
         if (displayName) {
             int w = [bitmap bitmapWidthForText:displayName];
