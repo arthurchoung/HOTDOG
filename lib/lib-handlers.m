@@ -29,7 +29,8 @@
 - (id)runFileHandler
 {
     id handlers = [[Definitions execDir:@"Config/fileHandlers.csv"] parseCSVFile];
-    for (id elt in handlers) {
+    for (int i=0; i<[handlers count]; i++) {
+        id elt = [handlers nth:i];
         id suffix = [elt valueForKey:@"suffix"];
         if ([self hasSuffix:suffix]) {
             id message = [elt valueForKey:@"message"];
@@ -69,7 +70,8 @@ NSLog(@"message '%@'", message);
     [cmd addObject:@"--hwdec=auto"];
     [cmd addObject:@"--force-window=yes"];
     [cmd addObject:@"--shuffle"];
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id filePath = [elt valueForKey:@"filePath"];
         if (filePath) {
             [cmd addObject:filePath];
