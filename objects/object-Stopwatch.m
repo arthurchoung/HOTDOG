@@ -27,6 +27,14 @@
 
 #include <time.h>
 
+#ifdef BUILD_FOR_OSX
+static uint64_t osx_clock()
+{
+    return mach_absolute_time();
+//    return clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW);
+}
+#endif
+
 @interface Stopwatch : IvarObject
 {
     Int4 _elapsedTextRect;
@@ -37,7 +45,13 @@
     struct timespec _startTime;
     struct timespec _endTime;
     struct timespec _lapTime;
-#else
+#endif
+#ifdef BUILD_FOR_OSX
+    uint64_t _startTime;
+    uint64_t _endTime;
+    uint64_t _lapTime;
+#endif
+#ifdef BUILD_FOR_IOS
     CFTimeInterval _startTime;
     CFTimeInterval _endTime;
     CFTimeInterval _lapTime;
@@ -66,7 +80,15 @@
             return YES;
         }
     }
-#else
+#endif
+#ifdef BUILD_FOR_OSX
+    if (_startTime) {
+        if (!_endTime) {
+            return YES;
+        }
+    }
+#endif
+#ifdef BUILD_FOR_IOS
     if (_startTime) {
         if (!_endTime) {
             return YES;
@@ -100,7 +122,16 @@
     double diff_time = ((double)time2.tv_sec + 1.0e-9*time2.tv_nsec) - ((double)time1.tv_sec + 1.0e-9*time1.tv_nsec);
     return diff_time;
 }
-#else
+#endif
+#ifdef BUILD_FOR_OSX
+- (double)timeDifference:(uint64_t)time1 :(uint64_t)time2
+{
+    uint64_t diff = time2 - time1;
+    double nsec = (double)diff / 1000000000.0;
+    return nsec;
+}
+#endif
+#ifdef BUILD_FOR_IOS
 - (double)timeDifference:(double)time1 :(double)time2
 {
     return time2 - time1;
@@ -132,7 +163,27 @@
         clock_gettime(CLOCK_MONOTONIC, &_startTime);
         _lapTime = _startTime;
     }
-#else
+#endif
+#ifdef BUILD_FOR_OSX
+    if (_startTime) {
+        if (_endTime) {
+            /* Start */
+            _cumulativeTime += [self timeDifference:_startTime :_endTime];
+            _cumulativeLapTime += [self timeDifference:_lapTime :_endTime];
+            _startTime = osx_clock();
+            _lapTime = _startTime;
+            _endTime = 0;
+        } else {
+            /* Stop */
+            _endTime = osx_clock();
+        }
+    } else {
+        /* Start */
+        _startTime = osx_clock();
+        _lapTime = _startTime;
+    }
+#endif
+#ifdef BUILD_FOR_IOS
     if (_startTime) {
         if (_endTime) {
             /* Start */
@@ -173,7 +224,26 @@
             _cumulativeLapTime = 0;
         }
     }
-#else
+#endif
+#ifdef BUILD_FOR_OSX
+    if (_startTime) {
+        if (_endTime) {
+            /* Reset */
+            _startTime = 0;
+            _endTime = 0;
+            _lapTime = 0;
+            _cumulativeTime = 0.0;
+            _cumulativeLapTime = 0.0;
+        } else {
+            /* Lap */
+            uint64_t timeNow = osx_clock();
+//            id str = nsfmt(@"Lap %d %@", [_array count]+1, [self timeDifferenceAsString:[self timeDifference:_lapTime :timeNow]+_cumulativeLapTime]);
+            _lapTime = timeNow;
+            _cumulativeLapTime = 0.0;
+        }
+    }
+#endif
+#ifdef BUILD_FOR_IOS
     if (_startTime) {
         if (_endTime) {
             /* Reset */
@@ -243,7 +313,28 @@
     } else {
         lapStr = elapsedStr;
     }
-#else
+#endif
+#ifdef BUILD_FOR_OSX
+    uint64_t timeNow;
+    if (_endTime) {
+        timeNow = _endTime;
+    } else {
+        timeNow = osx_clock();
+    }
+
+    id elapsedStr = @"00:00.0";
+    if (_startTime) {
+        elapsedStr = [self timeDifferenceAsString:[self timeDifference:_startTime :timeNow]+_cumulativeTime];
+    }
+
+    id lapStr = @"00:00.0";
+    if (_lapTime) {
+        lapStr = [self timeDifferenceAsString:[self timeDifference:_lapTime :timeNow]+_cumulativeLapTime];
+    } else {
+        lapStr = elapsedStr;
+    }
+#endif
+#ifdef BUILD_FOR_IOS
     CFTimeInterval timeNow;
     if (_endTime) {
         timeNow = _endTime;
@@ -292,7 +383,22 @@
     } else {
         leftButton = @"Start";
     }
-#else
+#endif
+#ifdef BUILD_FOR_OSX
+    id leftButton = @"";
+    char *leftPalette = ". #00ff00\nb #ffffff\n";
+    if (_startTime) {
+        if (_endTime) {
+            leftButton = @"Start";
+        } else {
+            leftButton = @"Stop";
+            leftPalette = ". #ff0000\nb #ffffff\n";
+        }
+    } else {
+        leftButton = @"Start";
+    }
+#endif
+#ifdef BUILD_FOR_IOS
     id leftButton = @"";
     char *leftPalette = ". #00ff00\nb #ffffff\n";
     if (_startTime) {
@@ -330,7 +436,18 @@
             rightButton = @"Lap";
         }
     }
-#else
+#endif
+#ifdef BUILD_FOR_OSX
+    id rightButton = @"Reset";
+    if (_startTime) {
+        if (_endTime) {
+            rightButton = @"Reset";
+        } else {
+            rightButton = @"Lap";
+        }
+    }
+#endif
+#ifdef BUILD_FOR_IOS
     id rightButton = @"Reset";
     if (_startTime) {
         if (_endTime) {
