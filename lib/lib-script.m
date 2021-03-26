@@ -706,7 +706,8 @@ NSLog(@"%@", err);
     [cpu setValue:context forKey:@"contextualObject"];
     [cpu setValue:initialObject forKey:@"recipient"];
     id recipient = initialObject;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         [cpu executeInstruction:elt];
         recipient = [cpu valueForKey:@"recipient"];
         if (!recipient) {
@@ -872,7 +873,7 @@ NSLog(@"%@", err);
         if (!argc) {
             return nil;
         } else if (argc == 1) {
-            return [_args firstObject];
+            return [_args nth:0];
         } else {
             return _args;
         }
@@ -910,17 +911,9 @@ NSLog(@"%@", err);
     }
     
     id valueForKey = [_recipient valueForKey:_selectorName];
-#ifdef BUILD_FOR_OSX
-    if (valueForKey == NSNoSelectionMarker) {
-    } else if (valueForKey == NSMultipleValuesMarker) {
-    } else if (valueForKey) {
-        return valueForKey;
-    }
-#else
     if (valueForKey) {
         return valueForKey;
     }
-#endif
     
     {
         id defs = objc_getClass("Definitions");
