@@ -63,7 +63,8 @@
 - (id)asArrayWithLeftStringFormat:(id)leftStringFormat rightStringFormat:(id)rightStringFormat messageForClick:(id)messageForClick
 {
     id results = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id dict = [[elt mutableCopy] autorelease];
         [dict setValue:leftStringFormat forKey:@"leftStringFormat"];
         [dict setValue:rightStringFormat forKey:@"rightStringFormat"];
@@ -77,7 +78,8 @@
 - (id)asArrayWithStringFormat:(id)stringFormat messageForClick:(id)messageForClick
 {
     id results = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id dict = [[elt mutableCopy] autorelease];
         [dict setValue:stringFormat forKey:@"stringFormat"];
         if ([messageForClick length]) {
@@ -108,7 +110,8 @@
     id str = self;
     id lines = [str split:@"\n"];
     id results = nsarr();
-    for (id line in lines) {
+    for (int i=0; i<[lines count]; i++) {
+        id line = [lines nth:i];
         if ([line hasPrefix:@"#"]) {
             continue;
         }
