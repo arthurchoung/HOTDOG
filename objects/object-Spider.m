@@ -333,13 +333,15 @@ static char *card_icon =
     id topmostCards = [self ranksOfTopmostCards];
     id facedownCards = [self ranksOfFacedownCards];
     id results = nsarr();
-    for (id obj in facedownCards) {
+    for (int i=0; i<[facedownCards count]; i++) {
+        id obj = [facedownCards nth:i];
         int facedownCard = [obj intValue];
         if (facedownCard < 0) {
             [results addObject:@"0"];
             continue;
         }
-        for (id elt in topmostCards) {
+        for (int j=0; j<[topmostCards count]; j++) {
+            id elt = [topmostCards nth:j];
             int topmostCard = [elt intValue];
             if (topmostCard < 0) {
                 continue;
@@ -374,7 +376,9 @@ endloop:
 {
     char *cardRanks = "A23456789TJQK";
     id results = nsarr();
-    for (id elt in [self ranksOfTopmostCards]) {
+    id ranksOfTopmostCards = [self ranksOfTopmostCards];
+    for (int i=0; i<[ranksOfTopmostCards count]; i++) {
+        id elt = [ranksOfTopmostCards nth:i];
         int rank = [elt intValue];
         if (rank == -1) {
             [results addObject:@"-"];
@@ -408,7 +412,9 @@ endloop:
 {
     char *cardRanks = "A23456789TJQK";
     id arr = nsarr();
-    for (id elt in [self ranksOfFacedownCards]) {
+    id ranksOfFacedownCards = [self ranksOfFacedownCards];
+    for (int i=0; i<[ranksOfFacedownCards count]; i++) {
+        id elt = [ranksOfFacedownCards nth:i];
         [arr addObject:nsfmt(@"%c", cardRanks[[elt intValue]])];
     }
     return [arr asProbabilityDistributionText];
