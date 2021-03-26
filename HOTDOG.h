@@ -23,20 +23,35 @@
 
  */
 
+#ifdef BUILD_FOR_OSX_ON_LINUX
+typedef double __m128d;
+typedef long long __m128i;
+#endif
+
 #ifdef BUILD_FOR_OSX
-//typedef long long __m128i;
-//typedef double __m128d;
 typedef int NSInteger;
 typedef unsigned int NSUInteger;
 #endif
 
 #ifndef BUILD_FOUNDATION
+#ifdef BUILD_WORKAROUND_OSX_X11_CONFLICT
+#import <Foundation/NSObject.h>
+#import <Foundation/NSGeometry.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSAutoreleasePool.h>
+#include <stdlib.h>
+#include <string.h>
+#else
 #import <Foundation/Foundation.h>
+#endif
 #endif
 
 #ifdef BUILD_FOR_OSX
+#ifndef BUILD_WORKAROUND_OSX_X11_CONFLICT
 #import <AppKit/AppKit.h>
 #import <WebKit/WebKit.h>
+#endif
 #define CGFloat float
 #include <unistd.h>
 #import <objc/objc-runtime.h>
