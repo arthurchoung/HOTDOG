@@ -57,7 +57,8 @@
         return;
     }
     [self setValue:arr forKey:@"array"];
-    for (id elt in arr) {
+    for (int i=0; i<[arr count]; i++) {
+        id elt = [arr nth:i];
         id objectMessage = [elt valueForKey:@"objectMessage"];
         if ([objectMessage length]) {
             id obj = [objectMessage evaluateMessage];
@@ -84,7 +85,8 @@ NSLog(@"DEALLOC BackgroundAgents");
 - (id)fileDescriptorObjects
 {
     id results = nsarr();
-    for (id elt in _array) {
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
         id obj = [elt valueForKey:@"object"];
         if ([obj respondsToSelector:@selector(fileDescriptor)]) {
             [results addObject:obj];
@@ -115,7 +117,8 @@ NSLog(@"DEALLOC BackgroundAgents");
 
     int cursorY = r.y+4;
     id text = nsarr();
-    for (id elt in _array) {
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
         Int4 r1 = r;
         r1.y = cursorY;
         r1.h = rowHeight;
