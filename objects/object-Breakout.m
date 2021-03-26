@@ -270,7 +270,8 @@ NSLog(@"_width %d wallWidth %d rightWallWidth %d", _width, wallWidth, rightWallW
             }
         }
     }
-    for (id elt in _bricks) {
+    for (int i=0; i<[_bricks count]; i++) {
+        id elt = [_bricks nth:i];
         int hit = [elt intValueForKey:@"hit"];
         if (hit) {
             hit++;
@@ -280,7 +281,8 @@ NSLog(@"_width %d wallWidth %d rightWallWidth %d", _width, wallWidth, rightWallW
     if (_flash) {
         _flash--;
     }
-    for (id elt in _bricks) {
+    for (int i=0; i<[_bricks count]; i++) {
+        id elt = [_bricks nth:i];
         if ([elt intValueForKey:@"hit"]) {
             continue;
         }
@@ -307,7 +309,8 @@ NSLog(@"_width %d wallWidth %d rightWallWidth %d", _width, wallWidth, rightWallW
         }
     }
     id keepBricks = nsarr();
-    for (id brick in _bricks) {
+    for (int i=0; i<[_bricks count]; i++) {
+        id brick = [_bricks nth:i];
         if ([brick intValueForKey:@"hit"] > 7) {
         } else {
             [keepBricks addObject:brick];
@@ -358,7 +361,8 @@ NSLog(@"_width %d wallWidth %d rightWallWidth %d", _width, wallWidth, rightWallW
 
     int brickHitWidth = [Definitions widthForCString:brickHitPixels];
 
-    for (id elt in _bricks) {
+    for (int i=0; i<[_bricks count]; i++) {
+        id elt = [_bricks nth:i];
         if ([elt intValueForKey:@"hit"]) {
             [bitmap drawCString:brickHitPixels palette:[[elt valueForKey:@"palette"] UTF8String] x:[elt intValueForKey:@"x"]+(([elt intValueForKey:@"w"]-brickHitWidth)/2) y:[elt intValueForKey:@"y"]];
         } else {
