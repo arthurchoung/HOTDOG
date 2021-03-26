@@ -51,7 +51,8 @@
     }
     id str = nscstr(cstr);
     id arr = [str split:@":"];
-    for (id elt in arr) {
+    for (int i=0; i<[arr count]; i++) {
+        id elt = [arr nth:i];
         id path = [elt stringByAppendingPathComponent:self];
         if ([path fileExists]) {
             return path;
