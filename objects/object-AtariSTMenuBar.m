@@ -72,7 +72,8 @@
         return;
     }
     [self setValue:arr forKey:@"array"];
-    for (id elt in arr) {
+    for (int i=0; i<[arr count]; i++) {
+        id elt = [arr nth:i];
         id objectMessage = [elt valueForKey:@"objectMessage"];
         if ([objectMessage length]) {
             id obj = [objectMessage evaluateMessage];
@@ -116,7 +117,8 @@ NSLog(@"DEALLOC AtariSTMenuBar");
 - (id)fileDescriptorObjects
 {
     id results = nsarr();
-    for (id elt in _array) {
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
         id obj = [elt valueForKey:@"object"];
         if ([obj respondsToSelector:@selector(fileDescriptor)]) {
             [results addObject:obj];
@@ -135,7 +137,8 @@ NSLog(@"DEALLOC AtariSTMenuBar");
     if ((x < monitorX) || (x >= monitorX+monitorWidth)) {
         return nil;
     }
-    for (id elt in _array) {
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
         int eltX = [elt intValueForKey:@"x"];
         int x1 = (eltX < 0) ? eltX+monitorX+monitorWidth : eltX+monitorX;
         int w1 = [elt intValueForKey:@"width"];
@@ -332,7 +335,8 @@ NSLog(@"AtariSTMenuBar handleMouseUp event %@", event);
             int monitorIndex = 0;
             id text = nsarr();
             int textHeight = [bitmap bitmapHeightForText:@"X"];
-            for (id elt in monitors) {
+            for (int i=0; i<[monitors count]; i++) {
+                id elt = [monitors nth:i];
                 if ([elt intValueForKey:@"x"] == [mouseMonitor intValueForKey:@"x"]) {
                     [text addObject:nsfmt(@"This is monitor %d (%@). Pointer is on monitor %d (%@)", monitorI+1, [monitor valueForKey:@"output"], monitorIndex+1, [elt valueForKey:@"output"])];
                 }
@@ -347,7 +351,8 @@ NSLog(@"AtariSTMenuBar handleMouseUp event %@", event);
     int mouseMonitorWidth = [mouseMonitor intValueForKey:@"width"];
 
 BOOL first = YES;
-    for (id elt in _array) {
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
         Int4 r1 = r;
         int eltX = [elt intValueForKey:@"x"];
         if (eltX < 0) {
