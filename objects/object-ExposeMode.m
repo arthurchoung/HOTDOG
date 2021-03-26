@@ -83,7 +83,8 @@
     id windowManager = [@"windowManager" valueForKey];
     id reparentClass = [[windowManager valueForKey:@"reparentClassName"] asClass];
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    for (id dict in objectWindows) {
+    for (int i=0; i<[objectWindows count]; i++) {
+        id dict = [objectWindows nth:i];
         if (![dict valueForKey:@"window"]) {
             continue;
         }
@@ -102,7 +103,8 @@
 {
     id windowManager = [@"windowManager" valueForKey];
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    for (id dict in objectWindows) {
+    for (int i=0; i<[objectWindows count]; i++) {
+        id dict = [objectWindows nth:i];
         if (![dict valueForKey:@"window"]) {
             continue;
         }
@@ -124,7 +126,8 @@
     for (int i=0; i<[monitors count]; i++) {
         [arr addObject:nsarr()];
     }
-    for (id dict in objectWindows) {
+    for (int i=0; i<[objectWindows count]; i++) {
+        id dict = [objectWindows nth:i];
         if (![dict valueForKey:@"window"]) {
             continue;
         }
@@ -188,7 +191,8 @@
     id windowManager = [@"windowManager" valueForKey];
     id reparentClass = [[windowManager valueForKey:@"reparentClassName"] asClass];
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    for (id dict in objectWindows) {
+    for (int i=0; i<[objectWindows count]; i++) {
+        id dict = [objectWindows nth:i];
         if (![dict valueForKey:@"window"]) {
             continue;
         }
