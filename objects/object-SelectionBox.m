@@ -57,7 +57,8 @@ NSLog(@"SelectionBox handleMouseDown");
     id windowManager = [event valueForKey:@"windowManager"];
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
     [windowManager setInputFocus:nil];
-    for (id dict in objectWindows) {
+    for (int i=0; i<[objectWindows count]; i++) {
+        id dict = [objectWindows nth:i];
         if ([dict intValueForKey:@"isIcon"]) {
             if ([dict valueForKey:@"selectedTimestamp"]) {
                 [dict setValue:nil forKey:@"selectedTimestamp"];
@@ -104,7 +105,8 @@ NSLog(@"SelectionBox handleMouseMoved");
     [x11dict setValue:nsfmt(@"%d %d", newWidth, newHeight) forKey:@"resizeWindow"];
     Int4 r = [Definitions rectWithX:newX y:newY w:newWidth h:newHeight];
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    for (id dict in objectWindows) {
+    for (int i=0; i<[objectWindows count]; i++) {
+        id dict = [objectWindows nth:i];
         if (![dict intValueForKey:@"isIcon"]) {
             continue;
         }
