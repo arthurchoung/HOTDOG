@@ -211,7 +211,8 @@ exit(0);
         return NO;
     }
     BOOL result = YES;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if (![elt respondsToSelector:@selector(UTF8String)]) {
             result = NO;
             break;
@@ -253,13 +254,15 @@ static int qsort_asFileArray(void *aptr, void *bptr, void *arg)
 - (id)asFileArray
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if (![[elt lastPathComponent] hasPrefix:@"."]) {
             [keepArr addObject:elt];
         }
     }
     id arr = nsarr();
-    for (id filePath in keepArr) {
+    for (int i=0; i<[keepArr count]; i++) {
+        id filePath = [keepArr nth:i];
         id dict = nsdict();
         id displayName = [filePath lastPathComponent];
         if ([filePath isDirectory]) {
@@ -283,7 +286,8 @@ static int qsort_asFileArray(void *aptr, void *bptr, void *arg)
 - (id)joinAsPath
 {
     id path = nil;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if (!path) {
             path = elt;
             continue;
@@ -505,7 +509,8 @@ static int qsort_asFileArray(void *aptr, void *bptr, void *arg)
 {
     id contents = [self contentsOfDirectory];
     id results = nsarr();
-    for (id elt in contents) {
+    for (int i=0; i<[contents count]; i++) {
+        id elt = [contents nth:i];
         id path = [self stringByAppendingPathComponent:elt];
         if ([path isDirectory]) {
             id arr = [path allFilesInDirectory];
@@ -520,7 +525,9 @@ static int qsort_asFileArray(void *aptr, void *bptr, void *arg)
 - (id)contentsOfDirectoryWithFullPaths
 {
     id arr = nsarr();
-    for (id obj in [self contentsOfDirectory]) {
+    id contents = [self contentsOfDirectory];
+    for (int i=0; i<[contents count]; i++) {
+        id obj = [contents nth:i];
         [arr addObject:[self stringByAppendingPathComponent:obj]];
     }
     return arr;
