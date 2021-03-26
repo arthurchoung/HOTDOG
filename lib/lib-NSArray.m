@@ -43,7 +43,8 @@
 - (id)asDictionaryGroupByKey:(id)groupKey
 {
     id results = nsdict();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id eltKey = [elt valueForKey:groupKey];
         if (eltKey) {
             [results addObject:elt intoArrayForKey:eltKey];
@@ -71,7 +72,7 @@
     if (n < 0) {
         return nil;
     }
-    if (n >= self.count) {
+    if (n >= [self count]) {
         return nil;
     }
     return [self objectAtIndex:n];
@@ -99,7 +100,8 @@
 - (id)filterEmptyStrings
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([elt length]) {
             [keepArr addObject:elt];
         }
@@ -117,7 +119,8 @@
 
 - (void)setAllValues:(id)val forKey:(id)key
 {
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         [elt setValue:val forKey:key];
     }
 }
@@ -126,7 +129,8 @@
 - (id)lowest
 {
     id lowest = nil;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if (!lowest) {
             lowest = elt;
         } else if ([elt compare:lowest] < 0) {
@@ -139,7 +143,8 @@
 - (id)highest
 {
     id highest = nil;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if (!highest) {
             highest = elt;
         } else if ([elt compare:highest] > 0) {
@@ -152,7 +157,8 @@
 - (id)removeIfContainsString:(id)string
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if (![elt containsString:string]) {
             [keepArr addObject:elt];
         }
@@ -163,7 +169,8 @@
 - (id)keepIfKey:(id)key startsWith:(id)string
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id val = [elt valueForKey:key];
         if ([val startsWith:string]) {
             [keepArr addObject:elt];
@@ -174,7 +181,8 @@
 - (id)keepIfKey:(id)key equals:(id)string
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id val = [elt valueForKey:key];
         if ([val isEqual:string]) {
             [keepArr addObject:elt];
@@ -186,7 +194,8 @@
 - (id)keepIfContainsString:(id)string
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([elt containsString:string]) {
             [keepArr addObject:elt];
         }
@@ -197,7 +206,8 @@
 - (id)keepPrefix:(id)prefix
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([elt hasPrefix:prefix]) {
             [keepArr addObject:elt];
         }
@@ -207,7 +217,8 @@
 - (id)keepSuffix:(id)suffix
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([elt hasSuffix:suffix]) {
             [keepArr addObject:elt];
         }
@@ -256,7 +267,8 @@ static int qsort_asArrayReverseSortedWithKeys(void *aptr, void *bptr, void *arg)
     id a = *((id *)aptr);
     id b = *((id *)bptr);
     id keys = arg;
-    for (id key in keys) {
+    for (int i=0; i<[keys count]; i++) {
+        id key = [keys nth:i];
         int cmp = [a reverseCompare:b key:key];
         if (cmp != 0) {
             return cmp;
@@ -406,7 +418,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 {
     id dict = nsdict();
     id key = nil;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if (!key) {
             key = elt;
             continue;
@@ -420,7 +433,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (id)keepObjectsEqualTo:(id)objectToKeep
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([elt isEqual:objectToKeep]) {
             [keepArr addObject:elt];
         }
@@ -434,7 +448,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
     id results = nsarr();
     
     id titleArr = nsarr();
-    for (id obj in titleKeys) {
+    for (int i=0; i<[titleKeys count]; i++) {
+        id obj = [titleKeys nth:i];
         [titleArr addObject:[[[self valueForKey:obj] uniq] join:@""]];
     }
     id title = [titleArr join:@"  "];
@@ -444,7 +459,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
     }
     
     id header = nsarr();
-    for (id key in keys) {
+    for (int i=0; i<[keys count]; i++) {
+        id key = [keys nth:i];
         int len = [key length];
         if (len < minLength) {
             len = minLength;
@@ -454,9 +470,11 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
     header = [header join:@"  "];
     
     id arr = nsarr();
-    for (id obj in self) {
+    for (int i=0; i<[self count]; i++) {
+        id obj = [self nth:i];
         id mapArr = nsarr();
-        for (id key in keys) {
+        for (int j=0; j<[keys count]; j++) {
+            id key = [keys nth:j];
             int len = [key length];
             if (len < minLength) {
                 len = minLength;
@@ -479,7 +497,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 {
     id results = nsarr();
     id prev = nil;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([prev isEqual:elt]) {
             continue;
         }
@@ -506,7 +525,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (id)asDictionaryCount
 {
     id results = nsdict();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         [results incrementKey:elt];
     }
     return results;
@@ -515,7 +535,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (id)asMergedDictionary
 {
     id results = nsdict();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         [results addEntriesFromDictionary:elt];
     }
     return results;
@@ -526,7 +547,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
     if (!value) {
         return nil;
     }
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([[elt evaluateMessage:message] isEqual:value]) {
             return elt;
         }
@@ -539,7 +561,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
     if (!value) {
         return nil;
     }
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([[elt valueForKey:key] isEqual:value]) {
             return elt;
         }
@@ -552,7 +575,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
     if (!str) {
         return nil;
     }
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([[elt valueForKey:key] containsString:str]) {
             return elt;
         }
@@ -576,7 +600,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 {
     BOOL first = YES;
     int lowest = 0;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         int val = [elt intValue];
         if (first) {
             lowest = val;
@@ -591,7 +616,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 {
     BOOL first = YES;
     double lowest = 0.0;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         double val = [elt doubleValue];
         if (first) {
             lowest = val;
@@ -612,7 +638,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 {
     BOOL first = YES;
     int highest = 0;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         int val = [elt intValue];
         if (first) {
             highest = val;
@@ -627,7 +654,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 {
     BOOL first = YES;
     double highest = 0.0;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         double val = [elt doubleValue];
         if (first) {
             highest = val;
@@ -684,7 +712,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (double)sumDouble
 {
     double result = 0.0;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         result += [elt doubleValue];
     }
     return result;
@@ -692,7 +721,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (int)sumIntegers
 {
     int result = 0;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         result += [elt intValue];
     }
     return result;
@@ -700,7 +730,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (id)sum
 {
     id result = @"0";
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         result = [result plus:elt];
     }
     return result;
@@ -773,7 +804,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (id)keepIfTrue:(id)message
 {
     id keepArr = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([[elt evaluateMessage:message] boolValue]) {
             [keepArr addObject:elt];
         }
@@ -799,7 +831,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (id)keep:(id)message
 {
     id results = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if ([[elt evaluateMessage:message] intValue]) {
             [results addObject:elt];
         }
@@ -813,7 +846,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (id)mapMessage:(id)message nullValue:(id)nullValue
 {
     id results = nsarr();
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id obj = [elt evaluateMessage:message];
         [results addObject:(obj) ? obj : nullValue];
     }
@@ -821,7 +855,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 }
 - (void)forEachMessage:(id)message
 {
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         id pool = [[NSAutoreleasePool alloc] init];
 
         [elt evaluateMessage:message];
@@ -833,8 +868,11 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
 - (id)allKeys
 {
     id results = nsdict();
-    for (id elt in self) {
-        for (id key in [elt allKeys]) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
+        id allKeys = [elt allKeys];
+        for (int j=0; j<[allKeys count]; j++) {
+            id key = [allKeys nth:j];
             if ([key hasPrefix:@"_"] && ![key containsString:@"."]) {
                 continue;
             }
@@ -880,7 +918,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
     id highest = nil;
     int index = 0;
     int highestIndex = 0;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if (!highest) {
             highest = elt;
         } else {
@@ -899,7 +938,8 @@ static int qsort_reverseNumericSort(void *aptr, void *bptr, void *arg)
     id lowest = nil;
     int index = 0;
     int lowestIndex = 0;
-    for (id elt in self) {
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
         if (!lowest) {
             lowest = elt;
         } else {
