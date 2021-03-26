@@ -130,6 +130,7 @@ gcc -c -O3
     -DBUILD_FOR_LINUX
     -DBUILD_WITH_GNU_PRINTF
     -DBUILD_WITH_GNU_QSORT_R
+    -DBUILD_WITH_BGRA_PIXEL_FORMAT
     -o $objectPath $sourcePath 2>>$logPath
 EOF
 
