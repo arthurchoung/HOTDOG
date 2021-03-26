@@ -27,8 +27,10 @@
 
 int main(int argc, char **argv)
 {
+#ifndef BUILD_FOR_OSX
     extern void HOTDOG_initialize(void);
     HOTDOG_initialize();
+#endif
 
 
     id pool = [[NSAutoreleasePool alloc] init];
