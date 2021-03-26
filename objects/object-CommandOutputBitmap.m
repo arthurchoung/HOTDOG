@@ -237,7 +237,8 @@ NSLog(@"CommandOutputBitmap handleMouseDown");
                 [x11dict setValue:@"1" forKey:@"needsRedraw"];
             } else {
                 id objectWindows = [windowManager valueForKey:@"objectWindows"];
-                for (id elt in objectWindows) {
+                for (int i=0; i<[objectWindows count]; i++) {
+                    id elt = [objectWindows nth:i];
                     if (![elt intValueForKey:@"isIcon"]) {
                         continue;
                     }
