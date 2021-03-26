@@ -30,7 +30,9 @@
 - (id)asString
 {
     id arr = nsarr();
-    for (id obj in [self allKeys]) {
+    id allKeys = [self allKeys];
+    for (int i=0; i<[allKeys count]; i++) {
+        id obj = [allKeys nth:i];
         [arr addObject:nsfmt(@"%@ %@", obj, [self valueForKey:obj])];
     }
     return [arr join:@"\n"];
@@ -59,7 +61,9 @@
 - (id)asKeyValueArray
 {
     id results = nsarr();
-    for (id key in [[self allKeys] sort]) {
+    id allKeys = [[self allKeys] sort];
+    for (int i=0; i<[allKeys count]; i++) {
+        id key = [allKeys nth:i];
         id dict = nsdict();
         [dict setValue:key forKey:@"key"];
         [dict setValue:[self valueForKey:key] forKey:@"value"];
