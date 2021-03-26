@@ -38,7 +38,9 @@
 #include <X11/keysym.h>
 #include <X11/cursorfont.h>
 #include <X11/extensions/shape.h>
+#ifndef BUILD_WITHOUT_XFIXES
 #include <X11/extensions/Xfixes.h>
+#endif
 
 static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned char *image, int width, int height, int depth)
 {
@@ -631,9 +633,13 @@ fcntl(ConnectionNumber(_display), F_SETFD, fcntl(ConnectionNumber(_display), F_G
     _rootWindowHeight = rootAttrs.height;
 
     if (!XMatchVisualInfo(_display, DefaultScreen(_display), 32, TrueColor, &_visualInfo)) {
-NSLog(@"XMatchVisualInfo failed");
-        return NO;
+NSLog(@"XMatchVisualInfo failed for depth 32, trying 24");
+        if (!XMatchVisualInfo(_display, DefaultScreen(_display), 24, TrueColor, &_visualInfo)) {
+NSLog(@"XMatchVisualInfo failed for depth 24");
+            return NO;
+        }
     }
+NSLog(@"XMatchVisualInfo depth %d", _visualInfo.depth);
 
     _colormap = XCreateColormap(_display, _rootWindow, _visualInfo.visual, AllocNone);
 
@@ -667,9 +673,11 @@ NSLog(@"Another window manager is running");
     _bottomRightCornerCursor = XCreateFontCursor(_display, XC_bottom_right_corner);
     [self setX11Cursor:'5'];
 
+#ifndef BUILD_WITHOUT_XFIXES
     if (XFixesQueryExtension(_display, &_xFixesEventBase, &_xFixesErrorBase)) {
         XFixesSelectSelectionInput(_display, DefaultRootWindow(_display), XA_PRIMARY, XFixesSetSelectionOwnerNotifyMask);
     }
+#endif
 
     return YES;
 }
@@ -763,7 +771,8 @@ NSLog(@"Another window manager is running");
 - (void)unparentAllWindows
 {
 NSLog(@"unparentAllWindows enter");
-    for (id elt in _objectWindows) {
+    for (int i=0; i<[_objectWindows count]; i++) {
+        id elt = [_objectWindows nth:i];
         [self unparentObjectWindow:elt];
     }
 NSLog(@"unparentAllWindows exit");
@@ -1007,7 +1016,8 @@ NSLog(@"unparent object %@", dict);
 
 - (id)dictForObjectChildWindow:(unsigned long)win
 {
-    for (id elt in _objectWindows) {
+    for (int i=0; i<[_objectWindows count]; i++) {
+        id elt = [_objectWindows nth:i];
         id childWindow = [elt valueForKey:@"childWindow"];
         if (childWindow) {
             if (win == [childWindow unsignedLongValue]) {
@@ -1024,7 +1034,8 @@ NSLog(@"unparent object %@", dict);
 }
 - (id)dictForObjectWindowClassName:(id)className
 {
-    for (id dict in _objectWindows) {
+    for (int i=0; i<[_objectWindows count]; i++) {
+        id dict = [_objectWindows nth:i];
         id obj = [dict valueForKey:@"object"];
         if ([[obj class] isEqual:[className asClass]]) {
 //FIXME
@@ -1037,7 +1048,8 @@ NSLog(@"unparent object %@", dict);
 }
 - (id)dictForObjectFilePath:(id)filePath
 {
-    for (id dict in _objectWindows) {
+    for (int i=0; i<[_objectWindows count]; i++) {
+        id dict = [_objectWindows nth:i];
         id val = [dict valueForKey:@"filePath"];
         if ([val isEqual:filePath]) {
             return dict;
@@ -1047,7 +1059,8 @@ NSLog(@"unparent object %@", dict);
 }
 - (id)dictForObject:(id)obj
 {
-    for (id dict in _objectWindows) {
+    for (int i=0; i<[_objectWindows count]; i++) {
+        id dict = [_objectWindows nth:i];
         if (obj == [dict valueForKey:@"object"]) {
             return dict;
         }
@@ -1154,11 +1167,13 @@ NSLog(@"unparent object %@", dict);
     if (!h) {
 w = 768.0 / 1.5;
 h = 768;
+#ifndef BUILD_FOR_OSX
 id monitor = [Definitions monitorForX:0 y:0];
 if ([monitor intValueForKey:@"height"] == 768) {
     w = 640.0 / 1.5;
     h = 640;
 }
+#endif
     }
 
     Window win = [self openWindowWithName:[object className] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
@@ -1256,7 +1271,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
                 XFreePixmap(_display, shape_pixmap);
             }
 
-            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, 32);
+            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, _visualInfo.depth);
             GC gc = XCreateGC(_display, win, 0, 0);
             XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
             XFreeGC(_display, gc);
@@ -1277,7 +1292,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
                 [bitmap drawBitmapText:text x:r.x+5 y:r.y+5];
             }
 
-            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, 32);
+            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, _visualInfo.depth);
             GC gc = XCreateGC(_display, win, 0, 0);
             XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
             XFreeGC(_display, gc);
@@ -1379,7 +1394,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
             [Definitions openGLXSwapBuffersForDisplay:_display window:win];
         } else {
             GC gc = XCreateGC(_display, win, 0, 0);
-            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, 32);
+            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, _visualInfo.depth);
             XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
             XDestroyImage(ximage);
             XFreeGC(_display, gc);
@@ -1413,7 +1428,8 @@ if ([monitor intValueForKey:@"height"] == 768) {
             }
         }
     }
-    for (id elt in _objectWindows) {
+    for (int i=0; i<[_objectWindows count]; i++) {
+        id elt = [_objectWindows nth:i];
         id childWindow = [elt valueForKey:@"childWindow"];
         if (elt == dict) {
             if (childWindow) {
@@ -1480,7 +1496,8 @@ NSLog(@"no object windows, exiting pid %d", getpid());
             if (!_isWindowManager) {
                 time_t timestamp = time(0);
                 if (timestamp != _backgroundUpdateTimestamp) {
-                    for (id elt in _objectWindows) {
+                    for (int i=0; i<[_objectWindows count]; i++) {
+                        id elt = [_objectWindows nth:i];
                         id obj = [elt valueForKey:@"object"];
                         if ([obj respondsToSelector:@selector(handleBackgroundUpdate:)]) {
                             id dict = nsdict();
@@ -1494,7 +1511,8 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                 }
             }
 
-            for (id elt in _objectWindows) {
+            for (int i=0; i<[_objectWindows count]; i++) {
+                id elt = [_objectWindows nth:i];
                 id obj = [elt valueForKey:@"object"];
                 if ([obj respondsToSelector:@selector(beginIteration:rect:)]) {
                     Int4 r = [Definitions rectWithX:[elt intValueForKey:@"x"] y:[elt intValueForKey:@"y"] w:[elt intValueForKey:@"w"] h:[elt intValueForKey:@"h"]];
@@ -1505,7 +1523,8 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                 }
             }
 
-            for (id elt in _objectWindows) {
+            for (int i=0; i<[_objectWindows count]; i++) {
+                id elt = [_objectWindows nth:i];
                 if ([elt valueForKey:@"needsRedraw"]) {
                     [self drawObjectWindow:elt];
                     [elt setValue:nil forKey:@"needsRedraw"];
@@ -1515,7 +1534,8 @@ NSLog(@"no object windows, exiting pid %d", getpid());
             fd_set rfds;
             int maxFD=0;
             FD_ZERO(&rfds);
-            for (id elt in _objectWindows) {
+            for (int i=0; i<[_objectWindows count]; i++) {
+                id elt = [_objectWindows nth:i];
                 id obj = [elt valueForKey:@"object"];
                 if (obj) {
                     if ([obj respondsToSelector:@selector(fileDescriptor)]) {
@@ -1529,7 +1549,8 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                     }
                     if ([obj respondsToSelector:@selector(fileDescriptorObjects)]) {
                         id arr = [obj fileDescriptorObjects];
-                        for (id fdobj in arr) {
+                        for (int j=0; j<[arr count]; j++) {
+                            id fdobj = [arr nth:j];
                             if ([fdobj respondsToSelector:@selector(fileDescriptor)]) {
                                 int fd = [fdobj fileDescriptor];
                                 if (fd != -1) {
@@ -1546,7 +1567,8 @@ NSLog(@"no object windows, exiting pid %d", getpid());
             struct timeval tv;
             tv.tv_sec = 1;
             tv.tv_usec = 0;
-            for (id elt in _objectWindows) {
+            for (int i=0; i<[_objectWindows count]; i++) {
+                id elt = [_objectWindows nth:i];
                 id obj = [elt valueForKey:@"object"];
                 if ([obj respondsToSelector:@selector(shouldAnimate)]) {
                     if ([obj shouldAnimate]) {
@@ -1626,16 +1648,19 @@ NSLog(@"MapNotify event");
 NSLog(@"ClientMessage event %lu %@", e->window, dict);
                         [dict setValue:@"1" forKey:@"shouldCloseWindow"];
                     }
+#ifndef BUILD_WITHOUT_XFIXES
                 } else if (event.type == _xFixesEventBase + XFixesSelectionNotify) {
                     if (((XFixesSelectionNotifyEvent *)&event)->selection == XA_PRIMARY) {
                         [self convertX11Selection];
                     }
+#endif
                 } else {
 NSLog(@"received X event type %d", event.type);
                 }
             }
 
-            for (id elt in _objectWindows) {
+            for (int i=0; i<[_objectWindows count]; i++) {
+                id elt = [_objectWindows nth:i];
                 id obj = [elt valueForKey:@"object"];
                 if ([obj respondsToSelector:@selector(endIteration:)]) {
                     id dict = nsdict();
@@ -1647,7 +1672,8 @@ NSLog(@"received X event type %d", event.type);
 
             {
                 id closeArr = nil;
-                for (id dict in _objectWindows) {
+                for (int i=0; i<[_objectWindows count]; i++) {
+                    id dict = [_objectWindows nth:i];
                     if ([dict intValueForKey:@"shouldCloseWindow"]) {
                         if ([dict intValueForKey:@"shouldKeepObject"]) {
                             [self destroyWindowButKeepObject:dict];
@@ -1660,11 +1686,13 @@ NSLog(@"received X event type %d", event.type);
                         }
                     }
                 }
-                for (id dict in closeArr) {
+                for (int i=0; i<[closeArr count]; i++) {
+                    id dict = [closeArr nth:i];
                     [self destroyObjectWindow:dict];
                 }
             }
-            for (id dict in _objectWindows) {
+            for (int i=0; i<[_objectWindows count]; i++) {
+                id dict = [_objectWindows nth:i];
                 id moveWindow = [dict valueForKey:@"moveWindow"];
                 id resizeWindow = [dict valueForKey:@"resizeWindow"];
                 id moveWindowTokens = [moveWindow split];
@@ -1690,7 +1718,8 @@ NSLog(@"received X event type %d", event.type);
                 [dict setValue:nil forKey:@"resizeWindow"];
             }
 
-            for (id elt in _objectWindows) {
+            for (int i=0; i<[_objectWindows count]; i++) {
+                id elt = [_objectWindows nth:i];
                 id obj = [elt valueForKey:@"object"];
                 if ([obj respondsToSelector:@selector(fileDescriptor)]) {
                     int fd = [obj fileDescriptor];
@@ -1706,7 +1735,8 @@ NSLog(@"received X event type %d", event.type);
                 if ([obj respondsToSelector:@selector(fileDescriptorObjects)]) {
                     id arr = [obj fileDescriptorObjects];
                     if (arr) {
-                        for (id fdObject in arr) {
+                        for (int j=0; j<[arr count]; j++) {
+                            id fdObject = [arr nth:j];
                             if ([fdObject respondsToSelector:@selector(fileDescriptor)]) {
                                 int fd = [fdObject fileDescriptor];
                                 if (fd != -1) {
@@ -1754,13 +1784,15 @@ NSLog(@"keysym %d mod1 %d mod2 %d mod3 %d mod4 %d mod5 %d", keysym, e->state&Mod
         id keyString = [Definitions keyForXKeyCode:keysym modifiers:e->state];
 NSLog(@"hotkey keyString %@", keyString);
         id hotKeyFiles = [[Definitions execDir:@"Config/hotKeyFiles.csv"] parseCSVFile];
-        for (id hotKeyFile in hotKeyFiles) {
+        for (int i=0; i<[hotKeyFiles count]; i++) {
+            id hotKeyFile = [hotKeyFiles nth:i];
             id path = [hotKeyFile valueForKey:@"path"];
             if (!path) {
                 continue;
             }
             id menu = [[Definitions execDir:path] parseCSVFile];
-            for (id elt in menu) {
+            for (int j=0; j<[menu count]; j++) {
+                id elt = [menu nth:j];
                 id hotKey = [[elt valueForKey:@"hotKey"] lowercaseString];
                 if ([keyString isEqual:hotKey]) {
                     id message = [elt valueForKey:@"messageForClick"];
@@ -2477,7 +2509,8 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
     }
     id arr = [[_alertsPath contentsOfDirectoryWithFullPaths] asFileArray];
     arr = [arr asArraySortedWithKey:@"fileModificationDate"];
-    for (id elt in arr) {
+    for (int i=0; i<[arr count]; i++) {
+        id elt = [arr nth:i];
         id filePath = [elt valueForKey:@"filePath"];
         id str = [filePath stringFromFile];
         if ([str length]) {
@@ -2516,7 +2549,8 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
 {
     id contents = [[Definitions execDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
     id closeList = nsarr();
-    for (id dict in _objectWindows) {
+    for (int i=0; i<[_objectWindows count]; i++) {
+        id dict = [_objectWindows nth:i];
         id filePath = [dict valueForKey:@"filePath"];
         if (!filePath) {
             continue;
@@ -2532,7 +2566,8 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
         }
         [closeList addObject:dict];
     }
-    for (id dict in closeList) {
+    for (int i=0; i<[closeList count]; i++) {
+        id dict = [closeList nth:i];
         [dict setValue:@"1" forKey:@"shouldCloseWindow"];
     }
 
@@ -2544,7 +2579,8 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
     int maxWidth = 16;
     int cursorX = 10;
     int cursorY = 30;
-    for (id path in contents) {
+    for (int i=0; i<[contents count]; i++) {
+        id path = [contents nth:i];
         id dict = [self dictForObjectFilePath:path];
         if (!dict) {
             id obj = nil;
