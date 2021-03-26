@@ -304,7 +304,7 @@ NSLog(@"Out of memory!");
     if (_a == 255) {
         unsigned char *p = _pixelBytes + _bitmapStride*y + (x1*4);
         for (int x=x1; x<=x2; x++) {
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
             p[0] = _b;
             p[1] = _g;
             p[2] = _r;
@@ -321,7 +321,7 @@ NSLog(@"Out of memory!");
     } else {
         unsigned char *p = _pixelBytes + _bitmapStride*y + (x1*4);
         for (int x=x1; x<=x2; x++) {
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
             p[0] = _blueTimesAlpha + ((double)p[0]*_oneMinusAlphaDouble);
             p[1] = _greenTimesAlpha + ((double)p[1]*_oneMinusAlphaDouble);
             p[2] = _redTimesAlpha + ((double)p[2]*_oneMinusAlphaDouble);
@@ -362,7 +362,7 @@ NSLog(@"Out of memory!");
         unsigned char *p = _pixelBytes + _bitmapStride*y + (x1*4);
         for (int x=x1; x<=x2; x++) {
             if ((dashCount / dashLength) % 2 == 0) {
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                 p[0] = _b;
                 p[1] = _g;
                 p[2] = _r;
@@ -382,7 +382,7 @@ NSLog(@"Out of memory!");
         unsigned char *p = _pixelBytes + _bitmapStride*y + (x1*4);
         for (int x=x1; x<=x2; x++) {
             if ((dashCount / dashLength) % 2 == 0) {
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                 p[0] = _blueTimesAlpha + ((double)p[0]*_oneMinusAlphaDouble);
                 p[1] = _greenTimesAlpha + ((double)p[1]*_oneMinusAlphaDouble);
                 p[2] = _redTimesAlpha + ((double)p[2]*_oneMinusAlphaDouble);
@@ -426,7 +426,7 @@ NSLog(@"Out of memory!");
     if (_a == 255) {
         unsigned char *p = _pixelBytes + _bitmapStride*y1 + (x*4);
         for (int y=y1; y<=y2; y++) {
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
             p[0] = _b;
             p[1] = _g;
             p[2] = _r;
@@ -443,7 +443,7 @@ NSLog(@"Out of memory!");
     } else {
         unsigned char *p = _pixelBytes + _bitmapStride*y1+(x*4);
         for (int y=y1; y<=y2; y++) {
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
             p[0] = _blueTimesAlpha + ((double)p[0]*_oneMinusAlphaDouble);
             p[1] = _greenTimesAlpha + ((double)p[1]*_oneMinusAlphaDouble);
             p[2] = _redTimesAlpha + ((double)p[2]*_oneMinusAlphaDouble);
@@ -480,7 +480,7 @@ NSLog(@"Out of memory!");
                     int x = x1 + step*(y-y1);
                     if ((x >= 0) && (x < _bitmapHeight)) {
                         unsigned char *q = _pixelBytes + _bitmapStride*y+(x*4);
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                         q[0] = _b;
                         q[1] = _g;
                         q[2] = _r;
@@ -501,7 +501,7 @@ NSLog(@"Out of memory!");
                     int x = x1 + step*(y-y1);
                     if ((x >= 0) && (x < _bitmapHeight)) {
                         unsigned char *q = _pixelBytes + _bitmapStride*y+(x*4);
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                         q[0] = _blueTimesAlpha + ((double)q[0]*_oneMinusAlphaDouble);
                         q[1] = _greenTimesAlpha + ((double)q[1]*_oneMinusAlphaDouble);
                         q[2] = _redTimesAlpha + ((double)q[2]*_oneMinusAlphaDouble);
@@ -532,7 +532,7 @@ NSLog(@"Out of memory!");
                     int y = y1 + step*(x-x1);
                     if ((y >= 0) && (y < _bitmapHeight)) {
                         unsigned char *q = _pixelBytes + _bitmapStride*y+(x*4);
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                         q[0] = _b;
                         q[1] = _g;
                         q[2] = _r;
@@ -553,7 +553,7 @@ NSLog(@"Out of memory!");
                     int y = y1 + step*(x-x1);
                     if ((y >= 0) && (y < _bitmapHeight)) {
                         unsigned char *q = _pixelBytes + _bitmapStride*y+(x*4);
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                         q[0] = _blueTimesAlpha + ((double)q[0]*_oneMinusAlphaDouble);
                         q[1] = _greenTimesAlpha + ((double)q[1]*_oneMinusAlphaDouble);
                         q[2] = _redTimesAlpha + ((double)q[2]*_oneMinusAlphaDouble);
@@ -614,7 +614,7 @@ NSLog(@"Out of memory!");
                 unsigned char *p = _pixelBytes + _bitmapStride*y;
                 unsigned char *q = p+(rx*4);
                 for (int x=0; x<rw; x++) {
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                     q[0] = _b;
                     q[1] = _g;
                     q[2] = _r;
@@ -634,7 +634,7 @@ NSLog(@"Out of memory!");
                     if ((x >= 0) && (x < _bitmapWidth)) {
                         if ((y >= 0) && (y < _bitmapHeight)) {
                             unsigned char *q = _pixelBytes + _bitmapStride*y+(x*4);
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                             q[0] = _b;
                             q[1] = _g;
                             q[2] = _r;
@@ -656,7 +656,7 @@ NSLog(@"Out of memory!");
             for (int x=rx; x<rx+rw; x++) {
                 for (int y=ry; y<ry+rh; y++) {
                     unsigned char *q = _pixelBytes + _bitmapStride*y+(x*4);
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                     q[0] = _blueTimesAlpha + ((double)q[0]*_oneMinusAlphaDouble);
                     q[1] = _greenTimesAlpha + ((double)q[1]*_oneMinusAlphaDouble);
                     q[2] = _redTimesAlpha + ((double)q[2]*_oneMinusAlphaDouble);
@@ -675,7 +675,7 @@ NSLog(@"Out of memory!");
                     if ((x >= 0) && (x < _bitmapWidth)) {
                         if ((y >= 0) && (y < _bitmapHeight)) {
                             unsigned char *q = _pixelBytes + _bitmapStride*y+(x*4);
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                             q[0] = _blueTimesAlpha + ((double)q[0]*_oneMinusAlphaDouble);
                             q[1] = _greenTimesAlpha + ((double)q[1]*_oneMinusAlphaDouble);
                             q[2] = _redTimesAlpha + ((double)q[2]*_oneMinusAlphaDouble);
@@ -1058,7 +1058,7 @@ NSLog(@"Out of memory!");
         if ((cursor_x >= 0) && (cursor_x < bitmapWidth)) {
             if ((cursor_y >= 0) && (cursor_y < bitmapHeight)) {
                 unsigned char *q = pixels + bitmapStride*cursor_y+(cursor_x*4);
-#if defined(BUILD_FOR_LINUX) && !defined(BUILD_FOR_ANDROID)
+#ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                 q[0] = b;
                 q[1] = g;
                 q[2] = r;
