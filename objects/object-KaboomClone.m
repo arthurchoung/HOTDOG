@@ -408,12 +408,14 @@ char *bomb3Pixels =
             [bomb setValue:nsfmt(@"%d", _madBomberY+46-14) forKey:@"y"];
             [_bombs addObject:bomb];
         }
-        for (id bomb in _bombs) {
+        for (int i=0; i<[_bombs count]; i++) {
+            id bomb = [_bombs nth:i];
             [bomb setValue:nsfmt(@"%d", [bomb intValueForKey:@"y"]+3) forKey:@"y"];
         }
         int bombWidth = [Definitions widthForCString:bombPixels];
         int bombHeight = [Definitions heightForCString:bombPixels];
-        for (id bomb in _bombs) {
+        for (int i=0; i<[_bombs count]; i++) {
+            id bomb = [_bombs nth:i];
             int x = [bomb intValueForKey:@"x"];
             int y = [bomb intValueForKey:@"y"];
             Int4 bombRect = [Definitions rectWithX:x y:y w:bombWidth h:bombHeight];
@@ -427,7 +429,8 @@ char *bomb3Pixels =
             }
         }
         id keepBombs = nsarr();
-        for (id bomb in _bombs) {
+        for (int i=0; i<[_bombs count]; i++) {
+            id bomb = [_bombs nth:i];
             if (![bomb intValueForKey:@"caught"]) {
                 [keepBombs addObject:bomb];
             }
@@ -446,7 +449,8 @@ char *bomb3Pixels =
 
     id firstBomb = [_bombs nth:0];
 
-    for (id elt in _bombs) {
+    for (int i=0; i<[_bombs count]; i++) {
+        id elt = [_bombs nth:i];
         if (_bombsExploding && (elt == firstBomb)) {
             if (_bombsExploding % 5 == 0) {
                 [bitmap setColorIntR:0 g:0 b:0 a:255];
