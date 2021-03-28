@@ -25,6 +25,64 @@
 
 #import "HOTDOG.h"
 
+@implementation Definitions(fewiomfiodsvmkocxjvoksjdfoks)
++ (void)updateWindowPositionsForExpose:(id)windows monitor:(id)monitor
+{
+    int monitorX = [monitor intValueForKey:@"x"];
+    int monitorY = [monitor intValueForKey:@"y"];
+    int monitorWidth = [monitor intValueForKey:@"width"];
+    int monitorHeight = [monitor intValueForKey:@"height"];
+    
+    id arr = nsarr();
+    for (int i=0; i<[windows count]; i++) {
+        id window = [windows nth:i];
+        int x = [window intValueForKey:@"x"];
+        int y = [window intValueForKey:@"y"];
+        id str = nsfmt(@"id:%@ x:%d y:%d w:%d h:%d\n",
+            [window valueForKey:@"window"],
+            x - monitorX,
+            y - monitorY,
+            [window intValueForKey:@"w"],
+            [window intValueForKey:@"h"]);
+        [arr addObject:str];
+    }
+    id str = [arr join:@""];
+    id cmd = nsarr();
+    [cmd addObject:@"packRectanglesIntoWidth:height:"];
+    [cmd addObject:nsfmt(@"%d", monitorWidth)];
+    [cmd addObject:nsfmt(@"%d", monitorHeight)];
+    id process = [cmd runCommandAndReturnProcess];
+    [process writeString:str];
+    [process closeInput];
+    id data = [process readAllDataFromOutputThenCloseAndWait];
+    id results = [[data asString] split:@"\n"];
+    for (int i=0; i<[results count]; i++) {
+        id elt = [results nth:i];
+        id windowID = [elt valueForKey:@"id"];
+        if (!windowID) {
+            continue;
+        }
+        id dict = [windows objectWithValue:windowID forKey:@"window"];
+        if (!dict) {
+            continue;
+        }
+        [dict setValue:[dict valueForKey:@"x"] forKey:@"origX"];
+        [dict setValue:[dict valueForKey:@"y"] forKey:@"origY"];
+        [dict setValue:[dict valueForKey:@"w"] forKey:@"origW"];
+        [dict setValue:[dict valueForKey:@"h"] forKey:@"origH"];
+
+        int newX = [elt intValueForKey:@"x"];
+        int newY = [elt intValueForKey:@"y"];
+        int newW = [elt intValueForKey:@"w"];
+        int newH = [elt intValueForKey:@"h"];
+        id moveWindow = nsfmt(@"%d %d", monitorX+newX, monitorY+newY);
+        id resizeWindow = nsfmt(@"%d %d", newW, newH);
+        [dict setValue:moveWindow forKey:@"moveWindow"];
+        [dict setValue:resizeWindow forKey:@"resizeWindow"];
+    }
+}
+@end
+
 @implementation Definitions(jfewjfsdjflksdjfkljsdklf)
 + (void)toggleExposeMode
 {
@@ -146,7 +204,8 @@
     }
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
-        [self tileWindows:elt monitor:[monitors nth:i]];
+[Definitions updateWindowPositionsForExpose:elt monitor:[monitors nth:i]];
+//        [self tileWindows:elt monitor:[monitors nth:i]];
     }
 }
 - (void)tileWindows:(id)windows monitor:(id)monitor
@@ -204,8 +263,10 @@
         int y = [dict intValueForKey:@"origY"];
         int w = [dict intValueForKey:@"origW"];
         int h = [dict intValueForKey:@"origH"];
-        [dict setValue:nsfmt(@"%d %d", x, y) forKey:@"moveWindow"];
-        [dict setValue:nsfmt(@"%d %d", w, h) forKey:@"resizeWindow"];
+        if ((w > 0) && (h > 0)) {
+            [dict setValue:nsfmt(@"%d %d", x, y) forKey:@"moveWindow"];
+            [dict setValue:nsfmt(@"%d %d", w, h) forKey:@"resizeWindow"];
+        }
     }
 }
 - (void)handleDidSetInputFocusEvent:(id)event
