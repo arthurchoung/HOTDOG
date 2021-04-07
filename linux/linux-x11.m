@@ -1402,13 +1402,14 @@ if ([monitor intValueForKey:@"height"] == 768) {
     }
 }
 
-- (void)setInputFocus:(id)dict
+- (void)setFocusDict:(id)dict
 {
-    [self setInputFocus:dict raiseWindow:YES];
+    [self setFocusDict:dict raiseWindow:YES setInputFocus:YES];
 }
 
-- (void)setInputFocus:(id)dict raiseWindow:(BOOL)raiseWindow
+- (void)setFocusDict:(id)dict raiseWindow:(BOOL)raiseWindow setInputFocus:(BOOL)setInputFocus
 {
+NSLog(@"setFocusDict:%@", dict);
     if (!dict) {
         dict = _menuBar;
     }
@@ -1418,13 +1419,15 @@ if ([monitor intValueForKey:@"height"] == 768) {
         if (raiseWindow) {
             [self raiseObjectWindow:dict];
         }
-        id childWindow = [dict valueForKey:@"childWindow"];
-        if (childWindow) {
-            XSetInputFocus(_display, [childWindow unsignedLongValue], RevertToPointerRoot, CurrentTime);
-        } else {
-            id window = [dict valueForKey:@"window"];
-            if (window) {
-                XSetInputFocus(_display, [window unsignedLongValue], RevertToPointerRoot, CurrentTime);
+        if (setInputFocus) {
+            id childWindow = [dict valueForKey:@"childWindow"];
+            if (childWindow) {
+                XSetInputFocus(_display, [childWindow unsignedLongValue], RevertToPointerRoot, CurrentTime);
+            } else {
+                id window = [dict valueForKey:@"window"];
+                if (window) {
+                    XSetInputFocus(_display, [window unsignedLongValue], RevertToPointerRoot, CurrentTime);
+                }
             }
         }
     }
@@ -1929,6 +1932,7 @@ NSLog(@"handleX11LeaveNotify:%x", e->window);
     Window win = e->window;
 NSLog(@"FocusIn event win %lu", win);
 }
+
 - (void)handleX11FocusOut:(void *)eptr
 {
     XFocusOutEvent *e = eptr;
@@ -2066,7 +2070,7 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
 
     id dict = [self reparentWindow:e->window x:attrs.x y:attrs.y w:attrs.width h:attrs.height];
     XMapWindow(_display, e->window);
-    [self setInputFocus:dict];
+    [self setFocusDict:dict];
 
 }
 - (void)handleX11DestroyNotify:(void *)eptr;
@@ -2183,16 +2187,16 @@ NSLog(@"rootWindow object %@", _rootWindowObject);
     {
         id dict = [self dictForObjectChildWindow:e->window];
         if (dict) {
-            // rootWindowObject might change after setInputFocus:, so save current value of shouldPassthroughClickToFocus
+            // rootWindowObject might change after setFocusDict:, so save current value of shouldPassthroughClickToFocus
             BOOL passthrough = NO;
             if ([_rootWindowObject respondsToSelector:@selector(shouldPassthroughClickToFocus)]) {
                 passthrough = [_rootWindowObject shouldPassthroughClickToFocus];
             }
 
             if ((e->button == 1) || (e->button == 3)) {
-                [self setInputFocus:dict];
+                [self setFocusDict:dict];
             } else {
-                [self setInputFocus:dict raiseWindow:NO];
+                [self setFocusDict:dict raiseWindow:NO setInputFocus:YES];
             }
 
             if (passthrough) {
