@@ -17,12 +17,12 @@ while ($line = <STDIN>) {
     }
     $elt->{'id'} = $1;
 
-    if ($line !~ m/\bx:(\d+)/) {
+    if ($line !~ m/\bx:([\-\d]+)/) {
         die("missing x");
     }
     $elt->{'x'} = $1;
 
-    if ($line !~ m/\by:(\d+)/) {
+    if ($line !~ m/\by:([\-\d]+)/) {
         die("missing y");
     }
     $elt->{'y'} = $1;
