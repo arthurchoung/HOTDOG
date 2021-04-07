@@ -293,6 +293,19 @@ static id callMethod(id target, struct objc_method *m, id args)
                         }
                     }
                 }
+            } else if (signature[5] == '@') {
+                if (signature[6] == '@') {
+                    if (signature[7] == '@') {
+                        if (signature[8] == '@') {
+                            if (signature[9] == 0) {
+                                if (signature[0] == '@') {
+                                    id (*func)(id, SEL, id, int, id, id, id, id) = imp;
+                                    return func(target, sel, [args nth:0], [[args nth:1] intValue], [args nth:2], [args nth:3], [args nth:4], [args nth:5]);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         } else if (signature[4] == 'd') {
             if (signature[5] == 0) {
