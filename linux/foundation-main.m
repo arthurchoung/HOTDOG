@@ -162,6 +162,20 @@ exit(1);
             [ipod setValue:home forKey:@"object"];
             [ipod goToLockScreen];
             [Definitions runWindowManagerForObject:ipod];
+        } else if ((argc > 1) && !strcmp(argv[1], "nav")) {
+            id args = nsarr();
+            for (int i=2; i<argc; i++) {
+                id str = nscstr(argv[i]);
+                [args addObject:str];
+            }
+            id message = [args join:@" "];
+            id object = [nsdict() evaluateMessage:message];
+            if (object) {
+                id nav = [Definitions mainInterface];
+                [nav pushObject:object];
+                [Definitions runWindowManagerForObject:nav];
+                [[Definitions mainInterface] setValue:nil forKey:@"context"];
+            }
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
