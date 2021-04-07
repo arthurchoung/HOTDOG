@@ -144,7 +144,7 @@
 NSLog(@"CommandOutputBitmap handleMouseDown");
     id windowManager = [event valueForKey:@"windowManager"];
     id x11dict = [event valueForKey:@"x11dict"];
-    [windowManager setInputFocus:nil];
+    [windowManager setFocusDict:nil];
     _buttonDown = YES;
     _buttonDownX = [event intValueForKey:@"mouseX"];
     _buttonDownY = [event intValueForKey:@"mouseY"];

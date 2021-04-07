@@ -104,7 +104,7 @@
 
     id rootObject = [@"ExposeRootWindow" asInstance];
     [rootObject setValue:oldRootWindowObject forKey:@"oldRootWindowObject"];
-    [windowManager setInputFocus:nil];
+    [windowManager setFocusDict:nil];
     [rootObject unmapIrrelevantWindows];
     [windowManager setValue:rootObject forKey:@"rootWindowObject"];
     id obj = [@"ExposeWindow" asInstance];

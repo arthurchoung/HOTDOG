@@ -56,7 +56,7 @@
 NSLog(@"SelectionBox handleMouseDown");
     id windowManager = [event valueForKey:@"windowManager"];
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    [windowManager setInputFocus:nil];
+    [windowManager setFocusDict:nil];
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
         if ([dict intValueForKey:@"isIcon"]) {

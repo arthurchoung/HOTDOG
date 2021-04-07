@@ -45,7 +45,7 @@
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
     id menuBar = [windowManager openWindowForObject:[@"MacMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
     [windowManager setValue:menuBar forKey:@"menuBar"];
-    [windowManager setInputFocus:nil];
+    [windowManager setFocusDict:nil];
 }
 @end
 @implementation Definitions(fjkdlemdisjfiowejfklsdjfklsdkljf)
@@ -608,7 +608,7 @@
 {
     id windowManager = [event valueForKey:@"windowManager"];
     id x11dict = [event valueForKey:@"x11dict"];
-    [windowManager setInputFocus:x11dict];
+    [windowManager setFocusDict:x11dict];
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
     int viewWidth = [event intValueForKey:@"viewWidth"];
