@@ -834,11 +834,11 @@ NSLog(@"Out of memory!");
 }
 - (void)drawCString:(unsigned char *)str rotatedRightAtX:(int)x y:(int)y c:(unsigned char)c r:(int)r g:(int)g b:(int)b a:(int)a
 {
-    [self drawCString:str x:x y:y c:c r:r g:g b:b a:a ix:0 iy:1 cx:0 cy:1 lx:-1 ly:0];
+    [self drawCString:str x:x y:y c:c r:r g:g b:b a:a ix:0 iy:0 cx:0 cy:1 lx:-1 ly:0];
 }
 - (void)drawCString:(unsigned char *)str rotatedLeftAtX:(int)x y:(int)y c:(unsigned char)c r:(int)r g:(int)g b:(int)b a:(int)a
 {
-    [self drawCString:str x:x y:y c:c r:r g:g b:b a:a ix:0 iy:1 cx:0 cy:-1 lx:1 ly:0];
+    [self drawCString:str x:x y:y c:c r:r g:g b:b a:a ix:0 iy:0 cx:0 cy:-1 lx:1 ly:0];
 }
 - (void)drawCString:(unsigned char *)str x:(int)x y:(int)y c:(unsigned char)c r:(int)r g:(int)g b:(int)b a:(int)a
 {
@@ -864,7 +864,7 @@ NSLog(@"Out of memory!");
                 int width = [Definitions widthForCString:cstr];
                 [self drawCString:cstr rotatedRightAtX:x y:y c:'b' r:_r g:_g b:_b a:_a];
                 int textXSpacing = _fontXSpacings[*p];
-                y -= width + textXSpacing;
+                y += width + textXSpacing;
             }
         }
         p++;
@@ -890,7 +890,7 @@ NSLog(@"Out of memory!");
                 int width = [Definitions widthForCString:cstr];
                 [self drawCString:cstr rotatedLeftAtX:x y:y c:'b' r:_r g:_g b:_b a:_a];
                 int textXSpacing = _fontXSpacings[*p];
-                y += width + textXSpacing;
+                y -= width + textXSpacing;
             }
         }
         p++;
@@ -902,7 +902,7 @@ NSLog(@"Out of memory!");
         return;
     }
     int textWidth = [self bitmapWidthForText:text];
-    [self drawBitmapText:text rotatedLeftAtX:startX y:startY-textWidth];
+    [self drawBitmapText:text rotatedLeftAtX:startX y:startY+textWidth];
 }
 - (void)drawBitmapText:(id)text x:(int)startX y:(int)startY
 {
