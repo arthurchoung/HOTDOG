@@ -369,6 +369,18 @@ NSLog(@"HotDogStandMenuBar handleMouseUp event %@", event);
                     int oldX = [elt intValueForKey:@"x"];
                     int newW = remainingX - leftPadding - rightPadding;
                     if (newW > 0) {
+                        id obj = [elt valueForKey:@"object"];
+                        if ([obj respondsToSelector:@selector(preferredWidthForBitmap:)]) {
+                            int w = [obj preferredWidthForBitmap:bitmap]+leftPadding+rightPadding;
+                            if (w < newW) {
+                                newW = w;
+                            }
+                        } else if ([obj respondsToSelector:@selector(preferredWidth)]) {
+                            int w = [obj preferredWidth]+leftPadding+rightPadding;
+                            if (w < newW) {
+                                newW = w;
+                            }
+                        }
                         [elt setValue:nsfmt(@"%d", oldX+leftPadding) forKey:@"x"];
                         [elt setValue:nsfmt(@"%d", newW) forKey:@"width"];
                     }
