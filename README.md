@@ -47,8 +47,6 @@ HOT DOG Linux is an acronym that stands for **H**orrible **O**bsolete **T**ypefa
 
 ## How to compile and run
 
-$ sh makeExternal.sh
-
 $ sh makeUtils.sh
 
 $ perl build.pl
