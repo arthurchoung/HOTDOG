@@ -1303,7 +1303,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
         id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:w height:h] autorelease];
         if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
             [bitmap setColorIntR:0 g:0 b:0 a:255];
-//            [bitmap fillRectX:0 y:0 w:w h:h];
+//            [bitmap fillRectangleAtX:0 y:0 w:w h:h];
             [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:w h:h]];
         } else {
             [bitmap setColor:@"white"];
