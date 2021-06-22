@@ -274,7 +274,11 @@ static id callMethod(id target, struct objc_method *m, id args)
                 }
             } else if (signature[5] == 'i') {
                 if (signature[6] == 0) {
-                    if (signature[0] == 'L') {
+                    if (signature[0] == 'v') {
+                        void (*func)(id, SEL, id, int, int) = imp;
+                        func(target, sel, [args nth:0], [[args nth:1] intValue], [[args nth:2] intValue]);
+                        return target;
+                    } else if (signature[0] == 'L') {
                         unsigned long (*func)(id, SEL, id, int, int) = imp;
                         unsigned long val = func(target, sel, [args nth:0], [[args nth:1] intValue], [[args nth:2] intValue]);
                         return nsfmt(@"%lu", val);
