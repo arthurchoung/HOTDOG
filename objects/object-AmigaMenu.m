@@ -98,11 +98,11 @@
     [bitmap fillRect:outerRect];
     [bitmap setColor:@"black"];
     for (int i=1; i<r.h; i+=2) {
-        [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:r.y+i];
+        [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
     }
     [bitmap setColor:@"white"];
     for (int i=0; i<r.h; i+=2) {
-        [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:r.y+i];
+        [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
     }
     [bitmap useTopazFont];
 
@@ -141,7 +141,7 @@
                 }
             } else {
                 [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
-                [bitmap drawHorizontalDashedLineX:r2.x x:r2.x+r2.w y:r2.y+r2.h/2 dashLength:1];
+                [bitmap drawHorizontalDashedLineAtX:r2.x x:r2.x+r2.w y:r2.y+r2.h/2 dashLength:1];
             }
             [self setValue:elt forKey:@"selectedObject"];
         } else {
@@ -161,7 +161,7 @@
                 }
             } else {
                 [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
-                [bitmap drawHorizontalDashedLineX:r2.x x:r2.x+r2.w y:r2.y+r2.h/2 dashLength:1];
+                [bitmap drawHorizontalDashedLineAtX:r2.x x:r2.x+r2.w y:r2.y+r2.h/2 dashLength:1];
             }
         }
     }
