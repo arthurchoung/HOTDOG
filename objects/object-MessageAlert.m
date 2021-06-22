@@ -115,6 +115,7 @@
     Int4 _buttonRect;
     int _buttonDown;
     int _buttonHover;
+    int _returnKey;
 }
 @end
 @implementation BitmapMessageAlert
@@ -126,7 +127,13 @@
     _buttonRect = [Definitions rectWithX:r.w-88 y:r.h-21-28 w:70 h:28];
     Int4 textRect = _buttonRect;
     textRect.y += 1;
+    BOOL okButtonDown = NO;
     if (_buttonDown && _buttonHover) {
+        okButtonDown = YES;
+    } else if (_returnKey) {
+        okButtonDown = YES;
+    }
+    if (okButtonDown) {
         char *palette = ". #000000\nb #000000\nw #ffffff\n";
         [Definitions drawDefaultButtonInBitmap:bitmap rect:_buttonRect palette:palette];
         [bitmap setColorIntR:255 g:255 b:255 a:255];
@@ -141,6 +148,23 @@
     id text = [bitmap fitBitmapString:_text width:textWidth];
     [bitmap setColorIntR:0 g:0 b:0 a:255];
     [bitmap drawBitmapText:text x:89 y:24];
+}
+- (void)handleKeyDown:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        _returnKey = 1;
+    }
+}
+- (void)handleKeyUp:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        if (_returnKey) {
+            [self handleCloseEvent:event];
+            _returnKey = 0;
+        }
+    }
 }
 - (void)handleMouseDown:(id)event
 {
