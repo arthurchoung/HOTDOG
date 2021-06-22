@@ -185,7 +185,7 @@ NSLog(@"dealloc Menu %@", self);
                 }
             } else {
                 [bitmap setColor:@"black"];
-                [bitmap drawHorizontalDashedLineX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
+                [bitmap drawHorizontalDashedLineAtX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
             }
             [self setValue:elt forKey:@"selectedObject"];
         } else {
@@ -205,7 +205,7 @@ NSLog(@"dealloc Menu %@", self);
                 }
             } else {
                 [bitmap setColor:@"black"];
-                [bitmap drawHorizontalDashedLineX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
+                [bitmap drawHorizontalDashedLineAtX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
             }
         }
     }
