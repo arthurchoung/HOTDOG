@@ -847,8 +847,8 @@
     [Definitions drawResizeButtonInBitmap:bitmap x:r.x+r.w-16 y:r.y+r.h-16];
     if (infoBarHeight) {
         [bitmap setColor:@"black"];
-        [bitmap drawLineX:r.x y:r.y+r.h-1-40 x:r.x+r.w-1 y:r.y+r.h-1-40];
-        [bitmap drawLineX:r.x y:r.y+r.h-1-38 x:r.x+r.w-1 y:r.y+r.h-1-38];
+        [bitmap drawLineAtX:r.x y:r.y+r.h-1-40 x:r.x+r.w-1 y:r.y+r.h-1-40];
+        [bitmap drawLineAtX:r.x y:r.y+r.h-1-38 x:r.x+r.w-1 y:r.y+r.h-1-38];
         [bitmap useGenevaFont];
         [bitmap setColorIntR:0 g:0 b:0 a:255];
         [bitmap drawBitmapText:@"16 items        3,622K in disk           6,453K available" x:20 y:r.y+r.h-1-20];
@@ -897,12 +897,12 @@
     } else {
         [bitmap setColor:@"#555555ff"];
     }
-    [bitmap drawVerticalLineX:rr.x y:rr.y y:rr.y+rr.h-1];
-    [bitmap drawVerticalLineX:rr.x+rr.w-1 y:rr.y y:rr.y+rr.h-1];
-    [bitmap drawVerticalLineX:rr.x+rr.w-2 y:rr.y y:rr.y+rr.h-1];
-    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y];
-    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-1];
-    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-2 y:rr.y+rr.h-2];
+    [bitmap drawVerticalLineAtX:rr.x y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawVerticalLineAtX:rr.x+rr.w-1 y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawVerticalLineAtX:rr.x+rr.w-2 y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y];
+    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-1];
+    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-2 y:rr.y+rr.h-2];
 
     if (_buttonDown == 't') {
         char *palette = "b #000000\nw #ffffff\n";
