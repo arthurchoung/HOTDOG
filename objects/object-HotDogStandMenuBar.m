@@ -298,7 +298,7 @@ NSLog(@"HotDogStandMenuBar handleMouseUp event %@", event);
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
     [bitmap setColor:@"black"];
-    [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:19];
+    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:19];
     id windowManager = [@"windowManager" valueForKey];
     int mouseRootX = [windowManager intValueForKey:@"mouseX"];
     id mouseMonitor = [Definitions monitorForX:mouseRootX y:0];
@@ -420,7 +420,7 @@ NSLog(@"HotDogStandMenuBar handleMouseUp event %@", event);
                     id firstLetter = [text stringToIndex:1];
                     if (firstLetter) {
                         int w = [bitmap bitmapWidthForText:firstLetter];
-                        [bitmap drawHorizontalLineX:r3.x x:r3.x+w y:r3.y+r3.h-4];
+                        [bitmap drawHorizontalLineAtX:r3.x x:r3.x+w y:r3.y+r3.h-4];
                     }
                 }
             } else if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
@@ -445,7 +445,7 @@ NSLog(@"HotDogStandMenuBar handleMouseUp event %@", event);
                     id firstLetter = [text stringToIndex:1];
                     if (firstLetter) {
                         int w = [bitmap bitmapWidthForText:firstLetter];
-                        [bitmap drawHorizontalLineX:r3.x x:r3.x+w y:r3.y+r3.h-4];
+                        [bitmap drawHorizontalLineAtX:r3.x x:r3.x+w y:r3.y+r3.h-4];
                     }
                 }
             } else {
