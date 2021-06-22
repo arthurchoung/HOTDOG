@@ -25,8 +25,17 @@
 
 #import "HOTDOG.h"
 
+static void signal_handler(int num)
+{
+NSLog(@"signal_handler %d", num);
+}
+
 int main(int argc, char **argv)
 {
+    if (signal(SIGPIPE, signal_handler) == SIG_ERR) {
+NSLog(@"unable to set signal handler for SIGPIPE");
+    }
+
 #ifndef BUILD_FOR_OSX
     extern void HOTDOG_initialize(void);
     HOTDOG_initialize();
@@ -127,13 +136,30 @@ NSLog(@"unable to read file '%s'", argv[2]);
 exit(1);
                 }
             } else {
-NSLog(@"check1");
                 lines = [Definitions linesFromStandardInput];
 NSLog(@"lines %@", lines);
             }
             if (lines) {
                 id nav = [Definitions mainInterface];
                 id obj = [lines asListInterface];
+                [nav pushObject:obj];
+                [Definitions runWindowManagerForObject:nav];
+            }
+        } else if ((argc > 1) && !strcmp(argv[1], "table")) {
+            id lines = nil;
+            if (argc > 2) {
+                lines = [nscstr(argv[2]) linesFromFile];
+                if (!lines) {
+NSLog(@"unable to read file '%s'", argv[2]);
+exit(1);
+                }
+            } else {
+                lines = [Definitions linesFromStandardInput];
+NSLog(@"lines %@", lines);
+            }
+            if (lines) {
+                id nav = [Definitions mainInterface];
+                id obj = [lines asTableInterface];
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
             }
