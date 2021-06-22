@@ -134,6 +134,7 @@
     Int4 _rects[2];
     int _buttonDown;
     int _buttonHover;
+    int _returnKey;
 }
 @end
 @implementation ConfirmationDialog
@@ -150,7 +151,13 @@
 
     Int4 okButtonRect = [Definitions rectWithX:r.w-okTextWidth-26-18 y:r.h-21-28 w:okTextWidth+26 h:28];
     _rects[0] = okButtonRect;
+    BOOL okButtonDown = NO;
     if ((_buttonDown == 1) && (_buttonDown == _buttonHover)) {
+        okButtonDown = YES;
+    } else if (_returnKey) {
+        okButtonDown = YES;
+    }
+    if (okButtonDown) {
         char *palette = ". #000000\nb #000000\nw #ffffff\n";
         [Definitions drawDefaultButtonInBitmap:bitmap rect:okButtonRect palette:palette];
         [bitmap setColorIntR:255 g:255 b:255 a:255];
@@ -179,6 +186,23 @@
     id text = [bitmap fitBitmapString:_text width:textWidth];
     [bitmap setColorIntR:0 g:0 b:0 a:255];
     [bitmap drawBitmapText:text x:89 y:24];
+}
+- (void)handleKeyDown:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        _returnKey = 1;
+    }
+}
+- (void)handleKeyUp:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        if (_returnKey) {
+            [self handleOKButton:event];
+            _returnKey = 0;
+        }
+    }
 }
 - (void)handleMouseDown:(id)event
 {
@@ -216,14 +240,18 @@
     }
     _buttonDown = 0;
     if (buttonUp == 1) {
-        id x11dict = [event valueForKey:@"x11dict"];
-        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
-        [_okText writeToStandardOutput];
+        [self handleOKButton:event];
     } else if (buttonUp == 2) {
         id x11dict = [event valueForKey:@"x11dict"];
         [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
         [@"Cancel" writeToStandardOutput];
     }
+}
+- (void)handleOKButton:(id)event
+{
+    id x11dict = [event valueForKey:@"x11dict"];
+    [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+    [_okText writeToStandardOutput];
 }
 @end
 
