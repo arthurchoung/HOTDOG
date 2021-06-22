@@ -251,12 +251,12 @@ NSLog(@"alsaStatus '%@'", line);
     volumeSliderRect.h -= 8;
     [self drawVolumeSliderInBitmap:bitmap rect:volumeSliderRect pct:sliderPct];
 
-    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y];
-    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-1];
-    [bitmap drawHorizontalLineX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-2];
-    [bitmap drawVerticalLineX:rr.x y:rr.y y:rr.y+rr.h-1];
-    [bitmap drawVerticalLineX:rr.x+rr.w-1 y:rr.y y:rr.y+rr.h-1];
-    [bitmap drawVerticalLineX:rr.x+rr.w-2 y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y];
+    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-1];
+    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-2];
+    [bitmap drawVerticalLineAtX:rr.x y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawVerticalLineAtX:rr.x+rr.w-1 y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawVerticalLineAtX:rr.x+rr.w-2 y:rr.y y:rr.y+rr.h-1];
 }
 
 - (void)drawVolumeSliderInBitmap:(id)bitmap rect:(Int4)r pct:(double)pct
