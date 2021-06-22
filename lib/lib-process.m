@@ -277,7 +277,6 @@ NSLog(@"unable to open /dev/null");
 {
     int _infd;
     int _outfd;
-    int _errfd;
     int _pid;
     id _status;
     id _exitStatus;
@@ -293,7 +292,6 @@ NSLog(@"unable to open /dev/null");
     if (self) {
         _infd = -1;
         _outfd = -1;
-        _errfd = -1;
     }
     return self;
 }
@@ -308,10 +306,6 @@ NSLog(@"Process dealloc pid %d getpid %d", _pid, getpid());
     if (_outfd != -1) {
         close(_outfd);
         _outfd = -1;
-    }
-    if (_errfd != -1) {
-        close(_errfd);
-        _errfd = -1;
     }
     if (_pid) {
         kill(_pid, SIGTERM);
@@ -404,25 +398,6 @@ NSLog(@"write result %d", result);
     _outfd = -1;
 }
 
-- (void)closeError
-{
-    if (_errfd == -1) {
-        return;
-    }
-    close(_errfd);
-    _errfd = -1;
-}
-
-- (id)readAllDataFromErrorThenCloseAndWait
-{
-    if (_errfd == -1) {
-        return nil;
-    }
-    id data = [self readAllData:_errfd];
-    [self closeError];
-    [self waitForExitStatus];
-    return data;
-}
 - (id)readAllDataFromOutputThenClose
 {
     if (_outfd == -1) {
@@ -531,12 +506,10 @@ NSLog(@"write result %d", result);
     
     int fdzero[2];
     int fdone[2];
-    int fdtwo[2];
     pid_t   childpid;
     
     pipe(fdzero);
     pipe(fdone);
-    pipe(fdtwo);
     
     if((childpid = fork()) == -1)
     {
@@ -555,10 +528,6 @@ NSLog(@"write result %d", result);
         close(fdone[0]);
         dup2(fdone[1], STDOUT_FILENO);
         close(fdone[1]);
-
-        close(fdtwo[0]);
-        dup2(fdtwo[1], STDERR_FILENO);
-        close(fdtwo[1]);
 
         int argc = [self count];
         char **argv = malloc(sizeof(char *)*(argc+1));
@@ -591,13 +560,10 @@ NSLog(@"write result %d", result);
         /* Parent process closes up output side of pipe */
         close(fdone[1]);
 
-        close(fdtwo[1]);
-
         id process = [[[Process alloc] init] autorelease];
         [process setValue:nsfmt(@"%d", childpid) forKey:@"pid"];
         [process setValue:nsfmt(@"%d", fdzero[1]) forKey:@"infd"];
         [process setValue:nsfmt(@"%d", fdone[0]) forKey:@"outfd"];
-        [process setValue:nsfmt(@"%d", fdtwo[0]) forKey:@"errfd"];
         return process;
     }
 }
