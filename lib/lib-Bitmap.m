@@ -262,26 +262,26 @@ NSLog(@"Out of memory!");
     _greenTimesAlpha = ((double)_g)*alpha;
     _blueTimesAlpha = ((double)_b)*alpha;
 }
-- (void)drawRectangleX:(int)x y:(int)y w:(int)w h:(int)h
+- (void)drawRectangleAtX:(int)x y:(int)y w:(int)w h:(int)h
 {
-    [self drawHorizontalLineX:x x:x+w-1 y:y];
-    [self drawHorizontalLineX:x x:x+w-1 y:y+h-1];
-    [self drawVerticalLineX:x y:y y:y+h-1];
-    [self drawVerticalLineX:x+w-1 y:y y:y+h-1];
+    [self drawHorizontalLineAtX:x x:x+w-1 y:y];
+    [self drawHorizontalLineAtX:x x:x+w-1 y:y+h-1];
+    [self drawVerticalLineAtX:x y:y y:y+h-1];
+    [self drawVerticalLineAtX:x+w-1 y:y y:y+h-1];
 }
-- (void)drawRectangleX:(int)x1 y:(int)y1 x:(int)x2 y:(int)y2
+- (void)drawRectangleAtX:(int)x1 y:(int)y1 x:(int)x2 y:(int)y2
 {
-    [self drawHorizontalLineX:x1 x:x2 y:y1];
-    [self drawHorizontalLineX:x1 x:x2 y:y2];
-    [self drawVerticalLineX:x1 y:y1 y:y2];
-    [self drawVerticalLineX:x2 y:y1 y:y2];
+    [self drawHorizontalLineAtX:x1 x:x2 y:y1];
+    [self drawHorizontalLineAtX:x1 x:x2 y:y2];
+    [self drawVerticalLineAtX:x1 y:y1 y:y2];
+    [self drawVerticalLineAtX:x2 y:y1 y:y2];
 }
 
-- (void)drawHLineX:(int)x1 x:(int)x2 y:(int)y
+- (void)drawHLineAtX:(int)x1 x:(int)x2 y:(int)y
 {
-    [self drawHorizontalLineX:x1 x:x2 y:y];
+    [self drawHorizontalLineAtX:x1 x:x2 y:y];
 }
-- (void)drawHorizontalLineX:(int)x1 x:(int)x2 y:(int)y
+- (void)drawHorizontalLineAtX:(int)x1 x:(int)x2 y:(int)y
 {
     if ((y < 0) || (y >= _bitmapHeight)) {
         return;
@@ -336,7 +336,7 @@ NSLog(@"Out of memory!");
         }
     }
 }
-- (void)drawHorizontalDashedLineX:(int)x1 x:(int)x2 y:(int)y dashLength:(int)dashLength
+- (void)drawHorizontalDashedLineAtX:(int)x1 x:(int)x2 y:(int)y dashLength:(int)dashLength
 {
     if ((y < 0) || (y >= _bitmapHeight)) {
         return;
@@ -399,11 +399,11 @@ NSLog(@"Out of memory!");
         }
     }
 }
-- (void)drawVLineX:(int)x y:(int)y1 y:(int)y2
+- (void)drawVLineAtX:(int)x y:(int)y1 y:(int)y2
 {
-    [self drawVerticalLineX:x y:y1 y:y2];
+    [self drawVerticalLineAtX:x y:y1 y:y2];
 }
-- (void)drawVerticalLineX:(int)x y:(int)y1 y:(int)y2
+- (void)drawVerticalLineAtX:(int)x y:(int)y1 y:(int)y2
 {
     if ((x < 0) || (x >= _bitmapWidth)) {
         return;
@@ -458,12 +458,12 @@ NSLog(@"Out of memory!");
         }
     }
 }
-- (void)drawLineX:(int)x1 y:(int)y1 x:(int)x2 y:(int)y2
+- (void)drawLineAtX:(int)x1 y:(int)y1 x:(int)x2 y:(int)y2
 {
     if (x1 == x2) {
-        [self drawVerticalLineX:x1 y:y1 y:y2];
+        [self drawVerticalLineAtX:x1 y:y1 y:y2];
     } else if (y1 == y2) {
-        [self drawHorizontalLineX:x1 x:x2 y:y1];
+        [self drawHorizontalLineAtX:x1 x:x2 y:y1];
     } else if (abs(x2-x1) < abs(y2-y1)) {
         if (y1 > y2) {
             int temp = y1;
@@ -570,15 +570,15 @@ NSLog(@"Out of memory!");
         }
     }
 }
-- (void)drawCircleX:(int)x y:(int)y r:(int)radius
+- (void)drawCircleAtX:(int)x y:(int)y r:(int)radius
 {
     [self fillRect:[Definitions rectWithX:x-radius y:y-radius w:radius+radius h:radius+radius]];
 }
-- (void)fillCircleX:(int)x y:(int)y r:(int)radius
+- (void)fillCircleAtX:(int)x y:(int)y r:(int)radius
 {
     [self fillRect:[Definitions rectWithX:x-radius y:y-radius w:radius+radius h:radius+radius]];
 }
-- (void)fillRectX:(int)x1 y:(int)y1 x:(int)x2 y:(int)y2
+- (void)fillRectangleAtX:(int)x1 y:(int)y1 x:(int)x2 y:(int)y2
 {
     if (x2 < x1) {
         int tmp = x1;
@@ -598,7 +598,7 @@ NSLog(@"Out of memory!");
     }
     [self fillRect:[Definitions rectWithX:x1 y:y1 w:x2-x1 h:y2-y1]];
 }
-- (void)fillRectX:(int)x y:(int)y w:(int)w h:(int)h
+- (void)fillRectangleAtX:(int)x y:(int)y w:(int)w h:(int)h
 {
     [self fillRect:[Definitions rectWithX:x y:y w:w h:h]];
 }
@@ -855,6 +855,16 @@ NSLog(@"Out of memory!");
     int x = startX;
     int y = startY;
     while (*p) {
+        if (*p == '#') {
+            if (p[1] == '{') {
+                unsigned char *q = strchr(p+2, '}');
+                id message = nsfmt(@"%.*s", q - p - 2, p+2);
+                [self evaluateMessage:message];
+                p = q+1;
+                continue;
+            }
+        }
+
         if (*p == '\n') {
             x += textHeight;
             y = startY;
@@ -881,6 +891,16 @@ NSLog(@"Out of memory!");
     int x = startX;
     int y = startY;
     while (*p) {
+        if (*p == '#') {
+            if (p[1] == '{') {
+                unsigned char *q = strchr(p+2, '}');
+                id message = nsfmt(@"%.*s", q - p - 2, p+2);
+                [self evaluateMessage:message];
+                p = q+1;
+                continue;
+            }
+        }
+
         if (*p == '\n') {
             x += textHeight;
             y = startY;
@@ -915,6 +935,16 @@ NSLog(@"Out of memory!");
     int x = startX;
     int y = startY;
     while (*p) {
+        if (*p == '#') {
+            if (p[1] == '{') {
+                unsigned char *q = strchr(p+2, '}');
+                id message = nsfmt(@"%.*s", q - p - 2, p+2);
+                [self evaluateMessage:message];
+                p = q+1;
+                continue;
+            }
+        }
+
         if (*p == '\n') {
             x = startX;
             y += textHeight;
@@ -931,6 +961,11 @@ NSLog(@"Out of memory!");
     }
 }
 
+- (void)drawBitmapText:(id)text centeredAtX:(int)x y:(int)y w:(int)w h:(int)h
+{
+    [self drawBitmapText:text centeredInRect:(Int4){x, y, w, h}];
+}
+
 - (void)drawBitmapText:(id)text centeredInRect:(Int4)rect
 {
     if (![text length]) {
@@ -940,6 +975,11 @@ NSLog(@"Out of memory!");
     int textHeight = _fontHeights['A'];
     Int4 textRect = [Definitions centerRect:[Definitions rectWithX:0 y:0 w:textWidth h:textHeight] inRect:rect];
     [self drawBitmapText:text x:textRect.x y:textRect.y+1];
+}
+
+- (void)drawBitmapText:(id)text leftAlignedAtX:(int)x y:(int)y w:(int)w h:(int)h
+{
+    [self drawBitmapText:text leftAlignedAtRect:(Int4){x, y, w, h}];
 }
 
 - (void)drawBitmapText:(id)text leftAlignedInRect:(Int4)rect
@@ -953,6 +993,11 @@ NSLog(@"Out of memory!");
     [self drawBitmapText:text x:rect.x+8 y:textRect.y+2];
 }
 
+- (void)drawBitmapText:(id)text topRightAlignedAtX:(int)x y:(int)y w:(int)w h:(int)h
+{
+    [self drawBitmapText:text topRightAlignedInRect:(Int4){x, y, w, h}];
+}
+
 - (void)drawBitmapText:(id)text topRightAlignedInRect:(Int4)rect
 {
     if (![text length]) {
@@ -961,6 +1006,12 @@ NSLog(@"Out of memory!");
     int textWidth = [self bitmapWidthForText:text];
     [self drawBitmapText:text x:rect.x+rect.w-textWidth-8 y:rect.y];
 }
+
+- (void)drawBitmapText:(id)text rightAlignedAtX:(int)x y:(int)y w:(int)w h:(int)h
+{
+    [self drawBitmapText:text rightAlignedInRect:(Int4){x, y, w, h}];
+}
+
 - (void)drawBitmapText:(id)text rightAlignedInRect:(Int4)rect
 {
     if (![text length]) {
@@ -987,6 +1038,16 @@ NSLog(@"Out of memory!");
     return [Definitions fitBitmapString:text width:maxWidth widths:_fontWidths];
 }
 
+
+- (void)drawPixelString:(id)str palette:(id)palette x:(int)x y:(int)y
+{
+    char *pixelcstr = [str UTF8String];
+    char *palettecstr = [palette UTF8String];
+    if (!pixelcstr || !palettecstr) {
+        return;
+    }
+    [self drawCString:pixelcstr palette:palettecstr x:x y:y];
+}
 
 - (void)drawCString:(unsigned char *)str palette:(unsigned char *)palette x:(int)x y:(int)y
 {
