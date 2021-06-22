@@ -266,6 +266,16 @@
     int maxLineWidth = 0;
     int lineWidth = 0;
     while (*p) {
+        if (*p == '#') {
+            if (p[1] == '{') {
+                unsigned char *q = strchr(p+2, '}');
+                id message = nsfmt(@"%.*s", q - p - 2, p+2);
+                [self evaluateMessage:message];
+                p = q+1;
+                continue;
+            }
+        }
+
         if (*p == '\n') {
             if (lineWidth > maxLineWidth) {
                 maxLineWidth = lineWidth;
