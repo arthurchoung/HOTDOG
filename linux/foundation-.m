@@ -539,6 +539,53 @@ NSLog(@"WARNING: no autorelease pool");
 }
 @end
 
+static int hexchartoint(char c)
+{
+    switch(c) {
+        case '0': return 0;
+        case '1': return 1;
+        case '2': return 2;
+        case '3': return 3;
+        case '4': return 4;
+        case '5': return 5;
+        case '6': return 6;
+        case '7': return 7;
+        case '8': return 8;
+        case '9': return 9;
+        case 'A': case 'a': return 10;
+        case 'B': case 'b': return 11;
+        case 'C': case 'c': return 12;
+        case 'D': case 'd': return 13;
+        case 'E': case 'e': return 14;
+        case 'F': case 'f': return 15;
+    }
+    return -1;
+}
+static void decode_percent_encoded_string(char *buf)
+{
+    char *p = buf;
+    char *dst = buf;
+    for(;;) {
+        if (!*p) {
+            *dst = 0;
+            return;
+        }
+        if (*p == '%') {
+            int val1 = hexchartoint(p[1]);
+            int val2 = hexchartoint(p[2]);
+            if ((val1 >= 0) && (val2 >= 0)) {
+                int val = val1*16+val2;
+                *dst = val;
+                dst++;
+                p += 3;
+                continue;
+            }
+        }
+        *dst = *p;
+        dst++;
+        p++;
+    }
+}
 
 @implementation NSMutableString
 @end
@@ -661,6 +708,20 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
     }
     return [[[NSMutableString alloc] initWithBytesNoCopy:strp length:result] autorelease];
 }
+
+- (id)destructiveDecodePercentEncodedString
+{
+    if (!_alloc) {
+        return nil;
+    }
+    if (!*_contents) {
+        return self;
+    }
+    decode_percent_encoded_string(_contents);
+    _length = strlen(_contents);
+    return self;
+}
+
 - (id)destructiveReplaceCharactersNotInString:(id)keepString withChar:(char)c
 {
     char *keepChars = [keepString UTF8String];
@@ -685,6 +746,7 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
     }
     if (p[len-1] == 10) {
         p[len-1] = 0;
+        _length = len-1;
     }
     return self;
 }
@@ -991,6 +1053,10 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
 - (id)copy
 {
     return [[NSString alloc] initWithBytes:_contents length:_length];
+}
+- (id)decodePercentEncodedString
+{
+    return [[[self copy] autorelease] destructiveDecodePercentEncodedString];
 }
 - (id)chomp
 {
