@@ -124,9 +124,9 @@
 
             int x = 10 + fieldWidth + 10;
             [bitmap setColor:@"black"];
-            [bitmap fillRectX:x y:y w:r.w-x-10 h:22];
+            [bitmap fillRectangleAtX:x y:y w:r.w-x-10 h:22];
             [bitmap setColor:@"white"];
-            [bitmap fillRectX:x+1 y:y+1 w:r.w-x-10-2 h:22-2];
+            [bitmap fillRectangleAtX:x+1 y:y+1 w:r.w-x-10-2 h:22-2];
 
             id str = [_buffers nth:i];
             if (!str) {
@@ -143,7 +143,7 @@
             if (_currentField == i) {
                 if (_cursorBlink) {
                     [bitmap setColor:@"black"];
-                    [bitmap drawVerticalLineX:x-1+4 y:y+3 y:y+18];
+                    [bitmap drawVerticalLineAtX:x-1+4 y:y+3 y:y+18];
                 }
             }
             if ([right length]) {
