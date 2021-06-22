@@ -93,13 +93,13 @@
     [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
     [bitmap fillRect:r];
     [bitmap setColorIntR:0x86 g:0x8a b:0x8e a:0xff];
-    [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
-    [bitmap drawVerticalLineX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
+    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
+    [bitmap drawVerticalLineAtX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
     [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
-    [bitmap drawHorizontalLineX:r.x x:r.x+r.w-2 y:r.y];
-    [bitmap drawHorizontalLineX:r.x x:r.x+r.w-2 y:r.y+r.h-2];
-    [bitmap drawVerticalLineX:r.x y:r.y y:r.y+r.h-2];
-    [bitmap drawVerticalLineX:r.x+r.w-2 y:r.y y:r.y+r.h-2];
+    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-2 y:r.y];
+    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-2 y:r.y+r.h-2];
+    [bitmap drawVerticalLineAtX:r.x y:r.y y:r.y+r.h-2];
+    [bitmap drawVerticalLineAtX:r.x+r.w-2 y:r.y y:r.y+r.h-2];
 
     r.x += 1;
     r.y += 1;
@@ -141,7 +141,7 @@
                 }
             } else {
                 [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
-                [bitmap drawHorizontalDashedLineX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
+                [bitmap drawHorizontalDashedLineAtX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
             }
             [self setValue:elt forKey:@"selectedObject"];
         } else {
@@ -161,7 +161,7 @@
                 }
             } else {
                 [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
-                [bitmap drawHorizontalDashedLineX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
+                [bitmap drawHorizontalDashedLineAtX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
             }
         }
     }
