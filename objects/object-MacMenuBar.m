@@ -340,7 +340,7 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
     [bitmap setColor:@"black"];
-    [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:r.y+19];
+    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+19];
 
     id windowManager = [@"windowManager" valueForKey];
     int mouseRootX = [windowManager intValueForKey:@"mouseX"];
