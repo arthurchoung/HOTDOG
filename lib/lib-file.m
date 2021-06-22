@@ -365,11 +365,11 @@ static int qsort_asFileArray(void *aptr, void *bptr, void *arg)
 
 - (id)linesFromFile
 {
-    return [[[self stringFromFile] chomp] split:@"\n"];
+    return [[[self stringFromFile] chomp] componentsSeparatedByString:@"\n"];
 }
 - (id)readAsLinesFromFile
 {
-    return [[[self stringFromFile] chomp] split:@"\n"];
+    return [[[self stringFromFile] chomp] componentsSeparatedByString:@"\n"];
 }
 
 - (id)resolveSymlinks
