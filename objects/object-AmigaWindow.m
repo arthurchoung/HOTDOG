@@ -612,11 +612,11 @@
     int verticalScrollBarWidth = [Definitions widthForCString:verticalScrollBarMiddle];
     [bitmap setColor:@"#0055aa"];
     for (int i=0; i<r.h; i+=2) {
-        [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:r.y+i];
+        [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
     }
     [bitmap setColor:@"#000000"];
     for (int i=1; i<r.h; i+=2) {
-        [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:r.y+i];
+        [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
     }
     [Definitions drawAmigaHorizontalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+r.h-scrollBarHeight w:r.w-verticalScrollBarWidth h:scrollBarHeight]];
     [Definitions drawAmigaVerticalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x+r.w-verticalScrollBarWidth y:r.y+titleBarHeight w:verticalScrollBarWidth h:r.h-titleBarHeight-scrollBarHeight]];
