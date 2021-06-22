@@ -585,8 +585,8 @@
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
     [bitmap setColor:@"black"];
-    [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
-    [bitmap drawVerticalLineX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
+    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
+    [bitmap drawVerticalLineAtX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
     if (hasFocus) {
         char *left = [Definitions cStringForAtariSTActiveTitleBarLeft];
         char *middle = [Definitions cStringForAtariSTActiveTitleBarMiddle];
