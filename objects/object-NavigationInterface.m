@@ -40,9 +40,11 @@
 #ifdef BUILD_FOR_IOS
 + (id)ListInterface
 {
+NSLog(@"ListInterface");
     id arr = [@"00index.csv" parseCSVFile];
     if (!arr) {
         arr = [@"00index.json" readFromFileAsJSON];
+NSLog(@"arr %@", arr);
         if ([arr isKindOfClass:[@"NSDictionary" asClass]]) {
             arr = [arr asKeyValueArray];
         }
@@ -1097,7 +1099,7 @@ shadowRect.y -= 1;
     [bitmap setColorIntR:240 g:240 b:240 a:255];
     [bitmap drawBitmapText:title centeredInRect:headerRect];
     [bitmap setColor:@"black"];
-    [bitmap drawHorizontalLineX:headerRect.x x:headerRect.x+headerRect.w y:headerRect.y+headerRect.h-1];
+    [bitmap drawHorizontalLineAtX:headerRect.x x:headerRect.x+headerRect.w y:headerRect.y+headerRect.h-1];
     
     if (backButton) {
         Int4 buttonRect = [Definitions rectWithX:headerRect.x y:headerRect.y w:headerRect.w/4.0 h:headerRect.h];
