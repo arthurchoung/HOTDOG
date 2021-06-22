@@ -46,10 +46,10 @@
         return;
     }
     [bitmap setColor:@"black"];
-    [bitmap drawLineX:r.x y:r.y x:r.x+r.w-1 y:r.y];
-    [bitmap drawLineX:r.x y:r.y+r.h-1 x:r.x+r.w-1 y:r.y+r.h-1];
-    [bitmap drawLineX:r.x y:r.y x:r.x y:r.y+r.h-1];
-    [bitmap drawLineX:r.x+r.w-1 y:r.y x:r.x+r.w-1 y:r.y+r.h-1];
+    [bitmap drawLineAtX:r.x y:r.y x:r.x+r.w-1 y:r.y];
+    [bitmap drawLineAtX:r.x y:r.y+r.h-1 x:r.x+r.w-1 y:r.y+r.h-1];
+    [bitmap drawLineAtX:r.x y:r.y x:r.x y:r.y+r.h-1];
+    [bitmap drawLineAtX:r.x+r.w-1 y:r.y x:r.x+r.w-1 y:r.y+r.h-1];
 }
 - (void)handleMouseDown:(id)event
 {
