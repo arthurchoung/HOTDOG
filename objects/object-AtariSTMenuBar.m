@@ -270,8 +270,8 @@ NSLog(@"AtariSTMenuBar handleMouseUp event %@", event);
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
     [bitmap setColor:@"black"];
-    [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:19];
-    [bitmap drawHorizontalLineX:r.x x:r.x+r.w-1 y:18];
+    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:19];
+    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:18];
     {
         int emptyIndex = [_array count];
 
