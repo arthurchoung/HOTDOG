@@ -261,6 +261,13 @@ static id callMethod(id target, struct objc_method *m, id args)
                         }
                     }
                 }
+            } else if (signature[5] == 'C') {
+                if (signature[6] == 0) {
+                    if (signature[0] == '@') {
+                        id (*func)(id, SEL, id, id, unsigned char) = imp;
+                        return func(target, sel, [args nth:0], [args nth:1], [[args nth:2] unsignedCharValue]);
+                    }
+                }
             }
         } else if (signature[4] == 'i') {
             if (signature[5] == 0) {
@@ -332,6 +339,13 @@ static id callMethod(id target, struct objc_method *m, id args)
                     _Bool (*func)(id, SEL, id, long long) = imp;
                     _Bool val = func(target, sel, [args nth:0], [[args nth:1] longLongValue]);
                     return (val) ? @"1" : @"0";
+                }
+            }
+        } else if (signature[4] == 'C') {
+            if (signature[5] == 0) {
+                if (signature[0] == '@') {
+                    id (*func)(id, SEL, id, unsigned char) = imp;
+                    return func(target, sel, [args nth:0], [[args nth:1] unsignedCharValue]);
                 }
             }
         }

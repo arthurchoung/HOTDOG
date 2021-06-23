@@ -31,7 +31,12 @@
 {
     return [self inputTextWithAlert:text];
 }
+
 + (id)inputTextWithAlert:(id)text
+{
+    return [Definitions inputTextWithAlert:text hidden:NO];
+}
++ (id)inputTextWithAlert:(id)text hidden:(BOOL)hidden
 {
     text = [text keepAlphanumericCharactersAndSpacesAndPunctuationAndNewlines];
     id quotedTitle = nil;
@@ -44,7 +49,7 @@
         quotedTitle = [text asQuotedString];
         quotedText = quotedTitle;
     }
-    id message = nsfmt(@"TextInputDialog:%@ field:%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedTitle, quotedText, 600, 400);
+    id message = nsfmt(@"TextInputDialog:%@ field:%@%@|showInXWindowWithWidth:%d height:%d|exit:0", quotedTitle, quotedText, (hidden) ? @" hidden:1" : @"", 600, 400);
     id cmd = nsarr();
     [cmd addObject:@"hotdog"];
     [cmd addObject:message];
@@ -88,6 +93,12 @@
 #endif
 
 @implementation Definitions(jfldslkfjdslkjfzkvjbvie)
++ (id)TextInputDialog:(id)text field:(id)field hidden:(BOOL)hidden
+{
+    id obj = [Definitions TextInputDialog:text field:field];
+    [obj setValue:@"1" forKey:@"hideText"];
+    return obj;
+}
 + (id)TextInputDialog:(id)text field:(id)field
 {
     id obj = [@"TextInputDialog" asInstance];
@@ -125,6 +136,7 @@
     int _cursorPos;
     int _currentField;
     int _returnKey;
+    BOOL _hideText;
 }
 @end
 @implementation TextInputDialog
@@ -174,6 +186,17 @@ NSLog(@"text '%@'", text);
             [bitmap fillRectangleAtX:x+1 y:y+1 w:r.w-x-10-2 h:22-2];
 
             id str = [_buffers nth:i];
+            if (_hideText) {
+                if ([str length]) {
+                    id hideStr = @"*******************************";
+                    int maxHideLen = [hideStr length];
+                    int hideLen = [str length];
+                    if (hideLen > maxHideLen) {
+                        hideLen = maxHideLen;
+                    }
+                    str = [hideStr substringToIndex:hideLen];
+                }
+            }
             if (!str) {
                 str = @"";
             }
