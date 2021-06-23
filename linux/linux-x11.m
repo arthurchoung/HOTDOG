@@ -1176,7 +1176,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
 #endif
     }
 
-    Window win = [self openWindowWithName:[object className] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
+    Window win = [self openWindowWithName:[[@"." asRealPath] lastPathComponent] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
 
     id dict = nsdict();
     [dict setValue:nsfmt(@"%lu", win) forKey:@"window"];
