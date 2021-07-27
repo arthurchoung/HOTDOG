@@ -608,6 +608,7 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
     id _animateFromContext;
     id _animateToContext;
     id _animateTransition;
+    id _defaultTitle;
 }
 @end
 
@@ -1036,7 +1037,15 @@ NSLog(@"obj %@", obj);
         id obj = [_context valueForKey:@"object"];
         if (obj) {
             id headerFormat = [obj valueForKey:@"headerFormat"];
-            title = (headerFormat) ? [obj str:headerFormat] : nsfmt(@"%@", [obj class]);
+            if (headerFormat) {
+                title = [obj str:headerFormat];
+            } else if (_defaultTitle) {
+                title = _defaultTitle;
+            } else {
+                title = nsfmt(@"%@", [obj class]);
+            }
+
+
             if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
                 [obj drawInBitmap:bitmap rect:r1];
                 goto end;
