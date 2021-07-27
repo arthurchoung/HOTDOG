@@ -61,6 +61,42 @@ exit(0);
 //NSLog(@"results %@", [results join:@""]);
     return results;
 }
++ (id)blocksFromStandardInput
+{
+    id results = nsarr();
+    id dict = nsdict();
+    char buf[16384];
+    while (fgets(buf, 16384, stdin)) {
+        int len = strlen(buf);
+        if (!len) {
+            break;
+        }
+        if (buf[len-1] != '\n') {
+NSLog(@"ERROR: line too long");
+exit(0);
+        }
+        buf[len-1] = 0;
+        len--;
+        if (!len) {
+            // empty line
+            if ([dict count]) {
+                [results addObject:dict];
+                dict = nsdict();
+            }
+        } else {
+            char *p = strchr(buf, ':');
+            if (p) {
+                *p = 0;
+                p++;
+                [dict setValue:nsfmt(@"%s", p) forKey:nsfmt(@"%s", buf)];
+            }
+        }
+    }
+    if ([dict count]) {
+        [results addObject:dict];
+    }
+    return results;
+}
 @end
 
 @implementation Definitions(jfdosjfkldsjfklsdjklfjk)
