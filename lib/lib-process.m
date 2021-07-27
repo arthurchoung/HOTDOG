@@ -189,6 +189,14 @@ NSLog(@"unable to open /dev/null");
                     argv[0] = [elt UTF8String];
                     continue;
                 }
+                if ([elt hasPrefix:@"./"]) {
+                    argv[0] = [elt UTF8String];
+                    continue;
+                }
+                if ([elt hasPrefix:@"../"]) {
+                    argv[0] = [elt UTF8String];
+                    continue;
+                }
                 id path = [elt findInPath];
                 if (path) {
                     argv[0] = [path UTF8String];
