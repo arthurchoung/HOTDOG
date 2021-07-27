@@ -27,6 +27,7 @@
 
 snd_ctl_t *_ctl;
 char *_name = "hw:0";
+char *_mix_name = "Master";
 
 int setup()
 {
@@ -73,23 +74,19 @@ double read_alsa_volume()
     snd_mixer_elem_t* elem;
     snd_mixer_selem_id_t* sid;
 
-    static const char* mix_name = "Master";
-    static const char* card = "default";
-    static int mix_index = 0;
-
     long pmin, pmax;
     long get_vol, set_vol;
 
     snd_mixer_selem_id_alloca(&sid);
 
     //sets simple-mixer index and name
-    snd_mixer_selem_id_set_index(sid, mix_index);
-    snd_mixer_selem_id_set_name(sid, mix_name);
+    snd_mixer_selem_id_set_index(sid, 0);
+    snd_mixer_selem_id_set_name(sid, _mix_name);
 
     if ((snd_mixer_open(&handle, 0)) < 0) {
         return 0.0;
     }
-    if ((snd_mixer_attach(handle, card)) < 0) {
+    if ((snd_mixer_attach(handle, _name)) < 0) {
         snd_mixer_close(handle);
         return 0.0;
     }
@@ -137,17 +134,13 @@ int read_alsa_playback_switch()
     snd_mixer_elem_t* elem;
     snd_mixer_selem_id_t* sid;
 
-    static const char* mix_name = "Master";
-    static const char* card = "default";
-    static int mix_index = 0;
-
     long pmin, pmax;
     long get_vol, set_vol;
 
     if ((snd_mixer_open(&handle, 0)) < 0) {
         return 0;
     }
-    if ((snd_mixer_attach(handle, card)) < 0) {
+    if ((snd_mixer_attach(handle, _name)) < 0) {
         snd_mixer_close(handle);
         return 0;
     }
@@ -164,8 +157,8 @@ int read_alsa_playback_switch()
     snd_mixer_selem_id_alloca(&sid);
 
     //sets simple-mixer index and name
-    snd_mixer_selem_id_set_index(sid, mix_index);
-    snd_mixer_selem_id_set_name(sid, mix_name);
+    snd_mixer_selem_id_set_index(sid, 0);
+    snd_mixer_selem_id_set_name(sid, _mix_name);
 
     elem = snd_mixer_find_selem(handle, sid);
     if (!elem) {
@@ -185,33 +178,30 @@ int read_alsa_playback_switch()
     return 0;
 }
 
-void print_raw_status()
-{
-    int playback_switch = read_alsa_playback_switch();
-    double vol = read_alsa_volume();
-    printf("%d %f\n", (playback_switch) ? 1 : 0, vol);
-    fflush(stdout);
-}
 void print_status()
 {
     int playback_switch = read_alsa_playback_switch();
     double vol = read_alsa_volume();
-    if (playback_switch) {
-        printf("Volume: %d%%\n", (int)(vol*100.0));
-    } else {
-        printf("Volume: Muted\n");
-    }
+    printf("playbackSwitch:%d volume:%f\n", (playback_switch) ? 1 : 0, vol);
     fflush(stdout);
 }
 
+/*
+
+Usage: printALSAStatus [card name] [mixer name]
+
+'card name' is 'hw:0' by default
+'mixer name' is 'Master' by default
+
+*/
+
 int main(int argc, char **argv)
 {
-    int flag = 0;
-
-    if (argc != 1) {
-        if (argv[1][0] == '1') {
-            flag = 1;
-        }
+    if (argc >= 2) {
+        _name = argv[1];
+    }
+    if (argc >= 3) {
+        _mix_name = argv[2];
     }
 
     if (!setup()) {
@@ -219,11 +209,7 @@ int main(int argc, char **argv)
     }
 
     for(;;) {
-        if (flag) {
-            print_raw_status();
-        } else {
-            print_status();
-        }
+        print_status();
         read_alsa_event();
     }
 
