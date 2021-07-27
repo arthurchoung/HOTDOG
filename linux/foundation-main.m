@@ -145,6 +145,19 @@ NSLog(@"lines %@", lines);
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "linesfmt")) {
+            id stringFormat = nil;
+            if (argc > 2) {
+                stringFormat = nscstr(argv[2]);
+            }
+            id lines = [Definitions linesFromStandardInput];
+            if (lines) {
+                id nav = [Definitions mainInterface];
+                id obj = [lines asListInterface];
+                [obj setValue:stringFormat forKey:@"defaultStringFormat"];
+                [nav pushObject:obj];
+                [Definitions runWindowManagerForObject:nav];
+            }
         } else if ((argc > 1) && !strcmp(argv[1], "table")) {
             id lines = nil;
             if (argc > 2) {
@@ -201,6 +214,64 @@ exit(1);
                 [nav pushObject:object];
                 [Definitions runWindowManagerForObject:nav];
                 [[Definitions mainInterface] setValue:nil forKey:@"context"];
+            }
+        } else if ((argc > 1) && !strcmp(argv[1], "alert")) {
+            id data = [Definitions dataFromStandardInput];
+            id str = [data asString];
+            if ([str length]) {
+                id obj = [str asBitmapMessageAlert];
+                [Definitions runWindowManagerForObject:obj];
+            }
+        } else if ((argc > 1) && !strcmp(argv[1], "confirm")) {
+            id data = [Definitions dataFromStandardInput];
+            id text = [data asString];
+            if ([text length]) {
+                id obj = [@"ConfirmationDialog" asInstance];
+                [obj setValue:text forKey:@"text"];
+                [obj setValue:@"OK" forKey:@"okText"];
+                [Definitions runWindowManagerForObject:obj];
+            }
+        } else if ((argc > 1) && !strcmp(argv[1], "choose")) {
+            id stringFormat = nil;
+            if (argc > 2) {
+                stringFormat = nsfmt(@"%s", argv[2]);
+            }
+            id title = nil;
+            if (argc > 3) {
+                title = nsfmt(@"%s", argv[3]);
+            }
+            id text = nil;
+            if (argc > 4) {
+                text = nsfmt(@"%s", argv[4]);
+            }
+            id lines = [Definitions linesFromStandardInput];
+            if (lines) {
+                id obj = [@"ListInterface" asInstance];
+                [obj setValue:text forKey:@"marginText"];
+                [obj setValue:lines forKey:@"array"];
+                [obj setValue:@"20" forKey:@"cellHeight"];
+//                id obj = [lines asListInterface];
+                [obj setValue:@"selectedObject|writeToStandardOutput;'\n'|writeToStandardOutput;exit:0" forKey:@"defaultMessageForClick"];
+                [obj setValue:stringFormat forKey:@"defaultStringFormat"];
+                [obj setValue:@"0" forKey:@"defaultDrawChevron"];
+
+                id nav = [Definitions mainInterface];
+                [nav pushObject:obj];
+                [nav setValue:title forKey:@"defaultTitle"];
+                [Definitions runWindowManagerForObject:nav];
+            }
+        } else if ((argc > 1) && !strcmp(argv[1], "chooseFromBlocks")) {
+            id stringFormat = nil;
+            if (argc > 2) {
+                stringFormat = nsfmt(@"%s", argv[2]);
+            }
+            id lines = [Definitions blocksFromStandardInput];
+            if (lines) {
+                id obj = [lines asListInterface];
+                [obj setValue:@"selectedObject|writeToStandardOutput;'\n'|writeToStandardOutput;exit:0" forKey:@"defaultMessageForClick"];
+                [obj setValue:stringFormat forKey:@"defaultStringFormat"];
+                [obj setValue:@"0" forKey:@"defaultDrawChevron"];
+                [Definitions runWindowManagerForObject:obj];
             }
         } else {
             id args = nsarr();
