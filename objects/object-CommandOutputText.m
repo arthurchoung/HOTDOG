@@ -39,6 +39,12 @@
     [obj setValue:lineMessage forKey:@"lineMessage"];
     return obj;
 }
++ (id)CommandOutputText:(id)cmd stringFormat:(id)stringFormat
+{
+    id obj = [Definitions CommandOutputText:cmd];
+    [obj setValue:stringFormat forKey:@"stringFormat"];
+    return obj;
+}
 @end
 
 @interface CommandOutputText : IvarObject
@@ -47,6 +53,7 @@
     id _lastLine;
     int _maxWidth;
     id _lineMessage;
+    id _stringFormat;
 }
 @end
 @implementation CommandOutputText
@@ -75,12 +82,16 @@
 }
 - (int)preferredWidth
 {
-    int len = [_lastLine length];
+    id str = _lastLine;
+    if (str && _stringFormat) {
+        str = [str str:_stringFormat];
+    }
+    int len = [str length];
     if (!len) {
-        return 200;
+        str = @"No output";
     }
 
-    int w = [Definitions bitmapWidthForText:_lastLine];
+    int w = [Definitions bitmapWidthForText:str];
     if (w > _maxWidth) {
         _maxWidth = w;
     }
@@ -88,12 +99,16 @@
 }
 - (int)preferredWidthForBitmap:(id)bitmap
 {
-    int len = [_lastLine length];
+    id str = _lastLine;
+    if (str && _stringFormat) {
+        str = [str str:_stringFormat];
+    }
+    int len = [str length];
     if (!len) {
-        return 200;
+        str = @"No output";
     }
 
-    int w = [bitmap bitmapWidthForText:_lastLine];
+    int w = [bitmap bitmapWidthForText:str];
     if (w > _maxWidth) {
         _maxWidth = w;
     }
@@ -102,6 +117,9 @@
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
     id str = _lastLine;
+    if (str && _stringFormat) {
+        str = [str str:_stringFormat];
+    }
     if (!str) {
         str = @"No output";
     }
@@ -110,6 +128,9 @@
 - (void)drawHighlightedInBitmap:(id)bitmap rect:(Int4)r
 {
     id str = _lastLine;
+    if (str && _stringFormat) {
+        str = [str str:_stringFormat];
+    }
     if (!str) {
         str = @"No output";
     }
