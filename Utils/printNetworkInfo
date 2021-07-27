@@ -7,11 +7,17 @@ for(;;) {
     $output = `ifconfig`;
     @lines = split '\n', $output;
 
+    $name = undef;
+    $addr = undef;
+
     foreach $line (@lines) {
         if ($line !~ m/^ /) {
             if ($line =~ m/:/) {
                 @tokens = split ':', $line;
                 $name = $tokens[0];
+                if ($name =~ m/^lo/) {
+                    $name = undef;
+                }
             }
             next;
         }
@@ -19,14 +25,14 @@ for(;;) {
         if ($name && $line =~ m/ inet /) {
             @tokens = split /\s+/, $line;
             $addr = $tokens[2];
-            if ($addr) {
-                if ($name =~ m/^lo/) {
-                    next;
-                }
-                print "$name $addr\n";
-            }
             next;
         }
+    }
+
+    if ($name and $addr) {
+        print "$name $addr\n";
+    } else {
+        print "No network\n";
     }
 
     sleep 10;
