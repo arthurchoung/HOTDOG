@@ -426,6 +426,9 @@ NSLog(@"setAllStringFormat:'%@'", val);
     id _searchText;
     Int4 _rect;
     time_t _currentDirectoryTimestamp;
+    int _defaultDrawChevron;
+    id _marginText;
+    int _marginHeight;
 }
 @end
 
@@ -435,7 +438,9 @@ NSLog(@"setAllStringFormat:'%@'", val);
 {
     self = [super init];
     if (self) {
-        _cellHeight = 20.0;
+        _cellHeight = 20;
+        _defaultDrawChevron = 1;
+        _marginHeight = _cellHeight/4;
     }
     return self;
 }
@@ -688,7 +693,7 @@ NSLog(@"line '%@'", line);
     }
     
     int cellHeight = _cellHeight;
-    int y = _objectOffsetY - cellHeight/4 + mouseY - _rect.y;
+    int y = _objectOffsetY - _marginHeight + mouseY - _rect.y;
     if (y < 0) {
         return nil;
     }
@@ -713,8 +718,8 @@ NSLog(@"line '%@'", line);
     int numberOfCells = ceil([event intValueForKey:@"viewHeight"] / cellHeight);
     id arr = [self valueForKey:@"array"];
     int count = [arr count];
-    if (_objectOffsetY > (count-1)*cellHeight) {
-        _objectOffsetY = (count-1)*cellHeight;
+    if (_objectOffsetY > (count-1)*cellHeight+_marginHeight) {
+        _objectOffsetY = (count-1)*cellHeight+_marginHeight;
     }
     [self handleMouseMoved:event];
 }
@@ -752,7 +757,7 @@ NSLog(@"messageForClick '%@'", messageForClick);
                 _index = [buttonDown intValue];
                 [self setValue:elt forKey:@"selectedObject"];
                 id result = [self evaluateMessage:messageForClick];
-                if ([elt intValueForKey:@"drawChevron" default:1]) {
+                if ([elt intValueForKey:@"drawChevron" default:_defaultDrawChevron]) {
                     [result pushToMainInterface];
                 }
                 NSLog(@"result %@", result);
@@ -800,6 +805,11 @@ NSLog(@"rightClickMenu %@", rightClickMenu);
     [bitmap fillRect:r];
 [Definitions drawStripedBackgroundInBitmap:bitmap rect:r];
     [bitmap setColor:@"black"];
+    if (_marginText) {
+        id text = [bitmap fitBitmapString:_marginText width:r.w-8];
+        _marginHeight = [bitmap bitmapHeightForText:text]+8;
+        [bitmap drawBitmapText:text x:4 y:r.y+4-_objectOffsetY];
+    }
 r = [Definitions rectWithPadding:r w:-4 h:0];
     [self drawArray:[self valueForKey:@"array"] inBitmap:bitmap rect:r];
 }
@@ -810,13 +820,13 @@ r = [Definitions rectWithPadding:r w:-4 h:0];
     
     int numberOfElements = [arr count];
 
-    int index = _objectOffsetY/_cellHeight - 1;
+    int index = (_objectOffsetY-_marginHeight)/_cellHeight - 1;
     if (index < 0) {
         index = 0;
     }
 
     for (;;) {
-        int cellY = index*_cellHeight + (_cellHeight/4) - _objectOffsetY;
+        int cellY = index*_cellHeight + _marginHeight - _objectOffsetY;
         if (cellY >= rect.h) {
             break;
         }
@@ -868,7 +878,7 @@ next:
 - (void)drawElement:(id)elt inBitmap:(id)bitmap rect:(Int4)r style:(id)style type:(int)type
 {
     id text = nil;
-    if (isnsdict(elt)) {
+//    if (isnsdict(elt)) {
         id stringFormat = [elt valueForKey:@"stringFormat"];
         if (!stringFormat) {
             stringFormat = _defaultStringFormat;
@@ -887,9 +897,9 @@ next:
 #endif
             }
         }
-    } else {
-        text = [elt description];
-    }
+//    } else {
+//        text = [elt description];
+//    }
 id leftText = nil;
 if (isnsdict(elt)) {
     id stringFormat = [elt valueForKey:@"leftStringFormat"];
@@ -959,7 +969,7 @@ if (!leftText && !rightText && !leftAlignedText && !rightAlignedText) {
         [bitmap drawBitmapText:rightAlignedText rightAlignedInRect:rightRect];
     }
 }
-        if ([elt intValueForKey:@"drawChevron" default:1]) {
+        if ([elt intValueForKey:@"drawChevron" default:_defaultDrawChevron]) {
             [bitmap setColorIntR:255 g:255 b:255 a:255];
             [bitmap drawBitmapText:@">" rightAlignedInRect:r];
         }
@@ -1003,7 +1013,7 @@ if (!leftText && !rightText && !leftAlignedText && !rightAlignedText) {
         [bitmap drawBitmapText:rightAlignedText rightAlignedInRect:rightRect];
     }
 }
-        if ([elt intValueForKey:@"drawChevron" default:1]) {
+        if ([elt intValueForKey:@"drawChevron" default:_defaultDrawChevron]) {
             [bitmap setColorIntR:255 g:255 b:255 a:255];
             [bitmap drawBitmapText:@">" rightAlignedInRect:r];
         }
@@ -1047,7 +1057,7 @@ if (!leftText && !rightText && !leftAlignedText && !rightAlignedText) {
         [bitmap drawBitmapText:rightAlignedText rightAlignedInRect:rightRect];
     }
 }
-        if ([elt intValueForKey:@"drawChevron" default:1]) {
+        if ([elt intValueForKey:@"drawChevron" default:_defaultDrawChevron]) {
             [bitmap setColorIntR:0 g:0 b:0 a:255];
             [bitmap drawBitmapText:@">" rightAlignedInRect:r];
         }
