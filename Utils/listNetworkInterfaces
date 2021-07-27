@@ -18,8 +18,6 @@ sub dhcpcdIsRunning
 
 $output = `ip -j -p link show`;
 $result = decode_json($output);
-$keys = 'ifname,link_type,up,lowerUp,operstate,address,dhcpcdIsRunning';
-print "$keys\n";
 foreach $elt (@$result) {
     if (grep /^UP$/, @{$elt->{'flags'}}) {
         $elt->{'up'} = '1';
@@ -37,8 +35,6 @@ foreach $elt (@$result) {
             $elt->{'dhcpcdIsRunning'} = '1';
         }
     }
-    @tokens = map { asQuotedString($elt->{$_}) } split ',', $keys;
-    print join ',', @tokens;
-    print "\n";
+    print "interface:$elt->{'ifname'} type:$elt->{'link_type'} up:$elt->{'up'} lowerUp:$elt->{'lowerUp'} operstate:$elt->{'operstate'} address:$elt->{'address'} dhcpIsRunning:$elt->{'dhcpcdIsRunning'}\n";
 }
 
