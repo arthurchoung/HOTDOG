@@ -561,7 +561,7 @@ static int hexchartoint(char c)
     }
     return -1;
 }
-static void decode_percent_encoded_string(char *buf)
+static void percent_decode(char *buf)
 {
     char *p = buf;
     char *dst = buf;
@@ -709,7 +709,7 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
     return [[[NSMutableString alloc] initWithBytesNoCopy:strp length:result] autorelease];
 }
 
-- (id)destructiveDecodePercentEncodedString
+- (id)destructivePercentDecode
 {
     if (!_alloc) {
         return nil;
@@ -717,7 +717,7 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
     if (!*_contents) {
         return self;
     }
-    decode_percent_encoded_string(_contents);
+    percent_decode(_contents);
     _length = strlen(_contents);
     return self;
 }
@@ -1054,9 +1054,9 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
 {
     return [[NSString alloc] initWithBytes:_contents length:_length];
 }
-- (id)decodePercentEncodedString
+- (id)percentDecode
 {
-    return [[[self copy] autorelease] destructiveDecodePercentEncodedString];
+    return [[[self copy] autorelease] destructivePercentDecode];
 }
 - (id)chomp
 {
@@ -1878,6 +1878,10 @@ NSLog(@"alloc %d", _alloc);
 @implementation NSMutableDictionary
 @end
 @implementation NSDictionary
+- (int)count
+{
+    return _length/2;
+}
 - (BOOL)isEqual:(id)obj
 {
     if (self == obj) {
