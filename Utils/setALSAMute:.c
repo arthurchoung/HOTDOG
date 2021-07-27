@@ -26,15 +26,14 @@
 #include <ctype.h>
 #include <alsa/asoundlib.h>
 
+char *_mix_name = "Master";
+char *_card = "hw:0";
+
 void write_alsa_playback_switch(int playback)
 {
     snd_mixer_t* handle;
     snd_mixer_elem_t* elem;
     snd_mixer_selem_id_t* sid;
-
-    static const char* mix_name = "Master";
-    static const char* card = "default";
-    static int mix_index = 0;
 
     long pmin, pmax;
     long get_vol, set_vol;
@@ -42,7 +41,7 @@ void write_alsa_playback_switch(int playback)
     if ((snd_mixer_open(&handle, 0)) < 0) {
         return;
     }
-    if ((snd_mixer_attach(handle, card)) < 0) {
+    if ((snd_mixer_attach(handle, _card)) < 0) {
         snd_mixer_close(handle);
         return;
     }
@@ -59,8 +58,8 @@ void write_alsa_playback_switch(int playback)
     snd_mixer_selem_id_alloca(&sid);
 
     //sets simple-mixer index and name
-    snd_mixer_selem_id_set_index(sid, mix_index);
-    snd_mixer_selem_id_set_name(sid, mix_name);
+    snd_mixer_selem_id_set_index(sid, 0);
+    snd_mixer_selem_id_set_name(sid, _mix_name);
 
     elem = snd_mixer_find_selem(handle, sid);
     if (!elem) {
@@ -78,9 +77,17 @@ void write_alsa_playback_switch(int playback)
 int main(int argc, char **argv)
 {
     if (argc != 2) {
-        fprintf(stderr, "To mute: %s 1\n", argv[0]);
-        fprintf(stderr, "To unmute: %s 0\n", argv[0]);
+        fprintf(stderr, "To mute: %s 1 [card name] [mixer name]\n", argv[0]);
+        fprintf(stderr, "To unmute: %s 0 [card name] [mixer name]\n", argv[0]);
+        fprintf(stderr, "'card name' is 'hw:0' by default\n");
+        fprintf(stderr, "'mixer name' is 'Master' by default\n");
         exit(0);
+    }
+    if (argc >= 3) {
+        _card = argv[2];
+    }
+    if (argc >= 4) {
+        _mix_name = argv[3];
     }
 
     switch (argv[1][0]) {
