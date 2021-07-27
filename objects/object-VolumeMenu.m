@@ -27,6 +27,21 @@
 
 #include <stdio.h>
 
+@implementation Definitions(fjkdlsjfklmnekwlvmlkdsjkvs)
++ (id)VolumeMenu
+{
+    return [Definitions VolumeMenu:@"hw:0" :@"Master"];
+}
++ (id)VolumeMenu:(id)cardName :(id)mixerName
+{
+    id obj = [@"VolumeMenu" asInstance];
+    [obj setValue:cardName forKey:@"alsaCardName"];
+    [obj setValue:mixerName forKey:@"alsaMixerName"];
+    [obj setup];
+    return obj;
+}
+@end
+
 @interface TestVerticalSlider : IvarObject
 @end
 @implementation TestVerticalSlider
@@ -113,6 +128,8 @@
 
 @interface VolumeMenu : IvarObject
 {
+    id _alsaCardName;
+    id _alsaMixerName;
     int _hasShadow;
     id _alsaStatus;
     id _alsaVolume;
@@ -128,19 +145,32 @@
 @end
 @implementation VolumeMenu
 
-- (id)init
+- (void)setup
 {
-    self = [super init];
-    if (self) {
-        _hasShadow = 1;
-        id alsaStatus = [[@"printALSAStatus 1" split] runCommandAndReturnProcess];
-        [self setValue:alsaStatus forKey:@"alsaStatus"];
-        id alsaVolume = [[@"setALSAVolume" split] runCommandAndReturnProcess];
-        [self setValue:alsaVolume forKey:@"alsaVolume"];
-        _volume = 0.0;
-        _playbackSwitch = 0;
+    _hasShadow = 1;
+    id cmd = nsarr();
+    [cmd addObject:@"printALSAStatus"];
+    if (_alsaCardName) {
+        [cmd addObject:_alsaCardName];
+        if (_alsaMixerName) {
+            [cmd addObject:_alsaMixerName];
+        }
     }
-    return self;
+    id alsaStatus = [cmd runCommandAndReturnProcess];
+    [self setValue:alsaStatus forKey:@"alsaStatus"];
+
+    cmd = nsarr();
+    [cmd addObject:@"setALSAVolume"];
+    if (_alsaCardName) {
+        [cmd addObject:_alsaCardName];
+        if (_alsaMixerName) {
+            [cmd addObject:_alsaMixerName];
+        }
+    }
+    id alsaVolume = [cmd runCommandAndReturnProcess];
+    [self setValue:alsaVolume forKey:@"alsaVolume"];
+    _volume = 0.0;
+    _playbackSwitch = 0;
 }
 
 - (int)preferredWidth
@@ -168,9 +198,8 @@
             break;
         }
 NSLog(@"alsaStatus '%@'", line);
-        id tokens = [line split:@" "];
-        _playbackSwitch = [[tokens nth:0] intValue];
-        _volume = [[tokens nth:1] doubleValue];
+        _playbackSwitch = [line intValueForKey:@"playbackSwitch"];
+        _volume = [line doubleValueForKey:@"volume"];
     }
 }
 
@@ -220,6 +249,12 @@ NSLog(@"alsaStatus '%@'", line);
                 id cmd = nsarr();
                 [cmd addObject:@"setALSAMute"];
                 [cmd addObject:@"0"];
+                if (_alsaCardName) {
+                    [cmd addObject:_alsaCardName];
+                    if (_alsaMixerName) {
+                        [cmd addObject:_alsaMixerName];
+                    }
+                }
                 [cmd runCommandInBackground];
                 alreadyRun = YES;
             }
