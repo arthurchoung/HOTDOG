@@ -47,12 +47,26 @@ NSLog(@"unable to set signal handler for SIGPIPE");
 #ifdef BUILD_FOR_ANDROID
 #else
         id execDir = [Definitions execDir];
-        if (setenv("HOTDOG_HOME", [execDir UTF8String], 1) != 0) {
-NSLog(@"Unable to setenv HOTDOG_HOME=%@", execDir);
+
+        /* If argv[0] contains a slash, then add the directory that the
+           executable resides in to the PATH */
+        if ((argc > 0) && strchr(argv[0], '/')) {
+            char *pathcstr = getenv("PATH");
+            id path = nil;
+            if (pathcstr && strlen(pathcstr)) {
+                path = nsfmt(@"%@:%s", execDir, pathcstr);
+            } else {
+                path = execDir;
+            }
+            if (setenv("PATH", [path UTF8String], 1) != 0) {
+NSLog(@"Unable to set PATH");
+            }
         }
+
         if (setenv("SUDO_ASKPASS", [[Definitions execDir:@"Utils/getPassword"] UTF8String], 1) != 0) {
 NSLog(@"Unable to setenv SUDO_ASKPASS");
         }
+
         if (argc == 1) {
             id object = [Definitions mainInterface];
             [[Definitions execDir:@"MainMenu"] changeDirectory];
