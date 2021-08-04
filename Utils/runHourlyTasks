@@ -2,7 +2,7 @@
 
 $|=1;
 
-$path = "$ENV{'HOTDOG_HOME'}/HourlyTasks";
+$path = "$ENV{'HOME'}/HourlyTasks";
 
 sub asQuotedString
 {
