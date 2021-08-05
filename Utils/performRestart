@@ -1,3 +1,8 @@
-#!/bin/bash
+#!/usr/bin/perl
 
-hotdog "confirmWithAlert:'Restart?' title:'Restart?' okText:'Restart' continuation:[['reboot']|runCommandWithSudoInBackground]"
+$result = `echo "Restart?" | hotdog confirm Restart`;
+chomp $result;
+if ($result eq 'Restart') {
+    system("sudo -A reboot");
+}
+

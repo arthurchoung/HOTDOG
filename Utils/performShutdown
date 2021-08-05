@@ -1,3 +1,8 @@
-#!/bin/bash
+#!/usr/bin/perl
 
-hotdog "confirmWithAlert:'Shutdown?' title:'Shutdown?' okText:'Shutdown' continuation:[['poweroff']|runCommandWithSudoInBackground]"
+$result = `echo "Shutdown?" | hotdog confirm Shutdown`;
+chomp $result;
+if ($result eq 'Shutdown') {
+    system("sudo -A poweroff");
+}
+
