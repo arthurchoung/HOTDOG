@@ -7,7 +7,7 @@ hotKey,displayName,messageForClick
 ,"Restart","[ 'performRestart' ]|runCommandInBackground"
 ,"Shutdown","[ 'performShutdown' ]|runCommandInBackground"
 ,
-,"About HOT DOG","'Horrible Obsolete Typeface and Dreadful Onscreen Graphics for Linux (HOT DOG Linux)\\n\\nWritten by Arthur Choung\\n'|showAlert"
+,"About HOT DOG","[ 'showAbout' ]|runCommandInBackground"
 ,
 ,Enter Amiga Mode,"enterAmigaMode"
 ,Enter Mac Classic Mode,"enterMacClassicMode"
