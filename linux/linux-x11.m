@@ -561,9 +561,6 @@ exit(0);
     Window _openGLWindow;
 
     BOOL _panOversizedWindow;
-
-    id _desktopPath;
-    time_t _desktopTimestamp;
 }
 @end
 @implementation WindowManager
@@ -1458,18 +1455,7 @@ NSLog(@"setFocusDict:%@", dict);
 
 - (void)runLoop
 {
-    id desktopPath = [Definitions execDir:@"Desktop"];
-
 NSLog(@"_displayFD %d", _displayFD);
-
-    if (_isWindowManager) {
-        if (![desktopPath fileExists]) {
-            [desktopPath makeDirectory];
-        }
-        [self setValue:desktopPath forKey:@"desktopPath"];
-        _desktopTimestamp = [_desktopPath fileModificationTimestamp];
-        [self handleDesktopPath];
-    }
 
     for (;;) {
         id pool = [[NSAutoreleasePool alloc] init];
@@ -1744,14 +1730,6 @@ NSLog(@"received X event type %d", event.type);
                             }
                         }
                     }
-                }
-            }
-
-            if (_desktopPath) {
-                time_t timestamp = [_desktopPath fileModificationTimestamp];
-                if (timestamp != _desktopTimestamp) {
-                    _desktopTimestamp = timestamp;
-                    [self handleDesktopPath];
                 }
             }
 
@@ -2486,6 +2464,8 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
     XDeleteProperty(_display, win, prop);
 }
 
+/*
+This should be implemented in a separate program
 - (void)handleDesktopPath
 {
     id contents = [[Definitions execDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
@@ -2572,6 +2552,7 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
         [dict setValue:@"1" forKey:@"needsRedraw"];
     }
 }
+*/
 
 
 - (id)allTopLevelWindows
