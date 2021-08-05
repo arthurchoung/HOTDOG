@@ -562,8 +562,6 @@ exit(0);
 
     BOOL _panOversizedWindow;
 
-    id _alertsPath;
-    time_t _alertsTimestamp;
     id _desktopPath;
     time_t _desktopTimestamp;
 }
@@ -1460,21 +1458,14 @@ NSLog(@"setFocusDict:%@", dict);
 
 - (void)runLoop
 {
-    id alertsPath = [Definitions execDir:@"Alerts"];
     id desktopPath = [Definitions execDir:@"Desktop"];
 
 NSLog(@"_displayFD %d", _displayFD);
 
     if (_isWindowManager) {
-        if (![alertsPath fileExists]) {
-            [alertsPath makeDirectory];
-        }
         if (![desktopPath fileExists]) {
             [desktopPath makeDirectory];
         }
-        [self setValue:alertsPath forKey:@"alertsPath"];
-        _alertsTimestamp = [_alertsPath fileModificationTimestamp];
-        [self handleAlertsPath];
         [self setValue:desktopPath forKey:@"desktopPath"];
         _desktopTimestamp = [_desktopPath fileModificationTimestamp];
         [self handleDesktopPath];
@@ -1756,13 +1747,6 @@ NSLog(@"received X event type %d", event.type);
                 }
             }
 
-            if (_alertsPath) {
-                time_t timestamp = [_alertsPath fileModificationTimestamp];
-                if (timestamp != _alertsTimestamp) {
-                    _alertsTimestamp = timestamp;
-                    [self handleAlertsPath];
-                }
-            }
             if (_desktopPath) {
                 time_t timestamp = [_desktopPath fileModificationTimestamp];
                 if (timestamp != _desktopTimestamp) {
@@ -2502,53 +2486,6 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
     XDeleteProperty(_display, win, prop);
 }
 
-- (void)handleAlertsPath
-{
-    if (!_alertsPath) {
-        return;
-    }
-    id dict = [self dictForObjectWindowClassName:@"BitmapMessageAlert"];
-    if (dict) {
-        return;
-    }
-    id arr = [[_alertsPath contentsOfDirectoryWithFullPaths] asFileArray];
-    arr = [arr asArraySortedWithKey:@"fileModificationDate"];
-    for (int i=0; i<[arr count]; i++) {
-        id elt = [arr nth:i];
-        id filePath = [elt valueForKey:@"filePath"];
-        id str = [filePath stringFromFile];
-        if ([str length]) {
-            int x = 0;
-            int y = 0;
-            int w = 400;
-            int h = [Definitions preferredHeightForBitmapMessageAlert:str width:400];
-            Window rootReturn;
-            Window childReturn;
-            int mouseX = 0;
-            int mouseY = 0;
-            int winXReturn;
-            int winYReturn;
-            unsigned int maskReturn;
-            XQueryPointer(_display, _rootWindow, &rootReturn, &childReturn, &mouseX, &mouseY, &winXReturn, &winYReturn, &maskReturn);
-NSLog(@"*** mouse %d %d", mouseX, mouseY);
-            id monitor = [Definitions monitorForX:mouseX y:mouseY];
-            if (monitor) {
-                int monitorX = [monitor intValueForKey:@"x"];
-                int monitorY = [monitor intValueForKey:@"y"];
-                int monitorWidth = [monitor intValueForKey:@"width"];
-                int monitorHeight = [monitor intValueForKey:@"height"];
-NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeight);
-                Int4 r = [Definitions centerRectX:0 y:0 w:w h:h inW:monitorWidth h:monitorHeight];
-                x = monitorX + r.x;
-                y = monitorY + r.y;
-            }
-            id obj = [str asBitmapMessageAlert];
-            [self openWindowForObject:obj x:x y:y w:w h:h];
-            [filePath moveToTrash];
-            return;
-        }
-    }
-}
 - (void)handleDesktopPath
 {
     id contents = [[Definitions execDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
