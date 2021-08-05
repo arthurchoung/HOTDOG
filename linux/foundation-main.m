@@ -257,7 +257,11 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
             if ([text length]) {
                 id obj = [@"ConfirmationDialog" asInstance];
                 [obj setValue:text forKey:@"text"];
-                [obj setValue:@"OK" forKey:@"okText"];
+                if (argc > 2) {
+                    [obj setValue:nsfmt(@"%s", argv[2]) forKey:@"okText"];
+                } else {
+                    [obj setValue:@"OK" forKey:@"okText"];
+                }
                 [Definitions runWindowManagerForObject:obj];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "choose")) {
