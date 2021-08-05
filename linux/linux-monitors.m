@@ -41,7 +41,9 @@
         [monitors addObject:elt];
     }
     [elt setValue:orientation forKey:@"rotate"];
-    [monitors writeCSVToFile:path];
+    if (![monitors writeCSVToFile:path]) {
+        [nsfmt(@"Unable to write to file '%@'", path) showAlert];
+    }
     [Definitions setupMonitors];
 }
 + (void)swapMonitors:(id)name1 :(id)name2
@@ -69,7 +71,10 @@
     [monitors replaceObjectAtIndex:index1 withObject:elt2];
     [monitors replaceObjectAtIndex:index2 withObject:elt1];
     
-    [monitors writeCSVToFile:path];
+    if (![monitors writeCSVToFile:path]) {
+        [nsfmt(@"Unable to write to file '%@'", path) showAlert];
+    }
+
     [Definitions setupMonitors];
 }
 + (id)previousMonitorName
@@ -138,7 +143,9 @@
         [monitors addObject:elt];
     }
     [elt setValue:orientation forKey:@"rotate"];
-    [monitors writeCSVToFile:path];
+    if (![monitors writeCSVToFile:path]) {
+        [nsfmt(@"Unable to write to file '%@'", path) showAlert];
+    }
     [Definitions setupMonitors];
 }
 + (void)showAlert:(id)text monitor:(int)monitor
