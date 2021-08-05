@@ -233,8 +233,23 @@ exit(1);
             id data = [Definitions dataFromStandardInput];
             id str = [data asString];
             if ([str length]) {
+                int x = 0;
+                int y = 0;
+                int w = 400;
+                int h = [Definitions preferredHeightForBitmapMessageAlert:str width:400];
+                id monitor = [Definitions monitorForX:0 y:0];
+                if (monitor) {
+                    int monitorX = [monitor intValueForKey:@"x"];
+                    int monitorY = [monitor intValueForKey:@"y"];
+                    int monitorWidth = [monitor intValueForKey:@"width"];
+                    int monitorHeight = [monitor intValueForKey:@"height"];
+NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeight);
+                    Int4 r = [Definitions centerRectX:0 y:0 w:w h:h inW:monitorWidth h:monitorHeight];
+                    x = monitorX + r.x;
+                    y = monitorY + r.y;
+                }
                 id obj = [str asBitmapMessageAlert];
-                [Definitions runWindowManagerForObject:obj];
+                [Definitions runWindowManagerForObject:obj x:x y:y w:w h:h];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "confirm")) {
             id data = [Definitions dataFromStandardInput];
