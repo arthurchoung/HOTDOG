@@ -38,8 +38,10 @@
 @implementation Definitions(fjkdlsjfkldsjfkldsjklfwejffjdkjfkdjlsd)
 + (void)showAlert:(id)text
 {
-    id path = [[Definitions execDir:@"Alerts/alert.txt"] asUniquePath];
-    [text writeToFile:path];
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:@"alert"];
+    [cmd runCommandInBackgroundAndWriteStringToStandardInput:text];
 }
 @end
 @implementation NSString(yjfhjhjhmv)
@@ -47,8 +49,10 @@
 
 - (void)showAlert
 {
-    id path = [[Definitions execDir:@"Alerts/alert.txt"] asUniquePath];
-    [self writeToFile:path];
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:@"alert"];
+    [cmd runCommandInBackgroundAndWriteStringToStandardInput:self];
 }
 
 @end
@@ -203,8 +207,6 @@
 {
     id x11dict = [event valueForKey:@"x11dict"];
     [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
-    id windowManager = [event valueForKey:@"windowManager"];
-    [windowManager handleAlertsPath];
 }
 @end
 
