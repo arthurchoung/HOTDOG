@@ -237,6 +237,7 @@ NSLog(@"unable to open /dev/null");
     
     if(childpid == 0)
     {
+        setpgid(0, 0);
 
         close(fdzero[1]);
         dup2(fdzero[0], STDIN_FILENO);
@@ -248,6 +249,14 @@ NSLog(@"unable to open /dev/null");
             if (i == 0) {
                 id elt = [self nth:0];
                 if ([elt hasPrefix:@"/"]) {
+                    argv[0] = [elt UTF8String];
+                    continue;
+                }
+                if ([elt hasPrefix:@"./"]) {
+                    argv[0] = [elt UTF8String];
+                    continue;
+                }
+                if ([elt hasPrefix:@"../"]) {
                     argv[0] = [elt UTF8String];
                     continue;
                 }
