@@ -40,11 +40,6 @@
         return execPath;
     }
 
-    id utilsPath = [Definitions execDir:nsfmt(@"Utils/%@", self)];
-    if ([utilsPath fileExists]) {
-        return utilsPath;
-    }
-
     char *cstr = getenv("PATH");
     if (!cstr) {
         cstr = "/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
