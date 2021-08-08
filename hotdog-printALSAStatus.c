@@ -188,7 +188,7 @@ void print_status()
 
 /*
 
-Usage: printALSAStatus [card name] [mixer name]
+Usage: hotdog-printALSAStatus [card name] [mixer name]
 
 'card name' is 'hw:0' by default
 'mixer name' is 'Master' by default
