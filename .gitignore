@@ -1,3 +1,9 @@
 Build
-hotdog
 Temp
+hotdog
+hotdog-printALSAStatus
+hotdog-setALSAMute:
+hotdog-setALSAVolume
+hotdog-monitorBlockDevices
+hotdog-monitorNetworkInterfaces
+hotdog-monitorMonitors
