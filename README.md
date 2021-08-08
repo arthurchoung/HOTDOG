@@ -66,7 +66,7 @@ $ ./hotdog
 The following executables must be in your PATH or at location if specified:
 
   * xrandr
-  * ifconfig (used by Utils/printNetworkInfo)
+  * ifconfig (used by hotdog-printNetworkInfo.pl)
   * find (used by build.pl)
   * clang
   * /usr/bin/perl
