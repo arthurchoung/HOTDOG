@@ -2,11 +2,10 @@
 
 set -x
 
-cd Utils
-gcc -o printALSAStatus printALSAStatus.c -lasound
-gcc -o setALSAMute: setALSAMute:.c -lasound
-gcc -o setALSAVolume setALSAVolume.c -lasound
-gcc -o monitorBlockDevices monitorBlockDevices.c
-gcc -o monitorNetworkInterfaces monitorNetworkInterfaces.c
-gcc -o monitorMonitors monitorMonitors.c
+gcc -o hotdog-printALSAStatus hotdog-printALSAStatus.c -lasound
+gcc -o hotdog-setALSAMute: hotdog-setALSAMute:.c -lasound
+gcc -o hotdog-setALSAVolume hotdog-setALSAVolume.c -lasound
+gcc -o hotdog-monitorBlockDevices hotdog-monitorBlockDevices.c
+gcc -o hotdog-monitorNetworkInterfaces hotdog-monitorNetworkInterfaces.c
+gcc -o hotdog-monitorMonitors hotdog-monitorMonitors.c
 
