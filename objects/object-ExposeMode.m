@@ -48,7 +48,7 @@
     }
     id str = [arr join:@""];
     id cmd = nsarr();
-    [cmd addObject:@"packRectanglesIntoWidth:height:"];
+    [cmd addObject:@"hotdog-packRectanglesIntoWidth:height:.pl"];
     [cmd addObject:nsfmt(@"%d", monitorWidth)];
     [cmd addObject:nsfmt(@"%d", monitorHeight)];
     id process = [cmd runCommandAndReturnProcess];
