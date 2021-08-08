@@ -63,7 +63,7 @@ NSLog(@"Unable to set PATH");
             }
         }
 
-        if (setenv("SUDO_ASKPASS", [[Definitions execDir:@"Utils/getPassword"] UTF8String], 1) != 0) {
+        if (setenv("SUDO_ASKPASS", [[Definitions execDir:@"hotdog-getPassword.pl"] UTF8String], 1) != 0) {
 NSLog(@"Unable to setenv SUDO_ASKPASS");
         }
 
