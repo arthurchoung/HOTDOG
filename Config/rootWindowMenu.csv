@@ -4,10 +4,10 @@ hotKey,displayName,messageForClick
 ,
 ,Stopwatch,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(execDir:'MainMenu/Stopwatch')|runCommandInBackground"
 ,
-,"Restart","[ 'performRestart' ]|runCommandInBackground"
-,"Shutdown","[ 'performShutdown' ]|runCommandInBackground"
+,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
+,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
 ,
-,"About HOT DOG","[ 'showAbout' ]|runCommandInBackground"
+,"About HOT DOG","[ 'hotdog-showAbout.pl' ]|runCommandInBackground"
 ,
 ,Enter Amiga Mode,"enterAmigaMode"
 ,Enter Mac Classic Mode,"enterMacClassicMode"
