@@ -149,7 +149,7 @@ NSLog(@"target %@", target);
     if (!classMenu) {
         Class classCursor = self;
         while (classCursor) {
-            id path = [Definitions execDir:nsfmt(@"ClassMenus/%s.csv", class_getName(classCursor))];
+            id path = [Definitions configDir:nsfmt(@"ClassMenus/%s.csv", class_getName(classCursor))];
             NSLog(@"path %@", path);
             classMenu = [path parseCSVFile];
             if (classMenu) {
