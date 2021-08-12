@@ -28,7 +28,7 @@
 @implementation NSString(fjkdlsjfklsdjf)
 - (id)runFileHandler
 {
-    id handlers = [[Definitions execDir:@"Config/fileHandlers.csv"] parseCSVFile];
+    id handlers = [[Definitions configDir:@"Config/fileHandlers.csv"] parseCSVFile];
     for (int i=0; i<[handlers count]; i++) {
         id elt = [handlers nth:i];
         id suffix = [elt valueForKey:@"suffix"];
