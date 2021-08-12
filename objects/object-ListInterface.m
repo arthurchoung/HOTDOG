@@ -783,7 +783,7 @@ NSLog(@"rightMouseUp %@", rightButtonDown);
                 return;
             }
             [self setValue:elt forKey:@"selectedObject"];
-            id rightClickMenu = [[[Definitions execDir:@"Config/rightClickMenu.csv"] menuFromPath] asListInterface];
+            id rightClickMenu = [[[Definitions configDir:@"Config/rightClickMenu.csv"] menuFromPath] asListInterface];
 NSLog(@"rightClickMenu %@", rightClickMenu);
             [rightClickMenu pushToMainInterface];
         }
