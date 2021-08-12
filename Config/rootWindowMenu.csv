@@ -2,7 +2,7 @@ hotKey,displayName,messageForClick
 ,HOT DOG,"[ 'hotdog' ] | runCommandInBackground"
 ,XTerm,"[ 'xterm' '-geometry' '80x50' '+bc' '+uc' ] | runCommandInBackground"
 ,
-,Stopwatch,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(execDir:'MainMenu/Stopwatch')|runCommandInBackground"
+,Stopwatch,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Stopwatch')|runCommandInBackground"
 ,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
