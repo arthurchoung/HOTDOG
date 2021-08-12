@@ -82,7 +82,7 @@
 {
     self = [super init];
     if (self) {
-        id configPath = [Definitions execDir:@"Config/menuBar.csv"];
+        id configPath = [Definitions configDir:@"Config/menuBar.csv"];
         [self setValue:configPath forKey:@"configPath"];
     }
     return self;
