@@ -123,7 +123,7 @@ static char *bananaPixels =
 @implementation Definitions(jfkldsjlkfsjfd)
 + (id)BitmapMenuItem:(id)name
 {
-    id basePath = [Definitions execDir:@"Graphics"];
+    id basePath = [Definitions configDir:@"Graphics"];
     id pixelsFile = nsfmt(@"%@/%@.pixels", basePath, name);
     id paletteFile = nsfmt(@"%@/%@.palette", basePath, name);
     id highlightedPaletteFile = nsfmt(@"%@/%@.highlightedPalette", basePath, name);
