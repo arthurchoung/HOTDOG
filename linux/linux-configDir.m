@@ -28,7 +28,15 @@
 @implementation Definitions(fjkdsljfklsdjf)
 + (id)configDir
 {
-    return [Definitions execDir:@"Config"];
+    id execDir = [Definitions execDir];
+    if ([execDir isEqual:@"/usr/bin"]) {
+        id homeConfigDir = [Definitions homeDir:@"HOTDOG"];
+        if ([homeConfigDir isDirectory]) {
+            return homeConfigDir;
+        }
+        return @"/etc/HOTDOG";
+    }
+    return execDir;
 }
 
 + (id)configDir:(id)path
