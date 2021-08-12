@@ -5,6 +5,6 @@ flexible,leftPadding,rightPadding,objectMessage,messageForClick
 ,4,4,"CommandOutputText:['hotdog-printALSAStatus' ]","VolumeMenu:'hw:0' :'Master'"
 ,4,4,"CommandOutputText:['hotdog-printBatteryStatus.pl' ]"
 ,4,4,"CommandOutputBitmap:['hotdog-printCPUStats.pl' ]"
-,4,4,"CommandOutputText:['hotdog-printNetworkInfo.pl' ]"
+,4,4,"CommandOutputText:['hotdog-printNetworkInfo.pl' ]","configDir:'Config/networkMenu.csv'|parseCSVFile|asMenu"
 ,4,4,"CommandOutputText:(str:'hotdog-printMemoryUsageForPID:.pl #{processID}'|split)"
 ,4,4,"CommandOutputText:['hotdog-printDateEverySecondForTimezone:text:.pl' 'Australia/Sydney' 'SYD']"
