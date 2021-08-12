@@ -44,7 +44,7 @@
         id windowFrame = [@"HotDogStandWindow" asInstance];
         [self setValue:windowFrame forKey:@"windowFrame"];
         _hasShadow = [windowFrame intValueForKey:@"hasShadow"];
-        id configPath = [Definitions execDir:@"Config/backgroundAgents.csv"];
+        id configPath = [Definitions configDir:@"Config/backgroundAgents.csv"];
         [self setValue:configPath forKey:@"configPath"];
     }
     return self;
