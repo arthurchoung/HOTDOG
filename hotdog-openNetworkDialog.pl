@@ -45,13 +45,12 @@ if ($wireless) {
     `sudo -A iwconfig $interface essid $essid`;
 }
 
-if (open FH, "sudo -A dhcpcd $interface 2>&1 |") {
+if (open FH, "sudo -A dhcpcd $interface 2>&1 | hotdog progress |") {
     $addr = undef;
     while ($line = <FH>) {
+        chomp $line;
         if ($line =~ m/ leased ([\d\.]+)/) {
             $addr = $1;
-        } else {
-            print "dhcpcd: $line";
         }
     }
     close(FH);
