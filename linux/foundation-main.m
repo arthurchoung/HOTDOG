@@ -344,6 +344,9 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
                 [obj setValue:@"0" forKey:@"defaultDrawChevron"];
                 [Definitions runWindowManagerForObject:obj];
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "progress")) {
+            id obj = [@"Progress" asInstance];
+            [Definitions runWindowManagerForObject:obj];
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
