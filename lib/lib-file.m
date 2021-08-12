@@ -109,7 +109,7 @@ exit(0);
 @implementation Definitions(fjdkslfjklsdf)
 + (void)testFilePointer
 {
-    id path = [Definitions execDir:@"Config/menuBar.csv"];
+    id path = [Definitions configDir:@"Config/menuBar.csv"];
     id fp = [@"FilePointer" asInstance];
     if ([fp openFile:path mode:@"r"]) {
         for(;;) {
