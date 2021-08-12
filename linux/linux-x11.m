@@ -1748,14 +1748,14 @@ NSLog(@"keysym %d mod1 %d mod2 %d mod3 %d mod4 %d mod5 %d", keysym, e->state&Mod
     if (_isWindowManager) {
         id keyString = [Definitions keyForXKeyCode:keysym modifiers:e->state];
 NSLog(@"hotkey keyString %@", keyString);
-        id hotKeyFiles = [[Definitions execDir:@"Config/hotKeyFiles.csv"] parseCSVFile];
+        id hotKeyFiles = [[Definitions configDir:@"Config/hotKeyFiles.csv"] parseCSVFile];
         for (int i=0; i<[hotKeyFiles count]; i++) {
             id hotKeyFile = [hotKeyFiles nth:i];
             id path = [hotKeyFile valueForKey:@"path"];
             if (!path) {
                 continue;
             }
-            id menu = [[Definitions execDir:path] parseCSVFile];
+            id menu = [[Definitions configDir:path] parseCSVFile];
             for (int j=0; j<[menu count]; j++) {
                 id elt = [menu nth:j];
                 id hotKey = [[elt valueForKey:@"hotKey"] lowercaseString];
