@@ -69,7 +69,7 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
 
         if (argc == 1) {
             id object = [Definitions mainInterface];
-            [[Definitions execDir:@"MainMenu"] changeDirectory];
+            [[Definitions configDir:@"MainMenu"] changeDirectory];
             [object pushObject:[Definitions ObjectInterface]];
             [Definitions runWindowManagerForObject:object];
             [[Definitions mainInterface] setValue:nil forKey:@"context"];
@@ -293,6 +293,44 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
                 [nav setValue:title forKey:@"defaultTitle"];
                 [Definitions runWindowManagerForObject:nav];
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "chooseCommandObserver")) {
+            id command = nil;
+            if (argc > 2) {
+                command = nsfmt(@"%s", argv[2]);
+            }
+            id observer = nil;
+            if (argc > 3) {
+                observer = nsfmt(@"%s", argv[3]);
+            }
+            id stringFormat = nil;
+            if (argc > 4) {
+                stringFormat = nsfmt(@"%s", argv[4]);
+            }
+            id title = nil;
+            if (argc > 5) {
+                title = nsfmt(@"%s", argv[5]);
+            }
+            id text = nil;
+            if (argc > 6) {
+                text = nsfmt(@"%s", argv[6]);
+            }
+            id observerCommand = nsarr();
+            [observerCommand addObject:observer];
+            id observerProcess = [observerCommand runCommandAndReturnProcess];
+            id obj = [@"ListInterface" asInstance];
+            [obj setValue:nsfmt(@"['%@']|runCommandAndReturnOutput|asString|lines", command) forKey:@"message"];
+            [obj setValue:observerProcess forKey:@"observer"];
+            [obj updateArray];
+            [obj setValue:text forKey:@"marginText"];
+            [obj setValue:@"20" forKey:@"cellHeight"];
+            [obj setValue:@"selectedObject|writeToStandardOutput;'\n'|writeToStandardOutput;exit:0" forKey:@"defaultMessageForClick"];
+            [obj setValue:stringFormat forKey:@"defaultStringFormat"];
+            [obj setValue:@"0" forKey:@"defaultDrawChevron"];
+
+            id nav = [Definitions mainInterface];
+            [nav pushObject:obj];
+            [nav setValue:title forKey:@"defaultTitle"];
+            [Definitions runWindowManagerForObject:nav];
         } else if ((argc > 1) && !strcmp(argv[1], "chooseFromBlocks")) {
             id stringFormat = nil;
             if (argc > 2) {
