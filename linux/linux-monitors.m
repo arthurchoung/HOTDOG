@@ -29,7 +29,7 @@
 @implementation Definitions(fjkdlsjfklsdjklfjsdf)
 + (void)rotateMonitor:(id)name orientation:(id)orientation
 {
-    id path = [Definitions execDir:@"Config/monitors.csv"];
+    id path = [Definitions configDir:@"Config/monitors.csv"];
     id monitors = [path parseCSVFile];
     id elt = [monitors objectWithValue:name forKey:@"output"];
     if (!elt) {
@@ -48,7 +48,7 @@
 }
 + (void)swapMonitors:(id)name1 :(id)name2
 {
-    id path = [Definitions execDir:@"Config/monitors.csv"];
+    id path = [Definitions configDir:@"Config/monitors.csv"];
     id monitors = [path parseCSVFile];
 
     int index1 = -1;
@@ -131,7 +131,7 @@
     int mouseY = [windowManager intValueForKey:@"mouseY"];
     id monitor = [Definitions monitorForX:mouseX y:mouseY];
     id name = [monitor valueForKey:@"output"];
-    id path = [Definitions execDir:@"Config/monitors.csv"];
+    id path = [Definitions configDir:@"Config/monitors.csv"];
     id monitors = [path parseCSVFile];
     id elt = [monitors objectWithValue:name forKey:@"output"];
     if (!elt) {
@@ -198,7 +198,7 @@
         return arr;
     }
     id lines = [str split:@"\n"];
-    id path = [Definitions execDir:@"Config/monitors.csv"];
+    id path = [Definitions configDir:@"Config/monitors.csv"];
     id monitors = [path parseCSVFile];
     id results = nsarr();
     for (id line in lines) {
