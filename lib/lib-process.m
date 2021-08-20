@@ -204,6 +204,7 @@ NSLog(@"unable to open /dev/null");
         }
         argv[argc] = 0;
         execv(argv[0], argv);
+        [Definitions showAlert:nsfmt(@"Unable to run command '%s'", argv[0])];
         free(argv);
         _exit(0);
     }
@@ -267,6 +268,7 @@ NSLog(@"unable to open /dev/null");
         }
         argv[argc] = 0;
         execv(argv[0], argv);
+        [Definitions showAlert:nsfmt(@"Unable to run command '%s'", argv[0])];
         free(argv);
         _exit(0);
     }
@@ -562,6 +564,7 @@ NSLog(@"write result %d", result);
         }
         argv[argc] = 0;
         execv(argv[0], argv);
+        [Definitions showAlert:nsfmt(@"Unable to run command '%s'", argv[0])];
         free(argv);
         _exit(0);
     }
