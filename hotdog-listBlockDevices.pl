@@ -1,5 +1,23 @@
 #!/usr/bin/perl
 
+#$output = `blkid`;
+#@lines = split "\n", $output;
+#foreach $line (@lines) {
+#    $device = undef;
+#    if ($line =~ m/^([^:]+):/) {
+#        $device = $1;
+#    }
+#    $type = undef;
+#    if ($line =~ m/TYPE=\"([^\"]+)\"/) {
+#        $type = $1;
+#    }
+#    $label = undef;
+#    if ($line =~ m/LABEL=\"([^\"]+)\"/) {
+#        $label = $1;
+#    }
+#    print "device:$device type:$type label:$label\n";
+#}
+
 use JSON;
 
 sub asQuotedString
@@ -10,13 +28,9 @@ sub asQuotedString
     return '"' . $str . '"';
 }
 
-$output = `lsblk -f --list --paths --json`;
+$output = `lsblk --json -l -p -o PATH,FSTYPE,SIZE,MOUNTPOINT,LABEL`;
 $result = decode_json($output);
 $blockdevices = $result->{'blockdevices'};
-$keys = 'name,label,mountpoint,fstype,uuid';
-print "$keys\n";
 foreach $elt (@$blockdevices) {
-    @tokens = map { ($elt->{$_}) ? asQuotedString($elt->{$_}) : '' } split ',', $keys;
-    print join ',', @tokens;
-    print "\n";
+    print "device:$elt->{path} fstype:$elt->{fstype} size:$elt->{size} mountpoint:$elt->{mountpoint} label:$elt->{label}\n";
 }
