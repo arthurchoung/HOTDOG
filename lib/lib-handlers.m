@@ -48,6 +48,7 @@ NSLog(@"message '%@'", message);
     [cmd addObject:@"--hwdec=auto"];
     [cmd addObject:@"--force-window=yes"];
     [cmd addObject:@"--volume-max=200"];
+    [cmd addObject:@"--video-unscaled=yes"];
     [cmd addObject:self];
     [cmd runCommandInBackground];
     return nil;
