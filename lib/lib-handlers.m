@@ -41,18 +41,6 @@ NSLog(@"message '%@'", message);
     [nsfmt(@"Unknown file type for '%@'", self) showAlert];
     return nil;
 }
-- (id)handleFileWithMPV
-{
-    id cmd = nsarr();
-    [cmd addObject:@"mpv"];
-    [cmd addObject:@"--hwdec=auto"];
-    [cmd addObject:@"--force-window=yes"];
-    [cmd addObject:@"--volume-max=200"];
-    [cmd addObject:@"--video-unscaled=yes"];
-    [cmd addObject:self];
-    [cmd runCommandInBackground];
-    return nil;
-}
 - (id)handleFileWithMAME
 {
     id cmd = nsarr();
