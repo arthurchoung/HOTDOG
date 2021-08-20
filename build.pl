@@ -150,7 +150,7 @@ sub linkSourcePaths
     my $cmd = <<EOF;
 gcc -o $execPath/hotdog
     $objectFiles
-    -lobjc
+    /usr/lib/libobjc.a
     -lm
     $ldflags
 EOF
