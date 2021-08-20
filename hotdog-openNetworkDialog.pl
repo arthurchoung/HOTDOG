@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-$interface = `q chooseCommandObserver hotdog-listNetworkInterfaces.pl hotdog-monitorNetworkInterfaces '#{interface} #{ifTrue:[up] then:["UP"] else:["DOWN"]} #{ifTrue:[dhcpIsRunning] then:["DHCP"]}' 'Network' '\nChoose a network interface to set up:\n\n' | allValuesForKey: interface`;
+$interface = `hotdog chooseCommandObserver hotdog-listNetworkInterfaces.pl hotdog-monitorNetworkInterfaces '#{interface} #{ifTrue:[up] then:["UP"] else:["DOWN"]} #{ifTrue:[dhcpIsRunning] then:["DHCP"]}' 'Network' '\nChoose a network interface to set up:\n\n' | hotdog-allValuesForKey:.pl interface`;
 chomp $interface;
 
 if (not $interface) {
@@ -36,7 +36,7 @@ while ($line = <FH>) {
 close(FH);
 
 if ($wireless) {
-    $essid = `sudo -A hotdog-scanNetworks.pl | q choose '#{essid|percentDecode} #{quality}/70' 'Wireless Network' '\nChoose a network ESSID:\n\n' | hotdog-allValuesForKey:.pl essid | hotdog-percentDecode.pl | hotdog-quotedString.pl`;
+    $essid = `sudo -A hotdog-scanNetworks.pl | hotdog choose '#{essid|percentDecode} #{quality}/70' 'Wireless Network' '\nChoose a network ESSID:\n\n' | hotdog-allValuesForKey:.pl essid | hotdog-percentDecode.pl | hotdog-quotedString.pl`;
     chomp $essid;
     if (not $essid) {
         exit 0;
