@@ -327,7 +327,7 @@ NSLog(@"_width %d wallWidth %d rightWallWidth %d", _width, wallWidth, rightWallW
         _ballDeltaX = 0;
         _ballDeltaY = 0;
     }
-    [self autoMove];
+//    [self autoMove];
     [self updateBitmap];
 }
 
