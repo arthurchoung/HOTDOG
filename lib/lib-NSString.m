@@ -423,3 +423,120 @@
 
 
 @end
+
+
+
+
+@implementation NSString(fjeieiivdklsfjlksdjf)
+- (id)allKeys
+{
+    id results = nsarr();
+    id tokens = [self split:@" "];
+    for (int i=0; i<[tokens count]; i++) {
+        id token = [tokens nth:i];
+        id keyval = [token split:@":"];
+        if ([keyval count] == 2) {
+            [results addObject:[keyval nth:0]];
+        }
+    }
+    return results;
+}
+@end
+
+static char *find_key_in_string(id key, id str)
+{
+    char *cstr = [str UTF8String];
+    char *p = cstr;
+loop:
+    // skip whitespace
+    for(;;) {
+        if (!*p) {
+            return NULL;
+        }
+        if (!isspace(*p)) {
+            break;
+        }
+        p++;
+    }
+    int keylen = [key length];
+    char *keycstr = [key UTF8String];
+    if (strncmp(keycstr, p, keylen) != 0) {
+        p++;
+        // look for whitespace
+        for (;;) {
+            if (!*p) {
+                return NULL;
+            }
+            if (isspace(*p)) {
+                p++;
+                break;
+            }
+            p++;
+        }
+        goto loop;
+    }
+    p += keylen;
+    if (*p != ':') {
+        // look for whitespace
+        for (;;) {
+            if (!*p) {
+                return NULL;
+            }
+            if (isspace(*p)) {
+                p++;
+                break;
+            }
+            p++;
+        }
+        goto loop;
+    }
+    p++;
+    return p;
+}
+
+@implementation NSString(fjdsciklfjklsdjfklsdjf)
+- (id)valueForKey:(id)key
+{
+    char *p = find_key_in_string(key, self);
+    if (!p) {
+        return NULL;
+    }
+    // look for whitespace
+    char *q = p;
+    for(;;) {
+        if (!*q) {
+            break;
+        }
+        if (isspace(*q)) {
+            break;
+        }
+        q++;
+    }
+    return nscstrn(p, q-p);
+}
+- (double)doubleValueForKey:(id)key
+{
+    char *p = find_key_in_string(key, self);
+    if (!p) {
+        return 0.0;
+    }
+    return strtod(p, NULL);
+}
+- (int)intValueForKey:(id)key
+{
+    char *p = find_key_in_string(key, self);
+    if (!p) {
+        return 0;
+    }
+    return strtol(p, NULL, 10);
+}
+- (int)intValueForKey:(id)key default:(int)def
+{
+    char *p = find_key_in_string(key, self);
+    if (!p) {
+        return def;
+    }
+    return strtol(p, NULL, 10);
+}
+@end
+
