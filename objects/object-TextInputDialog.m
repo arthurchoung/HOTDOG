@@ -271,6 +271,9 @@ NSLog(@"text '%@'", text);
     }
     id buf = [_buffers nth:_currentField];
     id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"space"]) {
+        str = @" ";
+    }
     if ([str length] == 1) {
         if (![buf length]) {
             [_buffers replaceObjectAtIndex:_currentField withObject:str];
