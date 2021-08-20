@@ -15,7 +15,7 @@ for (;;) {
     $status = `cat /sys/class/power_supply/BAT0/status 2>/dev/null`;
     chomp $status;
 
-    $str = 'N/A';
+    $str = 'No battery';
 
     if ($status && $chargeNow && $chargeFullDesign) {
         $str = sprintf("%s: %.0f%%", $status, ($chargeNow / $chargeFullDesign) * 100.0);
