@@ -1,11 +1,11 @@
 suffix,message
 .mp3,"showAlert"
-.m4a,"handleFileWithMPV"
-.mp4,"handleFileWithMPV"
-.m4v,"handleFileWithMPV"
-.mkv,"handleFileWithMPV"
-.avi,"handleFileWithMPV"
-.webm,"handleFileWithMPV"
+.m4a,"NSArray|addObject:'hotdog-handleVideoFile.pl'|addObject:(self)|runCommandInBackground|returnNil"
+.mp4,"NSArray|addObject:'hotdog-handleVideoFile.pl'|addObject:(self)|runCommandInBackground|returnNil"
+.m4v,"NSArray|addObject:'hotdog-handleVideoFile.pl'|addObject:(self)|runCommandInBackground|returnNil"
+.mkv,"NSArray|addObject:'hotdog-handleVideoFile.pl'|addObject:(self)|runCommandInBackground|returnNil"
+.avi,"NSArray|addObject:'hotdog-handleVideoFile.pl'|addObject:(self)|runCommandInBackground|returnNil"
+.webm,"NSArray|addObject:'hotdog-handleVideoFile.pl'|addObject:(self)|runCommandInBackground|returnNil"
 .wav
 .json,"readFromFileAsJSON"
 .pdf,"NSArray|addObject:'mupdf'|addObject:(self)|runCommandInBackground|returnNil"
