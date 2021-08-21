@@ -25,12 +25,21 @@
 
 #import "HOTDOG.h"
 
+#include <sys/time.h>
+
 static id ramDiskPalette =
 @"b #000000\n"
 @". #000022\n"
 @"X #FF8800\n"
 @"o #0055AA\n"
 @"O #FFFFFF\n"
+;
+static id ramDiskSelectedPalette =
+@"b #000000\n"
+@"O #000022\n"
+@"o #FF8800\n"
+@"X #0055AA\n"
+@". #FFFFFF\n"
 ;
 static id ramDiskPixels =
 @"..........................      \n"
@@ -73,6 +82,13 @@ static id wbDiskPalette =
 @"X #FF8800\n"
 @"o #0055AA\n"
 @"O #FFFFFF\n"
+;
+static id wbDiskSelectedPalette =
+@"b #000000\n"
+@"O #000022\n"
+@"o #FF8800\n"
+@"X #0055AA\n"
+@". #FFFFFF\n"
 ;
 
 static id wbDiskPixels =
@@ -123,6 +139,8 @@ static id wbDiskPixels =
     id _buttonDown;
     int _buttonDownOffsetX;
     int _buttonDownOffsetY;
+    id _buttonDownTimestamp;
+    id _selected;
 }
 @end
 @implementation AmigaDisks
@@ -151,18 +169,20 @@ static id wbDiskPixels =
         [dict setValue:nsfmt(@"%d", w) forKey:@"w"];
         [dict setValue:nsfmt(@"%d", h) forKey:@"h"];
         [dict setValue:wbDiskPalette forKey:@"palette"];
+        [dict setValue:wbDiskSelectedPalette forKey:@"selectedPalette"];
         [dict setValue:wbDiskPixels forKey:@"pixels"];
         [results addObject:dict];
         y += h + 30;
     }
     {
         id dict = nsdict();
-        [dict setValue:@"RAM Disk" forKey:@"device"];
+        [dict setValue:@"RAM DISK" forKey:@"device"];
         [dict setValue:nsfmt(@"%d", x) forKey:@"x"];
         [dict setValue:nsfmt(@"%d", y) forKey:@"y"];
         [dict setValue:nsfmt(@"%d", [Definitions widthForCString:[ramDiskPixels UTF8String]]) forKey:@"w"];
         [dict setValue:nsfmt(@"%d", [Definitions heightForCString:[ramDiskPixels UTF8String]]) forKey:@"h"];
         [dict setValue:ramDiskPalette forKey:@"palette"];
+        [dict setValue:ramDiskSelectedPalette forKey:@"selectedPalette"];
         [dict setValue:ramDiskPixels forKey:@"pixels"];
         [results addObject:dict];
     }
@@ -180,7 +200,7 @@ static id wbDiskPixels =
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
     [bitmap useTopazFont];
-    [bitmap setColor:@"blue"];
+    [bitmap setColor:@"#0055aa"];
     [bitmap fillRect:r];
     [bitmap setColor:@"white"];
     for (int i=0; i<[_array count]; i++) {
@@ -189,18 +209,29 @@ static id wbDiskPixels =
         int y = [elt intValueForKey:@"y"];
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
-        id palette = [elt valueForKey:@"palette"];
-        id pixels = [elt valueForKey:@"pixels"];
-        if (palette && pixels) {
-            [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+        if (_selected == elt) {
+            id palette = [elt valueForKey:@"selectedPalette"];
+            id pixels = [elt valueForKey:@"pixels"];
+            if (palette && pixels) {
+                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+            }
+        } else {
+            id palette = [elt valueForKey:@"palette"];
+            id pixels = [elt valueForKey:@"pixels"];
+            if (palette && pixels) {
+                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+            }
         }
-        id device = [elt valueForKey:@"device"];
-        [bitmap drawBitmapText:device centeredAtX:x+w/2 y:y+h-2];
+        id text = [elt valueForKey:@"device"];
+        if ([text length]) {
+            [bitmap drawBitmapText:text centeredAtX:x+w/2 y:y+h-8];
+        }
     }
 }
 
 - (void)handleMouseDown:(id)event
 {
+    [self setValue:nil forKey:@"selected"];
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
     for (int i=0; i<[_array count]; i++) {
@@ -211,8 +242,25 @@ static id wbDiskPixels =
         int h = [elt intValueForKey:@"h"];
         if ((mouseX >= x) && (mouseX < x+w) && (mouseY >= y) && (mouseY < y+h)) {
             [self setValue:elt forKey:@"buttonDown"];
+            [self setValue:elt forKey:@"selected"];
             _buttonDownOffsetX = mouseX - x;
             _buttonDownOffsetY = mouseY - y;
+            struct timeval tv;
+            gettimeofday(&tv, NULL);
+            id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
+            if ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3) {
+                id mountpoint = [_selected valueForKey:@"mountpoint"];
+                if ([mountpoint length]) {
+                    id cmd = nsarr();
+                    [cmd addObject:@"hotdog"];
+                    [cmd addObject:@"amigadir"];
+                    [cmd addObject:mountpoint];
+                    [cmd runCommandInBackground];
+                }
+                [self setValue:nil forKey:@"buttonDownTimestamp"];
+            } else {
+                [self setValue:timestamp forKey:@"buttonDownTimestamp"];
+            }
             break;
         }
     }
@@ -225,6 +273,7 @@ static id wbDiskPixels =
         int mouseY = [event intValueForKey:@"mouseY"];
         [_buttonDown setValue:nsfmt(@"%d", mouseX - _buttonDownOffsetX) forKey:@"x"];
         [_buttonDown setValue:nsfmt(@"%d", mouseY - _buttonDownOffsetY) forKey:@"y"];
+        [self setValue:nil forKey:@"buttonDownTimestamp"];
     }
 }
 
