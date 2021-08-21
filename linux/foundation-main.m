@@ -347,6 +347,63 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
         } else if ((argc > 1) && !strcmp(argv[1], "progress")) {
             id obj = [@"Progress" asInstance];
             [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "amigadisks")) {
+            id obj = [Definitions AmigaDisks];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "amigadir")) {
+            if (argc > 2) {
+                id filePath = nscstr(argv[2]);
+                if ([filePath isDirectory]) {
+                    chdir(argv[2]);
+                }
+            }
+
+            id obj = [Definitions AmigaDir];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "macclassicdisks")) {
+            id obj = [Definitions MacClassicDisks];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "macclassicdir")) {
+            if (argc > 2) {
+                id filePath = nscstr(argv[2]);
+                if ([filePath isDirectory]) {
+                    chdir(argv[2]);
+                }
+            }
+
+            id obj = [Definitions MacClassicDir];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "macclassictrash")) {
+            id obj = [Definitions MacClassicTrash];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "maccolordisks")) {
+            id obj = [Definitions MacColorDisks];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "maccolordir")) {
+            if (argc > 2) {
+                id filePath = nscstr(argv[2]);
+                if ([filePath isDirectory]) {
+                    chdir(argv[2]);
+                }
+            }
+
+            id obj = [Definitions MacColorDir];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "maccolortrash")) {
+            id obj = [Definitions MacColorTrash];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "macplatinumtrash")) {
+            id obj = [Definitions MacPlatinumTrash];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "ataristdisks")) {
+            id obj = [Definitions AtariSTDisks];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "ataristtrash")) {
+            id obj = [Definitions AtariSTTrash];
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "hotdogstandprograms")) {
+            id obj = [Definitions HotDogStandPrograms];
+            [Definitions runWindowManagerForObject:obj];
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
