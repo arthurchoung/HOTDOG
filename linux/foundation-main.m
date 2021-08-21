@@ -360,6 +360,9 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
 
             id obj = [Definitions AmigaDir];
             [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "amigagurumeditation")) {
+            id obj = [Definitions AmigaGuruMeditation];
+            [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "macclassicdisks")) {
             id obj = [Definitions MacClassicDisks];
             [Definitions runWindowManagerForObject:obj];
