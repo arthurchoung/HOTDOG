@@ -4,9 +4,9 @@ For more information, please visit http://hotdoglinux.com
 
 ## Download
 
-Live Image Based on Alpine Linux - Run With QEMU
+Live Image based on Slackware Live
 
-https://archive.org/details/HotDogLinux-20210118
+http://hotdoglinux.com/download/
 
 
 ## Screenshots
@@ -68,8 +68,8 @@ The following executables must be in your PATH or at location if specified:
   * xrandr
   * ifconfig (used by hotdog-printNetworkInfo.pl)
   * find (used by build.pl)
-  * clang
-  * /usr/bin/perl
+  * gcc (also needs gcc objc runtime)
+  * /usr/bin/perl (also needs JSON)
   * /bin/bash (used by Utils/printDateEverySecondForTimezone:text:)
   * date (used by Utils/printDateEverySecondForTimezone:text:)
 
@@ -83,18 +83,6 @@ The following libraries must have headers available and be linkable:
   * libGL (Mesa should work)
   * libpthread
   * libm
-
-These are optional:
-
-  * xterm
-  * mpv
-  * mupdf (used by Config/fileHandlers.csv)
-  * firefox (used by Config/rootWindowMenu.csv and Config/fileHandlers.csv)
-  * thunderbird (used by Config/rootWindowMenu.csv)
-  * x64 (used by Config/fileHandlers.csv)
-  * mupen64plus (used by Config/fileHandlers.csv)
-
-(this list is probably incomplete)
 
 
 
