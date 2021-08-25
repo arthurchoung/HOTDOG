@@ -26,6 +26,11 @@
 #import "HOTDOG.h"
 
 @implementation Definitions(jfkdlsjfklsdjlkfjdsklfjlkdsfjkldsfewrwerwe)
++ (id)LockScreen
+{
+    id obj = [@"LockScreen" asInstance];
+    return obj;
+}
 @end
 
 @interface LockScreen : IvarObject
