@@ -559,8 +559,6 @@ exit(0);
     id _openGLTexture;
     id _openGLObjectTexture;
     Window _openGLWindow;
-
-    BOOL _panOversizedWindow;
 }
 @end
 @implementation WindowManager
@@ -2051,7 +2049,6 @@ NSLog(@"handleX11DestroyNotify e->event %x e->window %x", e->event, e->window);
     XUnmapEvent *e = eptr;
 NSLog(@"handleX11UnmapNotify e->event %x e->window %x", e->event, e->window);
 
-    _panOversizedWindow = NO;
     // Seems to fix UAE file dialog
     {
         id dict = [self dictForObjectChildWindow:e->window];
@@ -2217,28 +2214,6 @@ NSLog(@"ButtonRelease window %x", e->window);
     _mouseX = e->x_root;
     _mouseY = e->y_root;
     if (_isWindowManager) {
-        if (_panOversizedWindow) {
-            if (_focusDict) {
-                int newX = _mouseX;
-                int newY = _mouseY;
-                int w = [_focusDict intValueForKey:@"w"];
-                int h = [_focusDict intValueForKey:@"h"];
-                if (w > _rootWindowWidth) {
-                    double xpct = (double)_mouseX / (double)_rootWindowWidth;
-                    int extra = w - _rootWindowWidth;
-                    newX = (double)extra * xpct * -1;
-                }
-                if (h > _rootWindowHeight) {
-                    double ypct = (double)_mouseY / (double)_rootWindowHeight;
-                    int extra = h - _rootWindowHeight;
-                    newY = (double)extra * ypct * -1;
-                }
-
-                [_focusDict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-            }
-            return;
-        }
-
         id x11dict = nil;
         if (_buttonDownDict) {
             x11dict = _buttonDownDict;
