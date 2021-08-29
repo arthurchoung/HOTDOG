@@ -276,244 +276,67 @@
 "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 ;
 }
-+ (char *)cStringForAmigaHorizontalScrollBarLeft
-{
-    return
-"ooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbb\n"
-"ooooooXXXooooooXX\n"
-"bbbbbbbbbbbbbbbbb\n"
-"ooooXXXooooooooXX\n"
-"bbbbbbbbbbbbbbbbb\n"
-"ooXXXooooooooooXX\n"
-"bbbbbbbbbbbbbbbbb\n"
-"ooXXXXXXXXXXXooXX\n"
-"bbbbbbbbbbbbbbbbb\n"
-"ooXXXooooooooooXX\n"
-"bbbbbbbbbbbbbbbbb\n"
-"ooooXXXooooooooXX\n"
-"bbbbbbbbbbbbbbbbb\n"
-"ooooooXXXooooooXX\n"
-"bbbbbbbbbbbbbbbbb\n"
-"ooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaHorizontalScrollBarMiddle
++ (char *)cStringForAmigaBottomBorder
 {
     return
 "o\n"
 "b\n"
-"X\n"
-"b\n"
-"o\n"
-"b\n"
-"o\n"
-"b\n"
-"o\n"
-"b\n"
-"o\n"
-"b\n"
-"o\n"
-"b\n"
-"X\n"
-"b\n"
-"o\n"
-"b\n"
 ;
 }
-+ (char *)cStringForAmigaHorizontalScrollBarRight
++ (char *)cStringForAmigaLeftBorder
 {
     return
-"ooooooooooooooo\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooXXXooo\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooooXXXo\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"XXooXXXXXXXXXXX\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooooXXXo\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooXXXooo\n"
-"bbbbbbbbbbbbbbb\n"
-"ooooooooooooooo\n"
-"bbbbbbbbbbbbbbb\n"
+"oo\n"
+"bb\n"
 ;
 }
-+ (char *)cStringForAmigaFuelGaugeTop
-{
-    return
-"oo............oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oooooo...oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oo.......oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oooo.....oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oo.......oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oo.......oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo............oo\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaFuelGaugeMiddle
-{
-    return
-"oo************oo\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaFuelGaugeBottom
-{
-    return
-"oo............oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oooooo...oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oo.......oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oooo.....oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oo.......oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo...oooooo...oo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oo............oo\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-+ (void)drawAmigaHorizontalScrollBarInBitmap:(id)bitmap rect:(Int4)r
++ (void)drawAmigaBottomBorderInBitmap:(id)bitmap rect:(Int4)r
 {
     char *palette = [Definitions cStringForAmigaPalette];
 
-    char *left = [Definitions cStringForAmigaHorizontalScrollBarLeft];
-    char *middle = [Definitions cStringForAmigaHorizontalScrollBarMiddle];
-    char *right = [Definitions cStringForAmigaHorizontalScrollBarRight];
+    char *middle = [Definitions cStringForAmigaBottomBorder];
 
-    int widthForLeft = [Definitions widthForCString:left];
     int widthForMiddle = [Definitions widthForCString:middle];
-    int widthForRight = [Definitions widthForCString:right];
 
-    int heightForMiddle = [Definitions heightForCString:middle];
-    int middleYOffset = (r.h - heightForMiddle)/2.0;
-
-    [bitmap drawCString:left palette:palette x:r.x y:r.y+middleYOffset];
     int x;
-    for (x=widthForLeft; x<r.w-widthForRight; x+=widthForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y+middleYOffset];
+    for (x=0; x<r.w; x+=widthForMiddle) {
+        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y];
     }
-    [bitmap drawCString:right palette:palette x:r.x+r.w-widthForRight y:r.y+middleYOffset];
 }
-+ (void)drawAmigaFuelGaugeInBitmap:(id)bitmap rect:(Int4)r
++ (void)drawAmigaLeftBorderInBitmap:(id)bitmap rect:(Int4)r
 {
     char *palette = [Definitions cStringForAmigaPalette];
 
-    char *top = [Definitions cStringForAmigaFuelGaugeTop];
-    char *middle = [Definitions cStringForAmigaFuelGaugeMiddle];
-    char *bottom = [Definitions cStringForAmigaFuelGaugeBottom];
-//    char *knob = [Definitions cStringForInactiveVerticalScrollBarKnob];
+    char *middle = [Definitions cStringForAmigaLeftBorder];
 
-    int heightForTop = [Definitions heightForCString:top];
     int heightForMiddle = [Definitions heightForCString:middle];
-    int heightForBottom = [Definitions heightForCString:bottom];
-//    int heightForKnob = [Definitions heightForCString:knob];
 
     int widthForMiddle = [Definitions widthForCString:middle];
-//    int widthForKnob = [Definitions widthForCString:knob];
-    int middleXOffset = (r.w - widthForMiddle)/2;
-//    int knobXOffset = (r.w - widthForKnob)/2;
 
-    [bitmap drawCString:top palette:palette x:r.x+middleXOffset y:r.y];
-    for (int y=r.y+heightForTop; y<r.y+r.h-heightForBottom; y+=heightForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+middleXOffset y:y];
+    for (int y=r.y; y<r.y+r.h; y+=heightForMiddle) {
+        [bitmap drawCString:middle palette:palette x:r.x y:y];
     }
-    [bitmap drawCString:bottom palette:palette x:r.x+middleXOffset y:r.y+r.h-heightForBottom];
-//    int knobX = widthForLeft + (int)(r.w-widthForLeft-widthForRight-widthForKnob) * pct;
-//    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y+r.h-1-knobYOffset];
 }
-+ (char *)cStringForAmigaVerticalScrollBarTop
++ (char *)cStringForAmigaRightBorder
 {
     return
-"oooooXXXXXXooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooXXooXXooXXooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oXXooooXXooooXXo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooooooXXooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooooooXXooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooooooXXooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooooooooooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"ooXXXXXXXXXXXXoo\n"
-"bbbbbbbbbbbbbbbb\n"
+"oo\n"
+"bb\n"
 ;
 }
-+ (char *)cStringForAmigaVerticalScrollBarMiddle
-{
-    return
-"ooXXooooooooXXoo\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaVerticalScrollBarBottom
-{
-    return
-"ooXXXXXXXXXXXXoo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooooooooooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooooooXXooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooooooXXooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooooooXXooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oXXooooXXooooXXo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooXXooXXooXXooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"oooooXXXXXXooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-+ (void)drawAmigaVerticalScrollBarInBitmap:(id)bitmap rect:(Int4)r
++ (void)drawAmigaRightBorderInBitmap:(id)bitmap rect:(Int4)r
 {
     char *palette = [Definitions cStringForAmigaPalette];
 
-    char *top = [Definitions cStringForAmigaVerticalScrollBarTop];
-    char *middle = [Definitions cStringForAmigaVerticalScrollBarMiddle];
-    char *bottom = [Definitions cStringForAmigaVerticalScrollBarBottom];
-//    char *knob = [Definitions cStringForInactiveVerticalScrollBarKnob];
+    char *middle = [Definitions cStringForAmigaRightBorder];
 
-    int heightForTop = [Definitions heightForCString:top];
     int heightForMiddle = [Definitions heightForCString:middle];
-    int heightForBottom = [Definitions heightForCString:bottom];
-//    int heightForKnob = [Definitions heightForCString:knob];
 
     int widthForMiddle = [Definitions widthForCString:middle];
-//    int widthForKnob = [Definitions widthForCString:knob];
-    int middleXOffset = (r.w - widthForMiddle)/2;
-//    int knobXOffset = (r.w - widthForKnob)/2;
 
-    [bitmap drawCString:top palette:palette x:r.x+middleXOffset y:r.y];
-    for (int y=r.y+heightForTop; y<r.y+r.h-heightForBottom; y+=heightForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+middleXOffset y:y];
+    for (int y=r.y; y<r.y+r.h; y+=heightForMiddle) {
+        [bitmap drawCString:middle palette:palette x:r.x y:y];
     }
-    [bitmap drawCString:bottom palette:palette x:r.x+middleXOffset y:r.y+r.h-heightForBottom];
-//    int knobX = widthForLeft + (int)(r.w-widthForLeft-widthForRight-widthForKnob) * pct;
-//    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y+r.h-1-knobYOffset];
 }
 + (char *)cStringForAmigaResizeButton
 {
@@ -548,6 +371,7 @@
     int _topBorder;
     int _bottomBorder;
     int _hasShadow;
+    id _x11HasChildMask;
     char _buttonDown;
     char _buttonHover;
     int _buttonDownX;
@@ -567,10 +391,10 @@
     self = [super init];
     if (self) {
         _topBorder = 20;
-        _leftBorder = 16;
-        _rightBorder = 16;
-        _bottomBorder = 18;
-        _hasShadow = 0;
+        _leftBorder = 2;
+        _rightBorder = 2;
+        _bottomBorder = 2;
+        [self setValue:@"amiga" forKey:@"x11HasChildMask"];
     }
     return self;
 }
@@ -604,12 +428,15 @@
     char *titleBarRight = [Definitions cStringForAmigaTitleBarRight];
     char *inactiveTitleBar = [Definitions cStringForInactiveAmigaTitleBar];
     int titleBarHeight = [Definitions heightForCString:titleBarMiddle];
-    char *scrollBarMiddle = [Definitions cStringForAmigaHorizontalScrollBarMiddle];
-    int scrollBarHeight = [Definitions heightForCString:scrollBarMiddle];
-    char *fuelGaugeMiddle = [Definitions cStringForAmigaFuelGaugeMiddle];
-    int fuelGaugeWidth = [Definitions widthForCString:fuelGaugeMiddle];
-    char *verticalScrollBarMiddle = [Definitions cStringForAmigaVerticalScrollBarMiddle];
-    int verticalScrollBarWidth = [Definitions widthForCString:verticalScrollBarMiddle];
+    char *bottomBorder = [Definitions cStringForAmigaBottomBorder];
+    int bottomBorderHeight = [Definitions heightForCString:bottomBorder];
+    char *leftBorder = [Definitions cStringForAmigaLeftBorder];
+    int leftBorderWidth = [Definitions widthForCString:leftBorder];
+    char *rightBorder = [Definitions cStringForAmigaRightBorder];
+    int rightBorderWidth = [Definitions widthForCString:rightBorder];
+    char *resizeButton = [Definitions cStringForAmigaResizeButton];
+    int resizeButtonWidth = [Definitions widthForCString:resizeButton];
+    int resizeButtonHeight = [Definitions heightForCString:resizeButton];
     [bitmap setColor:@"#0055aa"];
     for (int i=0; i<r.h; i+=2) {
         [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
@@ -618,9 +445,9 @@
     for (int i=1; i<r.h; i+=2) {
         [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
     }
-    [Definitions drawAmigaHorizontalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+r.h-scrollBarHeight w:r.w-verticalScrollBarWidth h:scrollBarHeight]];
-    [Definitions drawAmigaVerticalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x+r.w-verticalScrollBarWidth y:r.y+titleBarHeight w:verticalScrollBarWidth h:r.h-titleBarHeight-scrollBarHeight]];
-    [Definitions drawAmigaFuelGaugeInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+titleBarHeight w:fuelGaugeWidth h:r.h-titleBarHeight-scrollBarHeight]];
+    [Definitions drawAmigaRightBorderInBitmap:bitmap rect:[Definitions rectWithX:r.x+r.w-rightBorderWidth y:r.y+titleBarHeight w:rightBorderWidth h:r.h-titleBarHeight-bottomBorderHeight]];
+    [Definitions drawAmigaLeftBorderInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+titleBarHeight w:leftBorderWidth h:r.h-titleBarHeight-bottomBorderHeight]];
+    [Definitions drawAmigaBottomBorderInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+r.h-bottomBorderHeight w:r.w-resizeButtonWidth h:bottomBorderHeight]];
     [Definitions drawInBitmap:bitmap left:titleBarLeft middle:titleBarMiddle right:titleBarRight x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w palette:palette];
 
     [bitmap drawCString:[Definitions cStringForAmigaTitleBarCloseButton] palette:((_buttonDown=='c' && _buttonHover=='c') ? highlightedPalette : palette) x:_closeButtonRect.x y:_closeButtonRect.y];
@@ -633,7 +460,7 @@
             [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:highlightedPalette x:_raiseButtonRect.x y:_raiseButtonRect.y];
         }
     }
-    [bitmap drawCString:[Definitions cStringForAmigaResizeButton] palette:((_buttonDown=='s') ? highlightedPalette : palette) x:r.x+r.w-verticalScrollBarWidth y:r.y+r.h-scrollBarHeight];
+    [bitmap drawCString:[Definitions cStringForAmigaResizeButton] palette:((_buttonDown=='s') ? highlightedPalette : palette) x:r.x+r.w-resizeButtonWidth y:r.y+r.h-resizeButtonHeight];
 
     [bitmap useTopazFont];
     id text = [context valueForKey:@"name"];
