@@ -835,6 +835,9 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     [dict setValue:nsfmt(@"%lu", win) forKey:@"childWindow"];
     [dict setValue:name forKey:@"name"];
 
+    [self addShadowMaskToObjectWindow:dict];
+    [self addMaskToChildWindow:dict];
+
     return dict;
 }
 - (void)sendCloseEventToWindow:(unsigned long)win
@@ -856,6 +859,7 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     if (!hasShadow) {
         return;
     }
+
     id window = [dict valueForKey:@"window"];
     if (!window) {
         return;
@@ -863,6 +867,7 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     unsigned long win = [window unsignedLongValue];
     int w = [dict intValueForKey:@"w"];
     int h = [dict intValueForKey:@"h"];
+
     XGCValues xgcv;
     xgcv.foreground = WhitePixel(_display, DefaultScreen(_display));
     xgcv.line_width = 1;
@@ -877,7 +882,7 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
             XDrawPoint(_display, shape_pixmap, shape_gc, i, h-1);
             XDrawPoint(_display, shape_pixmap, shape_gc, w-1, i);
         }
-    } else {
+    } else if (hasShadow == -1) {
         //FIXME
         // Lower left corner for Atari ST
         XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-1);
@@ -897,6 +902,40 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
         XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 1);
         XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 1);
         XDrawPoint(_display, shape_pixmap, shape_gc, w-4, 1);
+    }
+    XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
+    XFreeGC(_display, shape_gc);
+    XFreePixmap(_display, shape_pixmap);
+}
+- (void)addMaskToChildWindow:(id)dict
+{
+    id object = [dict valueForKey:@"object"];
+    id x11HasChildMask = [object valueForKey:@"x11HasChildMask"];
+    id childWindow = [dict valueForKey:@"childWindow"];
+    if (!childWindow) {
+        return;
+    }
+    unsigned long win = [childWindow unsignedLongValue];
+    int w = [dict intValueForKey:@"w"];
+    int h = [dict intValueForKey:@"h"];
+    id obj = [dict valueForKey:@"object"];
+    w -= [obj intValueForKey:@"leftBorder"];
+    w -= [obj intValueForKey:@"rightBorder"];
+    h -= [obj intValueForKey:@"topBorder"];
+    h -= [obj intValueForKey:@"bottomBorder"];
+
+    XGCValues xgcv;
+    xgcv.foreground = WhitePixel(_display, DefaultScreen(_display));
+    xgcv.line_width = 1;
+    xgcv.line_style = LineSolid;
+    Pixmap shape_pixmap = XCreatePixmap(_display, win, w, h, 1);
+    GC shape_gc = XCreateGC(_display, shape_pixmap, 0, &xgcv);
+    XSetForeground(_display, shape_gc, 1);
+    XFillRectangle(_display, shape_pixmap, shape_gc, 0, 0, w, h);
+    XSetForeground(_display, shape_gc, 0);
+    if ([x11HasChildMask isEqual:@"amiga"]) {
+        //FIXME Amiga
+        XFillRectangle(_display, shape_pixmap, shape_gc, w-14, h-16, 14, 16);
     }
     XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
     XFreeGC(_display, shape_gc);
@@ -989,9 +1028,6 @@ NSLog(@"unparent object %@", dict);
     [dict setValue:nsfmt(@"%d", w) forKey:@"w"];
     [dict setValue:nsfmt(@"%d", h) forKey:@"h"];
     [self XMoveResizeWindow:win :x :y :w :h];
-    if ([object intValueForKey:@"hasShadow"]) {
-        [self addShadowMaskToObjectWindow:dict];
-    }
     id childWindowNumber = [dict valueForKey:@"childWindow"];
     if (childWindowNumber) {
         unsigned long childWindow = [childWindowNumber unsignedLongValue];
@@ -1004,6 +1040,8 @@ NSLog(@"unparent object %@", dict);
         int childH = [dict intValueForKey:@"h"]-topBorder-bottomBorder;
         [self XMoveResizeWindow:childWindow :leftBorder :topBorder :childW :childH];
     }
+    [self addShadowMaskToObjectWindow:dict];
+    [self addMaskToChildWindow:dict];
     [dict setValue:@"1" forKey:@"needsRedraw"];
 }
 
@@ -1069,31 +1107,6 @@ NSLog(@"unparent object %@", dict);
     }
     XDestroyWindow(_display, [window unsignedLongValue]);
     [dict setValue:nil forKey:@"window"];
-}
-- (void)openWindowForExistingObjectWindow:(id)dict x:(int)x y:(int)y w:(int)w h:(int)h
-{
-    id object = [dict valueForKey:@"object"];
-    if (!object) {
-        return;
-    }
-
-    id window = [dict valueForKey:@"window"];
-    if (window) {
-        return;
-    }
-
-    Window win = [self openWindowWithName:[object className] x:x y:y w:w h:h];
-
-    [dict setValue:nsfmt(@"%lu", win) forKey:@"window"];
-    [dict setValue:nsfmt(@"%d", x) forKey:@"x"];
-    [dict setValue:nsfmt(@"%d", y) forKey:@"y"];
-    [dict setValue:nsfmt(@"%d", w) forKey:@"w"];
-    [dict setValue:nsfmt(@"%d", h) forKey:@"h"];
-    [dict setValue:@"1" forKey:@"needsRedraw"];
-
-    if ([object intValueForKey:@"hasShadow"]) {
-        [self addShadowMaskToObjectWindow:dict];
-    }
 }
 - (unsigned long)openWindowWithName:(id)name x:(int)x y:(int)y w:(int)w h:(int)h
 {
@@ -1181,9 +1194,8 @@ if ([monitor intValueForKey:@"height"] == 768) {
     [dict setValue:@"1" forKey:@"needsRedraw"];
     [_objectWindows addObject:dict];
 
-    if ([object intValueForKey:@"hasShadow"]) {
-        [self addShadowMaskToObjectWindow:dict];
-    }
+    [self addShadowMaskToObjectWindow:dict];
+    [self addMaskToChildWindow:dict];
     return dict;
 }
 - (id)generateEventDictRootX:(int)rootX rootY:(int)rootY x:(int)x y:(int)y w:(int)w h:(int)h x11dict:(id)x11dict
@@ -2563,14 +2575,6 @@ This should be implemented in a separate program
     }
     XFree(topLevelWindows);
     return 0;
-}
-- (void)openBackgroundAgentsWindow
-{
-//FIXME
-    id dict = [self dictForObjectWindowClassName:@"BackgroundAgents"];
-    if (dict) {
-        [self openWindowForExistingObjectWindow:dict x:0 y:_menuBarHeight w:400 h:400];
-    }
 }
 - (void)XReparentWindow:(unsigned long)child :(unsigned long)parent :(int)x :(int)y
 {
