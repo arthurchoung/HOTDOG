@@ -77,90 +77,6 @@
     char *right = [Definitions cStringForInactiveTitleBarRight];
     [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y w:r.w palette:palette];
 }
-+ (void)drawActiveScrollBarInBitmap:(id)bitmap rect:(Int4)r pct:(double)pct
-{
-    char *palette = [Definitions cStringForActiveScrollBarPalette];
-
-    char *left = [Definitions cStringForActiveScrollBarLeftArrow];
-    char *middle = [Definitions cStringForActiveScrollBarMiddle];
-    char *right = [Definitions cStringForActiveScrollBarRightArrow];
-    char *knob = [Definitions cStringForActiveScrollBarKnob];
-
-    int widthForLeft = [Definitions widthForCString:left];
-    int widthForMiddle = [Definitions widthForCString:middle];
-    int widthForRight = [Definitions widthForCString:right];
-    int widthForKnob = [Definitions widthForCString:knob];
-
-    int heightForMiddle = [Definitions heightForCString:middle];
-    int heightForKnob = [Definitions heightForCString:knob];
-    int middleYOffset = (r.h - heightForMiddle)/2.0;
-    int knobYOffset = (r.h - heightForKnob)/2.0;
-
-    [bitmap drawCString:left palette:palette x:r.x y:r.y+middleYOffset];
-    int x;
-    for (x=widthForLeft; x<r.w-widthForRight; x+=widthForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y+middleYOffset];
-    }
-    [bitmap drawCString:right palette:palette x:r.x+r.w-widthForRight y:r.y+middleYOffset];
-    int knobX = widthForLeft + (int)(r.w-widthForLeft-widthForRight-widthForKnob) * pct;
-    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y+knobYOffset];
-}
-+ (void)drawInactiveHorizontalScrollBarInBitmap:(id)bitmap rect:(Int4)r
-{
-    char *palette = [Definitions cStringForInactiveHorizontalScrollBarPalette];
-
-    char *left = [Definitions cStringForInactiveHorizontalScrollBarLeftArrow];
-    char *middle = [Definitions cStringForInactiveHorizontalScrollBarMiddle];
-    char *right = [Definitions cStringForInactiveHorizontalScrollBarRightArrow];
-
-    int widthForLeft = [Definitions widthForCString:left];
-    int widthForMiddle = [Definitions widthForCString:middle];
-    int widthForRight = [Definitions widthForCString:right];
-
-    int heightForMiddle = [Definitions heightForCString:middle];
-    int middleYOffset = (r.h - heightForMiddle)/2.0;
-
-    [bitmap drawCString:left palette:palette x:r.x y:r.y+middleYOffset];
-    int x;
-    for (x=widthForLeft; x<r.w-widthForRight; x+=widthForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y+middleYOffset];
-    }
-    [bitmap drawCString:right palette:palette x:r.x+r.w-widthForRight y:r.y+middleYOffset];
-}
-+ (void)drawInactiveVerticalScrollBarInBitmap:(id)bitmap rect:(Int4)r
-{
-    char *palette = [Definitions cStringForInactiveVerticalScrollBarPalette];
-
-    char *top = [Definitions cStringForInactiveVerticalScrollBarUpArrow];
-    char *middle = [Definitions cStringForInactiveVerticalScrollBarMiddle];
-    char *bottom = [Definitions cStringForInactiveVerticalScrollBarDownArrow];
-//    char *knob = [Definitions cStringForInactiveVerticalScrollBarKnob];
-
-    int heightForTop = [Definitions heightForCString:top];
-    int heightForMiddle = [Definitions heightForCString:middle];
-    int heightForBottom = [Definitions heightForCString:bottom];
-//    int heightForKnob = [Definitions heightForCString:knob];
-
-    int widthForMiddle = [Definitions widthForCString:middle];
-//    int widthForKnob = [Definitions widthForCString:knob];
-    int middleXOffset = (r.w - widthForMiddle)/2;
-//    int knobXOffset = (r.w - widthForKnob)/2;
-
-    [bitmap drawCString:top palette:palette x:r.x+middleXOffset y:r.y];
-    for (int y=r.y+heightForTop; y<r.y+r.h-heightForBottom; y+=heightForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+middleXOffset y:y];
-    }
-    [bitmap drawCString:bottom palette:palette x:r.x+middleXOffset y:r.y+r.h-heightForBottom];
-//    int knobX = widthForLeft + (int)(r.w-widthForLeft-widthForRight-widthForKnob) * pct;
-//    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y+r.h-1-knobYOffset];
-}
-+ (void)drawResizeButtonInBitmap:(id)bitmap x:(int)x y:(int)y
-{
-    char *palette = [Definitions cStringForActiveScrollBarPalette];
-
-    char *button = [Definitions cStringForResizeButton];
-    [bitmap drawCString:button palette:palette x:x y:y];
-}
 
 + (char *)cStringForTitleBarPalette
 {
@@ -395,82 +311,6 @@
 "bb\n"
 ;
 }
-+ (char *)cStringForInactiveVerticalScrollBarPalette
-{
-    return
-"b #000000\n"
-"X #777777\n"
-". #eeeeee\n"
-;
-}
-+ (char *)cStringForInactiveVerticalScrollBarUpArrow
-{
-    return
-"bbbbbbbbbbbbbbbb\n"
-"b..............b\n"
-"b..............b\n"
-"b......XX......b\n"
-"b.....X..X.....b\n"
-"b....X....X....b\n"
-"b...X......X...b\n"
-"b..X........X..b\n"
-"b.XXXX....XXXX.b\n"
-"b....X....X....b\n"
-"b....X....X....b\n"
-"b....X....X....b\n"
-"b....XXXXXX....b\n"
-"b..............b\n"
-"b..............b\n"
-"bXXXXXXXXXXXXXXb\n"
-;
-}
-+ (char *)cStringForInactiveVerticalScrollBarMiddle
-{
-    return
-"b..............b\n"
-;
-}
-+ (char *)cStringForInactiveVerticalScrollBarDownArrow
-{
-    return
-"bXXXXXXXXXXXXXXb\n"
-"b..............b\n"
-"b..............b\n"
-"b....XXXXXX....b\n"
-"b....X....X....b\n"
-"b....X....X....b\n"
-"b....X....X....b\n"
-"b.XXXX....XXXX.b\n"
-"b..X........X..b\n"
-"b...X......X...b\n"
-"b....X....X....b\n"
-"b.....X..X.....b\n"
-"b......XX......b\n"
-"b..............b\n"
-"b..............b\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForActiveScrollBarPalette
-{
-    return
-"b #000000\n"
-". #333366\n"
-"X #555555\n"
-"o #606060\n"
-"O #777777\n"
-"+ #666699\n"
-"@ #a0a0a0\n"
-"# #a4a4a4\n"
-"$ #aaaaaa\n"
-"% #bbbbbb\n"
-"& #a3a3d7\n"
-"* #dddddd\n"
-"= #ccccff\n"
-"- #eeeeee\n"
-"; #ffffff\n"
-;
-}
 + (char *)cStringForResizeButton
 {
     return
@@ -493,165 +333,6 @@
 ;
 }
 
-+ (char *)cStringForActiveScrollBarLeftArrow
-{
-    return
-"bbbbbbbbbbbbbbbb\n"
-"b;;;;;;;;;;;;;Ob\n"
-"b;******.*****Ob\n"
-"b;*****..*****Ob\n"
-"b;****.&.*****Ob\n"
-"b;***.&&.....*Ob\n"
-"b;**.&&&&&&&.*Ob\n"
-"b;*.&&&&&&&&.*Ob\n"
-"b;**.&&&&&&&.*Ob\n"
-"b;***.&&.....*Ob\n"
-"b;****.&.*****Ob\n"
-"b;*****..*****Ob\n"
-"b;******.*****Ob\n"
-"b;************Ob\n"
-"bOOOOOOOOOOOOOOb\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForActiveScrollBarMiddle
-{
-    return
-"bbbb\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"bbbb\n"
-;
-}
-
-+ (char *)cStringForActiveScrollBarRightArrow
-{
-    return
-"bbbbbbbbbbbbbbbb\n"
-"b;;;;;;;;;;;;;Ob\n"
-"b;*****.******Ob\n"
-"b;*****..*****Ob\n"
-"b;*****.&.****Ob\n"
-"b;*.....&&.***Ob\n"
-"b;*.&&&&&&&.**Ob\n"
-"b;*.&&&&&&&&.*Ob\n"
-"b;*.&&&&&&&.**Ob\n"
-"b;*.....&&.***Ob\n"
-"b;*****.&.****Ob\n"
-"b;*****..*****Ob\n"
-"b;*****.******Ob\n"
-"b;************Ob\n"
-"bOOOOOOOOOOOOOOb\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-
-+ (char *)cStringForActiveScrollBarKnob
-{
-    return
-"bbbbbbbbbbbbbbbb\n"
-"X==============.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X...............\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-
-+ (char *)cStringForInactiveHorizontalScrollBarPalette
-{
-    return
-"b #000000\n"
-"X #777777\n"
-". #eeeeee\n"
-;
-}
-
-+ (char *)cStringForInactiveHorizontalScrollBarLeftArrow
-{
-    return
-"bbbbbbbbbbbbbbbb\n"
-"b..............X\n"
-"b......X.......X\n"
-"b.....XX.......X\n"
-"b....X.X.......X\n"
-"b...X..XXXXX...X\n"
-"b..X.......X...X\n"
-"b.X........X...X\n"
-"b.X........X...X\n"
-"b..X.......X...X\n"
-"b...X..XXXXX...X\n"
-"b....X.X.......X\n"
-"b.....XX.......X\n"
-"b......X.......X\n"
-"b..............X\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForInactiveHorizontalScrollBarMiddle
-{
-   return
-"b\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-"b\n"
-;
-}
-+ (char *)cStringForInactiveHorizontalScrollBarRightArrow
-{
-    return
-"bbbbbbbbbbbbbbbb\n"
-"X..............b\n"
-"X.......X......b\n"
-"X.......XX.....b\n"
-"X.......X.X....b\n"
-"X...XXXXX..X...b\n"
-"X...X.......X..b\n"
-"X...X........X.b\n"
-"X...X........X.b\n"
-"X...X.......X..b\n"
-"X...XXXXX..X...b\n"
-"X.......X.X....b\n"
-"X.......XX.....b\n"
-"X.......X......b\n"
-"X..............b\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
 
 + (char *)cStringForScrollBarLeftArrowBlackAndWhite
 {
@@ -782,6 +463,7 @@
     int _topBorder;
     int _bottomBorder;
     int _hasShadow;
+    id _x11HasChildMask;
 
     char _buttonDown;
     char _buttonHover;
@@ -801,10 +483,11 @@
     self = [super init];
     if (self) {
         _leftBorder = 1;
-        _rightBorder = 16+1;
+        _rightBorder = 1+1;//16+1;
         _topBorder = 19;
-        _bottomBorder = 16+1;
+        _bottomBorder = 1+1;//16+1;
         _hasShadow = 1;
+        [self setValue:@"maccolor" forKey:@"x11HasChildMask"];
     }
     return self;
 }
@@ -839,20 +522,17 @@
     [self calculateRects:r];
     char *palette = [Definitions cStringForTitleBarPalette];
     int titleBarHeight = 20;
-    int infoBarHeight = 0;
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
-    [Definitions drawInactiveHorizontalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+r.h-16 w:r.w-15 h:16]];
-    [Definitions drawInactiveVerticalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x+r.w-16 y:r.y+titleBarHeight+infoBarHeight-2 w:16 h:r.h-titleBarHeight-infoBarHeight-15+2]];
-    [Definitions drawResizeButtonInBitmap:bitmap x:r.x+r.w-16 y:r.y+r.h-16];
-    if (infoBarHeight) {
-        [bitmap setColor:@"black"];
-        [bitmap drawLineAtX:r.x y:r.y+r.h-1-40 x:r.x+r.w-1 y:r.y+r.h-1-40];
-        [bitmap drawLineAtX:r.x y:r.y+r.h-1-38 x:r.x+r.w-1 y:r.y+r.h-1-38];
-        [bitmap useGenevaFont];
-        [bitmap setColorIntR:0 g:0 b:0 a:255];
-        [bitmap drawBitmapText:@"16 items        3,622K in disk           6,453K available" x:20 y:r.y+r.h-1-20];
+
+    if (hasFocus) {
+        [bitmap drawCString:[Definitions cStringForResizeButton] palette:[Definitions cStringForActiveScrollBarPalette] x:r.x+r.w-16 y:r.y+r.h-16];
+    } else {
+        [bitmap drawCString:[Definitions cStringForResizeButton] palette:"b #000000\n" x:r.x+r.w-16 y:r.y+r.h-16];
     }
+
+
+
     if (hasFocus) {
         [Definitions drawActiveTitleBarInBitmap:bitmap rect:_titleBarRect];
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
@@ -892,16 +572,15 @@
         }
     }
 
-    if (hasFocus) {
-        [bitmap setColor:@"black"];
-    } else {
+    [bitmap setColor:@"black"];
+    [bitmap drawVerticalLineAtX:rr.x+rr.w-1 y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-1];
+    if (!hasFocus) {
         [bitmap setColor:@"#555555ff"];
     }
     [bitmap drawVerticalLineAtX:rr.x y:rr.y y:rr.y+rr.h-1];
-    [bitmap drawVerticalLineAtX:rr.x+rr.w-1 y:rr.y y:rr.y+rr.h-1];
-    [bitmap drawVerticalLineAtX:rr.x+rr.w-2 y:rr.y y:rr.y+rr.h-1];
+    [bitmap drawVerticalLineAtX:rr.x+rr.w-2 y:rr.y y:rr.y+rr.h-2];
     [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y];
-    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-1];
     [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-2 y:rr.y+rr.h-2];
 
     if (_buttonDown == 't') {
