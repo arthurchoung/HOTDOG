@@ -7,6 +7,14 @@
 }
 @end
 @implementation Progress
+- (int)preferredWidth
+{
+    return 400;
+}
+- (int)preferredHeight
+{
+    return 40;
+}
 - (int)fileDescriptor
 {
     return 0;
