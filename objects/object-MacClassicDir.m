@@ -27,6 +27,97 @@
 
 #include <sys/time.h>
 
+static id leftArrowPixels =
+@"bbbbbbbbbbbbbbb\n"
+@"......b.......b\n"
+@".....bb.......b\n"
+@"....b.b.......b\n"
+@"...b..bbbbb...b\n"
+@"..b.......b...b\n"
+@".b........b...b\n"
+@"b.........b...b\n"
+@".b........b...b\n"
+@"..b.......b...b\n"
+@"...b..bbbbb...b\n"
+@"....b.b.......b\n"
+@".....bb.......b\n"
+@"......b.......b\n"
+@"..............b\n"
+;
+static id bottomScrollBarPixels =
+@"b\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+@".\n"
+;
+static id rightArrowPixels =
+@"bbbbbbbbbbbbbbb\n"
+@"b.......b......\n"
+@"b.......bb.....\n"
+@"b.......b.b....\n"
+@"b...bbbbb..b...\n"
+@"b...b.......b..\n"
+@"b...b........b.\n"
+@"b...b.........b\n"
+@"b...b........b.\n"
+@"b...b.......b..\n"
+@"b...bbbbb..b...\n"
+@"b.......b.b....\n"
+@"b.......bb.....\n"
+@"b.......b......\n"
+@"b..............\n"
+;
+static id upArrowPixels =
+@"b..............\n"
+@"b......b.......\n"
+@"b.....b.b......\n"
+@"b....b...b.....\n"
+@"b...b.....b....\n"
+@"b..b.......b...\n"
+@"b.b.........b..\n"
+@"bbbbb.....bbbb.\n"
+@"b...b.....b....\n"
+@"b...b.....b....\n"
+@"b...b.....b....\n"
+@"b...bbbbbbb....\n"
+@"b..............\n"
+@"b..............\n"
+@"bbbbbbbbbbbbbbb\n"
+;
+
+static id rightScrollBarPixels =
+@"b..............\n"
+;
+
+static id downArrowPixels =
+@"bbbbbbbbbbbbbbb\n"
+@"b..............\n"
+@"b..............\n"
+@"b...bbbbbbb....\n"
+@"b...b.....b....\n"
+@"b...b.....b....\n"
+@"b...b.....b....\n"
+@"bbbbb.....bbbb.\n"
+@"b.b.........b..\n"
+@"b..b.......b...\n"
+@"b...b.....b....\n"
+@"b....b...b.....\n"
+@"b.....b.b......\n"
+@"b......b.......\n"
+@"b..............\n"
+;
+
 static id folderPalette =
 @"b #000000\n"
 @". #ffffff\n"
@@ -132,7 +223,7 @@ static id documentPixels =
     [bitmap useMonacoFont];
     id arr = [@"." contentsOfDirectory];
     arr = [arr asFileArray];
-    int x = 20;
+    int x = 40;
     int y = 5;
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
@@ -161,29 +252,15 @@ static id documentPixels =
         [elt setValue:selectedPixels forKey:@"selectedPixels"];
         int w = [Definitions widthForCString:[pixels UTF8String]];
         int h = [Definitions heightForCString:[pixels UTF8String]];
-        int textWidth = [Definitions bitmapWidthForText:[elt valueForKey:@"filePath"]];
-        if (textWidth > w) {
-            if (x + textWidth + 5 >= r.w) {
-                x = 20;
-                y += h + 30;
-            }
-            x += (textWidth - w) / 2;
-            [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
-            [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
-            [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
-            [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
-            x += w + ((textWidth - w) / 2) + 20;
-        } else {
-            if (x + w + 5 >= r.w) {
-                x = 20;
-                y += h + 30;
-            }
-            [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
-            [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
-            [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
-            [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
-            x += w + 20;
+        if (x + w + 5 >= r.w) {
+            x = 40;
+            y += h + 30;
         }
+        [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
+        [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
+        [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
+        [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
+        x += w + 50 + 20;
     }
     [self setValue:arr forKey:@"array"];
 }
@@ -220,17 +297,40 @@ static id documentPixels =
             id palette = [elt valueForKey:@"selectedPalette"];
             id pixels = [elt valueForKey:@"selectedPixels"];
             if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y+23];
             }
         } else {
             id palette = [elt valueForKey:@"palette"];
             id pixels = [elt valueForKey:@"pixels"];
             if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y+23];
             }
         }
         id filePath = [elt valueForKey:@"filePath"];
-        [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-2];
+        [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-2+23];
+    }
+    int infoBarHeight = 30;
+    if (infoBarHeight) {
+        [bitmap setColor:@"black"];
+        [bitmap drawLineAtX:r.x y:r.y+22 x:r.x+r.w-1 y:r.y+22];
+        [bitmap drawLineAtX:r.x y:r.y+20 x:r.x+r.w-1 y:r.y+20];
+        [bitmap useGenevaFont];
+        [bitmap setColorIntR:0 g:0 b:0 a:255];
+        [bitmap drawBitmapText:@"16 items        3,622K in disk           6,453K available" x:20 y:r.y+5];
+    }
+    {
+        char *left = [leftArrowPixels UTF8String];
+        char *middle = [bottomScrollBarPixels UTF8String];
+        char *right = [rightArrowPixels UTF8String];
+        char *palette = [folderPalette UTF8String];
+        [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y+r.h-15 w:r.w-15 palette:palette];
+    }
+    {
+        char *top = [upArrowPixels UTF8String];
+        char *middle = [rightScrollBarPixels UTF8String];
+        char *bottom = [downArrowPixels UTF8String];
+        char *palette = [folderPalette UTF8String];
+        [Definitions drawInBitmap:bitmap top:top palette:palette middle:middle palette:palette bottom:bottom palette:palette x:r.x+r.w-15 y:r.y h:r.h-15];
     }
 }
 
