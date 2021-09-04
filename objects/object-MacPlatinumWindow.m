@@ -25,6 +25,284 @@
 
 #import "HOTDOG.h"
 
+/*
++ (char *)cStringForMacPlatinumRightBorderPalette
+{
+    return
+"b #000000\n"
+". #555555\n"
+"X #777777\n"
+"o #63639C\n"
+"O #888888\n"
+"+ #999999\n"
+"@ #AAAAAA\n"
+"# #CCCCCC\n"
+"$ #DDDDDD\n"
+"% #EEEEEE\n"
+"& #FFFFFF\n"
+;
+}
++ (char *)cStringForMacPlatinumRightBorderTop
+{
+    return
+"b..............b&##+bb\n"
+;
+}
++ (char *)cStringForMacPlatinumRightBorderMiddle
+{
+    return
+"b%%%%%%%%%%%%%%b&##+bb\n"
+;
+}
++ (char *)cStringForMacPlatinumRightBorderBottom
+{
+    return
+"b..............b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%OO%%%%%%b&##+bb\n"
+"b%%%%%OOOO%%%%%b&##+bb\n"
+"b%%%%OOOOOO%%%%b&##+bb\n"
+"b%%%OOOOOOOO%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"bOOOOOOOOOOOOOOb&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%OOOOOOOO%%%b&##+bb\n"
+"b%%%%OOOOOO%%%%b&##+bb\n"
+"b%%%%%OOOO%%%%%b&##+bb\n"
+"b%%%%%%OO%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+"b%%%%%%%%%%%%%%b&##+bb\n"
+//"bbbbbbbbbbbbbbbb&##+b\n"
+;
+}
+
++ (char *)cStringForMacPlatinumInactiveRightBorderPalette
+{
+    return
+"b #555555\n"
+". #63639C\n"
+"X #DDDDDD\n"
+"o #EEEEEE\n"
+"O #FFFFFF\n"
+;
+}
+
++ (char *)cStringForMacPlatinumInactiveRightBorderTop
+{
+    return
+"bbbbbbbbbbbbbbbbXXXXbb\n"
+;
+}
++ (char *)cStringForMacPlatinumInactiveRightBorderMiddle
+{
+    return
+"boooooooooooooobXXXXbb\n"
+;
+}
+
++ (char *)cStringForMacPlatinumInactiveBottomBorderPalette
+{
+    return
+"b #555555\n"
+". #63639C\n"
+"X #DDDDDD\n"
+"o #EEEEEE\n"
+"O #FFFFFF\n"
+;
+}
++ (char *)cStringForMacPlatinumInactiveBottomBorderLeft
+{
+    return
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXb\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bbbbbb\n"
+"  bbbb\n"
+;
+}
++ (char *)cStringForMacPlatinumInactiveBottomBorderMiddle
+{
+    return
+"b\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"b\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"b\n"
+"b\n"
+;
+}
++ (char *)cStringForMacPlatinumInactiveBottomBorderRight
+{
+    return
+"bbbbbbbbbbbbbbbbXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"bXXXXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXXXXbb\n"
+"bbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbb\n"
+;
+}
++ (char *)cStringForMacPlatinumBottomBorderPalette
+{
+    return
+"b #000000\n"
+". #555555\n"
+"X #777777\n"
+"o #63639C\n"
+"O #888888\n"
+"+ #999999\n"
+"@ #AAAAAA\n"
+"# #CCCCCC\n"
+"$ #EEEEEE\n"
+"% #FFFFFF\n"
+;
+}
++ (char *)cStringForMacPlatinumBottomBorderLeft
+{
+    return
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%##+b\n"
+"b%###%\n"
+"b%####\n"
+"b%####\n"
+"b#++++\n"
+"bbbbbb\n"
+;
+}
++ (char *)cStringForMacPlatinumBottomBorderMiddle
+{
+    return
+"b\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"b\n"
+"%\n"
+"#\n"
+"#\n"
+"+\n"
+"b\n"
+;
+}
++ (char *)cStringForMacPlatinumBottomBorderRight
+{
+    return
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb%##+bb\n"
+".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%%%%%%%%%%%%%%%%##+bb\n"
+".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%#################+bb\n"
+".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%#################+bb\n"
+".$$$$$$$$O$$$$$O$$$$$O$$$$$$$$b%#######%%########+bb\n"
+".$$$$$$$OO$$$$$O$$$$$OO$$$$$$$b%######%#X########+bb\n"
+".$$$$$$OOO$$$$$O$$$$$OOO$$$$$$b%#####%#X#%%######+bb\n"
+".$$$$$OOOO$$$$$O$$$$$OOOO$$$$$b%####%#X#%#X######+bb\n"
+".$$$$$OOOO$$$$$O$$$$$OOOO$$$$$b%###%#X#%#X#%%####+bb\n"
+".$$$$$$OOO$$$$$O$$$$$OOO$$$$$$b%##%#X#%#X#%#X####+bb\n"
+".$$$$$$$OO$$$$$O$$$$$OO$$$$$$$b%##@X#%#X#%#X#####+bb\n"
+".$$$$$$$$O$$$$$O$$$$$O$$$$$$$$b%####%#X#%#X######+bb\n"
+".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%####@X#%#X#######+bb\n"
+".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%######%#X########+bb\n"
+".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%######@X#########+bb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb%#################+bb\n"
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#################+bb\n"
+"#################################################+bb\n"
+"#################################################+bb\n"
+"++++++++++++++++++++++++++++++++++++++++++++++++++bb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+;
+}
+
+*/
+
 @implementation Definitions(fjkdlsjfiowejfklsdjfklsdkljf)
 + (char *)cStringForMacPlatinumInactiveTitleBarPalette
 {
@@ -165,21 +443,21 @@
 + (char *)cStringForMacPlatinumInactiveBottomBorderMiddle
 {
     return
-"b\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
 "b\n"
 "X\n"
 "X\n"
@@ -448,21 +726,21 @@
 + (char *)cStringForMacPlatinumBottomBorderMiddle
 {
     return
-"b\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
 "b\n"
 "%\n"
 "#\n"
@@ -474,21 +752,21 @@
 + (char *)cStringForMacPlatinumBottomBorderRight
 {
     return
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb%##+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%%%%%%%%%%%%%%%%##+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%#################+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%#################+bb\n"
-".$$$$$$$$O$$$$$O$$$$$O$$$$$$$$b%#######%%########+bb\n"
-".$$$$$$$OO$$$$$O$$$$$OO$$$$$$$b%######%#X########+bb\n"
-".$$$$$$OOO$$$$$O$$$$$OOO$$$$$$b%#####%#X#%%######+bb\n"
-".$$$$$OOOO$$$$$O$$$$$OOOO$$$$$b%####%#X#%#X######+bb\n"
-".$$$$$OOOO$$$$$O$$$$$OOOO$$$$$b%###%#X#%#X#%%####+bb\n"
-".$$$$$$OOO$$$$$O$$$$$OOO$$$$$$b%##%#X#%#X#%#X####+bb\n"
-".$$$$$$$OO$$$$$O$$$$$OO$$$$$$$b%##@X#%#X#%#X#####+bb\n"
-".$$$$$$$$O$$$$$O$$$$$O$$$$$$$$b%####%#X#%#X######+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%####@X#%#X#######+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%######%#X########+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%######@X#########+bb\n"
+"                              bbbbbbbbbbbbbbbb%##+bb\n"
+"                              b%%%%%%%%%%%%%%%%##+bb\n"
+"                              b%#################+bb\n"
+"                              b%#################+bb\n"
+"                              b%#######%%########+bb\n"
+"                              b%######%#X########+bb\n"
+"                              b%#####%#X#%%######+bb\n"
+"                              b%####%#X#%#X######+bb\n"
+"                              b%###%#X#%#X#%%####+bb\n"
+"                              b%##%#X#%#X#%#X####+bb\n"
+"                              b%##@X#%#X#%#X#####+bb\n"
+"                              b%####%#X#%#X######+bb\n"
+"                              b%####@X#%#X#######+bb\n"
+"                              b%######%#X########+bb\n"
+"                              b%######@X#########+bb\n"
 "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb%#################+bb\n"
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#################+bb\n"
 "#################################################+bb\n"
@@ -519,49 +797,48 @@
 + (char *)cStringForMacPlatinumRightBorderTop
 {
     return
-"b..............b&##+bb\n"
+"b&##+bb\n"
 ;
 }
 + (char *)cStringForMacPlatinumRightBorderMiddle
 {
     return
-"b%%%%%%%%%%%%%%b&##+bb\n"
+"b&##+bb\n"
 ;
 }
 + (char *)cStringForMacPlatinumRightBorderBottom
 {
     return
-"b..............b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%OO%%%%%%b&##+bb\n"
-"b%%%%%OOOO%%%%%b&##+bb\n"
-"b%%%%OOOOOO%%%%b&##+bb\n"
-"b%%%OOOOOOOO%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"bOOOOOOOOOOOOOOb&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%OOOOOOOO%%%b&##+bb\n"
-"b%%%%OOOOOO%%%%b&##+bb\n"
-"b%%%%%OOOO%%%%%b&##+bb\n"
-"b%%%%%%OO%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-//"bbbbbbbbbbbbbbbb&##+b\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
+"b&##+bb\n"
 ;
 }
 
@@ -579,13 +856,13 @@
 + (char *)cStringForMacPlatinumInactiveRightBorderTop
 {
     return
-"bbbbbbbbbbbbbbbbXXXXbb\n"
+"bXXXXbb\n"
 ;
 }
 + (char *)cStringForMacPlatinumInactiveRightBorderMiddle
 {
     return
-"boooooooooooooobXXXXbb\n"
+"bXXXXbb\n"
 ;
 }
 
@@ -768,6 +1045,7 @@
     int _topBorder;
     int _bottomBorder;
     int _hasShadow;
+    id _x11HasChildMask;
 
     char _buttonDown;
     char _buttonHover;
@@ -792,10 +1070,11 @@
     self = [super init];
     if (self) {
         _leftBorder = 6;
-        _rightBorder = 21+1;
+        _rightBorder = 6+1;
         _topBorder = 22;
-        _bottomBorder = 21+1;
+        _bottomBorder = 6+1;
         _hasShadow = 2;
+        [self setValue:@"macplatinum" forKey:@"x11HasChildMask"];
     }
     return self;
 }
@@ -928,14 +1207,14 @@
         char *left = [Definitions cStringForMacPlatinumBottomBorderLeft];
         char *middle = [Definitions cStringForMacPlatinumBottomBorderMiddle];
         char *right = [Definitions cStringForMacPlatinumBottomBorderRight];
-        [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y w:r.w palette:palette];
+        [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y-15 w:r.w palette:palette];
     } else {
         Int4 r = _bottomBorderRect;
         char *palette = [Definitions cStringForMacPlatinumInactiveBottomBorderPalette];
         char *left = [Definitions cStringForMacPlatinumInactiveBottomBorderLeft];
         char *middle = [Definitions cStringForMacPlatinumInactiveBottomBorderMiddle];
         char *right = [Definitions cStringForMacPlatinumInactiveBottomBorderRight];
-        [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y w:r.w palette:palette];
+        [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y-15 w:r.w palette:palette];
     }
 
     if (hasFocus) {
@@ -977,11 +1256,11 @@
 
             [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x+_leftBorder-1 y:r.y+_topBorder-1 w:r.w-(_leftBorder-1)-(_leftBorder-1) palette:palette];
             [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+_leftBorder-1 y:r.y+_topBorder-1 h:r.h-(_topBorder-1)-5];
-            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-7 y:r.y+_topBorder-1 h:r.h-(_topBorder-1)-(_bottomBorder-1)];
-            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x+_leftBorder-1 y:r.y+r.h-7 w:r.w-(_leftBorder-1)-(_rightBorder-1) palette:palette];
+            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-7 y:r.y+_topBorder-1 h:r.h-(_topBorder-1)-(_bottomBorder+15-1)];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x+_leftBorder-1 y:r.y+r.h-7 w:r.w-(_leftBorder-1)-(_rightBorder+15-1) palette:palette];
 
-            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-_rightBorder y:r.y+r.h-_bottomBorder h:_bottomBorder-5];
-            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x+r.w-_rightBorder y:r.y+r.h-_bottomBorder w:_bottomBorder-5 palette:palette];
+            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-(_rightBorder+15) y:r.y+r.h-(_bottomBorder+15) h:_bottomBorder+15-5];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x+r.w-(_rightBorder+15) y:r.y+r.h-(_bottomBorder+15) w:_bottomBorder+15-5 palette:palette];
         }
     }
 
