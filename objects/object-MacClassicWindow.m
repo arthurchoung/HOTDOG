@@ -25,6 +25,7 @@
 
 #import "HOTDOG.h"
 
+
 @implementation Definitions(jfoiwcciiejfklsdjfklsdjlkfjsdlkfj)
 + (void)enterMacClassicMode
 {
@@ -270,43 +271,43 @@
 + (char *)cStringForMacClassicBottomBorderLeft
 {
     return
-"bbbbbbbbbbbbbbbb\n"
-"b......b.......b\n"
-"b.....bb.......b\n"
-"b....b.b.......b\n"
-"b...b..bbbbb...b\n"
-"b..b.......b...b\n"
-"b.b........b...b\n"
-"bb.........b...b\n"
-"b.b........b...b\n"
-"b..b.......b...b\n"
-"b...b..bbbbb...b\n"
-"b....b.b.......b\n"
-"b.....bb.......b\n"
-"b......b.......b\n"
-"b..............b\n"
-"bbbbbbbbbbbbbbbb\n"
-".bbbbbbbbbbbbbbb\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+".\n"
 ;
 }
 + (char *)cStringForMacClassicBottomBorderMiddle
 {
     return
-"b\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
+" \n"
 "b\n"
 "b\n"
 ;
@@ -314,80 +315,48 @@
 + (char *)cStringForMacClassicBottomBorderRight
 {
     return
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"b.......b......b..............bb\n"
-"b.......bb.....b..............bb\n"
-"b.......b.b....b..bbbbbbb.....bb\n"
-"b...bbbbb..b...b..b.....b.....bb\n"
-"b...b.......b..b..b.....bbbbb.bb\n"
-"b...b........b.b..b.....b...b.bb\n"
-"b...b.........bb..b.....b...b.bb\n"
-"b...b........b.b..b.....b...b.bb\n"
-"b...b.......b..b..bbbbbbb...b.bb\n"
-"b...bbbbb..b...b....b.......b.bb\n"
-"b.......b.b....b....b.......b.bb\n"
-"b.......bb.....b....b.......b.bb\n"
-"b.......b......b....bbbbbbbbb.bb\n"
-"b..............b..............bb\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-;
-}
-
-
-+ (char *)cStringForMacClassicRightBorderTop
-{
-    return
-"b..............bb\n"
-"b......b.......bb\n"
-"b.....b.b......bb\n"
-"b....b...b.....bb\n"
-"b...b.....b....bb\n"
-"b..b.......b...bb\n"
-"b.b.........b..bb\n"
-"bbbbb.....bbbb.bb\n"
-"b...b.....b....bb\n"
-"b...b.....b....bb\n"
-"b...b.....b....bb\n"
-"b...bbbbbbb....bb\n"
+"bbbbbbbbbbbbbbbbb\n"
 "b..............bb\n"
 "b..............bb\n"
+"b..bbbbbbb.....bb\n"
+"b..b.....b.....bb\n"
+"b..b.....bbbbb.bb\n"
+"b..b.....b...b.bb\n"
+"b..b.....b...b.bb\n"
+"b..b.....b...b.bb\n"
+"b..bbbbbbb...b.bb\n"
+"b....b.......b.bb\n"
+"b....b.......b.bb\n"
+"b....b.......b.bb\n"
+"b....bbbbbbbbb.bb\n"
+"b..............bb\n"
+"bbbbbbbbbbbbbbbbb\n"
 "bbbbbbbbbbbbbbbbb\n"
 ;
 }
+
++ (char *)cStringForMacClassicRightBorderTop
+{
+    return "";
+}
+
 + (char *)cStringForMacClassicRightBorderMiddle
 {
     return
-"b..............bb\n"
+"bb\n"
 ;
 }
 + (char *)cStringForMacClassicRightBorderBottom
 {
-    return
-"bbbbbbbbbbbbbbbbb\n"
-"b..............bb\n"
-"b..............bb\n"
-"b...bbbbbbb....bb\n"
-"b...b.....b....bb\n"
-"b...b.....b....bb\n"
-"b...b.....b....bb\n"
-"bbbbb.....bbbb.bb\n"
-"b.b.........b..bb\n"
-"b..b.......b...bb\n"
-"b...b.....b....bb\n"
-"b....b...b.....bb\n"
-"b.....b.b......bb\n"
-"b......b.......bb\n"
-"b..............bb\n"
-;
+    return "";
 }
-
 + (char *)cStringForMacClassicInactiveRightBorderMiddle
 {
     return
-"b..............bb\n"
+"bb\n"
 ;
 }
+
 
 
 
@@ -417,6 +386,7 @@
     int _topBorder;
     int _bottomBorder;
     int _hasShadow;
+    id _x11HasChildMask;
 
     char _buttonDown;
     char _buttonHover;
@@ -440,10 +410,11 @@
     self = [super init];
     if (self) {
         _leftBorder = 1;
-        _rightBorder = 16+1;
+        _rightBorder = 1+1;
         _topBorder = 19;
-        _bottomBorder = 16+1;
+        _bottomBorder = 1+1;
         _hasShadow = 1;
+        [self setValue:@"macclassic" forKey:@"x11HasChildMask"];
     }
     return self;
 }
@@ -464,19 +435,19 @@
     _leftBorderRect = r;
     _leftBorderRect.y += titleBarHeight;
     _leftBorderRect.h -= titleBarHeight;
-    _leftBorderRect.h -= _bottomBorder;
+    _leftBorderRect.h -= _bottomBorder+15;
     _leftBorderRect.w = _leftBorder;
 
     _rightBorderRect = r;
     _rightBorderRect.x += r.w-_rightBorder;
     _rightBorderRect.y += titleBarHeight;
     _rightBorderRect.h -= titleBarHeight;
-    _rightBorderRect.h -= _bottomBorder;
+    _rightBorderRect.h -= _bottomBorder+15;
     _rightBorderRect.w = _rightBorder;
 
     _bottomBorderRect = _titleBarRect;
-    _bottomBorderRect.y += r.h-_bottomBorder;
-    _bottomBorderRect.h = _bottomBorder;
+    _bottomBorderRect.y += r.h-(_bottomBorder+15);
+    _bottomBorderRect.h = _bottomBorder+15;
 
     _closeButtonRect = _titleBarRect;
     _closeButtonRect.x += 9;
