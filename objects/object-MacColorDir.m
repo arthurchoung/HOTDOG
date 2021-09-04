@@ -185,7 +185,7 @@ static id readmePixels =
     [bitmap useMonacoFont];
     id arr = [@"." contentsOfDirectory];
     arr = [arr asFileArray];
-    int x = 20;
+    int x = 40;
     int y = 5;
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
@@ -222,29 +222,15 @@ static id readmePixels =
         [elt setValue:selectedPixels forKey:@"selectedPixels"];
         int w = [Definitions widthForCString:[pixels UTF8String]];
         int h = [Definitions heightForCString:[pixels UTF8String]];
-        int textWidth = [Definitions bitmapWidthForText:[elt valueForKey:@"filePath"]];
-        if (textWidth > w) {
-            if (x + textWidth + 5 >= r.w) {
-                x = 20;
-                y += h + 30;
-            }
-            x += (textWidth - w) / 2;
-            [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
-            [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
-            [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
-            [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
-            x += w + ((textWidth - w) / 2) + 20;
-        } else {
-            if (x + w + 5 >= r.w) {
-                x = 20;
-                y += h + 30;
-            }
-            [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
-            [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
-            [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
-            [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
-            x += w + 20;
+        if (x + w + 5 >= r.w) {
+            x = 40;
+            y += h + 30;
         }
+        [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
+        [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
+        [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
+        [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
+        x += w + 50 + 20;
     }
     [self setValue:arr forKey:@"array"];
 }
@@ -293,6 +279,8 @@ static id readmePixels =
         id filePath = [elt valueForKey:@"filePath"];
         [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-2];
     }
+    [Definitions drawInactiveHorizontalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+r.h-15 w:r.w-15 h:15]];
+    [Definitions drawInactiveVerticalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x+r.w-15 y:r.y w:15 h:r.h-15]];
 }
 
 - (void)handleMouseDown:(id)event
@@ -352,3 +340,309 @@ static id readmePixels =
 
 @end
 
+@implementation Definitions(fjeilmwfkldsmklfsdklmfm)
++ (char *)cStringForInactiveVerticalScrollBarPalette
+{
+    return
+"b #000000\n"
+"X #777777\n"
+". #eeeeee\n"
+;
+}
++ (char *)cStringForInactiveVerticalScrollBarUpArrow
+{
+    return
+"b..............\n"
+"b..............\n"
+"b......XX......\n"
+"b.....X..X.....\n"
+"b....X....X....\n"
+"b...X......X...\n"
+"b..X........X..\n"
+"b.XXXX....XXXX.\n"
+"b....X....X....\n"
+"b....X....X....\n"
+"b....X....X....\n"
+"b....XXXXXX....\n"
+"b..............\n"
+"b..............\n"
+"bXXXXXXXXXXXXXX\n"
+;
+}
++ (char *)cStringForInactiveVerticalScrollBarMiddle
+{
+    return
+"b..............\n"
+;
+}
++ (char *)cStringForInactiveVerticalScrollBarDownArrow
+{
+    return
+"bXXXXXXXXXXXXXX\n"
+"b..............\n"
+"b..............\n"
+"b....XXXXXX....\n"
+"b....X....X....\n"
+"b....X....X....\n"
+"b....X....X....\n"
+"b.XXXX....XXXX.\n"
+"b..X........X..\n"
+"b...X......X...\n"
+"b....X....X....\n"
+"b.....X..X.....\n"
+"b......XX......\n"
+"b..............\n"
+"b..............\n"
+;
+}
++ (char *)cStringForActiveScrollBarPalette
+{
+    return
+"b #000000\n"
+". #333366\n"
+"X #555555\n"
+"o #606060\n"
+"O #777777\n"
+"+ #666699\n"
+"@ #a0a0a0\n"
+"# #a4a4a4\n"
+"$ #aaaaaa\n"
+"% #bbbbbb\n"
+"& #a3a3d7\n"
+"* #dddddd\n"
+"= #ccccff\n"
+"- #eeeeee\n"
+"; #ffffff\n"
+;
+}
++ (char *)cStringForActiveScrollBarLeftArrow
+{
+    return
+"bbbbbbbbbbbbbbb\n"
+";;;;;;;;;;;;;Ob\n"
+";******.*****Ob\n"
+";*****..*****Ob\n"
+";****.&.*****Ob\n"
+";***.&&.....*Ob\n"
+";**.&&&&&&&.*Ob\n"
+";*.&&&&&&&&.*Ob\n"
+";**.&&&&&&&.*Ob\n"
+";***.&&.....*Ob\n"
+";****.&.*****Ob\n"
+";*****..*****Ob\n"
+";******.*****Ob\n"
+";************Ob\n"
+"OOOOOOOOOOOOOOb\n"
+;
+}
++ (char *)cStringForActiveScrollBarMiddle
+{
+    return
+"bbbb\n"
+"*O**\n"
+"***O\n"
+"*O**\n"
+"***O\n"
+"*O**\n"
+"***O\n"
+"*O**\n"
+"***O\n"
+"*O**\n"
+"***O\n"
+"*O**\n"
+"***O\n"
+"*O**\n"
+"***O\n"
+;
+}
+
++ (char *)cStringForActiveScrollBarRightArrow
+{
+    return
+"bbbbbbbbbbbbbbb\n"
+"b;;;;;;;;;;;;;O\n"
+"b;*****.******O\n"
+"b;*****..*****O\n"
+"b;*****.&.****O\n"
+"b;*.....&&.***O\n"
+"b;*.&&&&&&&.**O\n"
+"b;*.&&&&&&&&.*O\n"
+"b;*.&&&&&&&.**O\n"
+"b;*.....&&.***O\n"
+"b;*****.&.****O\n"
+"b;*****..*****O\n"
+"b;*****.******O\n"
+"b;************O\n"
+"bOOOOOOOOOOOOOO\n"
+;
+}
+
++ (char *)cStringForActiveScrollBarKnob
+{
+    return
+"bbbbbbbbbbbbbbbb\n"
+"X==============.\n"
+"X=$$$$$$$$$$$$$.\n"
+"X=$$$$$$$$$$$$$.\n"
+"X=$$$$$$$$$$$$$.\n"
+"X=$&=+=+=+=+=$$.\n"
+"X=$&=+=+=+=+=$$.\n"
+"X=$&=+=+=+=+=$$.\n"
+"X=$&=+=+=+=+=$$.\n"
+"X=$&=+=+=+=+=$$.\n"
+"X=$&=+=+=+=+=$$.\n"
+"X=$$$$$$$$$$$$$.\n"
+"X=$$$$$$$$$$$$$.\n"
+"X=$$$$$$$$$$$$$.\n"
+"X...............\n"
+"bbbbbbbbbbbbbbbb\n"
+;
+}
+
++ (char *)cStringForInactiveHorizontalScrollBarPalette
+{
+    return
+"b #000000\n"
+"X #777777\n"
+". #eeeeee\n"
+;
+}
+
++ (char *)cStringForInactiveHorizontalScrollBarLeftArrow
+{
+    return
+"bbbbbbbbbbbbbbb\n"
+"..............X\n"
+"......X.......X\n"
+".....XX.......X\n"
+"....X.X.......X\n"
+"...X..XXXXX...X\n"
+"..X.......X...X\n"
+".X........X...X\n"
+".X........X...X\n"
+"..X.......X...X\n"
+"...X..XXXXX...X\n"
+"....X.X.......X\n"
+".....XX.......X\n"
+"......X.......X\n"
+"..............X\n"
+;
+}
++ (char *)cStringForInactiveHorizontalScrollBarMiddle
+{
+   return
+"b\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+;
+}
++ (char *)cStringForInactiveHorizontalScrollBarRightArrow
+{
+    return
+"bbbbbbbbbbbbbbb\n"
+"X..............\n"
+"X.......X......\n"
+"X.......XX.....\n"
+"X.......X.X....\n"
+"X...XXXXX..X...\n"
+"X...X.......X..\n"
+"X...X........X.\n"
+"X...X........X.\n"
+"X...X.......X..\n"
+"X...XXXXX..X...\n"
+"X.......X.X....\n"
+"X.......XX.....\n"
+"X.......X......\n"
+"X..............\n"
+;
+}
++ (void)drawActiveScrollBarInBitmap:(id)bitmap rect:(Int4)r pct:(double)pct
+{
+    char *palette = [Definitions cStringForActiveScrollBarPalette];
+
+    char *left = [Definitions cStringForActiveScrollBarLeftArrow];
+    char *middle = [Definitions cStringForActiveScrollBarMiddle];
+    char *right = [Definitions cStringForActiveScrollBarRightArrow];
+    char *knob = [Definitions cStringForActiveScrollBarKnob];
+
+    int widthForLeft = [Definitions widthForCString:left];
+    int widthForMiddle = [Definitions widthForCString:middle];
+    int widthForRight = [Definitions widthForCString:right];
+    int widthForKnob = [Definitions widthForCString:knob];
+
+    int heightForMiddle = [Definitions heightForCString:middle];
+    int heightForKnob = [Definitions heightForCString:knob];
+    int middleYOffset = (r.h - heightForMiddle)/2.0;
+    int knobYOffset = (r.h - heightForKnob)/2.0;
+
+    [bitmap drawCString:left palette:palette x:r.x y:r.y+middleYOffset];
+    int x;
+    for (x=widthForLeft; x<r.w-widthForRight; x+=widthForMiddle) {
+        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y+middleYOffset];
+    }
+    [bitmap drawCString:right palette:palette x:r.x+r.w-widthForRight y:r.y+middleYOffset];
+    int knobX = widthForLeft + (int)(r.w-widthForLeft-widthForRight-widthForKnob) * pct;
+    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y+knobYOffset];
+}
++ (void)drawInactiveHorizontalScrollBarInBitmap:(id)bitmap rect:(Int4)r
+{
+    char *palette = [Definitions cStringForInactiveHorizontalScrollBarPalette];
+
+    char *left = [Definitions cStringForInactiveHorizontalScrollBarLeftArrow];
+    char *middle = [Definitions cStringForInactiveHorizontalScrollBarMiddle];
+    char *right = [Definitions cStringForInactiveHorizontalScrollBarRightArrow];
+
+    int widthForLeft = [Definitions widthForCString:left];
+    int widthForMiddle = [Definitions widthForCString:middle];
+    int widthForRight = [Definitions widthForCString:right];
+
+    int heightForMiddle = [Definitions heightForCString:middle];
+    int middleYOffset = (r.h - heightForMiddle)/2.0;
+
+    [bitmap drawCString:left palette:palette x:r.x y:r.y+middleYOffset];
+    int x;
+    for (x=widthForLeft; x<r.w-widthForRight; x+=widthForMiddle) {
+        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y+middleYOffset];
+    }
+    [bitmap drawCString:right palette:palette x:r.x+r.w-widthForRight y:r.y+middleYOffset];
+}
++ (void)drawInactiveVerticalScrollBarInBitmap:(id)bitmap rect:(Int4)r
+{
+    char *palette = [Definitions cStringForInactiveVerticalScrollBarPalette];
+
+    char *top = [Definitions cStringForInactiveVerticalScrollBarUpArrow];
+    char *middle = [Definitions cStringForInactiveVerticalScrollBarMiddle];
+    char *bottom = [Definitions cStringForInactiveVerticalScrollBarDownArrow];
+//    char *knob = [Definitions cStringForInactiveVerticalScrollBarKnob];
+
+    int heightForTop = [Definitions heightForCString:top];
+    int heightForMiddle = [Definitions heightForCString:middle];
+    int heightForBottom = [Definitions heightForCString:bottom];
+//    int heightForKnob = [Definitions heightForCString:knob];
+
+    int widthForMiddle = [Definitions widthForCString:middle];
+//    int widthForKnob = [Definitions widthForCString:knob];
+    int middleXOffset = (r.w - widthForMiddle)/2;
+//    int knobXOffset = (r.w - widthForKnob)/2;
+
+    [bitmap drawCString:top palette:palette x:r.x+middleXOffset y:r.y];
+    for (int y=r.y+heightForTop; y<r.y+r.h-heightForBottom; y+=heightForMiddle) {
+        [bitmap drawCString:middle palette:palette x:r.x+middleXOffset y:y];
+    }
+    [bitmap drawCString:bottom palette:palette x:r.x+middleXOffset y:r.y+r.h-heightForBottom];
+//    int knobX = widthForLeft + (int)(r.w-widthForLeft-widthForRight-widthForKnob) * pct;
+//    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y+r.h-1-knobYOffset];
+}
+@end
