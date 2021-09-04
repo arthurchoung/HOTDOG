@@ -185,6 +185,19 @@ static id wbDiskPixels =
         [dict setValue:ramDiskSelectedPalette forKey:@"selectedPalette"];
         [dict setValue:ramDiskPixels forKey:@"pixels"];
         [results addObject:dict];
+        y += h + 30;
+    }
+    {
+        id dict = nsdict();
+        [dict setValue:@"Workbench1.3" forKey:@"device"];
+        [dict setValue:nsfmt(@"%d", x) forKey:@"x"];
+        [dict setValue:nsfmt(@"%d", y) forKey:@"y"];
+        [dict setValue:nsfmt(@"%d", [Definitions widthForCString:[ramDiskPixels UTF8String]]) forKey:@"w"];
+        [dict setValue:nsfmt(@"%d", [Definitions heightForCString:[ramDiskPixels UTF8String]]) forKey:@"h"];
+        [dict setValue:wbDiskPalette forKey:@"palette"];
+        [dict setValue:wbDiskSelectedPalette forKey:@"selectedPalette"];
+        [dict setValue:wbDiskPixels forKey:@"pixels"];
+        [results addObject:dict];
     }
     [self setValue:results forKey:@"array"];
 }
@@ -256,6 +269,21 @@ static id wbDiskPixels =
                     [cmd addObject:@"amigadir"];
                     [cmd addObject:mountpoint];
                     [cmd runCommandInBackground];
+                } else {
+                    id device = [_selected valueForKey:@"device"];
+                    if ([device isEqual:@"RAM DISK"]) {
+                        id cmd = nsarr();
+                        [cmd addObject:@"hotdog"];
+                        [cmd addObject:@"amigabuiltindir"];
+                        [cmd addObject:device];
+                        [cmd runCommandInBackground];
+                    } else if ([device isEqual:@"Workbench1.3"]) {
+                         id cmd = nsarr();
+                        [cmd addObject:@"hotdog"];
+                        [cmd addObject:@"amigabuiltindir"];
+                        [cmd addObject:device];
+                        [cmd runCommandInBackground];
+                    }
                 }
                 [self setValue:nil forKey:@"buttonDownTimestamp"];
             } else {
