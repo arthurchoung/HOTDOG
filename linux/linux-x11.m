@@ -936,6 +936,15 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     if ([x11HasChildMask isEqual:@"amiga"]) {
         //FIXME Amiga
         XFillRectangle(_display, shape_pixmap, shape_gc, w-14, h-16, 14, 16);
+    } else if ([x11HasChildMask isEqual:@"macclassic"]) {
+        //FIXME Mac Classic
+        XFillRectangle(_display, shape_pixmap, shape_gc, w-15, h-15, 15, 15);
+    } else if ([x11HasChildMask isEqual:@"maccolor"]) {
+        //FIXME Mac Color
+        XFillRectangle(_display, shape_pixmap, shape_gc, w-15, h-15, 15, 15);
+    } else if ([x11HasChildMask isEqual:@"macplatinum"]) {
+        //FIXME Mac Platinum
+        XFillRectangle(_display, shape_pixmap, shape_gc, w-15, h-15, 15, 15);
     }
     XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
     XFreeGC(_display, shape_gc);
