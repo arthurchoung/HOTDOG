@@ -73,6 +73,15 @@ static int hexchartoint(char c)
 }
 @end
 
+@implementation Definitions(fjeiowmfklsjvojiewjfksdjksjkdjfks)
++ (id)bitmapWithWidth:(int)width height:(int)height
+{
+    id bitmap = [[[Bitmap alloc] initWithWidth:width height:height] autorelease];
+    return bitmap;
+    
+}
+@end
+
 
 @implementation Bitmap
 
@@ -83,19 +92,6 @@ static int hexchartoint(char c)
         _pixelBytes = NULL;
     }
     [super dealloc];
-}
-
-+ (id)bitmapWithWidth:(int)width height:(int)height
-{
-    id bitmap = [[[Bitmap alloc] initWithWidth:width height:height] autorelease];
-    return bitmap;
-    
-}
-- (id)bitmapWithWidth:(int)width height:(int)height
-{
-    id bitmap = [[[Bitmap alloc] initWithWidth:width height:height] autorelease];
-    return bitmap;
-    
 }
 
 - (id)initWithWidth:(int)width height:(int)height
