@@ -47,20 +47,25 @@
 }
 - (int)preferredWidth
 {
+    static id bitmap = nil;
+    if (!bitmap) {
+        bitmap = [[Definitions bitmapWithWidth:1 height:1] retain];
+        [bitmap useTopazFont];
+    }
     int highestWidth = 0;
     int highestRightWidth = 0;
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
         id displayName = [elt valueForKey:@"displayName"];
         if (displayName) {
-            int w = [Definitions bitmapWidthForText:displayName];
+            int w = [bitmap bitmapWidthForText:displayName];
             if (w > highestWidth) {
                 highestWidth = w;
             }
         }
         id hotKey = [elt valueForKey:@"hotKey"];
         if (hotKey) {
-            int w = [Definitions bitmapWidthForText:hotKey];
+            int w = [bitmap bitmapWidthForText:hotKey];
             if (w > highestRightWidth) {
                 highestRightWidth = w;
             }
