@@ -192,8 +192,21 @@ static id wbDiskPixels =
         [dict setValue:@"Workbench1.3" forKey:@"device"];
         [dict setValue:nsfmt(@"%d", x) forKey:@"x"];
         [dict setValue:nsfmt(@"%d", y) forKey:@"y"];
-        [dict setValue:nsfmt(@"%d", [Definitions widthForCString:[ramDiskPixels UTF8String]]) forKey:@"w"];
-        [dict setValue:nsfmt(@"%d", [Definitions heightForCString:[ramDiskPixels UTF8String]]) forKey:@"h"];
+        [dict setValue:nsfmt(@"%d", [Definitions widthForCString:[wbDiskPixels UTF8String]]) forKey:@"w"];
+        [dict setValue:nsfmt(@"%d", [Definitions heightForCString:[wbDiskPixels UTF8String]]) forKey:@"h"];
+        [dict setValue:wbDiskPalette forKey:@"palette"];
+        [dict setValue:wbDiskSelectedPalette forKey:@"selectedPalette"];
+        [dict setValue:wbDiskPixels forKey:@"pixels"];
+        [results addObject:dict];
+        y += h + 30;
+    }
+    {
+        id dict = nsdict();
+        [dict setValue:@"/" forKey:@"device"];
+        [dict setValue:nsfmt(@"%d", x) forKey:@"x"];
+        [dict setValue:nsfmt(@"%d", y) forKey:@"y"];
+        [dict setValue:nsfmt(@"%d", [Definitions widthForCString:[wbDiskPixels UTF8String]]) forKey:@"w"];
+        [dict setValue:nsfmt(@"%d", [Definitions heightForCString:[wbDiskPixels UTF8String]]) forKey:@"h"];
         [dict setValue:wbDiskPalette forKey:@"palette"];
         [dict setValue:wbDiskSelectedPalette forKey:@"selectedPalette"];
         [dict setValue:wbDiskPixels forKey:@"pixels"];
@@ -281,6 +294,12 @@ static id wbDiskPixels =
                          id cmd = nsarr();
                         [cmd addObject:@"hotdog"];
                         [cmd addObject:@"amigabuiltindir"];
+                        [cmd addObject:device];
+                        [cmd runCommandInBackground];
+                    } else if ([device isEqual:@"/"]) {
+                         id cmd = nsarr();
+                        [cmd addObject:@"hotdog"];
+                        [cmd addObject:@"amigadir"];
                         [cmd addObject:device];
                         [cmd runCommandInBackground];
                     }
