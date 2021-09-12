@@ -446,6 +446,10 @@ NSLog(@"signal_handler %d", num);
 @implementation Definitions(fjkldsjlkfjdsf)
 + (void)runWindowManager
 {
+    [Definitions runWindowManager:@"enterHotDogStandMode"];
+}
++ (void)runWindowManager:(id)message
+{
     if (signal(SIGINT, signal_handler) == SIG_ERR) {
 NSLog(@"unable to set signal handler for SIGINT");
     }
@@ -464,14 +468,7 @@ exit(0);
         return;
     }
 [windowManager grabHotKeys];
-    id backgroundAgentsDict = nsdict();
-    id backgroundAgents = [@"BackgroundAgents" asInstance];
-    [backgroundAgentsDict setValue:@"BackgroundAgents" forKey:@"name"];
-    [backgroundAgentsDict setValue:@"1" forKey:@"shouldKeepObject"];
-    [backgroundAgentsDict setValue:backgroundAgents forKey:@"object"];
-    id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    [objectWindows addObject:backgroundAgentsDict];
-    [Definitions enterHotDogStandMode];
+    [Definitions evaluateMessage:message];
     [windowManager runLoop];
     [@"windowManager" setNilValueForKey];
 }
@@ -714,7 +711,7 @@ NSLog(@"Another window manager is running");
     if (!width || !height) {
         return;
     }
-    id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:width height:height] autorelease];
+    id bitmap = [Definitions bitmapWithWidth:width height:height];
     [bitmap drawCString:cstr palette:palette x:0 y:0];
 
     [self setBackgroundForBitmap:bitmap];
@@ -1245,7 +1242,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
     int h = [context intValueForKey:@"h"];
     if (_isWindowManager) {
         if ([context valueForKey:@"transparent"]) {
-            id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:w height:h] autorelease];
+            id bitmap = [Definitions bitmapWithWidth:w height:h];
             Int4 r = [Definitions rectWithX:x y:y w:w h:h];
             if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
                 [object drawInBitmap:bitmap rect:r context:context];
@@ -1291,7 +1288,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
             XFreeGC(_display, gc);
             XDestroyImage(ximage);
         } else {
-            id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:w height:h] autorelease];
+            id bitmap = [Definitions bitmapWithWidth:w height:h];
             Int4 r = [Definitions rectWithX:x y:y w:w h:h];
             if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
                 [object drawInBitmap:bitmap rect:r context:context];
@@ -1314,7 +1311,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
         }
     } else {
 //NSLog(@"drawObject:%@ drawInRect", object);
-        id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:w height:h] autorelease];
+        id bitmap = [Definitions bitmapWithWidth:w height:h];
         if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
             [bitmap setColorIntR:0 g:0 b:0 a:255];
 //            [bitmap fillRectangleAtX:0 y:0 w:w h:h];
@@ -2042,7 +2039,22 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
     if (attrs.x == 0) {
         if (attrs.y == 0) {
             id monitor = [Definitions monitorForX:_mouseX y:_mouseY];
+            id str = nsfmt(@"w:%d h:%d mouseX:%d mouseY:%d monitorX:%d monitorWidth:%d monitorHeight:%d\n", attrs.width, attrs.height, _mouseX, _mouseY, [monitor intValueForKey:@"x"], [monitor intValueForKey:@"width"], [monitor intValueForKey:@"height"]);
+            id cmd = nsarr();
+            [cmd addObject:@"hotdog-getCoordinatesForNewWindow.pl"];
+            id process = [cmd runCommandAndReturnProcess];
+            [process writeString:str];
+            [process closeInput];
+            id output = [[process readAllDataFromOutputThenCloseAndWait] asString];
+            id lines = [output split:@"\n"];
+            id firstLine = [lines nth:0];
+            attrs.x = [firstLine intValueForKey:@"x"];
+            attrs.y = [firstLine intValueForKey:@"y"];
+            
+/*
+            id monitor = [Definitions monitorForX:_mouseX y:_mouseY];
             attrs.x = [monitor intValueForKey:@"x"];
+*/
         }
     }
     if (attrs.y < _menuBarHeight) {
