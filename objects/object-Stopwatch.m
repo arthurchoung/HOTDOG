@@ -364,7 +364,7 @@ static uint64_t osx_clock()
         Int4 textRect = _lapTextRect;
         int textWidth = [bitmap bitmapWidthForText:@"00:00.0"];
         int textHeight = [bitmap bitmapHeightForText:lapStr];
-        id textBitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:textWidth+3 height:textHeight] autorelease];
+        id textBitmap = [Definitions bitmapWithWidth:textWidth+3 height:textHeight];
         [textBitmap setColorIntR:255 g:255 b:255 a:255];
         [textBitmap drawBitmapText:lapStr x:1 y:0];
         [bitmap drawBitmap:textBitmap x:textRect.x y:textRect.y w:textRect.w h:textRect.h];
