@@ -19,7 +19,7 @@
 @implementation AmigaGuruMeditation
 - (int)preferredWidth
 {
-    id bitmap = [[[@"Bitmap" asClass] bitmapWithWidth:1 height:1] autorelease];
+    id bitmap = [[Definitions bitmapWithWidth:1 height:1] autorelease];
     [bitmap useTopazFont];
     return [bitmap bitmapWidthForText:_text] + 80;
 }
