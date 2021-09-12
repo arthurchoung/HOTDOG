@@ -38,6 +38,11 @@
 @implementation Definitions(fjkdlsjfkldsjfkldsjklfwejffjdkjfkdjlsd)
 + (void)showAlert:(id)text
 {
+    id windowManager = [@"windowManager" valueForKey];
+    if ([windowManager intValueForKey:@"isWindowManager"]) {
+NSLog(@"showAlert:'%@'", text);
+        return;
+    }
     id cmd = nsarr();
     [cmd addObject:@"hotdog"];
     [cmd addObject:@"alert"];
@@ -49,6 +54,11 @@
 
 - (void)showAlert
 {
+    id windowManager = [@"windowManager" valueForKey];
+    if ([windowManager intValueForKey:@"isWindowManager"]) {
+NSLog(@"showAlert:'%@'", self);
+        return;
+    }
     id cmd = nsarr();
     [cmd addObject:@"hotdog"];
     [cmd addObject:@"alert"];
