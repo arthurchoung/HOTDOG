@@ -627,7 +627,7 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
 {
     self = [super init];
     if (self) {
-        _bitmap = [[[@"Bitmap" asClass] alloc] initWithWidth:[self bitmapWidth] height:[self bitmapHeight]];
+        [self setValue:[Definitions bitmapWithWidth:[self bitmapWidth] height:[self bitmapHeight]] forKey:@"bitmap"];
         for (int i=0; i<16; i++) {
             int y = i/4;
             int x = i%4;
