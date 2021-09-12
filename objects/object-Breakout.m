@@ -120,7 +120,7 @@ char *ballPixels =
     if (self) {
         _width = 640;
         _height = 400;
-        _bitmap = [[[@"Bitmap" asClass] alloc] initWithWidth:_width height:_height];
+        [self setValue:[Definitions bitmapWithWidth:_width height:_height] forKey:@"bitmap"];
     }
     return self;
 }
