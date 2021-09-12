@@ -47,7 +47,7 @@
 }
 - (int)preferredWidth
 {
-    id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:1 height:1] autorelease];
+    id bitmap = [Definitions bitmapWithWidth:1 height:1];
     [bitmap useAtariSTFont];
     int highestWidth = 0;
     for (int i=0; i<[_array count]; i++) {
