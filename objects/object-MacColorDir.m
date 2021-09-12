@@ -181,7 +181,7 @@ static id readmePixels =
 @implementation MacColorDir
 - (void)updateFromCurrentDirectory:(Int4)r
 {
-    id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:1 height:1] autorelease];
+    id bitmap = [Definitions bitmapWithWidth:1 height:1];
     [bitmap useMonacoFont];
     id arr = [@"." contentsOfDirectory];
     arr = [arr asFileArray];
