@@ -626,7 +626,7 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
         id prevObject = [_animateFromContext valueForKey:@"object"];
         id prevBitmap = [_animateFromContext valueForKey:@"bitmap"];
         if (!prevBitmap) {
-            prevBitmap = [bitmap bitmapWithWidth:w height:h];
+            prevBitmap = [Definitions bitmapWithWidth:w height:h];
             if ([prevObject respondsToSelector:@selector(drawInBitmap:rect:)]) {
                 [prevObject drawInBitmap:prevBitmap rect:[Definitions rectWithX:0 y:0 w:w h:h]];
             }
@@ -635,7 +635,7 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
         id nextObject = [_animateToContext valueForKey:@"object"];
         id nextBitmap = [_animateToContext valueForKey:@"bitmap"];
         if (!nextBitmap) {
-            nextBitmap = [bitmap bitmapWithWidth:w height:h];
+            nextBitmap = [Definitions bitmapWithWidth:w height:h];
             if ([nextObject respondsToSelector:@selector(drawInBitmap:rect:)]) {
                 [nextObject drawInBitmap:nextBitmap rect:[Definitions rectWithX:0 y:0 w:w h:h]];
             }
@@ -651,7 +651,7 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
         id prevObject = [_animateFromContext valueForKey:@"object"];
         id prevBitmap = [_animateFromContext valueForKey:@"bitmap"];
         if (!prevBitmap) {
-            prevBitmap = [bitmap bitmapWithWidth:w height:h];
+            prevBitmap = [Definitions bitmapWithWidth:w height:h];
             if ([prevObject respondsToSelector:@selector(drawInBitmap:rect:)]) {
                 [prevObject drawInBitmap:prevBitmap rect:[Definitions rectWithX:0 y:0 w:w h:h]];
             }
@@ -660,7 +660,7 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
         id nextObject = [_animateToContext valueForKey:@"object"];
         id nextBitmap = [_animateToContext valueForKey:@"bitmap"];
         if (!nextBitmap) {
-            nextBitmap = [bitmap bitmapWithWidth:w height:h];
+            nextBitmap = [Definitions bitmapWithWidth:w height:h];
             if ([nextObject respondsToSelector:@selector(drawInBitmap:rect:)]) {
                 [nextObject drawInBitmap:nextBitmap rect:[Definitions rectWithX:0 y:0 w:w h:h]];
             }
