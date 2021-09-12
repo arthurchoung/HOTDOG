@@ -312,7 +312,7 @@ static char *card_icon =
 {
     self = [super init];
     if (self) {
-        _bitmap = [[[@"Bitmap" asClass] alloc] initWithWidth:[self bitmapWidth] height:[self bitmapHeight]];
+        [self setValue:[Definitions bitmapWithWidth:[self bitmapWidth] height:[self bitmapHeight]] forKey:@"bitmap"];
         _buttonDown = -1;
     }
     return self;
