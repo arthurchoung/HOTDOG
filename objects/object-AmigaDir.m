@@ -962,7 +962,7 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
 }
 - (void)updateFromCurrentDirectory:(Int4)r
 {
-    id bitmap = [[[[@"Bitmap" asClass] alloc] initWithWidth:1 height:1] autorelease];
+    id bitmap = [Definitions bitmapWithWidth:1 height:1];
     [bitmap useTopazFont];
     id arr = [@"." contentsOfDirectory];
     arr = [arr asFileArray];
