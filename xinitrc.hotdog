@@ -26,5 +26,5 @@ fi
 
 # start some nice programs
 
-exec /usr/bin/hotdog runWindowManager
+exec /usr/bin/hotdog "runWindowManager:'enterAmigaMode'"
 
