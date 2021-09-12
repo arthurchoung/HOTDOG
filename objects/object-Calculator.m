@@ -193,7 +193,7 @@ static char *calculatorPixels =
     if (self) {
         _width = [Definitions widthForCString:calculatorPixels];
         _height = [Definitions heightForCString:calculatorPixels];
-        _bitmap = [[[@"Bitmap" asClass] alloc] initWithWidth:_width height:_height];
+        [self setValue:[Definitions bitmapWithWidth:_width height:_height] forKey:@"bitmap"];
     }
     return self;
 }
