@@ -229,7 +229,7 @@ char *centipedePixels[8] = {
     if (self) {
         _width = 256;
         _height = 240;
-        _bitmap = [[[@"Bitmap" asClass] alloc] initWithWidth:_width height:_height];
+        [self setValue:[Definitions bitmapWithWidth:_width height:_height] forKey:@"bitmap"];
         [self setupMushrooms];
     }
     return self;
