@@ -12,8 +12,8 @@
 <h2>Download</h2>
 
 <p>
-Live Image Based on Alpine Linux - Run With QEMU<br>
-<a href="https://archive.org/details/HotDogLinux-20210118">Archive.org</a>
+Live Image Based on Slackware Live<br>
+<a href="download">Download</a>
 <p>
 Source Code<br>
 <a href="https://github.com/arthurchoung/HOTDOG">Github</a>
@@ -37,7 +37,7 @@ HOT DOG Linux uses a custom lightweight Objective-C foundation on top of the GCC
 By design, Unicode is not supported.
 
 <p>
-Low DPI displays are preferred, since the graphics are bitmapped and fixed in size. The preferred aspect ratio for HOT DOG Linux is 4:3. 
+Low DPI displays are preferred, since the graphics are bitmapped and fixed in size. The preferred aspect ratio for HOT DOG Linux is 5:4 in landscape, and 3:4 in portrait. 
 
 <p>
 HOT DOG Linux does not use Automatic Reference Counting. It causes problems with type-checking during compilation (it is too strict).
@@ -105,12 +105,11 @@ The following executables must be in your PATH or at location if specified:
 
 <ul>
 <li>xrandr
-<li>ifconfig (used by Utils/printNetworkInfo)
+<li>ifconfig (used by hotdog-printNetworkInfo.pl)
 <li>find (used by build.pl)
 <li>gcc
 <li>/usr/bin/perl
-<li>/bin/bash (used by Utils/printDateEverySecondForTimezone:text:)
-<li>date (used by Utils/printDateEverySecondForTimezone:text:)
+<li>date (used by hotdog-printDateEverySecondForTimezone:text:.pl)
 </ul>
 
 <p>
@@ -135,10 +134,6 @@ These are optional:
 <li>xterm
 <li>mpv
 <li>mupdf (used by Config/fileHandlers.csv)
-<li>firefox (used by Config/rootWindowMenu.csv and Config/fileHandlers.csv)
-<li>thunderbird (used by Config/rootWindowMenu.csv)
-<li>x64 (used by Config/fileHandlers.csv)
-<li>mupen64plus (used by Config/fileHandlers.csv)
 </ul>
 
 <p>
