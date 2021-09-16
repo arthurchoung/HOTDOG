@@ -12,3 +12,4 @@ hotKey,displayName,messageForClick
 "Meta-Delete","Bottom Left","focusDict|x11MaximizeBottomLeft"
 "Meta-End","Bottom Right","focusDict|x11MaximizeBottomRight"
 "Meta-H","Fill To Height Of Monitor","focusDict|x11FillToHeightOfMonitor"
+"Meta-M","Toggle Maximize Window","focusDict|x11ToggleMaximizeWindow"
