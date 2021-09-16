@@ -37,7 +37,7 @@ HOT DOG Linux uses a custom lightweight Objective-C foundation on top of the GNU
 
 By design, Unicode is not supported.
 
-Low DPI displays are preferred, since the graphics are bitmapped and fixed in size. The preferred aspect ratio for HOT DOG Linux is 4:3. 
+Low DPI displays are preferred, since the graphics are bitmapped and fixed in size. The preferred aspect ratio for HOT DOG Linux is 5:4 in landscape, and 3:4 in portrait. 
 
 HOT DOG Linux does not use Automatic Reference Counting. It causes problems with type-checking during compilation (it is too strict).
 
