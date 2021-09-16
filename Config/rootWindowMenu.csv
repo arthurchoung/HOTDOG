@@ -1,6 +1,6 @@
 hotKey,displayName,messageForClick
 ,Home,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(homeDir) | runCommandInBackground"
-,XTerm,"[ 'xterm' '-geometry' '80x50' '+bc' '+uc' ] | runCommandInBackground"
+"F1",XTerm,"[ 'xterm' '-geometry' '80x50' '+bc' '+uc' ] | runCommandInBackground"
 ,Chromium,"[ 'chromium' ] | runCommandInBackground"
 ,
 ,Calculator,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Calculator')|runCommandInBackground"
