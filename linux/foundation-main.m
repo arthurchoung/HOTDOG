@@ -262,6 +262,11 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
                 } else {
                     [obj setValue:@"OK" forKey:@"okText"];
                 }
+                if (argc > 3) {
+                    [obj setValue:nsfmt(@"%s", argv[3]) forKey:@"cancelText"];
+                } else {
+                    [obj setValue:@"Cancel" forKey:@"cancelText"];
+                }
                 [Definitions runWindowManagerForObject:obj];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "choose")) {
