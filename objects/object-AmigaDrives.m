@@ -125,14 +125,14 @@ static id wbDiskPixels =
 ;
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksdj)
-+ (id)AmigaDisks
++ (id)AmigaDrives
 {
-    id obj = [@"AmigaDisks" asInstance];
+    id obj = [@"AmigaDrives" asInstance];
     return obj;
 }
 @end
 
-@interface AmigaDisks : IvarObject
+@interface AmigaDrives : IvarObject
 {
     time_t _timestamp;
     id _array;
@@ -143,7 +143,7 @@ static id wbDiskPixels =
     id _selected;
 }
 @end
-@implementation AmigaDisks
+@implementation AmigaDrives
 - (void)updateArray:(Int4)r
 {
     id cmd = nsarr();

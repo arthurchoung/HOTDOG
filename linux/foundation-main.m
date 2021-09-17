@@ -352,8 +352,8 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
         } else if ((argc > 1) && !strcmp(argv[1], "progress")) {
             id obj = [@"Progress" asInstance];
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "amigadisks")) {
-            id obj = [Definitions AmigaDisks];
+        } else if ((argc > 1) && !strcmp(argv[1], "amigadrives")) {
+            id obj = [Definitions AmigaDrives];
             [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "amigadir")) {
             if (argc > 2) {
