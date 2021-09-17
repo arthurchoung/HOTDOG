@@ -99,14 +99,14 @@ static id diskPixels =
 ;
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksfjdsklfjksdljfdkslmvdj)
-+ (id)AtariSTDisks
++ (id)AtariSTDrives
 {
-    id obj = [@"AtariSTDisks" asInstance];
+    id obj = [@"AtariSTDrives" asInstance];
     return obj;
 }
 @end
 
-@interface AtariSTDisks : IvarObject
+@interface AtariSTDrives : IvarObject
 {
     time_t _timestamp;
     id _array;
@@ -117,7 +117,7 @@ static id diskPixels =
     id _selected;
 }
 @end
-@implementation AtariSTDisks
+@implementation AtariSTDrives
 - (void)updateArray:(Int4)r
 {
     id cmd = nsarr();

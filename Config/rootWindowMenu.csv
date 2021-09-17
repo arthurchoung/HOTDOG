@@ -9,7 +9,7 @@ hotKey,displayName,messageForClick
 ,AmigaDrives,"['hotdog' 'show' 'homeDir|changeDirectory;AmigaDrives']|runCommandInBackground"
 ,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
 ,AmigaSay,"['hotdog' 'show' 'AmigaSay']|runCommandInBackground"
-,AtariSTDisks,"['hotdog' 'show' 'homeDir|changeDirectory;AtariSTDisks']|runCommandInBackground"
+,AtariSTDrives,"['hotdog' 'show' 'homeDir|changeDirectory;AtariSTDrives']|runCommandInBackground"
 ,AtariSTTrash,"['hotdog' 'show' 'AtariSTTrash']|runCommandInBackground"
 ,Breakout,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Breakout')|runCommandInBackground"
 ,CentipedeClone,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/CentipedeClone')|runCommandInBackground"

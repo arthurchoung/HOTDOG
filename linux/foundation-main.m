@@ -412,8 +412,8 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
         } else if ((argc > 1) && !strcmp(argv[1], "macplatinumtrash")) {
             id obj = [Definitions MacPlatinumTrash];
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "ataristdisks")) {
-            id obj = [Definitions AtariSTDisks];
+        } else if ((argc > 1) && !strcmp(argv[1], "ataristdrives")) {
+            id obj = [Definitions AtariSTDrives];
             [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "ataristtrash")) {
             id obj = [Definitions AtariSTTrash];
