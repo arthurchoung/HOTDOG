@@ -144,6 +144,14 @@ static id wbDiskPixels =
 }
 @end
 @implementation AmigaDrives
+- (int)preferredWidth
+{
+    return 600;
+}
+- (int)preferredHeight
+{
+    return 360;
+}
 - (void)updateArray:(Int4)r
 {
     id cmd = nsarr();
