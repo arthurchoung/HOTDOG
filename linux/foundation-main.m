@@ -393,8 +393,8 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
         } else if ((argc > 1) && !strcmp(argv[1], "macclassictrash")) {
             id obj = [Definitions MacClassicTrash];
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "maccolordisks")) {
-            id obj = [Definitions MacColorDisks];
+        } else if ((argc > 1) && !strcmp(argv[1], "maccolordrives")) {
+            id obj = [Definitions MacColorDrives];
             [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "maccolordir")) {
             if (argc > 2) {

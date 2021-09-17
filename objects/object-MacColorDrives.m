@@ -88,14 +88,14 @@ static id computerPixels =
 ;
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksfjdsklfjksddjsfkldj)
-+ (id)MacColorDisks
++ (id)MacColorDrives
 {
-    id obj = [@"MacColorDisks" asInstance];
+    id obj = [@"MacColorDrives" asInstance];
     return obj;
 }
 @end
 
-@interface MacColorDisks : IvarObject
+@interface MacColorDrives : IvarObject
 {
     time_t _timestamp;
     id _array;
@@ -106,7 +106,7 @@ static id computerPixels =
     id _selected;
 }
 @end
-@implementation MacColorDisks
+@implementation MacColorDrives
 - (void)updateArray:(Int4)r
 {
     id cmd = nsarr();
