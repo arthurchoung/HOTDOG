@@ -101,12 +101,8 @@
     r.h -= 2;
     [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
     [bitmap fillRect:outerRect];
-    [bitmap setColor:@"black"];
-    for (int i=1; i<r.h; i+=2) {
-        [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
-    }
     [bitmap setColor:@"white"];
-    for (int i=0; i<r.h; i+=2) {
+    for (int i=0; i<r.h; i++) {
         [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
     }
     [bitmap useTopazFont];

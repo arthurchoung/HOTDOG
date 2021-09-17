@@ -40,12 +40,20 @@
     [windowManager unparentAllWindows];
     char *backgroundCString =
 "a\n"
+;
+    char *backgroundPalette =
+"a #0055aa\n"
+;
+/*
+    char *backgroundCString =
+"a\n"
 "b\n"
 ;
     char *backgroundPalette =
 "a #0055aa\n"
 "b #000000\n"
 ;
+*/
     [windowManager setBackgroundForCString:backgroundCString palette:backgroundPalette];
     id rootWindowObject = [@"MacRootWindow" asInstance];
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
@@ -82,150 +90,150 @@
 {
     return
 "o\n"
-"b\n"
 "o\n"
-"b\n"
 "o\n"
-"b\n"
 "o\n"
-"b\n"
 "o\n"
-"b\n"
 "o\n"
-"b\n"
 "o\n"
-"b\n"
 "o\n"
-"b\n"
 "o\n"
-"b\n"
 "o\n"
-"b\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
 ;
 }
 + (char *)cStringForAmigaTitleBarCloseButton
 {
     return
 "XXooooooooooooooooooooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXXXXXXXXXXXXXXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXooooooooooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXooooooooooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXoooo....ooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXoooo....ooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXooooooooooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXooooooooooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXXXXXXXXXXXXXXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
 "XXooooooooooooooooooooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXXXXXXXXXXXXXXXooXX\n"
+"XXooXXXXXXXXXXXXXXXXooXX\n"
+"XXooXXooooooooooooXXooXX\n"
+"XXooXXooooooooooooXXooXX\n"
+"XXooXXooooooooooooXXooXX\n"
+"XXooXXooooooooooooXXooXX\n"
+"XXooXXoooo....ooooXXooXX\n"
+"XXooXXoooo....ooooXXooXX\n"
+"XXooXXoooo....ooooXXooXX\n"
+"XXooXXoooo....ooooXXooXX\n"
+"XXooXXooooooooooooXXooXX\n"
+"XXooXXooooooooooooXXooXX\n"
+"XXooXXooooooooooooXXooXX\n"
+"XXooXXooooooooooooXXooXX\n"
+"XXooXXXXXXXXXXXXXXXXooXX\n"
+"XXooXXXXXXXXXXXXXXXXooXX\n"
+"XXooooooooooooooooooooXX\n"
+"XXooooooooooooooooooooXX\n"
 ;
 }
 + (char *)cStringForAmigaTitleBarLowerButton
 {
     return
 "XXooooooooooooooooooooooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXXXXXXXXXXXXXooooooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXooooooooooXXooooooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXoo..............ooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXoo..............ooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXoo..............ooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooXXXX..............ooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXoooooo..............ooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXoooooo..............ooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "XXooooooooooooooooooooooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXXXXXXXXXXXXXooooooXX\n"
+"XXooXXXXXXXXXXXXXXooooooXX\n"
+"XXooXXooooooooooXXooooooXX\n"
+"XXooXXooooooooooXXooooooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXXX..............ooXX\n"
+"XXooXXXX..............ooXX\n"
+"XXoooooo..............ooXX\n"
+"XXoooooo..............ooXX\n"
+"XXoooooo..............ooXX\n"
+"XXoooooo..............ooXX\n"
+"XXooooooooooooooooooooooXX\n"
+"XXooooooooooooooooooooooXX\n"
 ;
 }
 + (char *)cStringForAmigaTitleBarRaiseButton
 {
     return
 "XXooooooooooooooooooooooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXoo..............ooooooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXoo....XXXXXXXXXXXXXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXoo....XXooooooooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXoo....XXooooooooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXoo....XXooooooooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXoo....XXooooooooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooooooXXooooooooooXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"XXooooooXXXXXXXXXXXXXXooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "XXooooooooooooooooooooooXX\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXoo..............ooooooXX\n"
+"XXoo..............ooooooXX\n"
+"XXoo....XXXXXXXXXXXXXXooXX\n"
+"XXoo....XXXXXXXXXXXXXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXooooooXXooooooooooXXooXX\n"
+"XXooooooXXooooooooooXXooXX\n"
+"XXooooooXXXXXXXXXXXXXXooXX\n"
+"XXooooooXXXXXXXXXXXXXXooXX\n"
+"XXooooooooooooooooooooooXX\n"
+"XXooooooooooooooooooooooXX\n"
 ;
 }
 + (char *)cStringForAmigaTitleBarLeft
 {
     return
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooo\n"
 ;
 }
 + (char *)cStringForAmigaTitleBarMiddle
 {
     return
 "o\n"
-"b\n"
 "o\n"
-"b\n"
+"o\n"
+"o\n"
 "X\n"
-"b\n"
 "X\n"
-"b\n"
-"o\n"
-"b\n"
-"o\n"
-"b\n"
 "X\n"
-"b\n"
 "X\n"
-"b\n"
 "o\n"
-"b\n"
 "o\n"
-"b\n"
+"o\n"
+"o\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
 ;
 }
 + (char *)cStringForInactiveAmigaTitleBar
@@ -236,17 +244,17 @@
 "    \n"
 "    \n"
 "o   \n"
-"b   \n"
+"o   \n"
 "  o \n"
-"  b \n"
+"  o \n"
 "    \n"
 "    \n"
 "    \n"
 "    \n"
 "o   \n"
-"b   \n"
+"o   \n"
 "  o \n"
-"  b \n"
+"  o \n"
 "    \n"
 "    \n"
 "    \n"
@@ -257,39 +265,39 @@
 {
     return
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
 ;
 }
 + (char *)cStringForAmigaBottomBorder
 {
     return
 "o\n"
-"b\n"
+"o\n"
 ;
 }
 + (char *)cStringForAmigaLeftBorder
 {
     return
 "oo\n"
-"bb\n"
+"oo\n"
 ;
 }
 + (void)drawAmigaBottomBorderInBitmap:(id)bitmap rect:(Int4)r
@@ -323,7 +331,7 @@
 {
     return
 "oo\n"
-"bb\n"
+"oo\n"
 ;
 }
 + (void)drawAmigaRightBorderInBitmap:(id)bitmap rect:(Int4)r
@@ -344,23 +352,23 @@
 {
     return
 "oooooooooooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"ooXXXXXXoooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"ooXXooXXoooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
-"ooXXXXXXXXXXXXoo\n"
-"bbbbbbbbbbbbbbbb\n"
-"ooooooXXooooXXoo\n"
-"bbbbbbbbbbbbbbbb\n"
-"ooooooXXooooXXoo\n"
-"bbbbbbbbbbbbbbbb\n"
-"ooooooXXooooXXoo\n"
-"bbbbbbbbbbbbbbbb\n"
-"ooooooXXXXXXXXoo\n"
-"bbbbbbbbbbbbbbbb\n"
 "oooooooooooooooo\n"
-"bbbbbbbbbbbbbbbb\n"
+"ooXXXXXXoooooooo\n"
+"ooXXXXXXoooooooo\n"
+"ooXXooXXoooooooo\n"
+"ooXXooXXoooooooo\n"
+"ooXXXXXXXXXXXXoo\n"
+"ooXXXXXXXXXXXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXXXXXXXoo\n"
+"ooooooXXXXXXXXoo\n"
+"oooooooooooooooo\n"
+"oooooooooooooooo\n"
 ;
 }
 @end
@@ -629,3 +637,249 @@
 }
 @end
 
+/*
++ (char *)cStringForAmigaTitleBarTextBackground
+{
+    return
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+;
+}
++ (char *)cStringForAmigaTitleBarCloseButton
+{
+    return
+"XXooooooooooooooooooooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXXXXXXXXXXXXXXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXooooooooooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXooooooooooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXoooo....ooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXoooo....ooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXooooooooooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXooooooooooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXXXXXXXXXXXXXXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooooooooooooooooooooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbb\n"
+;
+}
++ (char *)cStringForAmigaTitleBarLowerButton
+{
+    return
+"XXooooooooooooooooooooooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXXXXXXXXXXXXXooooooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXooooooooooXXooooooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXoo..............ooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXoo..............ooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXoo..............ooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooXXXX..............ooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXoooooo..............ooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXoooooo..............ooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooooooooooooooooooooooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+;
+}
++ (char *)cStringForAmigaTitleBarRaiseButton
+{
+    return
+"XXooooooooooooooooooooooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXoo..............ooooooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXoo....XXXXXXXXXXXXXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXoo....XXooooooooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXoo....XXooooooooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXoo....XXooooooooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXoo....XXooooooooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooooooXXooooooooooXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooooooXXXXXXXXXXXXXXooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"XXooooooooooooooooooooooXX\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+;
+}
++ (char *)cStringForAmigaTitleBarLeft
+{
+    return
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+;
+}
++ (char *)cStringForAmigaTitleBarMiddle
+{
+    return
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"X\n"
+"b\n"
+"X\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+"X\n"
+"b\n"
+"X\n"
+"b\n"
+"o\n"
+"b\n"
+"o\n"
+"b\n"
+;
+}
++ (char *)cStringForInactiveAmigaTitleBar
+{
+    return
+"    \n"
+"    \n"
+"    \n"
+"    \n"
+"o   \n"
+"b   \n"
+"  o \n"
+"  b \n"
+"    \n"
+"    \n"
+"    \n"
+"    \n"
+"o   \n"
+"b   \n"
+"  o \n"
+"  b \n"
+"    \n"
+"    \n"
+"    \n"
+"    \n"
+;
+}
++ (char *)cStringForAmigaTitleBarRight
+{
+    return
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+;
+}
++ (char *)cStringForAmigaBottomBorder
+{
+    return
+"o\n"
+"b\n"
+;
+}
++ (char *)cStringForAmigaLeftBorder
+{
+    return
+"oo\n"
+"bb\n"
+;
+}
++ (char *)cStringForAmigaRightBorder
+{
+    return
+"oo\n"
+"bb\n"
+;
+}
++ (char *)cStringForAmigaResizeButton
+{
+    return
+"oooooooooooooooo\n"
+"bbbbbbbbbbbbbbbb\n"
+"ooXXXXXXoooooooo\n"
+"bbbbbbbbbbbbbbbb\n"
+"ooXXooXXoooooooo\n"
+"bbbbbbbbbbbbbbbb\n"
+"ooXXXXXXXXXXXXoo\n"
+"bbbbbbbbbbbbbbbb\n"
+"ooooooXXooooXXoo\n"
+"bbbbbbbbbbbbbbbb\n"
+"ooooooXXooooXXoo\n"
+"bbbbbbbbbbbbbbbb\n"
+"ooooooXXooooXXoo\n"
+"bbbbbbbbbbbbbbbb\n"
+"ooooooXXXXXXXXoo\n"
+"bbbbbbbbbbbbbbbb\n"
+"oooooooooooooooo\n"
+"bbbbbbbbbbbbbbbb\n"
+;
+}
+*/
