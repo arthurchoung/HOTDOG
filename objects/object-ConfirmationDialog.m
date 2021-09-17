@@ -96,20 +96,22 @@
 #endif
 
 @implementation Definitions(jfldslkfjdslkjf)
-+ (id)ConfirmationDialog:(id)text okText:(id)okText
++ (id)ConfirmationDialog:(id)text okText:(id)okText cancelText:(id)cancelText
 {
     id obj = [@"ConfirmationDialog" asInstance];
     [obj setValue:text forKey:@"text"];
     [obj setValue:okText forKey:@"okText"];
+    [obj setValue:cancelText forKey:@"cancelText"];
     return obj;
+}
++ (id)ConfirmationDialog:(id)text okText:(id)okText
+{
+    return [Definitions ConfirmationDialog:text okText:okText cancelText:@"Cancel"];
 }
 
 + (id)ConfirmationDialog:(id)text
 {
-    id obj = [@"ConfirmationDialog" asInstance];
-    [obj setValue:text forKey:@"text"];
-    [obj setValue:@"OK" forKey:@"okText"];
-    return obj;
+    return [Definitions ConfirmationDialog:text okText:@"OK" cancelText:@"Cancel"];
 }
 + (int)preferredHeightForConfirmationDialog:(id)text width:(int)width
 {
@@ -130,6 +132,7 @@
 {
     id _text;
     id _okText;
+    id _cancelText;
     int _numberOfRects;
     Int4 _rects[2];
     int _buttonDown;
@@ -175,12 +178,12 @@
         char *palette = ". #000000\nb #000000\nw #ffffff\n";
         [Definitions drawButtonInBitmap:bitmap rect:cancelButtonRect palette:palette];
         [bitmap setColorIntR:255 g:255 b:255 a:255];
-        [bitmap drawBitmapText:@"Cancel" centeredInRect:cancelButtonRect];
+        [bitmap drawBitmapText:_cancelText centeredInRect:cancelButtonRect];
     } else {
         char *palette = ". #ffffff\nb #000000\nw #ffffff\n";
         [Definitions drawButtonInBitmap:bitmap rect:cancelButtonRect palette:palette];
         [bitmap setColorIntR:0 g:0 b:0 a:255];
-        [bitmap drawBitmapText:@"Cancel" centeredInRect:cancelButtonRect];
+        [bitmap drawBitmapText:_cancelText centeredInRect:cancelButtonRect];
     }
     int textWidth = (int)r.w - 89 - 18;
     id text = [bitmap fitBitmapString:_text width:textWidth];
@@ -244,7 +247,7 @@
     } else if (buttonUp == 2) {
         id x11dict = [event valueForKey:@"x11dict"];
         [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
-        [@"Cancel" writeToStandardOutput];
+        [_cancelText writeToStandardOutput];
     }
 }
 - (void)handleOKButton:(id)event
