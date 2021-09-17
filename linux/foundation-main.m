@@ -377,8 +377,8 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
                 id obj = [Definitions AmigaBuiltInDir:nil];
                 [Definitions runWindowManagerForObject:obj];
             }
-        } else if ((argc > 1) && !strcmp(argv[1], "macclassicdisks")) {
-            id obj = [Definitions MacClassicDisks];
+        } else if ((argc > 1) && !strcmp(argv[1], "macclassicdrives")) {
+            id obj = [Definitions MacClassicDrives];
             [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "macclassicdir")) {
             if (argc > 2) {

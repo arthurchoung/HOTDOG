@@ -71,14 +71,14 @@ static id diskPixels =
 ;
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksfjdsklfjksdldj)
-+ (id)MacClassicDisks
++ (id)MacClassicDrives
 {
-    id obj = [@"MacClassicDisks" asInstance];
+    id obj = [@"MacClassicDrives" asInstance];
     return obj;
 }
 @end
 
-@interface MacClassicDisks : IvarObject
+@interface MacClassicDrives : IvarObject
 {
     time_t _timestamp;
     id _array;
@@ -89,7 +89,7 @@ static id diskPixels =
     id _selected;
 }
 @end
-@implementation MacClassicDisks
+@implementation MacClassicDrives
 - (void)updateArray:(Int4)r
 {
     id cmd = nsarr();
