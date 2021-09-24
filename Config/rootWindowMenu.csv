@@ -1,6 +1,6 @@
 hotKey,displayName,messageForClick
-,Home,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(homeDir) | runCommandInBackground"
-"F1",XTerm,"[ 'xterm' '-geometry' '80x50' '+bc' '+uc' ] | runCommandInBackground"
+,Main,"['hotdog' 'show' 'homeDir|changeDirectory;AmigaDrives']|runCommandInBackground"
+"F1",XTerm,"[ 'xterm' '-geometry' '80x50' '-bg' '#0055aa' '-fg' 'white' '-cr' '#ff8800' '+bc' '+uc' ] | runCommandInBackground"
 ,Chromium,"[ 'chromium' ] | runCommandInBackground"
 ,
 ,Calculator,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Calculator')|runCommandInBackground"
@@ -14,6 +14,7 @@ hotKey,displayName,messageForClick
 ,Breakout,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Breakout')|runCommandInBackground"
 ,CentipedeClone,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/CentipedeClone')|runCommandInBackground"
 ,"FifteenPuzzle","NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/FifteenPuzzle')|runCommandInBackground"
+,Home,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(homeDir) | runCommandInBackground"
 ,HomeScreen,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/HomeScreen')|runCommandInBackground"
 ,HotDogStandPrograms,"['hotdog' 'show' 'HotDogStandPrograms']|runCommandInBackground"
 ,KaboomClone,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/KaboomClone')|runCommandInBackground"
