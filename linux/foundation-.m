@@ -38,11 +38,13 @@
 #import "foundation-printf.h"
 #endif
 
+static FILE *HOTDOG_stderr = NULL;
+
 #ifdef BUILD_FOR_ANDROID
 #include <android/log.h>
 #define LOG(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
 #else
-#define LOG(...) ((void)fprintf(stderr, __VA_ARGS__))
+#define LOG(...) ((void)fprintf(HOTDOG_stderr, __VA_ARGS__))
 #endif
 
 
@@ -75,9 +77,9 @@ void NSLog(id formatString, ...)///$;
 #ifdef BUILD_WITH_GNU_PRINTF
     va_list args;
     va_start(args, formatString);
-    vfprintf(stderr, [formatString UTF8String], args);
+    vfprintf(HOTDOG_stderr, [formatString UTF8String], args);
     va_end(args);
-    fprintf(stderr, "\n");
+    fprintf(HOTDOG_stderr, "\n");
 #else
     char *fmt = [formatString UTF8String];
     char *strp = NULL;
@@ -2156,8 +2158,10 @@ NSLog(@"copyMethodsToNSConstantString class '%s' not found", className);
 
 }
 
-void HOTDOG_initialize()
+void HOTDOG_initialize(FILE *fp)
 {
+    HOTDOG_stderr = fp;
+
     __objc_msg_forward2 = my_objc_msg_forward2;
 #ifdef BUILD_WITH_GNUSTEP_RUNTIME
     __objc_msg_forward3 = my_objc_msg_forward3;
@@ -2185,7 +2189,7 @@ LOG("ERROR! missing NSObject\n");
 
 #ifdef BUILD_WITH_GNU_PRINTF
     if (register_printf_function('@', print_objc_object, print_objc_object_arginfo) != 0) {
-fprintf(stderr, "ERROR! register_printf_function\n");
+fprintf(HOTDOG_stderr, "ERROR! register_printf_function\n");
         exit(0);
     }
 #endif
