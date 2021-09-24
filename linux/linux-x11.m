@@ -1125,7 +1125,7 @@ NSLog(@"unparent object %@", dict);
     if (_isWindowManager) {
         setAttrs.event_mask = SubstructureRedirectMask|SubstructureNotifyMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|VisibilityChangeMask|KeyPressMask|KeyReleaseMask|StructureNotifyMask|FocusChangeMask|EnterWindowMask|LeaveWindowMask;
     } else {
-        setAttrs.event_mask = ButtonPressMask|ButtonReleaseMask|PointerMotionMask|VisibilityChangeMask|KeyPressMask|KeyReleaseMask|StructureNotifyMask;
+        setAttrs.event_mask = ButtonPressMask|ButtonReleaseMask|PointerMotionMask|VisibilityChangeMask|KeyPressMask|KeyReleaseMask|StructureNotifyMask|FocusChangeMask;
     }
     setAttrs.bit_gravity = NorthWestGravity;
     setAttrs.background_pixmap = None;
@@ -1188,7 +1188,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
 #endif
     }
 
-    Window win = [self openWindowWithName:[[@"." asRealPath] lastPathComponent] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
+    Window win = [self openWindowWithName:[@"." asRealPath] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
 
     id dict = nsdict();
     [dict setValue:nsfmt(@"%lu", win) forKey:@"window"];
@@ -1916,6 +1916,15 @@ NSLog(@"FocusIn event win %lu", win);
     XFocusOutEvent *e = eptr;
     Window win = e->window;
 NSLog(@"FocusOut event win %lu", win);
+
+// FIXME this is for linux-dialog --infobox
+    id dict = [self dictForObjectWindow:e->window];
+    if (dict) {
+        id object = [dict valueForKey:@"object"];
+        if ([object intValueForKey:@"x11WaitForFocusOutThenClose"]) {
+            [dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        }
+    }
 }
 - (void)handleX11PropertyNotify:(void *)eptr
 {
