@@ -37,8 +37,17 @@ NSLog(@"unable to set signal handler for SIGPIPE");
     }
 
 #ifndef BUILD_FOR_OSX
-    extern void HOTDOG_initialize(void);
-    HOTDOG_initialize();
+    extern void HOTDOG_initialize(FILE *);
+    if ((argc >= 2) && !strcmp(argv[1], "dialog")) {
+        FILE *fp = fopen("/dev/null", "w");
+        if (!fp) {
+            fprintf(stderr, "unable to open /dev/null\n");
+            exit(1);
+        }
+        HOTDOG_initialize(fp);
+    } else {
+        HOTDOG_initialize(stderr);
+    }
 #endif
 
 
@@ -377,6 +386,15 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
                 id obj = [Definitions AmigaBuiltInDir:nil];
                 [Definitions runWindowManagerForObject:obj];
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "amigaalert")) {
+            id data = [Definitions dataFromStandardInput];
+            id str = [data asString];
+            if ([str length]) {
+                id obj = [@"AmigaAlert" asInstance];
+                [obj setValue:str forKey:@"text"];
+                [obj setValue:@"OK" forKey:@"okText"];
+                [Definitions runWindowManagerForObject:obj];
+            }
         } else if ((argc > 1) && !strcmp(argv[1], "macclassicdrives")) {
             id obj = [Definitions MacClassicDrives];
             [Definitions runWindowManagerForObject:obj];
@@ -421,6 +439,9 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
         } else if ((argc > 1) && !strcmp(argv[1], "hotdogstandprograms")) {
             id obj = [Definitions HotDogStandPrograms];
             [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "dialog")) {
+            [Definitions dialog:argc-2 :&argv[2]];
+            exit(-1);
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
