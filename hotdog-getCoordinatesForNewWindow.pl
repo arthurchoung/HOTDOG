@@ -19,7 +19,7 @@ if ($w && $h && ($monitorWidth > $w) && ($monitorHeight - 20 > $h)) {
     $rangeY = $monitorHeight - 20 - $h;
 
     $x = $monitorX + int(rand($rangeX));
-    $y = int(rand($rangeY));
+    $y = 20 + int(rand($rangeY));
     print "x:$x y:$y\n";
     exit 0;
 }
