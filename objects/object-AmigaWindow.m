@@ -38,6 +38,9 @@
 {
     id windowManager = [@"windowManager" valueForKey];
     [windowManager unparentAllWindows];
+
+    [Definitions setValue:@"amiga" forEnvironmentVariable:@"HOTDOG_MODE"];
+
     char *backgroundCString =
 "a\n"
 ;
