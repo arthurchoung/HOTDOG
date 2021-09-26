@@ -31,6 +31,9 @@
 {
     id windowManager = [@"windowManager" valueForKey];
     [windowManager unparentAllWindows];
+
+    [Definitions setValue:@"macclassic" forEnvironmentVariable:@"HOTDOG_MODE"];
+
     char *backgroundCString =
 "ab\n"
 "ba\n"
