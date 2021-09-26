@@ -91,7 +91,7 @@ static void unescape_newlines(char *str)
 }
 
 @implementation Definitions(fjkdlsjfkldsjflksdjfisdnmfilewv)
-+ (void)dialog:(int)argc :(char **)argv
++ (void)dialog:(char *)classPrefix :(int)argc :(char **)argv
 {
     int i = 0;
     while (i < argc) {
@@ -338,7 +338,7 @@ static void unescape_newlines(char *str)
         }
         [arr addObject:nsfmt(@"%s", _msgbox)];
         id str = [arr join:@"\n"];
-        id obj = [@"AmigaAlert" asInstance];
+        id obj = [nsfmt(@"%sAlert", classPrefix) asInstance];
         [obj setValue:str forKey:@"text"];
         [obj setValue:@"OK" forKey:@"okText"];
         [obj setValue:@"1" forKey:@"dialogMode"];
@@ -361,7 +361,7 @@ static void unescape_newlines(char *str)
         }
         [arr addObject:nsfmt(@"%s", _infobox)];
         id str = [arr join:@"\n"];
-        id obj = [@"AmigaAlert" asInstance];
+        id obj = [nsfmt(@"%sAlert", classPrefix) asInstance];
         [obj setValue:@"1" forKey:@"x11WaitForFocusOutThenClose"];
         [obj setValue:str forKey:@"text"];
         [obj setValue:@"1" forKey:@"dialogMode"];
@@ -381,7 +381,7 @@ static void unescape_newlines(char *str)
         }
         [arr addObject:nsfmt(@"%s", _yesno)];
         id str = [arr join:@"\n"];
-        id obj = [@"AmigaAlert" asInstance];
+        id obj = [nsfmt(@"%sAlert", classPrefix) asInstance];
         [obj setValue:nsfmt(@"%d", 1) forKey:@"dialogMode"];
         [obj setValue:str forKey:@"text"];
         [obj setValue:nsfmt(@"%s", (_yes_label) ? _yes_label : "Yes") forKey:@"okText"];
@@ -422,7 +422,7 @@ static void unescape_newlines(char *str)
                 [arr addObject:elt];
             }
         }
-        id obj = [@"AmigaChecklist" asInstance];
+        id obj = [nsfmt(@"%sChecklist", classPrefix) asInstance];
         [obj setValue:nsfmt(@"%d", (_stdout) ? 1 : 2) forKey:@"dialogMode"];
         [obj setValue:str forKey:@"text"];
         [obj setValue:arr forKey:@"array"];
@@ -458,7 +458,7 @@ static void unescape_newlines(char *str)
             [elt setValue:nsfmt(@"%s", argv[j+1]) forKey:@"text"];
             [arr addObject:elt];
         }
-        id obj = [@"AmigaRadio" asInstance];
+        id obj = [nsfmt(@"%sRadio", classPrefix) asInstance];
         [obj setValue:nsfmt(@"%d", (_stdout) ? 1 : 2) forKey:@"dialogMode"];
         [obj setValue:str forKey:@"text"];
         [obj setValue:arr forKey:@"array"];
@@ -511,7 +511,7 @@ static void unescape_newlines(char *str)
             [buffers addObject:nsfmt(@"%s", item)];
             [readonly addObject:nsfmt(@"%d", (flen <= 0) ? 1 : 0)];
         }
-        id obj = [@"AmigaTextFields" asInstance];
+        id obj = [nsfmt(@"%sTextFields", classPrefix) asInstance];
         [obj setValue:nsfmt(@"%d", (_stdout) ? 1 : 2) forKey:@"dialogMode"];
         [obj setValue:str forKey:@"text"];
         [obj setValue:@"OK" forKey:@"okText"];
@@ -554,7 +554,7 @@ static void unescape_newlines(char *str)
             [buffers addObject:nsfmt(@"%s", item)];
             [readonly addObject:nsfmt(@"%d", (flen <= 0) ? 1 : 0)];
         }
-        id obj = [@"AmigaTextFields" asInstance];
+        id obj = [nsfmt(@"%sTextFields", classPrefix) asInstance];
         [obj setValue:nsfmt(@"%d", (_stdout) ? 1 : 2) forKey:@"dialogMode"];
         [obj setValue:str forKey:@"text"];
         [obj setValue:fields forKey:@"fields"];
@@ -579,7 +579,7 @@ static void unescape_newlines(char *str)
         }
         [arr addObject:nsfmt(@"%s", _programbox)];
         id str = [arr join:@"\n"];
-        id obj = [@"AmigaProgramBox" asInstance];
+        id obj = [nsfmt(@"%sProgramBox", classPrefix) asInstance];
         [obj setValue:@"1" forKey:@"dialogMode"];
         [obj setValue:str forKey:@"text"];
         [obj setValue:@"OK" forKey:@"okText"];
@@ -597,7 +597,7 @@ static void unescape_newlines(char *str)
             [arr addObject:nsfmt(@"%s", _title)];
         }
         id str = [arr join:@"\n"];
-        id obj = [@"AmigaTailBox" asInstance];
+        id obj = [nsfmt(@"%sTailBox", classPrefix) asInstance];
         [obj setValue:@"1" forKey:@"dialogMode"];
         [obj setValue:str forKey:@"text"];
         [obj setValue:nsfmt(@"%s", _tailbox) forKey:@"path"];
@@ -616,7 +616,7 @@ static void unescape_newlines(char *str)
             [arr addObject:nsfmt(@"%s", _title)];
         }
         id str = [arr join:@"\n"];
-        id obj = [@"AmigaTailBox" asInstance];
+        id obj = [nsfmt(@"%sTailBox", classPrefix) asInstance];
         [obj setValue:str forKey:@"text"];
         [obj setValue:nsfmt(@"%s", _textbox) forKey:@"path"];
         [obj setValue:(_exit_label) ? nsfmt(@"%s", _exit_label) : @"OK" forKey:@"okText"];
@@ -644,7 +644,7 @@ static void unescape_newlines(char *str)
         [arr addObject:nsfmt(@"%s", _inputbox)];
         id str = [arr join:@"\n"];
 
-        id obj = [@"AmigaTextFields" asInstance];
+        id obj = [nsfmt(@"%sTextFields", classPrefix) asInstance];
         [obj setValue:nsfmt(@"%d", (_stdout) ? 1 : 2) forKey:@"dialogMode"];
 
         [obj setValue:str forKey:@"text"];
