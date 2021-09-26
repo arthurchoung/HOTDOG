@@ -30,6 +30,8 @@
 {
     id windowManager = [@"windowManager" valueForKey];
     [windowManager unparentAllWindows];
+
+    [Definitions setValue:@"hotdogstand" forEnvironmentVariable:@"HOTDOG_MODE"];
     [windowManager setBackgroundForCString:"b\n" palette:"b #ffff00\n"];
     id rootWindowObject = [@"MacRootWindow" asInstance];
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
