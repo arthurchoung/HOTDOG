@@ -1,6 +1,11 @@
 #!/usr/bin/perl
 
-if (open FH, "| hotdog amigaalert") {
+$arg = '';
+if ($ENV{'HOTDOG_MODE'} eq 'amiga') {
+    $arg = 'amiga';
+}
+
+if (open FH, "| hotdog ${arg}alert") {
     print FH <<EOF;
 Horrible Obsolete Typeface and Dreadful Onscreen Graphics for Linux (HOT DOG Linux)
 
