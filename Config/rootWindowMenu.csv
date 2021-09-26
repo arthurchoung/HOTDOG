@@ -1,6 +1,6 @@
 hotKey,displayName,messageForClick
 ,Main,"['hotdog' 'show' 'homeDir|changeDirectory;AmigaDrives']|runCommandInBackground"
-"F1",XTerm,"[ 'xterm' '-geometry' '80x50' '-bg' '#0055aa' '-fg' 'white' '-cr' '#ff8800' '+bc' '+uc' ] | runCommandInBackground"
+"F1",XTerm,"[ 'hotdog-xterm.sh' ] | runCommandInBackground"
 ,Chromium,"[ 'chromium' ] | runCommandInBackground"
 ,
 ,Calculator,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Calculator')|runCommandInBackground"
@@ -27,6 +27,9 @@ hotKey,displayName,messageForClick
 ,Spider,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Spider')|runCommandInBackground"
 ,
 "F9","Toggle Expose Mode","toggleExposeMode"
+,"Take Screen Shot of Root Window","['hotdog-takeScreenShotRootWindow.pl'|runCommandInBackground"
+,"Take Screen Shot of Focus Window","NSArray|addObject:'hotdog-takeScreenShotForWindow:.pl'|addObject:(currentWindow|window)|runCommandInBackground"
+,"Take Screen Shot with Selection Box","NSArray|addObject:'hotdog-takeScreenShotSelectionBox.pl'|runCommandInBackground"
 ,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
