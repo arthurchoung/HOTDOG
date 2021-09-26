@@ -138,9 +138,22 @@
     int _buttonDown;
     int _buttonHover;
     int _returnKey;
+    int _dialogMode;
 }
 @end
 @implementation ConfirmationDialog
+- (int)preferredWidth
+{
+    return 480;
+}
+- (int)preferredHeight
+{
+    int h = [Definitions preferredHeightForConfirmationDialog:_text width:480];
+    if (h > 240) {
+        return h;
+    }
+    return 240;
+}
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
     [Definitions drawAlertBorderInBitmap:bitmap rect:r];
@@ -245,6 +258,9 @@
     if (buttonUp == 1) {
         [self handleOKButton:event];
     } else if (buttonUp == 2) {
+        if (_dialogMode) {
+            exit(1);
+        }
         id x11dict = [event valueForKey:@"x11dict"];
         [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
         [_cancelText writeToStandardOutput];
@@ -252,6 +268,9 @@
 }
 - (void)handleOKButton:(id)event
 {
+    if (_dialogMode) {
+        exit(0);
+    }
     id x11dict = [event valueForKey:@"x11dict"];
     [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
     [_okText writeToStandardOutput];
