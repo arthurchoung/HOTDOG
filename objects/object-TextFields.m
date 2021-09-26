@@ -42,6 +42,19 @@
 }
 @end
 
+@implementation NSString(fjdklsfjlksdjf)
+- (id)asTextFieldsForSelector
+{
+    id obj = [@"TextFields" asInstance];
+    id fields = [self splitTerminator:@":"];
+    if (![fields count]) {
+        return nil;
+    }
+    [obj setValue:fields forKey:@"fields"];
+    return obj;
+}
+@end
+
 @implementation Definitions(fjdksljfklsdjf)
 + (id)selectorMenu
 {
@@ -62,28 +75,23 @@
 {
     id obj = [@"TextFields" asInstance];
     id fields = [@"field1:field2:field3:field4:field5:" splitTerminator:@":"];
-    [obj setValue:fields forKey:@"fields"];
-    return obj;
-}
-@end
-
-@implementation NSString(fjdklsfjlksdjf)
-- (id)asTextFieldsForSelector
-{
-    id obj = [@"TextFields" asInstance];
-    id fields = [self splitTerminator:@":"];
-    if (![fields count]) {
-        return nil;
+    id editable = nsarr();
+    for (int i=0; i<[fields count]; i++) {
+        [editable addObject:@"1"];
     }
+    [obj setValue:@"JDLFKSJLKDFJKLDSJFKL" forKey:@"text"];
     [obj setValue:fields forKey:@"fields"];
+    [obj setValue:editable forKey:@"editable"];
     return obj;
 }
 @end
 
 @interface TextFields : IvarObject
 {
+    id _text;
     id _fields;
     id _buffers;
+    id _editable;
     int _cursorBlink;
     int _cursorPos;
     int _currentField;
@@ -104,8 +112,6 @@
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
 
-    int textHeight = [bitmap bitmapHeightForText:@"A"];
-
     int fieldWidth = 0;
     for (int i=0; i<[_fields count]; i++) {
         int w = [bitmap bitmapWidthForText:[_fields nth:i]];
@@ -115,6 +121,13 @@
     }
 
     int y = r.y+10;
+    if (_text) {
+        int textHeight = [bitmap bitmapHeightForText:_text];
+        [bitmap setColor:@"black"];
+        [bitmap drawBitmapText:_text x:5 y:y];
+        y += textHeight + 20;
+    }
+
     {
         int x = 5;
         for (int i=0; i<[_fields count]; i++) {
@@ -240,17 +253,19 @@
 {
     id str = [event valueForKey:@"keyString"];
     if ([str isEqual:@"return"]) {
-        _okButtonDown = NO;
-        id message = nsarr();
-        for (int i=0; i<[_fields count]; i++) {
-            id field = [_fields nth:i];
-            id buf = [_buffers nth:i];
-            [message addObject:nsfmt(@"%@'%@'", field, buf)];
+        if (_okButtonDown) {
+            for (int i=0; i<[_fields count]; i++) {
+                id editable = [_editable nth:i];
+                if ([editable intValue]) {
+                    id field = [_fields nth:i];
+                    id buffer = [_buffers nth:i];
+                    printf("%@\n", buffer);
+                }
+            }
+            id x11Dict = [event valueForKey:@"x11dict"];
+            [x11Dict setValue:@"1" forKey:@"shouldCloseWindow"];
+            _okButtonDown = NO;
         }
-        message = [message join:@" "];
-id result = [self evaluateMessage:message];
-[result pushToMainInterface];
-//        [self setValue:message forKey:@"returnValue"];
     }
 }
 @end
