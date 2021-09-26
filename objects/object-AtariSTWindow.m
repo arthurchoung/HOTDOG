@@ -30,6 +30,9 @@
 {
     id windowManager = [@"windowManager" valueForKey];
     [windowManager unparentAllWindows];
+
+    [Definitions setValue:@"atarist" forEnvironmentVariable:@"HOTDOG_MODE"];
+
     [windowManager setBackgroundForCString:"x\n" palette:"x #00ee00\n"];
     id rootWindowObject = [@"MacRootWindow" asInstance];
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
