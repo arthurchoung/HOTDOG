@@ -96,6 +96,13 @@ static char *checkbox_down_pixels =
 }
 @end
 @implementation AmigaChecklist
+- (BOOL)getCheckedForIndex:(int)index
+{
+    if ((index >= 0) && (index < MAX_CHECKBOXES)) {
+        return _checked[index];
+    }
+    return NO;
+}
 - (void)setChecked:(BOOL)checked forIndex:(int)index
 {
     if ((index >= 0) && (index < MAX_CHECKBOXES)) {
@@ -183,7 +190,7 @@ static char *checkbox_down_pixels =
             str = checkbox_down_pixels;
         }
         [bitmap drawCString:str x:x y:y+1 c:'b' r:0x00 g:0x55 b:0xaa a:255];
-        if (_checked[i]) {
+        if ([self getCheckedForIndex:i]) {
             [bitmap drawCString:checkbox_selected_pixels x:x y:y+1 c:'b' r:0x00 g:0x55 b:0xaa a:255];
         }
         [bitmap drawBitmapText:text x:x+checkboxWidth+10 y:y];
@@ -316,10 +323,10 @@ static char *checkbox_down_pixels =
                 exit(1);
             }
         } else {
-            if (_checked[_down-1]) {
-                _checked[_down-1] = 0;
+            if ([self getCheckedForIndex:_down-1]) {
+                [self setChecked:NO forIndex:_down-1];
             } else {
-                _checked[_down-1] = 1;
+                [self setChecked:YES forIndex:_down-1];
             }
         }
     }
@@ -339,7 +346,7 @@ static char *checkbox_down_pixels =
     BOOL first = YES;
     FILE *fp = (_dialogMode == 1) ? stdout : stderr;
     for (int i=0; i<[_array count]; i++) {
-        if (_checked[i]) {
+        if ([self getCheckedForIndex:i]) {
             id elt = [_array nth:i];
             id tag = [elt valueForKey:@"tag"];
             if (first) {
