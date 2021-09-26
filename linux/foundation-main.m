@@ -440,7 +440,15 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
             id obj = [Definitions HotDogStandPrograms];
             [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "dialog")) {
-            [Definitions dialog:argc-2 :&argv[2]];
+            if (argc > 3) {
+                char *classPrefix = "Amiga";
+                if (!strcmp(argv[2], "amiga")) {
+                    classPrefix = "Amiga";
+                } else if (!strcmp(argv[2], "mac")) {
+                    classPrefix = "Mac";
+                }
+                [Definitions dialog:classPrefix :argc-3 :&argv[3]];
+            }
             exit(-1);
         } else {
             id args = nsarr();
