@@ -34,6 +34,9 @@
 
     id windowManager = [@"windowManager" valueForKey];
     [windowManager unparentAllWindows];
+
+    [Definitions setValue:@"macplatinum" forEnvironmentVariable:@"HOTDOG_MODE"];
+
     [windowManager setBackgroundForCString:cstr palette:palette];
     id rootWindowObject = [@"MacRootWindow" asInstance];
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
