@@ -170,6 +170,7 @@
             if (_dialogMode) {
                 exit(0);
             }
+            printf("%@\n", _okText);
             id x11dict = [event valueForKey:@"x11dict"];
             [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
         } else if (_buttonDown == 'c') {
