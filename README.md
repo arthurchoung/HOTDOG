@@ -12,7 +12,7 @@ http://hotdoglinux.com/download/
 
 The design goals of HOT DOG Linux include:
 
-  * Graphical user interface based on retro computer systems including Windows 3.1 Hot Dog Stand, Amiga Workbench, Atari ST GEM, and Classic Mac
+  * Graphical user interface based on retro computer systems including Hot Dog Stand (Windows 3.1), Amiga Workbench, Atari ST GEM, and Classic Mac
   * Custom lightweight Objective-C foundation
   * Bitmapped graphics, low DPI displays
   * No Unicode support by design
@@ -43,15 +43,27 @@ $ ./hotdog
 
 ## Screenshots
 
-![Amiga Screenshot 1280x1024](Screenshots/hotdog-screenshot-amiga.png)
+Amiga Screenshot 1280x1024
 
-![Windows 3.1 Screenshot](Screenshots/hotdog-screenshot-win31.png)
+![Amiga Screenshot](Screenshots/hotdog-screenshot-amiga.png)
+
+Hot Dog Stand
+
+![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
+
+Atari ST GEM
 
 ![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
 
+Mac Classic
+
 ![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
 
+Mac Color
+
 ![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
+
+Mac Platinum
 
 ![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
 
