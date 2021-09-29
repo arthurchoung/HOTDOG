@@ -8,22 +8,6 @@ Live Image based on Slackware Live
 
 http://hotdoglinux.com/download/
 
-
-## Screenshots
-
-![Windows 3.1 Screenshot](Screenshots/hotdog-screenshot-win31.png)
-
-![Amiga Screenshot](Screenshots/hotdog-screenshot-amiga.png)
-
-![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
-
-![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
-
-![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
-
-![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
-
-
 ## Overview
 
 The design goals of HOT DOG Linux include:
@@ -43,8 +27,6 @@ HOT DOG Linux does not use Automatic Reference Counting. It causes problems with
 
 HOT DOG Linux is an acronym that stands for **H**orrible **O**bsolete **T**ypeface and **D**readful **O**nscreen **G**raphics for Linux.
 
-
-
 ## How to compile and run
 
 $ sh makeUtils.sh
@@ -59,32 +41,19 @@ To run the iPod style interface:
 
 $ ./hotdog
 
+## Screenshots
 
+![Amiga Screenshot 1280x1024](Screenshots/hotdog-screenshot-amiga.png)
 
-## Dependencies
+![Windows 3.1 Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
-The following executables must be in your PATH or at location if specified:
+![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
 
-  * xrandr
-  * ifconfig (used by hotdog-printNetworkInfo.pl)
-  * find (used by build.pl)
-  * gcc (also needs gcc objc runtime)
-  * /usr/bin/perl (also needs JSON)
-  * /bin/bash (used by Utils/printDateEverySecondForTimezone:text:)
-  * date (used by Utils/printDateEverySecondForTimezone:text:)
+![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
 
-(this list is probably incomplete)
+![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
 
-The following libraries must have headers available and be linkable:
-
-  * libX11
-  * libXext
-  * libXfixes
-  * libGL (Mesa should work)
-  * libpthread
-  * libm
-
-
+![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
 
 ## Legal
 
