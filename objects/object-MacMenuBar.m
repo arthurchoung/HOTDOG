@@ -293,50 +293,6 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
     char *rightCornerStr = [Definitions cStringForUpperRightMenuBar];
     int rightCornerWidth = [Definitions widthForCString:rightCornerStr];
 
-    {
-        int emptyIndex = [_array count];
-
-        int x = leftCornerWidth;
-        for (int i=0; i<[_array count]; i++) {
-            id elt = [_array nth:i];
-            id objectMessage = [elt valueForKey:@"objectMessage"];
-            if ([objectMessage length] == 0) {
-                emptyIndex = i;
-                break;
-            }
-            id obj = [elt valueForKey:@"object"];
-            if (!obj) {
-                continue;
-            }
-            int leftPadding = [elt intValueForKey:@"leftPadding"];
-            int rightPadding = [elt intValueForKey:@"rightPadding"];
-            int w = 100;
-            if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                w = [obj preferredWidth]+leftPadding+rightPadding;
-            }
-            [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
-            [elt setValue:nsfmt(@"%d", w) forKey:@"width"];
-            x += w;
-        }
-        x = rightCornerWidth;
-        for (int i=[_array count]-1; i>emptyIndex; i--) {
-            id elt = [_array nth:i];
-            id obj = [elt valueForKey:@"object"];
-            if (!obj) {
-                continue;
-            }
-            int leftPadding = [elt intValueForKey:@"leftPadding"];
-            int rightPadding = [elt intValueForKey:@"rightPadding"];
-            int w = 100;
-            if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                w = [obj preferredWidth]+leftPadding+rightPadding;
-            }
-            x += w;
-            [elt setValue:nsfmt(@"%d", -x) forKey:@"x"];
-            [elt setValue:nsfmt(@"%d", w) forKey:@"width"];
-        }
-    }
-
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
     [bitmap setColor:@"black"];
@@ -371,22 +327,79 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
 
     int mouseMonitorX = [mouseMonitor intValueForKey:@"x"];
     int mouseMonitorWidth = [mouseMonitor intValueForKey:@"width"];
+
+    {
+        int flexibleIndex = -1;
+
+        int x = 5;
+        for (int i=0; i<[_array count]; i++) {
+            id elt = [_array nth:i];
+            id obj = [elt valueForKey:@"object"];
+            if (!obj) {
+                continue;
+            }
+            int flexible = [elt intValueForKey:@"flexible"];
+            int leftPadding = [elt intValueForKey:@"leftPadding"];
+            int rightPadding = [elt intValueForKey:@"rightPadding"];
+            int w = 0;
+            if (flexible) {
+                flexibleIndex = i;
+            } else {
+                if ([obj respondsToSelector:@selector(preferredWidthForBitmap:)]) {
+                    w = [obj preferredWidthForBitmap:bitmap]+leftPadding+rightPadding;
+                } else if ([obj respondsToSelector:@selector(preferredWidth)]) {
+                    w = [obj preferredWidth]+leftPadding+rightPadding;
+                } else {
+                    w = 100;
+                }
+            }
+            [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
+            [elt setValue:nsfmt(@"%d", w) forKey:@"width"];
+            x += w;
+        }
+        int maxX = mouseMonitorWidth - (5 + 26 + 24 + 3);
+        int remainingX = maxX - x;
+        if (remainingX > 0) {
+            if (flexibleIndex != -1) {
+                {
+                    id elt = [_array nth:flexibleIndex];
+                    int leftPadding = [elt intValueForKey:@"leftPadding"];
+                    int rightPadding = [elt intValueForKey:@"rightPadding"];
+                    int oldX = [elt intValueForKey:@"x"];
+                    int newW = remainingX - leftPadding - rightPadding;
+                    if (newW > 0) {
+                        id obj = [elt valueForKey:@"object"];
+                        if ([obj respondsToSelector:@selector(preferredWidthForBitmap:)]) {
+                            int w = [obj preferredWidthForBitmap:bitmap]+leftPadding+rightPadding;
+                            if (w < newW) {
+                                newW = w;
+                            }
+                        } else if ([obj respondsToSelector:@selector(preferredWidth)]) {
+                            int w = [obj preferredWidth]+leftPadding+rightPadding;
+                            if (w < newW) {
+                                newW = w;
+                            }
+                        }
+                        [elt setValue:nsfmt(@"%d", oldX+leftPadding) forKey:@"x"];
+                        [elt setValue:nsfmt(@"%d", newW) forKey:@"width"];
+                    }
+                }
+                for (int i=flexibleIndex+1; i<[_array count]; i++) {
+                    id elt = [_array nth:i];
+                    int oldX = [elt intValueForKey:@"x"];
+                    [elt setValue:nsfmt(@"%d", oldX+remainingX) forKey:@"x"];
+                }
+            }
+        }
+    }
+
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
         Int4 r1 = r;
         int eltX = [elt intValueForKey:@"x"];
-        if (eltX < 0) {
-            r1.x = r.x+mouseMonitorX+mouseMonitorWidth+eltX;
-            r1.w = [elt intValueForKey:@"width"];
-        } else {
-            r1.x = r.x+mouseMonitorX+eltX;
-            r1.w = [elt intValueForKey:@"width"];
-        }
-/*
-        if (isnan(r1.x)) {
-            r1.x = 0.0;
-        }
-*/
+        r1.x = r.x+mouseMonitorX+eltX;
+        r1.w = [elt intValueForKey:@"width"];
+
         Int4 r2 = r1;
         r2.y += 1;
         r2.h -= 1;
