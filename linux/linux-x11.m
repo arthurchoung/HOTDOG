@@ -54,7 +54,12 @@ static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned c
 + (id)currentWindow
 {
     id windowManager = [@"windowManager" valueForKey];
-    return [windowManager valueForKey:@"focusDict"];
+    id focusDict = [windowManager valueForKey:@"focusDict"];
+    id menuBar = [windowManager valueForKey:@"menuBar"];
+    if (focusDict == menuBar) {
+        return nil;
+    }
+    return focusDict;
 }
 + (void)x11FixupEvent:(id)eventDict forBitmapObject:(id)object
 {
@@ -2080,11 +2085,29 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
     XDestroyWindowEvent *e = eptr;
 NSLog(@"handleX11DestroyNotify e->event %x e->window %x", e->event, e->window);
     id dict = [self dictForObjectChildWindow:e->window];
+NSLog(@"dictForObjectChildWindow %@", dict);
     if (dict) {
         [dict setValue:nil forKey:@"childWindow"];
         [dict setValue:@"1" forKey:@"shouldCloseWindow"];
     }
-
+    Window focus_return = 0;
+    int revert_to_return = 0;
+    XGetInputFocus(_display, &focus_return, &revert_to_return);
+    if (focus_return == PointerRoot) {
+NSLog(@"focus_return == PointerRoot");
+        [self focusTopmostWindow];
+    } else if (focus_return == None) {
+NSLog(@"focus_return == None");
+        [self focusTopmostWindow];
+    } else {
+        Window menuBarWindow = [[_menuBar valueForKey:@"window"] unsignedLongValue];
+        if (focus_return == menuBarWindow) {
+NSLog(@"focus_return == menu bar");
+            [self focusTopmostWindow];
+        } else {
+NSLog(@"focus_return %x", focus_return);
+        }
+    }
 }
 - (void)handleX11UnmapNotify:(void *)eptr;
 {
@@ -2571,6 +2594,29 @@ This should be implemented in a separate program
 }
 */
 
+- (void)focusTopmostWindow
+{
+    Window menuBarWindow = [[_menuBar valueForKey:@"window"] unsignedLongValue];
+    Window win = 0;
+    Window returnedRoot, returnedParent;
+    Window *topLevelWindows;
+    unsigned int numTopLevelWindows;
+    XQueryTree(_display, _rootWindow, &returnedRoot, &returnedParent, &topLevelWindows, &numTopLevelWindows);
+    for (int i=numTopLevelWindows-1; i>=0; i--) {
+        if (topLevelWindows[i] == menuBarWindow) {
+            continue;
+        }
+        win = topLevelWindows[i];
+        break;
+    }
+    XFree(topLevelWindows);
+    if (win) {
+        id dict = [self dictForObjectWindow:win];
+        if (dict) {
+            [self setFocusDict:dict];
+        }
+    }
+}
 
 - (id)allTopLevelWindows
 {
