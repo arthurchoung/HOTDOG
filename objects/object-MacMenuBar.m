@@ -331,7 +331,7 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
     {
         int flexibleIndex = -1;
 
-        int x = 5;
+        int x = leftCornerWidth;
         for (int i=0; i<[_array count]; i++) {
             id elt = [_array nth:i];
             id obj = [elt valueForKey:@"object"];
@@ -357,7 +357,7 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
             [elt setValue:nsfmt(@"%d", w) forKey:@"width"];
             x += w;
         }
-        int maxX = mouseMonitorWidth - (5 + 26 + 24 + 3);
+        int maxX = mouseMonitorWidth - rightCornerWidth;
         int remainingX = maxX - x;
         if (remainingX > 0) {
             if (flexibleIndex != -1) {
