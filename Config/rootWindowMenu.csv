@@ -27,9 +27,9 @@ hotKey,displayName,messageForClick
 ,Spider,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Spider')|runCommandInBackground"
 ,
 "F9","Toggle Expose Mode","toggleExposeMode"
-,"Take Screen Shot of Root Window","['hotdog-takeScreenShotRootWindow.pl']|runCommandInBackground"
-,"Take Screen Shot of Focus Window","NSArray|addObject:'hotdog-takeScreenShotForWindow:.pl'|addObject:(currentWindow|window)|runCommandInBackground"
-,"Take Screen Shot with Selection Box","NSArray|addObject:'hotdog-takeScreenShotSelectionBox.pl'|runCommandInBackground"
+,"Take Screenshot of Root Window","['hotdog-takeScreenshotRootWindow.pl']|runCommandInBackground"
+,"Take Screenshot of Focus Window","NSArray|addObject:'hotdog-takeScreenshotForWindow:.pl'|addObject:(currentWindow|window)|runCommandInBackground"
+,"Take Screenshot with Selection Box","NSArray|addObject:'hotdog-takeScreenshotSelectionBox.pl'|runCommandInBackground"
 ,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
