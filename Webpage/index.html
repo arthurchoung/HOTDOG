@@ -15,6 +15,16 @@
 Live Image Based on Slackware Live<br>
 <a href="download/">Download</a>
 
+<pre>
+$ dd if=/path/to/file.iso of=/dev/sdX bs=1M
+
+/path/to/file.iso is the file name of the image file.
+
+/dev/sdX is the device to write the image to.
+
+Run as root. Be careful not to write to the wrong drive.
+</pre>
+
 <h2>Links</h2>
 
 <p>
@@ -51,41 +61,6 @@ HOT DOG Linux does not use Automatic Reference Counting. It causes problems with
 <p>
 HOT DOG Linux is an acronym that stands for <b>H</b>orrible <b>O</b>bsolete <b>T</b>ypeface and <b>D</b>readful <b>O</b>nscreen <b>G</b>raphics for Linux.
 
-<h2>Screenshots</h2>
-
-<p>
-Windows 3.1 Screenshot
-<p>
-<img src="hotdog-screenshot-win31.png">
-
-<p>
-Amiga Screenshot
-<p>
-<img src="hotdog-screenshot-amiga.png">
-
-<p>
-Atari ST Screenshot
-<p>
-<img src="hotdog-screenshot-atarist.png">
-
-<p>
-Mac Classic Screenshot
-<p>
-<img src="hotdog-screenshot-macclassic.png">
-
-<p>
-Mac Color Screenshot
-<p>
-<img src="hotdog-screenshot-maccolor.png">
-
-<p>
-Mac Platinum Screenshot
-<p>
-<img src="hotdog-screenshot-macplatinum.png">
-
-
-
-
 <h2>How to compile and run</h2>
 
 <pre>
@@ -103,47 +78,38 @@ $ ./hotdog
 </pre>
 
 
-
-<h2>Dependencies</h2>
-
-<p>
-The following executables must be in your PATH or at location if specified:
-
-<ul>
-<li>xrandr
-<li>ifconfig (used by hotdog-printNetworkInfo.pl)
-<li>find (used by build.pl)
-<li>gcc
-<li>/usr/bin/perl
-<li>date (used by hotdog-printDateEverySecondForTimezone:text:.pl)
-</ul>
+<h2>Screenshots</h2>
 
 <p>
-(this list might be incomplete)
+Amiga Screenshot 1280x1024
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-screenshot-amiga.png"></div>
 
 <p>
-The following libraries must have headers available and be linkable:
-
-<ul>
-<li>libX11
-<li>libXext
-<li>libXfixes
-<li>libGL (Mesa should work)
-<li>libm
-<li>libobjc (GCC Runtime)
-</ul>
+Windows 3.1 Screenshot 640x480
+<p>
+<img src="hotdog-screenshot-win31.png">
 
 <p>
-These are optional:
-
-<ul>
-<li>xterm
-<li>mpv
-<li>mupdf (used by Config/fileHandlers.csv)
-</ul>
+Atari ST Screenshot 640x480
+<p>
+<img src="hotdog-screenshot-atarist.png">
 
 <p>
-(this list might be incomplete)
+Mac Classic Screenshot 640x480
+<p>
+<img src="hotdog-screenshot-macclassic.png">
+
+<p>
+Mac Color Screenshot 640x480
+<p>
+<img src="hotdog-screenshot-maccolor.png">
+
+<p>
+Mac Platinum Screenshot 640x480
+<p>
+<img src="hotdog-screenshot-macplatinum.png">
+
 
 
 <h2>Legal</h2>
@@ -174,7 +140,6 @@ Turing Machines
 -
 
 Human readable and editable text files
-Shared libraries are discouraged
 Executable programs are preferred with communication using stdio
 Network should not be accessed directly, but through executable program
 -->

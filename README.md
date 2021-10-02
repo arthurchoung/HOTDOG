@@ -8,6 +8,14 @@ Live Image based on Slackware Live
 
 http://hotdoglinux.com/download/
 
+$ dd if=/path/to/file.iso of=/dev/sdX bs=1M
+
+/path/to/file.iso is the file name of the image file.
+
+/dev/sdX is the device to write the image to.
+
+Run as root. Be careful not to write to the wrong drive.
+
 ## Overview
 
 The design goals of HOT DOG Linux include:
@@ -47,23 +55,23 @@ Amiga Screenshot 1280x1024
 
 ![Amiga Screenshot](Screenshots/hotdog-screenshot-amiga.png)
 
-Hot Dog Stand
+Hot Dog Stand 640x480
 
 ![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
-Atari ST GEM
+Atari ST GEM 640x480
 
 ![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
 
-Mac Classic
+Mac Classic 640x480
 
 ![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
 
-Mac Color
+Mac Color 640x480
 
 ![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
 
-Mac Platinum
+Mac Platinum 640x480
 
 ![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
 
