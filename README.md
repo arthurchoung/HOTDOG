@@ -8,6 +8,8 @@ Live Image based on Slackware Live
 
 http://hotdoglinux.com/download/
 
+How to write the image to a USB drive:
+
 $ dd if=/path/to/file.iso of=/dev/sdX bs=1M
 
 /path/to/file.iso is the file name of the image file.
