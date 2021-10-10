@@ -609,6 +609,7 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
     id _animateToContext;
     id _animateTransition;
     id _defaultTitle;
+    BOOL _updateWindowName;
 }
 @end
 
@@ -712,6 +713,7 @@ NSLog(@"popToObject %@", [cursor valueForKey:@"object"]);
             id currentDirectory = [previousObject valueForKey:@"currentDirectory"];
             if (currentDirectory) {
                 [currentDirectory changeDirectory];
+                _updateWindowName = YES;
             }
         }
         [self transition:@"reverse" context:previous];
@@ -735,6 +737,7 @@ NSLog(@"pushObject:%@ not allowed", obj);
     } else {
         [self transition:@"forward" context:newContext];
     }
+    _updateWindowName = YES;
 }
 
 
@@ -789,6 +792,11 @@ NSLog(@"pushObject:%@ not allowed", obj);
     
 - (void)beginIteration:(id)event rect:(Int4)r
 {
+    if (_updateWindowName) {
+        id x11dict = [event valueForKey:@"x11dict"];
+        [x11dict setValue:[@"." asRealPath] forKey:@"changeWindowName"];
+        _updateWindowName = NO;
+    }
     if (_animateIteration < _animateMaxIteration) {
 NSLog(@"beginIteration animateIteration %d", _animateIteration);
         _animateIteration++;
