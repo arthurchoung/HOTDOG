@@ -19,7 +19,7 @@ for(;;) {
         exit 0;
     }
     `sudo -A kill $dhcpcd`;
-    sleep 1;
+    exit 0;
 }
 
 `sudo -A ifconfig $interface up`;
