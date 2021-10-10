@@ -195,7 +195,7 @@ Usage: hotdog-printALSAStatus [card name] [mixer name]
 
 */
 
-int main(int argc, char **argv)
+void main(int argc, char **argv)
 {
     if (argc >= 2) {
         _name = argv[1];
@@ -205,14 +205,17 @@ int main(int argc, char **argv)
     }
 
     if (!setup()) {
-        return 1;
+        exit(1);
     }
 
     for(;;) {
         print_status();
-        read_alsa_event();
+        int result = read_alsa_event();
+        if (!result) {
+            break;
+        }
     }
 
-    return 0;
+    exit(0);
 }
 
