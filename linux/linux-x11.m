@@ -1147,7 +1147,7 @@ NSLog(@"unparent object %@", dict);
 
     if (!_isWindowManager) {
         if (name) {
-            XStoreName(_display, win, [name UTF8String]);
+            [self XStoreName:win :name];
         }
 
         Atom wm_delete_window = XInternAtom(_display, "WM_DELETE_WINDOW", 0);
@@ -1717,6 +1717,18 @@ NSLog(@"received X event type %d", event.type);
                 }
                 [dict setValue:nil forKey:@"moveWindow"];
                 [dict setValue:nil forKey:@"resizeWindow"];
+            }
+            for (int i=0; i<[_objectWindows count]; i++) {
+                id dict = [_objectWindows nth:i];
+                id changeWindowName = [dict valueForKey:@"changeWindowName"];
+                if (changeWindowName) {
+                    id window = [dict valueForKey:@"window"];
+                    if (window) {
+                        Window win = [window unsignedLongValue];
+                        [self XStoreName:win :changeWindowName];
+                    }
+                    [dict setValue:nil forKey:@"changeWindowName"];
+                }
             }
 
             for (int i=0; i<[_objectWindows count]; i++) {
@@ -2740,6 +2752,11 @@ This should be implemented in a separate program
 {
     XSync(_display, (discard) ? True : False);
 }
+- (void)XStoreName:(unsigned long)win :(id)name
+{
+    XStoreName(_display, win, [name UTF8String]);
+}
+
 - (void)setX11Cursor:(char)cursor
 {
     if (cursor == _currentCursor) {
@@ -3146,18 +3163,22 @@ This should be implemented in a separate program
     int monitorIndex = [Definitions monitorIndexForX:midX y:midY];
 
     id monitors = [Definitions monitorConfig];
+    id oldMonitor = [monitors nth:monitorIndex];
+    int offsetX = [dict intValueForKey:@"x"] - [oldMonitor intValueForKey:@"x"];
+    int offsetY = [dict intValueForKey:@"y"] - [oldMonitor intValueForKey:@"y"];
     monitorIndex += delta;
     id monitor = [monitors nth:monitorIndex];
     int monitorX = [monitor intValueForKey:@"x"];
     int monitorWidth = [monitor intValueForKey:@"width"];
     int monitorHeight = [monitor intValueForKey:@"height"];
-    int newX = monitorX;
-    int newY = menuBarHeight-1;
+    int newX = monitorX+offsetX;
+    int newY = offsetY;//menuBarHeight-1;
     int newW = monitorWidth;
     int newH = monitorHeight-(menuBarHeight-1);
     if ((newW > 0) && (newH > 0)) {
         [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-        [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
+//        [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
+        [dict setValue:nil forKey:@"revertMaximize"];
     }
 }
 @end
