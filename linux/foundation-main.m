@@ -199,24 +199,6 @@ NSLog(@"lines %@", lines);
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
             }
-        } else if ((argc > 1) && !strcmp(argv[1], "json")) {
-            id json = nil;
-            if (argc > 2) {
-                json = [nscstr(argv[2]) readFromFileAsJSON];
-                if (!json) {
-NSLog(@"unable to read file '%s'", argv[2]);
-exit(1);
-                }
-            } else {
-                id data = [Definitions dataFromStandardInput];
-                json = [[data asString] decodeJSON];
-            }
-            if (json) {
-                id nav = [Definitions mainInterface];
-                id obj = [json asListInterface];
-                [nav pushObject:obj];
-                [Definitions runWindowManagerForObject:nav];
-            }
         } else if ((argc > 1) && !strcmp(argv[1], "ipod")) {
             id ipod = [@"IpodInterface" asInstance];
             [ipod setAsValueForKey:@"IpodInterface"];
