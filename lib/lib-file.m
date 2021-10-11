@@ -215,20 +215,9 @@ exit(0);
 @end
 
 
-@implementation NSDictionary(jfkldsjklfjs)
-- (BOOL)writeToFileAsJSON:(id)path
-{
-    return [[self encodeJSON] writeToFile:path];
-}
-
-@end
 
 
 @implementation NSArray(jfieowfjksdjfks)
-- (BOOL)writeToFileAsJSON:(id)path
-{
-    return [[self encodeJSON] writeToFile:path];
-}
 
 - (BOOL)writeLinesToFile:(id)path
 {
