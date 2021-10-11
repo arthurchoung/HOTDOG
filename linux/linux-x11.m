@@ -1644,6 +1644,7 @@ NSLog(@"MapNotify event");
                     if (event.xclient.message_type == XInternAtom(_display, "WM_PROTOCOLS", 1)
                         && event.xclient.data.l[0] == XInternAtom(_display, "WM_DELETE_WINDOW", 1))
                     {
+                        exit(1);
                         XClientMessageEvent *e = &event;
                         id dict = [self dictForObjectWindow:e->window];
 NSLog(@"ClientMessage event %lu %@", e->window, dict);
@@ -1811,6 +1812,7 @@ NSLog(@"hotkey keyString %@", keyString);
         return;
     } else {
         if (keysym == XK_Escape) {
+            exit(1);
             id dict = [self dictForObjectWindow:e->window];
             [dict setValue:@"1" forKey:@"shouldCloseWindow"];
             return;
@@ -2065,13 +2067,30 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
     if (attrs.x == 0) {
         if (attrs.y == 0) {
             id monitor = [Definitions monitorForX:_mouseX y:_mouseY];
-            id str = nsfmt(@"w:%d h:%d mouseX:%d mouseY:%d monitorX:%d monitorWidth:%d monitorHeight:%d\n", attrs.width, attrs.height, _mouseX, _mouseY, [monitor intValueForKey:@"x"], [monitor intValueForKey:@"width"], [monitor intValueForKey:@"height"]);
+            id focusDict = [Definitions currentWindow];
+            int focusX = [focusDict intValueForKey:@"x"];
+            int focusY = [focusDict intValueForKey:@"y"];
+            id focusMonitor = [Definitions monitorForX:focusX y:focusY];
+            int focusMonitorX = [focusMonitor intValueForKey:@"x"];
+            int focusMonitorY = [focusMonitor intValueForKey:@"y"];
+            int focusMonitorWidth = [focusMonitor intValueForKey:@"width"];
+            int focusMonitorHeight = [focusMonitor intValueForKey:@"height"];
             id cmd = nsarr();
             [cmd addObject:@"hotdog-getCoordinatesForNewWindow.pl"];
-            id process = [cmd runCommandAndReturnProcess];
-            [process writeString:str];
-            [process closeInput];
-            id output = [[process readAllDataFromOutputThenCloseAndWait] asString];
+            [cmd addObject:nsfmt(@"w:%d", attrs.width)];
+            [cmd addObject:nsfmt(@"h:%d", attrs.height)];
+            [cmd addObject:nsfmt(@"mouseX:%d", _mouseX)];
+            [cmd addObject:nsfmt(@"mouseY:%d", _mouseY)];
+            [cmd addObject:nsfmt(@"monitorX:%d", [monitor intValueForKey:@"x"])];
+            [cmd addObject:nsfmt(@"monitorWidth:%d", [monitor intValueForKey:@"width"])];
+            [cmd addObject:nsfmt(@"monitorHeight:%d", [monitor intValueForKey:@"height"])];
+            [cmd addObject:nsfmt(@"focusX:%d", focusX)];
+            [cmd addObject:nsfmt(@"focusY:%d", focusY)];
+            [cmd addObject:nsfmt(@"focusMonitorX:%d", focusMonitorX)];
+            [cmd addObject:nsfmt(@"focusMonitorY:%d", focusMonitorY)];
+            [cmd addObject:nsfmt(@"focusMonitorWidth:%d", focusMonitorWidth)];
+            [cmd addObject:nsfmt(@"focusMonitorHeight:%d", focusMonitorHeight)];
+            id output = [[cmd runCommandAndReturnOutput] asString];
             id lines = [output split:@"\n"];
             id firstLine = [lines nth:0];
             attrs.x = [firstLine intValueForKey:@"x"];
