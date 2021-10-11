@@ -93,7 +93,6 @@ find -L
     $execPath/linux/
 	$execPath/lib/
     $execPath/objects/
-    $execPath/jsmn
     $execPath/misc/
     $execPath/external/tidy-html5-5.6.0/src/
 EOF
@@ -119,7 +118,6 @@ sub compileSourcePath
 gcc -c -O3 
     -Werror=implicit-function-declaration
     -Werror=return-type
-    -I$execPath/jsmn
     -I$execPath
     -I$execPath/linux
     -I$execPath/lib
