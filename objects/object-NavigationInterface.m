@@ -43,13 +43,6 @@
 NSLog(@"ListInterface");
     id arr = [@"00index.csv" parseCSVFile];
     if (!arr) {
-        arr = [@"00index.json" readFromFileAsJSON];
-NSLog(@"arr %@", arr);
-        if ([arr isKindOfClass:[@"NSDictionary" asClass]]) {
-            arr = [arr asKeyValueArray];
-        }
-    }
-    if (!arr) {
         arr = [@"." contentsOfDirectory];
         arr = [arr asFileArray];
         for (int i=0; i<[arr count]; i++) {
