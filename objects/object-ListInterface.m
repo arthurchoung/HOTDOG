@@ -482,13 +482,6 @@ NSLog(@"setAllStringFormat:'%@'", val);
     _currentDirectoryTimestamp = [@"." fileModificationTimestamp];
     id arr = [@"00index.csv" parseCSVFile];
     if (!arr) {
-        arr = [@"00index.json" readFromFileAsJSON];
-        if ([arr isKindOfClass:[@"NSDictionary" asClass]]) {
-            [self setupDict:arr];
-            arr = _array;
-        }
-    }
-    if (!arr) {
         arr = [@"." contentsOfDirectory];
         arr = [arr asFileArray];
         for (int i=0; i<[arr count]; i++) {
