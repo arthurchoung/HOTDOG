@@ -50,6 +50,10 @@ int main()
                 } else if (!strncmp(p, "DEVTYPE=partition", 17)) {
                     printf("%s\n", p);
                     break;
+                } else if (!strncmp(p, "ACTION=bind", 11)) {
+                    sleep(1); // FIXME: there should be a better way
+                    printf("%s\n", p);
+                    break;
                 }
             }
 //            printf("%d: %s\n", line, p);
