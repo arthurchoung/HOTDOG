@@ -68,12 +68,12 @@ static id callMethod(id target, struct objc_method *m, id args)
         [arr addObject:nsfmt(@"| callStackSymbols %@", [NSThread callStackSymbols])];
 #endif
         id str = [arr join:@"\n"];
-        [str pushToMainInterface];
+NSLog(@"Error callMethod %@", str);
         return nil;
     }
 
     if ([args count] > OBJC_TYPE_BUFSIZE-2) {
-        [@"Too many arguments" pushToMainInterface];
+NSLog(@"Too many arguments");
         return nil;
     }
 
@@ -100,12 +100,12 @@ static id callMethod(id target, struct objc_method *m, id args)
 #endif
 
     if (signature[1] != '@') {
-        [@"Bad signature" pushToMainInterface];
+NSLog(@"Bad signature");
         return nil;
     }
 
     if (signature[2] != ':') {
-        [@"Bad signature" pushToMainInterface];
+NSLog(@"Bad signature");
         return nil;
     }
 
@@ -470,14 +470,17 @@ NSLog(@"%@", err);
     return nil;
 }
 
+//FIXME
+// I am copy-pasting this section so that these methods will get copied to NSConstantString
+// There should be a better way
+// Probably these methods don't need to be in NSObject, but maybe should also be in another
+// class, but I need to double-check first
 @implementation NSObject(jfksdjkflsdkfj)
-
 - (id)evaluateFile:(id)path
 {
     id str = [path stringFromFile];
     return [self evaluateMessage:str];
 }
-
 - (id)evaluateAsMessage
 {
     if (![self length]) {
@@ -485,7 +488,6 @@ NSLog(@"%@", err);
     }
     return [self executeScript];
 }
-
 - (id)evaluateAsMessageWithContext:(id)context
 {
     if (![self length]) {
@@ -493,7 +495,6 @@ NSLog(@"%@", err);
     }
     return [self executeScriptWithContext:context];
 }
-
 - (id)evaluateMessage
 {
     if (![self length]) {
@@ -522,9 +523,57 @@ NSLog(@"%@", err);
     }
     return [self executeScriptWithContext:context];
 }
-
-
 @end
+@implementation NSString(jejskfjkdsfjkfksdjkflsdkfj)
+- (id)evaluateFile:(id)path
+{
+    id str = [path stringFromFile];
+    return [self evaluateMessage:str];
+}
+- (id)evaluateAsMessage
+{
+    if (![self length]) {
+        return nil;
+    }
+    return [self executeScript];
+}
+- (id)evaluateAsMessageWithContext:(id)context
+{
+    if (![self length]) {
+        return nil;
+    }
+    return [self executeScriptWithContext:context];
+}
+- (id)evaluateMessage
+{
+    if (![self length]) {
+        return nil;
+    }
+    return [self executeScript];
+}
++ (id)evaluateMessage:(id)message
+{
+    if (![message length]) {
+        return nil;
+    }
+    return [message executeScriptWithContext:self];
+}
+- (id)evaluateMessage:(id)message
+{
+    if (![message length]) {
+        return nil;
+    }
+    return [message executeScriptWithContext:self];
+}
+- (id)evaluateMessageWithContext:(id)context
+{
+    if (![self length]) {
+        return nil;
+    }
+    return [self executeScriptWithContext:context];
+}
+@end
+/// end FIXME
 
 @implementation NSArray(fjkdlsjfklsdjf)
 - (id)executeScript
@@ -953,6 +1002,9 @@ NSLog(@"%@", err);
     id valueForKey = [_recipient valueForKey:_selectorName];
     if (valueForKey) {
         return valueForKey;
+    }
+    if ([_recipient hasKey:_selectorName]) {
+        return nil;
     }
     
     {
