@@ -17,7 +17,7 @@ sub get_monitors
             $line =~ s/ primary / /;
             my %elt = ();
             if ($line =~ m/^([^\s]+)\s+(\d+)x(\d+)\+(\d+)\+(\d+)\s([^\(]*)\(/) {
-                $elt{'name'} = $1;
+                $elt{'output'} = $1;
                 $elt{'width'} = $2;
                 $elt{'height'} = $3;
                 $elt{'x'} = $4;
@@ -27,7 +27,7 @@ sub get_monitors
                     $elt{'rotate'} = 'normal';
                 }
             } elsif ($line =~ m/^([^\s]+)\s/) {
-                $elt{'name'} = $1;
+                $elt{'output'} = $1;
             }
             push @results, \%elt;
         }
@@ -48,7 +48,7 @@ sub get_monitors
 
 my @results = get_monitors();
 
-my @keys = ('name', 'width', 'height', 'x', 'y', 'rotate');
+my @keys = ('output', 'width', 'height', 'x', 'y', 'rotate');
 my $str = join ',', @keys;
 print "$str\n";
 
