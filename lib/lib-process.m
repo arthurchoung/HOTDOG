@@ -58,6 +58,15 @@
 @end
 
 @implementation NSString(jksldfjkldsjflk)
+- (void)writeLineToStandardOutput
+{
+    char *bytes = [self UTF8String];
+    int length = strlen(bytes);
+    if (length) {
+        write(1, bytes, length);
+    }
+    write(1, "\n", 1);
+}
 - (void)writeToStandardOutput
 {
     char *bytes = [self UTF8String];
@@ -294,7 +303,6 @@ NSLog(@"unable to open /dev/null");
     int _pid;
     id _status;
     id _exitStatus;
-    int _len;
     id _data;
 }
 @end
@@ -346,7 +354,6 @@ NSLog(@"Process dealloc pid %d getpid %d", _pid, getpid());
     if (result > 0) {
 //NSLog(@"Received %d bytes", result);
         [_data appendBytes:buf length:result];
-        _len = result;
     } else if (result == 0) {
         close(_outfd);
         _outfd = -1;
