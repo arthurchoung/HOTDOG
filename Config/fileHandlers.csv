@@ -7,7 +7,6 @@ suffix,message
 .avi,"NSArray|addObject:'hotdog-handleVideoFile:.pl'|addObject:(self)|runCommandInBackground|returnNil"
 .webm,"NSArray|addObject:'hotdog-handleVideoFile:.pl'|addObject:(self)|runCommandInBackground|returnNil"
 .wav
-.json,"readFromFileAsJSON"
 .pdf,"NSArray|addObject:'mupdf'|addObject:(self)|runCommandInBackground|returnNil"
 .html,"NSArray|addObject:'firefox'|addObject:(self)|runCommandInBackground|returnNil"
 .txt,"stringFromFile"
