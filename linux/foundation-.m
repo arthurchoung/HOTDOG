@@ -312,6 +312,7 @@ NSLog(@"OUT OF MEMORY! NSAutoreleasePool -addObject: newAlloc %d", newAlloc);
     }
     return NO;
 }
+// FIXME: Should valueForKey related methods get copied from NSString???
 + (void)setValue:(id)val forKey:(id)key
 {
 }
@@ -319,12 +320,20 @@ NSLog(@"OUT OF MEMORY! NSAutoreleasePool -addObject: newAlloc %d", newAlloc);
 {
     return nil;
 }
++ (BOOL)hasKey:(id)key
+{
+    return NO;
+}
 - (void)setValue:(id)val forKey:(id)key
 {
 }
 - (id)valueForKey:(id)key
 {
     return nil;
+}
+- (BOOL)hasKey:(id)key
+{
+    return NO;
 }
 #ifndef BUILD_WITH_GNUSTEP_RUNTIME
 - (BOOL)isEqual:(id)obj
@@ -532,12 +541,20 @@ NSLog(@"WARNING: no autorelease pool");
 {
     return nil;
 }
++ (BOOL)hasKey:(id)key
+{
+    return NO;
+}
 - (void)setValue:(id)val forKey:(id)key
 {
 }
 - (id)valueForKey:(id)key
 {
     return nil;
+}
+- (BOOL)hasKey:(id)key
+{
+    return NO;
 }
 @end
 
@@ -2063,6 +2080,31 @@ NSLog(@"OUT OF MEMORY! NSDictionary -setValue:forKey:");
         }
     }
     return nil;
+}
+- (BOOL)hasKey:(id)key
+{
+    if (!key) {
+        return NO;
+    }
+    char *keycstr = ((NSObject *)key)->_contents;
+
+    id *elts = _contents;
+    for (int i=0; i<_length; i+=2) {
+        if (!elts[i]) {
+            continue;
+        }
+        if (elts[i] == key) {
+            return YES;
+        }
+        char *cstr = ((NSObject *)elts[i])->_contents;
+        if (!cstr) {
+            continue;
+        }
+        if (!strcmp(keycstr, cstr)) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end
