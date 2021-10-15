@@ -89,6 +89,8 @@ foreach my $elt (@results) {
 
 @results = sort_monitors(@results);
 
+print "xrandr --auto\n";
+
 my $prevElt = undef;
 foreach my $elt (@results) {
     my @arr = ();
