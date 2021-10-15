@@ -174,6 +174,11 @@
     return arr;
 }
 
+- (id)str:(id)str
+{
+    return [str strWithContext:self];
+}
+
 - (id)strWithContext:(id)context
 {
     id string = self;
@@ -495,6 +500,14 @@ loop:
 }
 
 @implementation NSString(fjdsciklfjklsdjfklsdjf)
+- (BOOL)hasKey:(id)key
+{
+    char *p = find_key_in_string(key, self);
+    if (!p) {
+        return NO;
+    }
+    return YES;
+}
 - (id)valueForKey:(id)key
 {
     char *p = find_key_in_string(key, self);
