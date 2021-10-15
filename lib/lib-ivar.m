@@ -247,6 +247,10 @@ NSLog(@"doubleValueForIvar:'%@' unhandled ivar type '%s'", key, ivarType);
 
     return 0.0;
 }
+- (BOOL)hasKey:(id)key
+{
+    return [self hasIvar:key];
+}
 - (id)valueForKey:(id)key
 {
     return [self valueForIvar:key];
@@ -325,6 +329,22 @@ NSLog(@"valueForIvar:'%@' unhandled ivar type '%s'", key, ivarType);
     }
 
     return nil;
+}
+- (BOOL)hasIvar:(id)key
+{
+    if ([key length] > 254) {
+NSLog(@"key name '%@' too long", key);
+        return nil;
+    }
+    char ivarName[256];
+    sprintf(ivarName, "_%s", [key UTF8String]);
+    void *outval = NULL;
+    Ivar ivar = object_getInstanceVariable(self, ivarName, &outval);
+    if (!ivar) {
+//NSLog(@"valueForKey: unknown ivar '%s' self %@", ivarName, self);
+        return NO;
+    }
+    return YES;
 }
 - (BOOL)writeStateToFile:(id)path
 {
