@@ -30,6 +30,8 @@ hotKey,displayName,messageForClick
 ,"Take Screenshot of Root Window","['hotdog-takeScreenshotRootWindow.pl']|runCommandInBackground"
 ,"Take Screenshot of Focus Window","NSArray|addObject:'hotdog-takeScreenshotForWindow:.pl'|addObject:(currentWindow|window)|runCommandInBackground"
 ,"Take Screenshot with Selection Box","NSArray|addObject:'hotdog-takeScreenshotSelectionBox.pl'|runCommandInBackground"
+,"Drives Panel","['hotdog' 'show' 'DrivesPanel']|runCommandInBackground"
+,"Audio Panel","['hotdog-openAudioPanel.sh']|runCommandInBackground"
 ,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
