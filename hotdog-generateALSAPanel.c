@@ -224,6 +224,7 @@ void main(int argc, char **argv)
         stripchars(_displayName);
     }
 
+    printf("panelStripedBackground\n");
     if (_displayName) {
         printf("panelText:'%s'\n", _displayName);
     }
