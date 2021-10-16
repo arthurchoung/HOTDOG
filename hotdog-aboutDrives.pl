@@ -1,4 +1,4 @@
 #!/usr/bin/perl
 
-$str = `lsblk`;
+$str = `df`;
 print $str;
