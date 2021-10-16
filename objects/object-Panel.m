@@ -391,6 +391,16 @@ NSLog(@"waiting for input");
     }
     [self setValue:nil forKey:@"bitmap"];
 }
+- (void)panelFillWithColor:(id)color
+{
+    [_bitmap setColor:color];
+    [_bitmap fillRect:_r];
+}
+- (void)panelStripedBackground
+{
+    [Definitions drawStripedBackgroundInBitmap:_bitmap rect:_r];
+}
+
 - (void)panelText:(id)text
 {
     text = [_bitmap fitBitmapString:text width:_r.w-20];
