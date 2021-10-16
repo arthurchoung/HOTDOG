@@ -77,6 +77,12 @@ Mac Platinum 640x480
 
 ![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
 
+ALSA Mixer Panel
+
+$ hotdog-openALSAPanel.sh hw:0
+
+![ALSA Mixer Panel Screenshot](Screenshots/hotdog-screenshot-alsa-mixer-panel.png)
+
 ## Legal
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
