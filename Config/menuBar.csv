@@ -1,7 +1,7 @@
 flexible,leftPadding,rightPadding,objectMessage,messageForClick
 ,4,4,"HotDog","configDir:'Config/rootWindowMenu.csv'|parseCSVFile|asMenu"
 1,4,4,"TextMenuItem:'#{currentWindow|name|split|nth:0}'","configDir:'Config/windowMenu.csv'|parseCSVFile|asMenu"
-,4,4,"CommandOutputText:['hotdog-printMonitor.pl']","configDir:'Config/monitorMenu.csv'|parseCSVFile|asMenu"
+,4,4,"CommandOutputText:['hotdog-printMonitor.pl'] stringFormat:'Mon #{monitorTitle}'","configDir:'Config/monitorMenu.csv'|parseCSVFile|asMenu"
 ,4,4,"CommandOutputText:('hotdog-printALSAStatus hw:0'|split) stringFormat:'Volume: #{ifTrue:[playbackSwitch] then:[volume|times:100|intValue]}%'","VolumeMenu:'hw:0' :'Master'"
 ,4,4,"CommandOutputText:['hotdog-printBatteryStatus.pl' ]"
 ,4,4,"CommandOutputBitmap:['hotdog-printCPUStats.pl' ]"
