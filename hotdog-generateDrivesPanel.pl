@@ -4,6 +4,10 @@ $output = `hotdog-listBlockDevices.pl`;
 @lines = split "\n", $output;
 @lines = grep { m/\bfstype:[a-zA-Z0-9]+/ } @lines;
 
+print <<EOF;
+panelStripedBackground
+EOF
+
 foreach $line (@lines) {
     $device = '';
     if ($line !~ m/\bfstype:[a-zA-Z0-9]+/) {
