@@ -43,6 +43,17 @@ if ($w && $h && ($monitorWidth > $w) && ($monitorHeight - 20 > $h)) {
     exit 0;
 }
 
+# centered
+#if ($w && $h && ($monitorWidth > $w) && ($monitorHeight - 20 > $h)) {
+#    $rangeX = $monitorWidth - $w;
+#    $rangeY = $monitorHeight - 20 - $h;
+#
+#    $x = $monitorX + int($rangeX/2);
+#    $y = 20 + int($rangeY/2);
+#    print "x:$x y:$y\n";
+#    exit 0;
+#}
+
 # top left corner
 print "x:$monitorX y:0\n";
 
