@@ -158,7 +158,7 @@ void print_all()
 
             if (hasPlaybackVolume && hasPlaybackSwitch) {
                 printf("panelTopSlider:'%s%dPlaybackVolume' message:[str:'nth:%d playbackVolume:#{buttonDownKnobPct}'|writeLineToStandardOutput]\n", namebuf, index, nth);
-                printf("panelBottomButton:'Mute' toggle:'%s%dPlaybackSwitch' message:[lastLine|if:[%s%dPlaybackSwitch] then:['nth:%d playbackSwitch:0'|writeLineToStandardOutput] else:['nth:%d playbackSwitch:1'|writeLineToStandardOutput]]\n", namebuf, index, namebuf, index, nth, nth);
+                printf("panelBottomButton:'Mute' toggle:(lastLine|if:[%s%dPlaybackSwitch] then:[0] else:[1]) message:[lastLine|if:[%s%dPlaybackSwitch] then:['nth:%d playbackSwitch:0'|writeLineToStandardOutput] else:['nth:%d playbackSwitch:1'|writeLineToStandardOutput]]\n", namebuf, index, namebuf, index, nth, nth);
             } else if (hasPlaybackVolume) {
                 printf("panelSingleSlider:'%s%dPlaybackVolume' message:[str:'nth:%d playbackVolume:#{buttonDownKnobPct}'|writeLineToStandardOutput]\n", namebuf, index, nth);
             } else if (hasPlaybackSwitch) {
