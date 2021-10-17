@@ -32,6 +32,7 @@ hotKey,displayName,messageForClick
 ,"Take Screenshot with Selection Box","NSArray|addObject:'hotdog-takeScreenshotSelectionBox.pl'|runCommandInBackground"
 ,"Drives Panel","['hotdog' 'show' 'DrivesPanel']|runCommandInBackground"
 ,"Audio Panel","['hotdog-openAudioPanel.sh']|runCommandInBackground"
+,"About This Computer","['hotdog' 'show' 'MacAboutThisComputer']|runCommandInBackground"
 ,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
