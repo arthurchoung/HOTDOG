@@ -588,7 +588,7 @@ NSLog(@"waiting for input");
     } else if (toggle) {
         char *palette = "";
         char *pixels = "";
-        if ([_lastLine intValueForKey:toggle]) {
+        if ([toggle intValue]) {
             pixels = toggle_on_button;
             if (_buttonDown && (_buttonDown-1 == buttonIndex) && (_buttonDown == _buttonHover)) {
                 palette = "b #cccccc\n. #0000cc\n0 #555555\n1 #000000\n";
@@ -643,8 +643,7 @@ NSLog(@"waiting for input");
         _rect[buttonIndex].w = widthForKnob;
         _rect[buttonIndex].h = heightForKnob;
     } else if (checkmark) {
-        int val = [[self evaluateMessage:checkmark] intValue];
-        if (val) {
+        if ([checkmark intValue]) {
             id palette = nsfmt(@"b %@\n", textColor);
             [_bitmap drawCString:checkmark_pixels palette:[palette UTF8String] x:r1.x+10 y:r1.y+5];
         }
