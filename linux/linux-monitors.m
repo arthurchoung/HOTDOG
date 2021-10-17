@@ -29,7 +29,7 @@
 @implementation Definitions(fjkdlsjfklsdjklfjsdf)
 + (void)rotateMonitor:(id)name orientation:(id)orientation
 {
-    id path = [Definitions execDir:@"Temp/monitors.csv"];
+    id path = [Definitions configDir:@"Temp/monitors.csv"];
     id monitors = [path parseCSVFile];
     id elt = [monitors objectWithValue:name forKey:@"output"];
     if (!elt) {
@@ -48,7 +48,7 @@
 }
 + (void)swapMonitors:(id)name1 :(id)name2
 {
-    id path = [Definitions execDir:@"Temp/monitors.csv"];
+    id path = [Definitions configDir:@"Temp/monitors.csv"];
     id monitors = [path parseCSVFile];
 
     int index1 = -1;
@@ -131,7 +131,7 @@
     int mouseY = [windowManager intValueForKey:@"mouseY"];
     id monitor = [Definitions monitorForX:mouseX y:mouseY];
     id name = [monitor valueForKey:@"output"];
-    id path = [Definitions execDir:@"Temp/monitors.csv"];
+    id path = [Definitions configDir:@"Temp/monitors.csv"];
     id monitors = [path parseCSVFile];
     id elt = [monitors objectWithValue:name forKey:@"output"];
     if (!elt) {
@@ -207,7 +207,7 @@
     static time_t lastTimestamp = 0;
     static id lastMonitors = nil;
     
-    id path = [Definitions execDir:@"Temp/listMonitors.csv"];    
+    id path = [Definitions configDir:@"Temp/listMonitors.csv"];    
     if ([path fileExists]) {
         time_t timestamp = [path fileModificationTimestamp];
         if (timestamp == lastTimestamp) {
