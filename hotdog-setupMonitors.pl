@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-$baseDir = `hotdog execDir`;
+$baseDir = `hotdog configDir`;
 chomp $baseDir;
 chdir $baseDir;
 
