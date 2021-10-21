@@ -139,8 +139,9 @@ static unsigned char *button_right =
         width += textWidth + 20 - 1;
     }
 
-    [bitmap setColor:@"white"];
-    [bitmap fillRect:r];
+//    [bitmap setColor:@"white"];
+//    [bitmap fillRect:r];
+[Definitions drawHorizontalStripesInBitmap:bitmap rect:r];
 
     int x = 10 + (r.w-width-20)/2;
     int y = r.y+10;
