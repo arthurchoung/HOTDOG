@@ -49,6 +49,7 @@
     id menuBar = [windowManager openWindowForObject:[@"MacMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
+    [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
 }
 @end
 
