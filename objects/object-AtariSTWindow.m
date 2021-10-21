@@ -41,6 +41,7 @@
     id menuBar = [windowManager openWindowForObject:[@"AtariSTMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
+    [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
 }
 @end
 @implementation Definitions(fjkdlsjfiowejfklsdjfklsdjfieiikljf)
