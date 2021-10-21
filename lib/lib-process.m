@@ -32,6 +32,13 @@
 #include <signal.h>
 #include <errno.h>
 
+@implementation Definitions(jfeklsfmlksdmvioewjfklds)
++ (int)system:(id)str
+{
+    return system([str UTF8String]);
+}
+@end
+
 @implementation NSString(JFksdljfklsdjfkljsdkf)
 - (id)findInPath
 {
@@ -90,6 +97,14 @@
 @implementation Definitions(jfkldsjfklsdjf)
 + (void)runCommandInBackground:(id)cmd
 {
+    [cmd runCommandInBackground];
+}
+@end
+@implementation NSString(jfdksljflkdsjklfjsdfkfewfwe)
+- (void)runCommandInBackground
+{
+    id cmd = nsarr();
+    [cmd addObject:self];
     [cmd runCommandInBackground];
 }
 @end
