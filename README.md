@@ -22,7 +22,7 @@ Run as root. Be careful not to write to the wrong drive.
 
 The design goals of HOT DOG Linux include:
 
-  * Graphical user interface based on retro computer systems including Hot Dog Stand (Windows 3.1), Amiga Workbench, Atari ST GEM, and Classic Mac
+  * Graphical user interface based on retro computer systems including Hot Dog Stand (Windows 3.1), Amiga Workbench, Atari ST GEM, Mac Classic and Aqua
   * Custom lightweight Objective-C foundation
   * Bitmapped graphics, low DPI displays
   * No Unicode support by design
@@ -65,6 +65,10 @@ Atari ST GEM 640x480
 
 ![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
 
+Aqua 1280x1024
+
+![Aqua Screenshot](Screenshots/hotdog-screenshot-aqua.png)
+
 Mac Classic 640x480
 
 ![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
@@ -82,6 +86,10 @@ ALSA Mixer Panel
 $ hotdog-openALSAPanel.sh hw:0
 
 ![ALSA Mixer Panel Screenshot](Screenshots/hotdog-screenshot-alsa-mixer-panel.png)
+
+## Notes
+
+Aqua mode uses 'compton' for window drop shadows and 'feh' to set the wallpaper.
 
 ## Legal
 
