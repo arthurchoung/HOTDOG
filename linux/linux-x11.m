@@ -904,6 +904,34 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
         XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 1);
         XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 1);
         XDrawPoint(_display, shape_pixmap, shape_gc, w-4, 1);
+    } else if (hasShadow == -2) {
+        //FIXME
+        // Upper left corner
+        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 1, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 2, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 3, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 4, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 1, 1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 2, 1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 2);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 1, 2);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 3);
+        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 4);
+        // Upper right corner
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-4, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-5, 0);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 1);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 2);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 2);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 3);
+        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 4);
     }
     XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
     XFreeGC(_display, shape_gc);
