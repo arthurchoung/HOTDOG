@@ -15,9 +15,10 @@
 Live Image Based on Slackware Live<br>
 <a href="download/">Download</a>
 
-<pre>
+<p>
 How to write the image to a USB drive:
 
+<pre>
 $ dd if=/path/to/file.iso of=/dev/sdX bs=1M
 
 /path/to/file.iso is the file name of the image file.
@@ -42,7 +43,7 @@ Blog<br>
 The design goals of HOT DOG Linux include:
 
 <ul>
-<li>Graphical user interface based on retro computer systems including Windows 3.1 Hot Dog Stand, Amiga Workbench, Atari ST GEM, and Classic Mac
+<li>Graphical user interface based on retro computer systems including Windows 3.1 Hot Dog Stand, Amiga Workbench, Atari ST GEM, and Mac Classic and Aqua
 <li>Custom lightweight Objective-C foundation
 <li>Bitmapped graphics, low DPI displays
 <li>No Unicode support by design
@@ -98,6 +99,11 @@ Atari ST Screenshot 640x480
 <img src="hotdog-screenshot-atarist.png">
 
 <p>
+Aqua Screenshot 1280x1024
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-screenshot-aqua.png"></div>
+
+<p>
 Mac Classic Screenshot 640x480
 <p>
 <img src="hotdog-screenshot-macclassic.png">
@@ -112,7 +118,18 @@ Mac Platinum Screenshot 640x480
 <p>
 <img src="hotdog-screenshot-macplatinum.png">
 
+<p>
+ALSA Mixer Panel
+<pre>
+$ hotdog-openALSAPanel.sh hw:0
+</pre>
+<p>
+<img src="hotdog-screenshot-alsa-mixer-panel.png">
 
+<h2>Notes</h2>
+
+<p>
+Aqua mode uses 'compton' for window drop shadows and 'feh' to set the wallpaper.
 
 <h2>Legal</h2>
 
