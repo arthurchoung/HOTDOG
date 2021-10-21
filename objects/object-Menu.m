@@ -37,6 +37,8 @@
         className = @"HotDogStandMenu";
     } else if ([windowClassName isEqual:@"AtariSTWindow"]) {
         className = @"AtariSTMenu";
+    } else if ([windowClassName isEqual:@"AquaWindow"]) {
+        className = @"AquaMenu";
     }
     id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
