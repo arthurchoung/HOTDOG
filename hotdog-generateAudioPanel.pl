@@ -1,8 +1,9 @@
 #!/usr/bin/perl
 
 print <<EOF;
-panelStripedBackground
+panelHorizontalStripes
 EOF
+#panelStripedBackground
 
 $output = `cat /proc/asound/cards`;
 @lines = split "\n", $output;
