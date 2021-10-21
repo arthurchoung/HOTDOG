@@ -234,6 +234,16 @@ static unsigned char *button_bottom_right_squared =
 ;
 
 @implementation Definitions(fjkdlsjfklsdjfklsdfjdksjfkdsfjdskfjksdljfj)
++ (id)AdventurePanel
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"./generateAdventurePanel.pl"];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    return obj;
+}
 + (id)AudioPanel
 {
     id generatecmd = nsarr();
@@ -395,6 +405,10 @@ NSLog(@"waiting for input");
 {
     [_bitmap setColor:color];
     [_bitmap fillRect:_r];
+}
+- (void)panelHorizontalStripes
+{
+    [Definitions drawHorizontalStripesInBitmap:_bitmap rect:_r];
 }
 - (void)panelStripedBackground
 {
