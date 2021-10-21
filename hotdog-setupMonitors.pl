@@ -6,10 +6,8 @@ chdir $baseDir;
 
 system('hotdog-generateSetupMonitorsScriptForCSVFile:.pl Temp/monitors.csv | sh');
 if (not -d 'Temp') {
-    if (not mkdir 'Temp', 1777) {
-        print STDERR "Unable to mkdir Temp\n";
-        exit(1);
-    }
+    system('mkdir', 'Temp');
+    system('chmod', '1777', 'Temp');
 }
 
 system('hotdog-listMonitors.pl >Temp/listMonitors.csv');
