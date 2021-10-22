@@ -369,13 +369,21 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
                 [Definitions runWindowManagerForObject:obj];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "amigaalert")) {
-            id data = [Definitions dataFromStandardInput];
-            id str = [data asString];
-            if ([str length]) {
+            if (argc > 2) {
+                id str = nsfmt(@"%s", argv[2]);
                 id obj = [@"AmigaAlert" asInstance];
                 [obj setValue:str forKey:@"text"];
                 [obj setValue:@"OK" forKey:@"okText"];
                 [Definitions runWindowManagerForObject:obj];
+            } else {
+                id data = [Definitions dataFromStandardInput];
+                id str = [data asString];
+                if ([str length]) {
+                    id obj = [@"AmigaAlert" asInstance];
+                    [obj setValue:str forKey:@"text"];
+                    [obj setValue:@"OK" forKey:@"okText"];
+                    [Definitions runWindowManagerForObject:obj];
+                }
             }
         } else if ((argc > 1) && !strcmp(argv[1], "macclassicdrives")) {
             id obj = [Definitions MacClassicDrives];
