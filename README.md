@@ -8,7 +8,9 @@ Live Image based on Slackware Live
 
 http://hotdoglinux.com/download/
 
-How to write the image to a USB drive:
+## Hot Dog (Linux) on a (USB) stick
+
+To write the image to a USB drive:
 
 $ dd if=/path/to/file.iso of=/dev/sdX bs=1M
 
