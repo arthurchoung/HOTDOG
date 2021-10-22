@@ -318,6 +318,7 @@ NSLog(@"DEALLOC AquaMenuBar");
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+[bitmap useWinSystemFont];
     char *leftCornerStr = menu_bar_upper_left_corner;
     int leftCornerWidth = [Definitions widthForCString:menu_bar_upper_left_corner];
     char *rightCornerStr = menu_bar_upper_right_corner;
