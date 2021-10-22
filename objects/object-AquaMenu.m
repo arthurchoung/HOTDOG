@@ -115,6 +115,7 @@ NSLog(@"dealloc Menu %@", self);
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)outerRect
 {
+[bitmap useWinSystemFont];
     Int4 r = outerRect;
     r.x += 1;
     r.y += 1;
