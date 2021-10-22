@@ -383,9 +383,10 @@ static unsigned char yellow_down_rgb[] = {
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+[bitmap useWinSystemFont];
     int hasFocus = [context intValueForKey:@"hasFocus"];
 
-    _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:_topBorder];
+    _titleBarRect = [Definitions rectWithX:r.x y:r.y+2 w:r.w h:_topBorder-2];
     _leftButtonsRect = [Definitions rectWithX:r.x+8 y:r.y+2 w:14*3+7*2 h:_topBorder-4];
     _redButtonRect = [Definitions rectWithX:r.x+8 y:r.y+2 w:14 h:_topBorder-4];
     _yellowButtonRect = [Definitions rectWithX:r.x+8+14+7 y:r.y+2 w:14 h:_topBorder-4];
@@ -544,11 +545,11 @@ static unsigned char yellow_down_rgb[] = {
 {
     if ((y >= 0) && (y < 4)) {
         if ((x >= 0) && (x < 23)) {
-//            return '7';
+            return '7';
         } else if ((x >= w-23) && (x < w)) {
-//            return '9';
+            return '9';
         } else {
-//            return '8';
+            return '8';
         }
     } else if ((y >= h-4) && (y < h)) {
         if ((x >= 0) && (x < 23)) {
@@ -560,8 +561,8 @@ static unsigned char yellow_down_rgb[] = {
         }
     } else if ((x >= 0) && (x < 4)) {
         if ((y >= 0) && (y < 23)) {
-//            return '7';
-return '4';
+            return '7';
+//return '4';
         } else if ((y >= h-23) && (y < h)) {
             return '1';
         } else {
@@ -569,8 +570,8 @@ return '4';
         }
     } else if ((x >= w-4) && (x < w)) {
         if ((y >= 0) && (y < 23)) {
-//            return '9';
-return '6';
+            return '9';
+//return '6';
         } else if ((y >= h-23) && (y < h)) {
             return '3';
         } else {
@@ -645,6 +646,8 @@ return '6';
 - (void)handleMouseMoved:(id)event
 {
     if (_buttonDown == 'r') {
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager setX11Cursor:'5'];
         int mouseX = [event intValueForKey:@"mouseX"];
         int mouseY = [event intValueForKey:@"mouseY"];
         if ([Definitions isX:mouseX y:mouseY insideRect:_redButtonRect]) {
@@ -655,6 +658,8 @@ return '6';
         return;
     }
     if (_buttonDown == 'y') {
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager setX11Cursor:'5'];
         int mouseX = [event intValueForKey:@"mouseX"];
         int mouseY = [event intValueForKey:@"mouseY"];
         if ([Definitions isX:mouseX y:mouseY insideRect:_yellowButtonRect]) {
@@ -665,6 +670,8 @@ return '6';
         return;
     }
     if (_buttonDown == 'g') {
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager setX11Cursor:'5'];
         int mouseX = [event intValueForKey:@"mouseX"];
         int mouseY = [event intValueForKey:@"mouseY"];
         if ([Definitions isX:mouseX y:mouseY insideRect:_greenButtonRect]) {
@@ -676,6 +683,8 @@ return '6';
     }
 
     if (_buttonDown == 'R') {
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager setX11Cursor:'5'];
         int mouseX = [event intValueForKey:@"mouseX"];
         int mouseY = [event intValueForKey:@"mouseY"];
         if ([Definitions isX:mouseX y:mouseY insideRect:_rightButtonRect]) {
@@ -688,6 +697,7 @@ return '6';
 
     if (_buttonDown == 't') {
         id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager setX11Cursor:'5'];
         int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
         int mouseRootX = [event intValueForKey:@"mouseRootX"];
         int mouseRootY = [event intValueForKey:@"mouseRootY"];
@@ -714,10 +724,14 @@ return '6';
     int mouseY = [event intValueForKey:@"mouseY"];
 
     if ([Definitions isX:mouseX y:mouseY insideRect:_leftButtonsRect]) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager setX11Cursor:'5'];
         _buttonHover = 'l';
         return;
     }
     if ([Definitions isX:mouseX y:mouseY insideRect:_titleBarRect]) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager setX11Cursor:'5'];
         _buttonHover = 't';
         return;
     }
@@ -863,6 +877,7 @@ return '6';
         [x11dict setValue:nsfmt(@"%d %d", newWidth, newHeight) forKey:@"resizeWindow"];
         return;
     }
+    [windowManager setX11Cursor:'5'];
     _buttonHover = 0;
 }
 - (void)handleMouseUp:(id)event
@@ -872,7 +887,8 @@ return '6';
         [dict x11CloseWindow];
     }
     if ((_buttonDown == 'y') && (_buttonHover == 'y')) {
-        [dict x11ToggleMaximizeWindow];
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager lowerObjectWindow:dict];
     }
     if ((_buttonDown == 'g') && (_buttonHover == 'g')) {
         [dict x11ToggleMaximizeWindow];
