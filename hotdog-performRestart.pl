@@ -4,6 +4,8 @@ $result = undef;
 
 if ($ENV{'HOTDOG_MODE'} eq 'amiga') {
     $result = `hotdog show "'AmigaAlert'|asInstance|setValue:'Restart?' forKey:'text'|setValue:'Restart' forKey:'okText'|setValue:'Cancel' forKey:'cancelText'"`;
+} elsif ($ENV{'HOTDOG_MODE'} eq 'aqua') {
+    $result = `hotdog show "'AquaAlert'|asInstance|setValue:'Restart?' forKey:'text'|setValue:'Restart' forKey:'okText'|setValue:'Cancel' forKey:'cancelText'"`;
 } else {
     $result = `echo "Restart?" | hotdog confirm Restart`;
 }
