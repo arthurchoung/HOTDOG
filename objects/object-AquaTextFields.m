@@ -561,7 +561,7 @@ static unsigned char blue_button_right[] = {
         if (textWidth > innerWidth) {
             innerWidth = textWidth;
         }
-        _okRect.x = r.x+r.w-10-(innerWidth+16);
+        _okRect.x = r.x+r.w-20-(innerWidth+16);
         _okRect.y = r.y+r.h-40;
         _okRect.w = innerWidth+16;
         _okRect.h = 25;
@@ -587,10 +587,10 @@ static unsigned char blue_button_right[] = {
         if (textWidth > innerWidth) {
             innerWidth = textWidth;
         }
-        _cancelRect.x = r.x+10;
-        _cancelRect.y = r.y+r.h-40;
         _cancelRect.w = innerWidth+16;
         _cancelRect.h = 25;
+        _cancelRect.x = r.x+r.w-_okRect.w-20-20-_cancelRect.w;
+        _cancelRect.y = r.y+r.h-40;
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
             [self drawButtonInBitmap:bitmap rect:_cancelRect :blue_button_left :blue_button_middle :blue_button_right];
         } else {
