@@ -55,6 +55,10 @@ $ ./hotdog
 
 ## Screenshots
 
+Aqua 1280x1024
+
+![Aqua Screenshot](Screenshots/hotdog-screenshot-aqua.png)
+
 Amiga Screenshot 1280x1024
 
 ![Amiga Screenshot](Screenshots/hotdog-screenshot-amiga.png)
@@ -66,10 +70,6 @@ Hot Dog Stand 640x480
 Atari ST GEM 640x480
 
 ![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
-
-Aqua 1280x1024
-
-![Aqua Screenshot](Screenshots/hotdog-screenshot-aqua.png)
 
 Mac Classic 640x480
 
