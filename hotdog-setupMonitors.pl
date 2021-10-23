@@ -12,3 +12,8 @@ if (not -d 'Temp') {
 
 system('hotdog-listMonitors.pl >Temp/listMonitors.csv');
 
+# this should be handled with hotdog-setupWindowManagerMode.sh somehow
+if ($ENV{'HOTDOG_MODE'} eq 'aqua') {
+    system('feh', '--bg-tile', 'Wallpaper/aqua.png');
+}
+
