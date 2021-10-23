@@ -309,7 +309,7 @@ static unsigned char blue_button_right[] = {
             if (textWidth > innerWidth) {
                 innerWidth = textWidth;
             }
-            _okRect.x = r.x+r.w-10-(innerWidth+16);
+            _okRect.x = r.x+r.w-20-(innerWidth+16);
             _okRect.y = r.y+r.h-40;
             _okRect.w = innerWidth+16;
             _okRect.h = 25;
@@ -409,6 +409,9 @@ static unsigned char blue_button_right[] = {
     }
 
     unsigned char *rgb = left;
+if (!rgb) {
+    return;
+}
     
     int w1;
     int w2;
@@ -435,6 +438,9 @@ static unsigned char blue_button_right[] = {
     }
 
     rgb = right;
+if (!rgb) {
+    return;
+}
 
     width = rgb[1];
     w2 = width;
@@ -456,6 +462,9 @@ int offset = (r.w - w2) * 4;
     }
 
     rgb = middle;
+if (!rgb) {
+    return;
+}
 
     width = rgb[1];
     height = rgb[3];
