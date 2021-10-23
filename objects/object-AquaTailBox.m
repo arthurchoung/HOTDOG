@@ -32,6 +32,7 @@
 {
     id obj = [@"AquaTailBox" asInstance];
     [obj setValue:path forKey:@"path"];
+    [obj setValue:@"OK" forKey:@"okText"];
     return obj;
 }
 @end
@@ -288,7 +289,7 @@ static unsigned char blue_button_right[] = {
         if (textWidth > innerWidth) {
             innerWidth = textWidth;
         }
-        _okRect.x = r.x+r.w-10-(innerWidth+16);
+        _okRect.x = r.x+r.w-20-(innerWidth+16);
         _okRect.y = r.y+r.h-40;
         _okRect.w = innerWidth+16;
         _okRect.h = 25;
@@ -352,6 +353,104 @@ static unsigned char blue_button_right[] = {
     }
     _buttonDown = 0;
     _buttonHover = 0;
+}
+- (void)drawButtonInBitmap:(id)bitmap rect:(Int4)r :(unsigned char *)left :(unsigned char *)middle :(unsigned char *)right
+{
+    unsigned char *pixelBytes = [bitmap pixelBytes];
+    if (!pixelBytes) {
+        return;
+    }
+    int bitmapWidth = [bitmap bitmapWidth];
+    int bitmapHeight = [bitmap bitmapHeight];
+    int bitmapBytesPerRow = bitmapWidth*4;
+
+    if (r.x < 0) {
+        return;
+    }
+    if (r.x+r.w >= bitmapWidth) {
+        return;
+    }
+    if (r.y < 0) {
+        return;
+    }
+    if (r.y+r.h >= bitmapHeight) {
+        return;
+    }
+
+    unsigned char *rgb = left;
+if (!rgb) {
+    return;
+}
+    
+    int w1;
+    int w2;
+    int width;
+    int height;
+    int bytes_per_row;
+
+    width = rgb[1];
+    w1 = width;
+    height = rgb[3];
+    bytes_per_row = width*3;
+    for (int y=0; y<height; y++) {
+        for (int x=0; x<width; x++) {
+            int i = (r.y+y)*bitmapBytesPerRow + (r.x+x)*4;
+            int j = y*bytes_per_row + x*3;
+            if (!rgb[4+j+2] && (rgb[4+j+1] == 255) && !rgb[4+j+0]) {
+                continue;
+            }
+            pixelBytes[i] = rgb[4+j+2];
+            pixelBytes[i+1] = rgb[4+j+1];
+            pixelBytes[i+2] = rgb[4+j+0];
+            pixelBytes[i+3] = 255;
+        }
+    }
+
+    rgb = right;
+if (!rgb) {
+    return;
+}
+
+    width = rgb[1];
+    w2 = width;
+    height = rgb[3];
+    bytes_per_row = width*3;
+int offset = (r.w - w2) * 4;
+    for (int y=0; y<height; y++) {
+        for (int x=0; x<width; x++) {
+            int i = (r.y+y)*bitmapBytesPerRow + (r.x+x)*4 + offset;
+            int j = y*bytes_per_row + x*3;
+            if (!rgb[4+j+2] && (rgb[4+j+1] == 255) && !rgb[4+j+0]) {
+                continue;
+            }
+            pixelBytes[i] = rgb[4+j+2];
+            pixelBytes[i+1] = rgb[4+j+1];
+            pixelBytes[i+2] = rgb[4+j+0];
+            pixelBytes[i+3] = 255;
+        }
+    }
+
+    rgb = middle;
+if (!rgb) {
+    return;
+}
+
+    width = rgb[1];
+    height = rgb[3];
+    bytes_per_row = width*3;
+    for (int y=0; y<height; y++) {
+        for (int x=w1; x<r.w-w2; x++) {
+            int i = (r.y+y)*bitmapBytesPerRow + (r.x+x)*4;
+            int j = y*bytes_per_row;
+            if (!rgb[4+j+2] && (rgb[4+j+1] == 255) && !rgb[4+j+0]) {
+                continue;
+            }
+            pixelBytes[i] = rgb[4+j+2];
+            pixelBytes[i+1] = rgb[4+j+1];
+            pixelBytes[i+2] = rgb[4+j+0];
+            pixelBytes[i+3] = 255;
+        }
+    }
 }
 @end
 
