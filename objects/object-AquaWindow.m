@@ -464,60 +464,7 @@ static unsigned char yellow_down_rgb[] = {
         rightRGB = inactive_right_rgb;
     }
 
-    unsigned char *rgb;
-    int w1;
-    int w2;
-    int width;
-    int height;
-    int bytes_per_row;
-
-    rgb = leftRGB;
-    width = rgb[1];
-    w1 = width;
-    height = rgb[3];
-    bytes_per_row = width*3;
-    for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
-            int i = y*bitmapBytesPerRow + x*4;
-            int j = y*bytes_per_row + x*3;
-            pixelBytes[i] = rgb[4+j+2];
-            pixelBytes[i+1] = rgb[4+j+1];
-            pixelBytes[i+2] = rgb[4+j+0];
-            pixelBytes[i+3] = 255;
-        }
-    }
-
-    rgb = rightRGB;
-    width = rgb[1];
-    w2 = width;
-    height = rgb[3];
-    bytes_per_row = width*3;
-    int offset = (bitmapWidth - width)*4;
-    for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
-            int i = y*bitmapBytesPerRow + offset + x*4;
-            int j = y*bytes_per_row + x*3;
-            pixelBytes[i] = rgb[4+j+2];
-            pixelBytes[i+1] = rgb[4+j+1];
-            pixelBytes[i+2] = rgb[4+j+0];
-            pixelBytes[i+3] = 255;
-        }
-    }
-
-    rgb = middleRGB;
-    width = rgb[1];
-    height = rgb[3];
-    bytes_per_row = width*3;
-    for (int y=0; y<height; y++) {
-        int j = y*bytes_per_row;
-        for (int x=w1; x<bitmapWidth-w2; x++) {
-            int i = y*bitmapBytesPerRow + x*4;
-            pixelBytes[i] = rgb[4+j+2];
-            pixelBytes[i+1] = rgb[4+j+1];
-            pixelBytes[i+2] = rgb[4+j+0];
-            pixelBytes[i+3] = 255;
-        }
-    }
+    [self drawButtonInBitmap:bitmap :leftRGB :middleRGB :rightRGB];
 
     if (_titleBarTextRect.w > 0) {
         id text = [context valueForKey:@"name"];
@@ -901,6 +848,90 @@ static unsigned char yellow_down_rgb[] = {
     }
 
     _buttonDown = 0;
+}
+- (void)drawButtonInBitmap:(id)bitmap :(unsigned char *)left :(unsigned char *)middle :(unsigned char *)right
+{
+    if (!left || !middle || !right) {
+        return;
+    }
+
+    unsigned char *pixelBytes = [bitmap pixelBytes];
+    if (!pixelBytes) {
+        return;
+    }
+    int bitmapWidth = [bitmap bitmapWidth];
+    int bitmapHeight = [bitmap bitmapHeight];
+    int bitmapBytesPerRow = bitmapWidth*4;
+
+    if (bitmapWidth < (left[1]+middle[1]+right[1])) {
+        return;
+    }
+    if (bitmapHeight < left[3]) {
+        return;
+    }
+    if (bitmapHeight < middle[3]) {
+        return;
+    }
+    if (bitmapHeight < right[3]) {
+        return;
+    }
+
+    unsigned char *rgb = left;
+    
+    int w1;
+    int w2;
+    int width;
+    int height;
+    int bytes_per_row;
+
+    width = rgb[1];
+    w1 = width;
+    height = rgb[3];
+    bytes_per_row = width*3;
+    for (int y=0; y<height; y++) {
+        for (int x=0; x<width; x++) {
+            int i = y*bitmapBytesPerRow + x*4;
+            int j = y*bytes_per_row + x*3;
+            pixelBytes[i] = rgb[4+j+2];
+            pixelBytes[i+1] = rgb[4+j+1];
+            pixelBytes[i+2] = rgb[4+j+0];
+            pixelBytes[i+3] = 255;
+        }
+    }
+
+    rgb = right;
+
+    width = rgb[1];
+    w2 = width;
+    height = rgb[3];
+    bytes_per_row = width*3;
+int offset = (bitmapWidth - width) * 4;
+    for (int y=0; y<height; y++) {
+        for (int x=0; x<width; x++) {
+            int i = y*bitmapBytesPerRow + x*4 + offset;
+            int j = y*bytes_per_row + x*3;
+            pixelBytes[i] = rgb[4+j+2];
+            pixelBytes[i+1] = rgb[4+j+1];
+            pixelBytes[i+2] = rgb[4+j+0];
+            pixelBytes[i+3] = 255;
+        }
+    }
+
+    rgb = middle;
+
+    width = rgb[1];
+    height = rgb[3];
+    bytes_per_row = width*3;
+    for (int y=0; y<height; y++) {
+        int j = y*bytes_per_row;
+        for (int x=w1; x<bitmapWidth-w2; x++) {
+            int i = y*bitmapBytesPerRow + x*4;
+            pixelBytes[i] = rgb[4+j+2];
+            pixelBytes[i+1] = rgb[4+j+1];
+            pixelBytes[i+2] = rgb[4+j+0];
+            pixelBytes[i+3] = 255;
+        }
+    }
 }
 @end
 
