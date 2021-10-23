@@ -241,7 +241,7 @@ static unsigned char blue_button_right[] = {
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
     [bitmap useWinSystemFont];
     int lineHeight = [bitmap bitmapHeightForText:@"X"];
-    id text = [bitmap fitBitmapString:_text width:480-16*2-150];
+    id text = [bitmap fitBitmapString:_text width:480-60];
     int textHeight = [bitmap bitmapHeightForText:text];
     textHeight += 16+50+lineHeight;
     if (textHeight > 288) {
@@ -256,9 +256,9 @@ static unsigned char blue_button_right[] = {
 
     // text
 
-    id text = [bitmap fitBitmapString:_text width:r.w-16*2-150];
+    id text = [bitmap fitBitmapString:_text width:r.w-60];
     [bitmap setColor:@"black"];
-    [bitmap drawBitmapText:text x:r.x+166 y:r.y+16];
+    [bitmap drawBitmapText:text x:r.x+30 y:r.y+16];
 
     // ok button
 
@@ -268,7 +268,7 @@ static unsigned char blue_button_right[] = {
         if (textWidth > innerWidth) {
             innerWidth = textWidth;
         }
-        _okRect.x = r.x+r.w-10-(innerWidth+16);
+        _okRect.x = r.x+r.w-20-(innerWidth+16);
         _okRect.y = r.y+r.h-40;
         _okRect.w = innerWidth+16;
         _okRect.h = 25;
@@ -294,10 +294,10 @@ static unsigned char blue_button_right[] = {
         if (textWidth > innerWidth) {
             innerWidth = textWidth;
         }
-        _cancelRect.x = r.x+10;
-        _cancelRect.y = r.y+r.h-40;
         _cancelRect.w = innerWidth+16;
         _cancelRect.h = 25;
+        _cancelRect.x = r.x+r.w-_okRect.w-20-20-_cancelRect.w;
+        _cancelRect.y = r.y+r.h-40;
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
             [self drawButtonInBitmap:bitmap rect:_cancelRect :blue_button_left :blue_button_middle :blue_button_right];
         } else {
@@ -386,6 +386,9 @@ static unsigned char blue_button_right[] = {
     }
 
     unsigned char *rgb = left;
+if (!rgb) {
+    return;
+}
     
     int w1;
     int w2;
@@ -412,6 +415,9 @@ static unsigned char blue_button_right[] = {
     }
 
     rgb = right;
+if (!rgb) {
+    return;
+}
 
     width = rgb[1];
     w2 = width;
@@ -433,6 +439,9 @@ int offset = (r.w - w2) * 4;
     }
 
     rgb = middle;
+if (!rgb) {
+    return;
+}
 
     width = rgb[1];
     height = rgb[3];
