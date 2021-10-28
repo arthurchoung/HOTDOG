@@ -2,6 +2,12 @@
 
 use strict;
 
+my $LIBOBJC = '/usr/lib/libobjc.a';
+my $uname = `uname -a`;
+if ($uname =~ m/x86_64/) {
+    $LIBOBJC = '/usr/lib64/libobjc.a';
+}
+
 sub getExecPath
 {
     my $path = __FILE__;
@@ -48,6 +54,9 @@ sub cflagsForFile
         my $flags = `pkg-config --cflags gmime-3.0`;
         return "$objcflags $flags";
     }
+    if ($path eq "$execPath/misc/misc-chipmunk.m") {
+        return "$objcflags -I$execPath/external/chipmunk/include";
+    }
     if ($path =~ m/\.m$/) {
         return '-std=c99 -fconstant-string-class=NSConstantString';
     }
@@ -71,6 +80,9 @@ sub ldflagsForFile
     }
     if ($path eq "$execPath/misc/object-nes.m") {
         return '-ldl';
+    }
+    if ($path eq "$execPath/misc/misc-chipmunk.m") {
+        return "$execPath/external/chipmunk/libchipmunk.a";
     }
     return '';
 }
@@ -148,7 +160,7 @@ sub linkSourcePaths
     my $cmd = <<EOF;
 gcc -o $execPath/hotdog
     $objectFiles
-    /usr/lib/libobjc.a
+    $LIBOBJC
     -lm
     $ldflags
 EOF
