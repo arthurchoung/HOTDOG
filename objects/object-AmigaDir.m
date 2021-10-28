@@ -922,6 +922,7 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
     }
     [bitmap drawCString:bottom palette:palette x:x0 y:y0+h-heightForBottom];
 }
+@end
 
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgj)
