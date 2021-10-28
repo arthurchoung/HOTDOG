@@ -262,6 +262,7 @@ NSLog(@"rightClickMenu %@", rightClickMenu);
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+    [bitmap useWinSystemFont];
     _rect = r;
     _viewWidth = r.w;
     _viewHeight = r.h;
