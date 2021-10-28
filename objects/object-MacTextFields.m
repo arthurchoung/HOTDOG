@@ -70,7 +70,7 @@
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
     int lineHeight = [bitmap bitmapHeightForText:@"X"];
     int h = 24;
-    id w = 640-89-18;
+    int w = 640-89-18;
     {
         id text = [bitmap fitBitmapString:_text width:w];
         h += [bitmap bitmapHeightForText:text] + lineHeight;
