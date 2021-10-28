@@ -332,7 +332,7 @@ static unsigned char blue_button_right[] = {
     int lineHeight = [bitmap bitmapHeightForText:@"X"];
     int radioWidth = radio_rgb[1];
     int h = 16;
-    id w = 640;
+    int w = 640;
     {
         id text = [bitmap fitBitmapString:_text width:w-16*2];
         h += [bitmap bitmapHeightForText:text] + lineHeight;
