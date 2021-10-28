@@ -264,6 +264,7 @@ NSLog(@"rightClickMenu %@", rightClickMenu);
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+    [bitmap useChicagoFont];
     _rect = r;
     _viewWidth = r.w;
     _viewHeight = r.h;
@@ -445,9 +446,11 @@ next:
     rr.h -= 16;
     id preview = [elt valueForKey:@"preview"];
     if (preview) {
+        [bitmap useWinSystemFont];
         preview = [[[[bitmap fitBitmapString:preview width:rr.w] split:@"\n"] subarrayToIndex:2] join:@"\n"];
         [bitmap setColor:previewcolor];
         [bitmap drawBitmapText:preview x:rr.x y:rr.y];
+        [bitmap useChicagoFont];
     }
     if ([elt intValueForKey:@"drawChevron" default:1]) {
         [bitmap setColor:fgcolor];
