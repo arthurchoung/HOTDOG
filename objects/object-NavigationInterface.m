@@ -50,7 +50,7 @@ NSLog(@"ListInterface");
             if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
                 [elt setValue:@"selectedObject|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
             } else {
-                [elt setValue:@"selectedObject|filePath|runFileHandler|pushToMainInterface" forKey:@"messageForClick"];
+                [elt setValue:@"selectedObject|filePath|runFileHandler" forKey:@"messageForClick"];
             }
         }
     }
