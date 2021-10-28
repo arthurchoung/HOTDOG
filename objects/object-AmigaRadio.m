@@ -107,7 +107,7 @@ static char *radio_down_pixels =
     int lineHeight = [bitmap bitmapHeightForText:@"X"];
     int radioWidth = [Definitions widthForCString:radio_pixels];
     int h = 16;
-    id w = 640;
+    int w = 640;
     {
         id text = [bitmap fitBitmapString:_text width:w-16*2];
         h += [bitmap bitmapHeightForText:text] + lineHeight;
