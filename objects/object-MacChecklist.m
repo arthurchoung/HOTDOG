@@ -123,7 +123,7 @@ static char *checkbox_down_pixels =
     int lineHeight = [bitmap bitmapHeightForText:@"X"];
     int checkboxWidth = [Definitions widthForCString:checkbox_pixels];
     int h = 24;
-    id w = 640;
+    int w = 640;
     {
         id text = [bitmap fitBitmapString:_text width:w-89-18];
         h += [bitmap bitmapHeightForText:text] + lineHeight;
