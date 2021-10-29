@@ -1,53 +1,28 @@
-# HOT DOG Linux
-
-For more information, please visit http://hotdoglinux.com
-
-
+# HOTDOGbuntu
 
 ## Notes for Ubuntu and derivatives
 
-Before compiling, you'll need the following packages installed:
+Download the .deb file from http://hotdoglinux.com/download/
+
+You'll also need the following packages installed:
 
 ```
-sudo apt install git
-sudo apt install clang
-sudo apt install libasound2-dev
-sudo apt install libx11-dev
-sudo apt install libxext-dev
-sudo apt install libxfixes-dev
-sudo apt install net-tools
-sudo apt install inotify-tools
-sudo apt install mesa-common-dev
-sudo apt install xterm
+sudo apt install libjson-perl
+sudo apt install feh
+sudo apt install compton
 ```
 
-(this can be combined into a single command)
-
-Create a file as root at /usr/share/xsessions/xterm.desktop with these
-contents:
+Install the .deb file:
 
 ```
-[Desktop Entry]
-Version=1.0
-Name=xterm
-Comment=xterm
-Exec=xterm
-Icon=
-Type=Application
-DesktopNames=xterm
+dpkg -i HOTDOGbuntu_xxxxxxxx_amd64.deb
 ```
 
-This allows you to change the window manager to a simple xterm by logging out,
-choosing the newly created xterm.desktop, then logging back in.
+Log out, change the window manager from the login screen, then log back in.
 
-From the xterm you can run the HOT DOG Linux window manager.
+Some things don't work properly when running on Ubuntu, for various reasons.
 
-You can customize this as you like.
-
-This was tested using xubuntu-20.04-desktop-amd64.iso but it should work
-for other versions as well.
-
-
+This is just to see if it runs. Slackware is preferred.
 
 ## Legal
 
