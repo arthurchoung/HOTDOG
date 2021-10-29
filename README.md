@@ -53,6 +53,12 @@ To run the iPod style interface:
 
 $ ./hotdog
 
+## Notes
+
+Aqua mode uses 'compton' for window drop shadows and 'feh' to set the wallpaper.
+
+Some of the Perl scripts use the JSON module.
+
 ## Screenshots
 
 Aqua 1280x1024
@@ -89,9 +95,11 @@ $ hotdog-openALSAPanel.sh hw:0
 
 ![ALSA Mixer Panel Screenshot](Screenshots/hotdog-screenshot-alsa-mixer-panel.png)
 
-## Notes
+## HOTDOGbuntu -- Ubuntu compatibility
 
-Aqua mode uses 'compton' for window drop shadows and 'feh' to set the wallpaper.
+HOTDOG can be run on Ubuntu and its derivatives.
+
+See the NOTES-Ubuntu file for more information.
 
 ## Legal
 
