@@ -32,6 +32,7 @@
     int _mouseY;
     id _array;
     id _selectedObject;
+    id _contextualObject;
 }
 @end
 
@@ -162,7 +163,11 @@ NSLog(@"Menu handleMouseUp");
     if (_selectedObject) {
         id message = [_selectedObject valueForKey:@"messageForClick"];
         if (message) {
-            [[Definitions namespace]  evaluateMessage:message];
+            id context = _contextualObject;
+            if (!context) {
+                context = [Definitions namespace];
+            }
+            [context  evaluateMessage:message];
         }
     }
 }
