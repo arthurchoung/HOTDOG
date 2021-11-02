@@ -55,6 +55,7 @@
     int _mouseY;
     id _array;
     id _selectedObject;
+    id _contextualObject;
 }
 @end
 
@@ -130,7 +131,11 @@ NSLog(@"dealloc Menu %@", self);
     if (_closingIteration == 0) {
         id message = [_selectedObject valueForKey:@"messageForClick"];
         if (message) {
-            [x11dict evaluateMessage:message];
+            id context = _contextualObject;
+            if (!context) {
+                context = [Definitions namespace];
+            }
+            [context evaluateMessage:message];
         }
         [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
     }
