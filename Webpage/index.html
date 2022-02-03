@@ -15,8 +15,10 @@
 Live Image Based on Slackware Live<br>
 <a href="download/">Download</a>
 
+<h2>Hot Dog (Linux) on a (USB) stick</h2>
+
 <p>
-How to write the image to a USB drive:
+To write the image to a USB drive:
 
 <pre>
 $ dd if=/path/to/file.iso of=/dev/sdX bs=1M
@@ -28,14 +30,21 @@ $ dd if=/path/to/file.iso of=/dev/sdX bs=1M
 Run as root. Be careful not to write to the wrong drive.
 </pre>
 
-<h2>Links</h2>
+<h2>Source Code</h2>
 
-<p>
-Source Code<br>
-<a href="https://github.com/arthurchoung/HOTDOG">Github</a>
-<p>
-Blog<br>
-<a href="blog/">Click here</a>
+<ul>
+<li><a href="https://github.com/arthurchoung/HOTDOG">Github</a>
+</ul>
+
+<h2>Misc</h2>
+<ul>
+<li><a href="TheIdealProgrammingLanguage/index.html">The Ideal Programming Language</a>
+<li><a href="CartoonsComicStripsAndUserInterfaces/index.html">Cartoons, Comic Strips, and User Interfaces</a>
+<li><a href="EverythingIsAStream/index.html">Everything Is A Stream</a>
+<li><a href="AmigaInstallationScreenshots/index.html">Amiga Installation Screenshots</a>
+<li><a href="MacInstallationScreenshots/index.html">Mac Installation Screenshots</a>
+<li><a href="AquaInstallationScreenshots/index.html">Aqua Installation Screenshots</a>
+</ul>
 
 <h2>Overview</h2>
 
@@ -80,8 +89,20 @@ To run the iPod style interface:
 $ ./hotdog
 </pre>
 
+<h2>Notes</h2>
+
+<p>
+Aqua mode uses 'compton' for window drop shadows and 'feh' to set the wallpaper.
+<p>
+Some of the Perl scripts use the JSON module.
+
 
 <h2>Screenshots</h2>
+
+<p>
+Aqua Screenshot 1280x1024
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-screenshot-aqua.png"></div>
 
 <p>
 Amiga Screenshot 1280x1024
@@ -97,11 +118,6 @@ Windows 3.1 Screenshot 640x480
 Atari ST Screenshot 640x480
 <p>
 <img src="hotdog-screenshot-atarist.png">
-
-<p>
-Aqua Screenshot 1280x1024
-<p>
-<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-screenshot-aqua.png"></div>
 
 <p>
 Mac Classic Screenshot 640x480
@@ -126,10 +142,11 @@ $ hotdog-openALSAPanel.sh hw:0
 <p>
 <img src="hotdog-screenshot-alsa-mixer-panel.png">
 
-<h2>Notes</h2>
-
+<h2>HOTDOGbuntu -- Ubuntu compatibility</h2>
 <p>
-Aqua mode uses 'compton' for window drop shadows and 'feh' to set the wallpaper.
+HOTDOG can be run on Ubuntu and its derivatives.
+<p>
+See the NOTES-Ubuntu file for more information.
 
 <h2>Legal</h2>
 

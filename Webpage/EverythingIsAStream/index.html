@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>HOT DOG Linux</title>
+</head>
+<body style="background-color:yellow;">
+<div style="width:80%; margin:auto; background-color:white;border: 1px solid black;">
+<div style="border: 4px solid red;">
+<div style="border: 1px solid black; padding-left:1em; padding-right:1em;">
+<h1 align=center><img src="logo.png" style="padding-bottom:4px"> HOT DOG Linux <img src="logo.png" style="padding-bottom:4px"></h1>
+<hr style="clear:both">
+
+<h2>Everything Is A Stream</h2>
+
+<p>
+One of the maxims of Unix is that 'Everything is a file'. In Hot Dog Linux, it is more accurate to say that 'Everything is a stream'. A file implies data that exists on some kind of storage unit that is written and then read back into memory at a later time. A file can be moved or deleted, and randomly accessed. And so on.
+
+<p>
+The way to send data from one process to another process is by using standard input and output, which are streams. A stream can be read one line at a time, and can be processed one line at a time, reducing memory requirements. Often times, files are loaded into memory in their entirety, and then processed. But this makes it impossible to handle large files that exceed the amount of RAM in a system.
+
+<p>
+To expand upon this philosophy, there should be a consistent data format that is trivial to parse. Data should be human-readable text. It should be line-oriented, with a newline indicating the end of each line. Each line represents a key-value dictionary, and each key-value pair is separated by whitespace. A key-value pair is separated by a colon `:'. Keys do not contain whitespace. If a value has whitespace, it is percent-encoded like with URL's.
+
+
+<p>
+ For example:
+
+<pre>
+    x:10 y:20 name:A
+    x:20 y:40 name:B
+    x:30 y:60 name:C
+</pre>
+
+<p>
+If a value has a space in it:
+
+<pre>
+    name:John%20Smith address:1%20Main%20Street
+</pre>
+
+
+<p>
+To parse a key-value pair in Perl:
+
+<pre>
+     while ($line = &lt;STDIN&gt;) {
+         chomp $line;
+
+         $x = 0;
+         if ($line =~ m/\bx:(\d+)/) {
+             $x = $1;
+         }
+
+         # do something with $x
+     }
+</pre>
+
+</div>
+</div>
+</div>
+</body>
+</html>
+
