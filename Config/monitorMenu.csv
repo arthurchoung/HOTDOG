@@ -1,9 +1,0 @@
-displayName,stringFormat,messageForClick
-,"#{currentMonitorName}"
-"Portrait (left)",,"rotateCurrentMonitor:'left'"
-"Portrait (right)",,"rotateCurrentMonitor:'right'"
-"Landscape (normal)",,"rotateCurrentMonitor:'normal'"
-"Landscape (inverted)",,"rotateCurrentMonitor:'inverted'"
-,,
-"Move Monitor Left",,"swapMonitors:(currentMonitorName) :(nextMonitorName)"
-"Move Monitor Right",,"swapMonitors:(currentMonitorName) :(previousMonitorName)"
