@@ -227,7 +227,7 @@ NSLog(@"messageForClick '%@'", messageForClick);
                 [self setValue:elt forKey:@"selectedObject"];
                 id result = [self evaluateMessage:messageForClick];
                 if ([elt intValueForKey:@"drawChevron" default:1]) {
-                    [result pushToMainInterface];
+                    [result pushToNavigationStack];
                 }
                 NSLog(@"result %@", result);
             }
@@ -252,7 +252,7 @@ NSLog(@"rightMouseUp %@", rightButtonDown);
             [self setValue:elt forKey:@"selectedObject"];
             id rightClickMenu = [[[Definitions configDir:@"Config/rightClickMenu.csv"] menuFromPath] asListInterface];
 NSLog(@"rightClickMenu %@", rightClickMenu);
-            [rightClickMenu pushToMainInterface];
+            [rightClickMenu pushToNavigationStack];
         }
     }
 }
