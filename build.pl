@@ -81,6 +81,9 @@ sub ldflagsForFile
     if ($path eq "$execPath/misc/object-nes.m") {
         return '-ldl';
     }
+    if ($path eq "$execPath/objects/object-VIBitmap.m") {
+        return '-lpng';
+    }
     if ($path eq "$execPath/misc/misc-chipmunk.m") {
         return "$execPath/external/chipmunk/libchipmunk.a";
     }
