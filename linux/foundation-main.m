@@ -77,11 +77,11 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
         }
 
         if (argc == 1) {
-            id object = [Definitions mainInterface];
+            id object = [Definitions navigationStack];
             [[Definitions configDir:@"MainMenu"] changeDirectory];
             [object pushObject:[Definitions ObjectInterface]];
             [Definitions runWindowManagerForObject:object];
-            [[Definitions mainInterface] setValue:nil forKey:@"context"];
+            [[Definitions navigationStack] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "open")) {
             if (argc > 2) {
                 id filePath = nscstr(argv[2]);
@@ -90,14 +90,14 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                 }
             }
             id obj = [Definitions ObjectInterface];
-            if ([obj isKindOfClass:[@"ListInterface" asClass]]) {
-                id nav = [Definitions mainInterface];
+            if ([obj isKindOfClass:[@"Panel" asClass]]) {
+                id nav = [Definitions navigationStack];
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
             } else {
                 [Definitions runWindowManagerForObject:obj];
             }
-            [[Definitions mainInterface] setValue:nil forKey:@"context"];
+            [[Definitions navigationStack] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "ls")) {
             id arr = nsarr();
             for (int i=2; i<argc; i++) {
@@ -118,7 +118,7 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                 [dict setValue:nsfmt(@"%lu", [filePath fileSize]) forKey:@"fileSize"];
                 [arr addObject:dict];
             }
-            id rootObject = [Definitions mainInterface];
+            id rootObject = [Definitions navigationStack];
             if ([arr count]) {
                 [rootObject pushObject:[arr asListInterface]];
             } else {
@@ -126,7 +126,7 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                 [rootObject pushObject:object];
             }
             [Definitions runWindowManagerForObject:rootObject];
-            [[Definitions mainInterface] setValue:nil forKey:@"context"];
+            [[Definitions navigationStack] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "show")) {
             id args = nsarr();
             for (int i=2; i<argc; i++) {
@@ -138,18 +138,18 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             id object = [nsdict() evaluateMessage:message];
             if (object) {
                 [Definitions runWindowManagerForObject:object];
-                [[Definitions mainInterface] setValue:nil forKey:@"context"];
+                [[Definitions navigationStack] setValue:nil forKey:@"context"];
             }
         } else if ((argc == 2) && !strcmp(argv[1], ".")) {
             id obj = [Definitions ObjectInterface];
             if ([obj isKindOfClass:[@"ListInterface" asClass]]) {
-                id nav = [Definitions mainInterface];
+                id nav = [Definitions navigationStack];
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
             } else {
                 [Definitions runWindowManagerForObject:obj];
             }
-            [[Definitions mainInterface] setValue:nil forKey:@"context"];
+            [[Definitions navigationStack] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "lines")) {
             id lines = nil;
             if (argc > 2) {
@@ -163,7 +163,7 @@ exit(1);
 NSLog(@"lines %@", lines);
             }
             if (lines) {
-                id nav = [Definitions mainInterface];
+                id nav = [Definitions navigationStack];
                 id obj = [lines asListInterface];
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
@@ -175,7 +175,7 @@ NSLog(@"lines %@", lines);
             }
             id lines = [Definitions linesFromStandardInput];
             if (lines) {
-                id nav = [Definitions mainInterface];
+                id nav = [Definitions navigationStack];
                 id obj = [lines asListInterface];
                 [obj setValue:stringFormat forKey:@"defaultStringFormat"];
                 [nav pushObject:obj];
@@ -194,7 +194,7 @@ exit(1);
 NSLog(@"lines %@", lines);
             }
             if (lines) {
-                id nav = [Definitions mainInterface];
+                id nav = [Definitions navigationStack];
                 id obj = [lines asTableInterface];
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
@@ -215,10 +215,10 @@ NSLog(@"lines %@", lines);
             id message = [args join:@" "];
             id object = [nsdict() evaluateMessage:message];
             if (object) {
-                id nav = [Definitions mainInterface];
+                id nav = [Definitions navigationStack];
                 [nav pushObject:object];
                 [Definitions runWindowManagerForObject:nav];
-                [[Definitions mainInterface] setValue:nil forKey:@"context"];
+                [[Definitions navigationStack] setValue:nil forKey:@"context"];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "alert")) {
             id data = [Definitions dataFromStandardInput];
@@ -284,7 +284,7 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
                 [obj setValue:stringFormat forKey:@"defaultStringFormat"];
                 [obj setValue:@"0" forKey:@"defaultDrawChevron"];
 
-                id nav = [Definitions mainInterface];
+                id nav = [Definitions navigationStack];
                 [nav pushObject:obj];
                 [nav setValue:title forKey:@"defaultTitle"];
                 [Definitions runWindowManagerForObject:nav];
@@ -323,7 +323,7 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
             [obj setValue:stringFormat forKey:@"defaultStringFormat"];
             [obj setValue:@"0" forKey:@"defaultDrawChevron"];
 
-            id nav = [Definitions mainInterface];
+            id nav = [Definitions navigationStack];
             [nav pushObject:obj];
             [nav setValue:title forKey:@"defaultTitle"];
             [Definitions runWindowManagerForObject:nav];
