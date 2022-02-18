@@ -140,7 +140,11 @@ static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
     
     if (modifiers & ShiftMask) {
         if ([str length] > 1) {
-            str = nsfmt(@"shift-%@", str);
+            if ([str isEqual:@"leftshift"]) {
+            } else if ([str isEqual:@"rightshift"]) {
+            } else {
+                str = nsfmt(@"shift-%@", str);
+            }
         }
     }
 
@@ -451,6 +455,7 @@ NSLog(@"signal_handler %d", num);
 @implementation Definitions(fjkldsjlkfjdsf)
 + (void)runWindowManager
 {
+//    [Definitions runWindowManager:@"enterAquaMode"];
     [Definitions runWindowManager:@"enterHotDogStandMode"];
 }
 + (void)runWindowManager:(id)message
@@ -473,9 +478,11 @@ exit(0);
         return;
     }
 [windowManager grabHotKeys];
-    [Definitions evaluateMessage:message];
+    [windowManager setValue:message forKey:@"pendingMessage"];
     [windowManager runLoop];
+NSLog(@"exited windowManager runLoop");
     [@"windowManager" setNilValueForKey];
+NSLog(@"windowManager setNilValueForKey");
 }
 + (void)runWindowManagerForObject:(id)object
 {
@@ -561,6 +568,8 @@ exit(0);
     id _openGLTexture;
     id _openGLObjectTexture;
     Window _openGLWindow;
+
+    id _pendingMessage;
 }
 @end
 @implementation WindowManager
@@ -1367,7 +1376,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
                 [Definitions drawToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
             }
             [Definitions drawOpenGLTextureID:[_openGLTexture textureID]];
-            if ([object isKindOfClass:[@"NavigationInterface" asClass]]) {
+            if ([object isKindOfClass:[@"NavigationStack" asClass]]) {
                 id obj = [[object valueForKey:@"context"] valueForKey:@"object"];
                 int draw_GL_NEAREST = 0;
                 if ([obj respondsToSelector:@selector(glNearest)]) {
@@ -1520,6 +1529,11 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                     [pool drain];
                     break;
                 }
+            }
+
+            if (_pendingMessage) {
+                [Definitions evaluateMessage:_pendingMessage];
+                [self setValue:nil forKey:@"pendingMessage"];
             }
 
             if (!_isWindowManager) {
