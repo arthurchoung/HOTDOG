@@ -480,25 +480,34 @@ NSLog(@"setAllStringFormat:'%@'", val);
 - (void)updateFromCurrentDirectory
 {
     _currentDirectoryTimestamp = [@"." fileModificationTimestamp];
+
     id arr = [@"00index.csv" parseCSVFile];
+
     if (!arr) {
-        arr = [@"." contentsOfDirectory];
-        arr = [arr asFileArray];
-        for (int i=0; i<[arr count]; i++) {
-            id elt = [arr nth:i];
-            if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
-                [elt setValue:@"selectedObject|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
-            } else {
-                [elt setValue:@"0" forKey:@"drawChevron"];
-                [elt setValue:@"selectedObject|filePath|runFileHandler" forKey:@"messageForClick"];
+        id cmd = nsarr();
+        if ([@"00ls" stringFromFile]) {
+            [cmd addObject:@"./00ls"];
+        } else {
+            [cmd addObject:@"ls"];
+            [cmd addObject:@"--group-directories-first"];
+        }
+
+        id output = [cmd runCommandAndReturnOutput];
+        if (output) {
+            id lines = [[output asString] split:@"\n"];
+            arr = [lines asFileArray];
+            for (int i=0; i<[arr count]; i++) {
+                id elt = [arr nth:i];
+                if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
+                    [elt setValue:@"selectedObject|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
+                } else {
+                    [elt setValue:@"0" forKey:@"drawChevron"];
+                    [elt setValue:@"selectedObject|filePath|runFileHandler" forKey:@"messageForClick"];
+                }
             }
         }
     }
-    id preArr = [@"00preindex.csv" parseCSVFile];
-    if (preArr) {
-        arr = [preArr arrayByAddingObjectsFromArray:arr];
-    }
-            
+
     [self setValue:arr forKey:@"array"];
 
     id defaultStringFormat = [@"00defaultStringFormat" stringFromFile];
@@ -751,7 +760,7 @@ NSLog(@"messageForClick '%@'", messageForClick);
                 [self setValue:elt forKey:@"selectedObject"];
                 id result = [self evaluateMessage:messageForClick];
                 if ([elt intValueForKey:@"drawChevron" default:_defaultDrawChevron]) {
-                    [result pushToMainInterface];
+                    [result pushToNavigationStack];
                 }
                 NSLog(@"result %@", result);
             }
@@ -778,7 +787,7 @@ NSLog(@"rightMouseUp %@", rightButtonDown);
             [self setValue:elt forKey:@"selectedObject"];
             id rightClickMenu = [[[Definitions configDir:@"Config/rightClickMenu.csv"] menuFromPath] asListInterface];
 NSLog(@"rightClickMenu %@", rightClickMenu);
-            [rightClickMenu pushToMainInterface];
+            [rightClickMenu pushToNavigationStack];
         }
     }
 }
