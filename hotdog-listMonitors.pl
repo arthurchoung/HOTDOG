@@ -49,12 +49,10 @@ sub get_monitors
 my @results = get_monitors();
 
 my @keys = ('output', 'width', 'height', 'x', 'y', 'rotate');
-my $str = join ',', @keys;
-print "$str\n";
 
 foreach my $elt (@results) {
-    my @vals = map { $elt->{$_} } @keys;
-    my $str = join ',', @vals;
+    my @vals = map { $_ . ':' . $elt->{$_} } @keys;
+    my $str = join ' ', @vals;
     print "$str\n";
 }
 
