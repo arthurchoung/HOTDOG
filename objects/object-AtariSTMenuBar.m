@@ -338,7 +338,7 @@ NSLog(@"AtariSTMenuBar handleMouseUp event %@", event);
             for (int i=0; i<[monitors count]; i++) {
                 id elt = [monitors nth:i];
                 if ([elt intValueForKey:@"x"] == [mouseMonitor intValueForKey:@"x"]) {
-                    [text addObject:nsfmt(@"This is monitor %d (%@). Pointer is on monitor %d (%@)", monitorI+1, [monitor valueForKey:@"output"], monitorIndex+1, [elt valueForKey:@"output"])];
+                    [text addObject:nsfmt(@"This is monitor %d (%@). Pointer is on monitor %d (%@) x:%d y:%d", monitorI+1, [monitor valueForKey:@"output"], monitorIndex+1, [elt valueForKey:@"output"], mouseRootX, [windowManager intValueForKey:@"mouseY"])];
                 }
                 monitorIndex++;
             }
