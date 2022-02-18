@@ -51,15 +51,33 @@
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
     [bitmap useAtariSTFont];
     int highestWidth = 0;
+    int highestRightWidth = 0;
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
-        id displayName = [elt valueForKey:@"displayName"];
-        if (displayName) {
-            int w = [bitmap bitmapWidthForText:displayName];
+        id text = nil;
+        id stringFormat = [elt valueForKey:@"stringFormat"];
+        if (stringFormat) {
+            text = [self str:stringFormat];
+        }
+        if (!text) {
+            text = [elt valueForKey:@"displayName"];
+        }
+        if (text) {
+            int w = [bitmap bitmapWidthForText:text];
             if (w > highestWidth) {
                 highestWidth = w;
             }
         }
+        id hotKey = [elt valueForKey:@"hotKey"];
+        if (hotKey) {
+            int w = [bitmap bitmapWidthForText:hotKey];
+            if (w > highestRightWidth) {
+                highestRightWidth = w;
+            }
+        }
+    }
+    if (highestWidth && highestRightWidth) {
+        return highestWidth + 8 + highestRightWidth + 18;
     }
     if (highestWidth) {
         return highestWidth + 8 + 18;
