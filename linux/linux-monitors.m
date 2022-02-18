@@ -27,75 +27,6 @@
 
 
 @implementation Definitions(fjkdlsjfklsdjklfjsdf)
-+ (void)rotateMonitor:(id)name orientation:(id)orientation
-{
-    id path = [Definitions configDir:@"Temp/monitors.csv"];
-    id monitors = [path parseCSVFile];
-    id elt = [monitors objectWithValue:name forKey:@"output"];
-    if (!elt) {
-        elt = nsdict();
-        [elt setValue:name forKey:@"output"];
-        if (!monitors) {
-            monitors = nsarr();
-        }
-        [monitors addObject:elt];
-    }
-    [elt setValue:orientation forKey:@"rotate"];
-    if (![monitors writeCSVToFile:path]) {
-        [nsfmt(@"Unable to write to file '%@'", path) showAlert];
-    }
-    [Definitions setupMonitors];
-}
-+ (void)swapMonitors:(id)name1 :(id)name2
-{
-    id path = [Definitions configDir:@"Temp/monitors.csv"];
-    id monitors = [path parseCSVFile];
-
-    int index1 = -1;
-    int index2 = -1;
-    for (int i=0; i<[monitors count]; i++) {
-        id elt = [monitors nth:i];
-        if ([name1 isEqual:[elt valueForKey:@"output"]]) {
-            index1 = i;
-        } else if ([name2 isEqual:[elt valueForKey:@"output"]]) {
-            index2 = i;
-        }
-    }
-    if ((index1 == -1) || (index2 == -1)) {
-        return;
-    }
-
-    id elt1 = [monitors nth:index1];
-    id elt2 = [monitors nth:index2];
-
-    [monitors replaceObjectAtIndex:index1 withObject:elt2];
-    [monitors replaceObjectAtIndex:index2 withObject:elt1];
-    
-    if (![monitors writeCSVToFile:path]) {
-        [nsfmt(@"Unable to write to file '%@'", path) showAlert];
-    }
-
-    [Definitions setupMonitors];
-}
-+ (id)previousMonitorName
-{
-    int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
-    int index = [Definitions monitorIndexForX:x y:0];
-    if (index >= 1) {
-        id monitors = [Definitions monitorConfig];
-        id elt = [monitors nth:index-1];
-        return [elt valueForKey:@"output"];
-    }
-    return nil;
-}
-+ (id)nextMonitorName
-{
-    int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
-    int index = [Definitions monitorIndexForX:x y:0];
-    id monitors = [Definitions monitorConfig];
-    id elt = [monitors nth:index+1];
-    return [elt valueForKey:@"output"];
-}
 + (id)currentMonitor
 {
     int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
@@ -112,47 +43,17 @@
     int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
     return [Definitions monitorIndexForX:x y:0];
 }
-+ (id)monitorName
-{
-    int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
-    id result = [Definitions monitorForX:x y:0];
-    return [result valueForKey:@"output"];
-}
-+ (id)monitorTitle
++ (id)currentMonitorIndexName
 {
     int x = [[@"windowManager" valueForKey] intValueForKey:@"mouseX"];
     id result = [Definitions monitorIndexNameForX:x y:0];
     return result;
 }
-+ (void)rotateCurrentMonitor:(id)orientation
-{
-    id windowManager = [@"windowManager" valueForKey];
-    int mouseX = [windowManager intValueForKey:@"mouseX"];
-    int mouseY = [windowManager intValueForKey:@"mouseY"];
-    id monitor = [Definitions monitorForX:mouseX y:mouseY];
-    id name = [monitor valueForKey:@"output"];
-    id path = [Definitions configDir:@"Temp/monitors.csv"];
-    id monitors = [path parseCSVFile];
-    id elt = [monitors objectWithValue:name forKey:@"output"];
-    if (!elt) {
-        elt = nsdict();
-        [elt setValue:name forKey:@"output"];
-        if (!monitors) {
-            monitors = nsarr();
-        }
-        [monitors addObject:elt];
-    }
-    [elt setValue:orientation forKey:@"rotate"];
-    if (![monitors writeCSVToFile:path]) {
-        [nsfmt(@"Unable to write to file '%@'", path) showAlert];
-    }
-    [Definitions setupMonitors];
-}
 + (void)setupMonitors
 {
     id cmd = nsarr();
     [cmd addObject:@"hotdog-setupMonitors.pl"];
-    [cmd runCommandAndReturnOutput];
+    [cmd runCommandInBackground];
 }
 
 + (id)monitorIndexNameForX:(int)x y:(int)y
@@ -204,33 +105,27 @@
 }
 + (id)monitorConfig
 {
-    static time_t lastTimestamp = 0;
+    static long lastTimestampPlusSize= 0;
     static id lastMonitors = nil;
     
-    id path = [Definitions configDir:@"Temp/listMonitors.csv"];    
+    id path = [Definitions configDir:@"Temp/listMonitors.txt"];    
     if ([path fileExists]) {
-        time_t timestamp = [path fileModificationTimestamp];
-        if (timestamp == lastTimestamp) {
+        long timestampPlusSize = [path fileTimestampPlusSize];
+        if (timestampPlusSize == lastTimestampPlusSize) {
             return lastMonitors;
         }
-        id monitors = [path parseCSVFile];
+        id monitors = [path linesFromFile];
         if (monitors) {
-            lastTimestamp = timestamp; 
+            lastTimestampPlusSize = timestampPlusSize; 
             [lastMonitors autorelease];
             lastMonitors = monitors;
             [lastMonitors retain];
             return lastMonitors;
         }
     }
-    if (lastMonitors) {
-        return lastMonitors;
-    }
-    id dict = nsdict();
-    [dict setValue:@"default" forKey:@"output"];
-    [dict setValue:@"1024" forKey:@"width"];
-    [dict setValue:@"768" forKey:@"height"];
+    lastTimestampPlusSize = 0;
     id arr = nsarr();
-    [arr addObject:dict];
+    [arr addObject:@"output:default width:1024 height:768"];
     lastMonitors = arr;
     [lastMonitors retain];
     return lastMonitors;
