@@ -7,7 +7,17 @@ if (not $device) {
 
 for(;;) {
 loop:
-    $mountpoint = `hotdog dialog mac --stdout --inputbox "Enter mount point for $device:" 1 1`;
+    # FIXME
+    @mountlist = `hotdog-listBlockDevices.pl | allValuesForKey: mountpoint | sed '/^\$/d'`;
+    chomp @mountlist;
+    $mountlist = join ' ', @mountlist;
+
+    $text = <<EOF;
+Enter mount point for $device:
+(mount points that are already in use: $mountlist)
+EOF
+
+    $mountpoint = `hotdog dialog mac --stdout --inputbox "$text" 1 1`;
     chomp $mountpoint;
     if ($? != 0) {
         exit 1;
@@ -34,8 +44,6 @@ loop:
         `echo "Unable to mount $device at $mountpoint" | hotdog alert`;
         exit 1;
     }
-
-    system('hotdog', 'open', $mountpoint);
 
     exit 0;
 }
