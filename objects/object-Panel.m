@@ -25,7 +25,7 @@
 
 #import "HOTDOG.h"
 
-#define MAX_RECT 64
+#define MAX_RECT 640
 
 static unsigned char *checkmark_pixels =
 "        bb\n"
@@ -304,6 +304,28 @@ exit(1);
 
     id obj = [@"Panel" asInstance];
     [obj setValue:lines forKey:@"array"];
+    [obj setValue:[@"." asRealPath] forKey:@"currentDirectory"];
+    return obj;
+}
++ (id)Panel:(id)cmd
+{
+    id obj = [@"Panel" asInstance];
+    [obj setValue:cmd forKey:@"generateCommand"];
+    [obj setValue:[@"." asRealPath] forKey:@"currentDirectory"];
+    if ([obj respondsToSelector:@selector(updateArrayAndTimestamp)]) {
+        [obj updateArrayAndTimestamp];
+    }
+    return obj;
+}
+@end
+@implementation NSString(jfkelwjfklsdmkflmsdklfm)
+- (id)panelFromString
+{
+    id lines = [self split:@"\n"];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:lines forKey:@"array"];
+    [obj setValue:[@"." asRealPath] forKey:@"currentDirectory"];
     return obj;
 }
 @end
@@ -311,6 +333,9 @@ exit(1);
 
 @interface Panel : IvarObject
 {
+    id _currentDirectory;
+    time_t _timestamp;
+    int _seconds;
     id _generateCommand;
     id _observer;
     BOOL _waitForObserver;
@@ -336,6 +361,22 @@ exit(1);
 }
 @end
 @implementation Panel
+- (void)handleBackgroundUpdate:(id)event
+{
+    if (!_currentDirectory) {
+        return;
+    }
+    time_t timestamp = [_currentDirectory fileModificationTimestamp];
+    if (timestamp == _timestamp) {
+        _seconds++;
+        return;
+    }
+    if (_generateCommand) {
+        [self updateArray];
+    }
+    _timestamp = timestamp;
+    _seconds = 0;
+}
 - (int)fileDescriptor
 {
     if (_observer) {
@@ -368,9 +409,20 @@ exit(1);
 }
 - (void)updateArray
 {
+NSLog(@"Panel updateArray path %@", _currentDirectory);
     id output = [[[_generateCommand runCommandAndReturnOutput] asString] split:@"\n"];
     if (output) {
         [self setValue:output forKey:@"array"];
+    }
+}
+- (void)updateArrayAndTimestamp
+{
+NSLog(@"Panel updateArrayAndTimestamp path %@", _currentDirectory);
+    time_t timestamp = [_currentDirectory fileModificationTimestamp];
+    id output = [[[_generateCommand runCommandAndReturnOutput] asString] split:@"\n"];
+    if (output) {
+        [self setValue:output forKey:@"array"];
+        _timestamp = timestamp;
     }
 }
 
@@ -392,6 +444,9 @@ NSLog(@"waiting for input");
 
     [self setValue:bitmap forKey:@"bitmap"];
     for (int i=0; i<[_array count]; i++) {
+        if (_cursorY >= r.y + r.h) {
+            break;
+        }
         if ([_buttons count] >= MAX_RECT) {
             [self panelText:@"MAX_RECT reached"];
             break;
@@ -415,7 +470,51 @@ NSLog(@"waiting for input");
     [Definitions drawStripedBackgroundInBitmap:_bitmap rect:_r];
 }
 
-- (void)panelText:(id)text
+- (void)panelColor:(id)color
+{
+    [_bitmap setColor:color];
+}
+
+- (void)panelBlankSpace:(int)h
+{
+    _cursorY += h;
+}
+- (void)panelLine
+{
+    [self panelLine:1];
+}
+
+- (void)panelLine:(int)h
+{
+    if (h == 1) {
+        [_bitmap drawHorizontalLineAtX:_r.x x:_r.x+_r.w-1 y:_cursorY];
+    } else if (h > 1) {
+        [_bitmap fillRectangleAtX:_r.x y:_cursorY w:_r.w h:h];
+    }
+    _cursorY += h;
+}
+
+- (void)panelText:(id)text color:(id)color backgroundColor:(id)backgroundColor
+{
+    text = [_bitmap fitBitmapString:text width:_r.w-20];
+    int textWidth = [_bitmap bitmapWidthForText:text];
+    int textHeight = [_bitmap bitmapHeightForText:text];
+    if (textHeight <= 0) {
+        textHeight = [_bitmap bitmapHeightForText:@"X"];
+    }
+
+    [_bitmap setColor:backgroundColor];
+    [_bitmap fillRectangleAtX:_r.x y:_cursorY w:_r.w h:textHeight];
+
+    int x = _r.x;
+    x += (_r.w - textWidth) / 2;
+    if (color) {
+        [_bitmap setColor:color];
+    }
+    [_bitmap drawBitmapText:text x:x y:_cursorY];
+    _cursorY += textHeight;
+}
+- (void)panelText:(id)text color:(id)color
 {
     text = [_bitmap fitBitmapString:text width:_r.w-20];
     int textWidth = [_bitmap bitmapWidthForText:text];
@@ -426,9 +525,15 @@ NSLog(@"waiting for input");
 
     int x = _r.x;
     x += (_r.w - textWidth) / 2;
-    [_bitmap setColor:@"black"];
+    if (color) {
+        [_bitmap setColor:color];
+    }
     [_bitmap drawBitmapText:text x:x y:_cursorY];
     _cursorY += textHeight;
+}
+- (void)panelText:(id)text
+{
+    [self panelText:text color:@"black"];
 }
 - (void)panelTopButton:(id)text
 {
@@ -730,7 +835,7 @@ NSLog(@"waiting for input");
         id message = [_buttons nth:_buttonDown-1];
         if ([message length]) {
             [self evaluateMessage:message];
-            [self updateArray];
+//            [self updateArray];
         }
     }
     _buttonDown = 0;
@@ -738,6 +843,20 @@ NSLog(@"waiting for input");
 - (void)handleScrollWheel:(id)event
 {
     _scrollY -= [event intValueForKey:@"deltaY"];
+}
+- (void)handleRightMouseDown:(id)event
+{
+    id windowManager = [event valueForKey:@"windowManager"];
+    int mouseRootX = [event intValueForKey:@"mouseRootX"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+    id buttonDownWhich = [event valueForKey:@"buttonDownWhich"];
+
+    id obj = [[[Definitions configDir:@"Config/rootWindowMenu.csv"] parseCSVFile] asMenu];
+    int w = [obj preferredWidth];
+    int h = [obj preferredHeight];
+    id dict = [windowManager openWindowForObject:obj x:mouseRootX y:mouseRootY w:w+3 h:h+3];
+    [windowManager setValue:dict forKey:@"buttonDownDict"];
+    [windowManager setValue:buttonDownWhich forKey:@"buttonDownWhich"];
 }
 @end
 
