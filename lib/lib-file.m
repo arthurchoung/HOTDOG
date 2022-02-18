@@ -265,17 +265,6 @@ exit(0);
     return result;
 }
 
-static int qsort_asFileArray(void *aptr, void *bptr, void *arg)
-{
-    id a = *((id *)aptr);
-    id b = *((id *)bptr);
-    int val = [a compare:b key:@"fileType"];
-    if (val == 0) {
-        val = [a compare:b key:@"displayName"];
-    }
-    return val;
-}
-
 - (id)asFileArray
 {
     id keepArr = nsarr();
@@ -303,10 +292,8 @@ static int qsort_asFileArray(void *aptr, void *bptr, void *arg)
         [dict setValue:nsfmt(@"%lu", [filePath fileSize]) forKey:@"fileSize"];
         [arr addObject:dict];
     }
-    arr = [arr asArraySortedWithFunction:qsort_asFileArray argument:nil];
     return arr;
 }
-
 
 - (id)joinAsPath
 {
@@ -642,6 +629,23 @@ static int qsort_asFileArray(void *aptr, void *bptr, void *arg)
 }
 #endif
 
+- (long)fileTimestampPlusSize
+{
+#ifdef BUILD_FOR_LINUX
+    struct stat buf;
+    if (stat([self UTF8String], &buf) != 0) {
+        return nil;
+    }
+    return buf.st_mtim.tv_sec + buf.st_size;
+#else
+    struct stat buf;
+    if (stat([self UTF8String], &buf) != 0) {
+        return nil;
+    }
+    return buf.st_mtimespec.tv_sec + buf.st_size;
+#endif
+
+}
 
 
 
