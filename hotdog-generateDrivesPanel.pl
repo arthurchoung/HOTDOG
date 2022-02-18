@@ -5,10 +5,21 @@ $output = `hotdog-listBlockDevices.pl`;
 @lines = grep { m/\bfstype:[a-zA-Z0-9]+/ } @lines;
 
 print <<EOF;
-panelStripedBackground
+panelHorizontalStripes
 EOF
 
+$first = 1;
+
 foreach $line (@lines) {
+    if ($first) {
+        $first = 0;
+    } else {
+        print <<EOF;
+panelText:''
+panelLine
+EOF
+    }
+
     $device = '';
     if ($line !~ m/\bfstype:[a-zA-Z0-9]+/) {
         next;
@@ -46,12 +57,12 @@ EOF
         if ($mountpoint ne '/') {
             print <<EOF;
 panelText:''
-panelButton:'Unmount $mountpoint' message:[NSArray|addObject:'hotdog-unmountDrive.pl'|addObject:'$mountpoint'|runCommandAndReturnOutput]
+panelButton:'Unmount $mountpoint' message:[NSArray|addObject:'hotdog-unmountDrive.pl'|addObject:'$mountpoint'|runCommandAndReturnOutput;updateArray]
 EOF
         }
     } else {
         print <<EOF;
-panelButton:'Mount $device' message:[NSArray|addObject:'hotdog-mountDrive.pl'|addObject:'$device'|runCommandAndReturnOutput]
+panelButton:'Mount $device' message:[NSArray|addObject:'hotdog-mountDrive.pl'|addObject:'$device'|runCommandAndReturnOutput;updateArray]
 EOF
     }
 }
