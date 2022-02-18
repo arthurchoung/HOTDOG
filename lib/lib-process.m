@@ -173,11 +173,11 @@ NSLog(@"runAsArgumentsForCommandAndReturnOutput %@ self %@", command, self);
     return [process readAllDataFromOutputThenCloseAndWait];
 }
 
-- (int)runCommandInBackground
+- (void)runCommandInBackground
 {
     NSLog(@"runCommandInBackground: %@", self);
     if ([self count] < 1) {
-        return 0;
+        return;// 0;
     }
     
     pid_t   childpid;
@@ -185,7 +185,7 @@ NSLog(@"runAsArgumentsForCommandAndReturnOutput %@ self %@", command, self);
     if((childpid = fork()) == -1)
     {
         perror("fork");
-        return 0;
+        return;// 0;
     }
     
     if(childpid == 0)
@@ -234,7 +234,7 @@ NSLog(@"unable to open /dev/null");
     }
     else
     {
-        return childpid;
+        return;// childpid;
     }
 }
 - (int)runCommandInBackgroundAndWriteStringToStandardInput:(id)str
@@ -313,6 +313,7 @@ NSLog(@"unable to open /dev/null");
 
 @interface Process : IvarObject
 {
+    id _command;
     int _infd;
     int _outfd;
     int _pid;
@@ -335,7 +336,7 @@ NSLog(@"unable to open /dev/null");
 
 - (void)dealloc
 {
-NSLog(@"Process dealloc pid %d getpid %d", _pid, getpid());
+NSLog(@"Process dealloc pid %d getpid %d command %@", _pid, getpid(), _command);
     if (_infd != -1) {
         close(_infd);
         _infd = -1;
@@ -598,6 +599,7 @@ NSLog(@"write result %d", result);
         close(fdone[1]);
 
         id process = [[[Process alloc] init] autorelease];
+        [process setValue:self forKey:@"command"];
         [process setValue:nsfmt(@"%d", childpid) forKey:@"pid"];
         [process setValue:nsfmt(@"%d", fdzero[1]) forKey:@"infd"];
         [process setValue:nsfmt(@"%d", fdone[0]) forKey:@"outfd"];
