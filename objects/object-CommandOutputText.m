@@ -92,9 +92,15 @@ NSLog(@"CommandOutputText command '%@' readLine '%@'", _command, line);
 }
 - (int)preferredWidth
 {
-    id str = _lastLine;
-    if (str && _stringFormat) {
-        str = [str str:_stringFormat];
+    id str = @"No output";
+    if (_stringFormat) {
+        if (_lastLine) {
+            str = [_lastLine str:_stringFormat];
+        } else {
+            str = [@"" str:_stringFormat];
+        }
+    } else if (_lastLine) {
+        str = _lastLine;
     }
     int len = [str length];
     if (!len) {
@@ -109,9 +115,15 @@ NSLog(@"CommandOutputText command '%@' readLine '%@'", _command, line);
 }
 - (int)preferredWidthForBitmap:(id)bitmap
 {
-    id str = _lastLine;
-    if (str && _stringFormat) {
-        str = [str str:_stringFormat];
+    id str = @"No output";
+    if (_stringFormat) {
+        if (_lastLine) {
+            str = [_lastLine str:_stringFormat];
+        } else {
+            str = [@"" str:_stringFormat];
+        }
+    } else if (_lastLine) {
+        str = _lastLine;
     }
     int len = [str length];
     if (!len) {
@@ -126,22 +138,36 @@ NSLog(@"CommandOutputText command '%@' readLine '%@'", _command, line);
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
-    id str = _lastLine;
-    if (str && _stringFormat) {
-        str = [str str:_stringFormat];
+    id str = @"No output";
+    if (_stringFormat) {
+        if (_lastLine) {
+            str = [_lastLine str:_stringFormat];
+        } else {
+            str = [@"" str:_stringFormat];
+        }
+    } else if (_lastLine) {
+        str = _lastLine;
     }
-    if (!str) {
+    int len = [str length];
+    if (!len) {
         str = @"No output";
     }
     [bitmap drawBitmapText:str x:r.x y:r.y+3];
 }
 - (void)drawHighlightedInBitmap:(id)bitmap rect:(Int4)r
 {
-    id str = _lastLine;
-    if (str && _stringFormat) {
-        str = [str str:_stringFormat];
+    id str = @"No output";
+    if (_stringFormat) {
+        if (_lastLine) {
+            str = [_lastLine str:_stringFormat];
+        } else {
+            str = [@"" str:_stringFormat];
+        }
+    } else if (_lastLine) {
+        str = _lastLine;
     }
-    if (!str) {
+    int len = [str length];
+    if (!len) {
         str = @"No output";
     }
     [bitmap setColorIntR:255 g:255 b:255 a:255];
