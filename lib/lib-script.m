@@ -449,6 +449,10 @@ NSLog(@"Bad signature");
             if (signature[0] == '@') {
                 id (*func)(id, SEL, double) = imp;
                 return func(target, sel, [[args nth:0] doubleValue]);
+            } else if (signature[0] == 'C') {
+                unsigned char (*func)(id, SEL, double) = imp;
+                unsigned char val = func(target, sel, [[args nth:0] doubleValue]);
+                return nsfmt(@"%u", val);
             }
         } else if (signature[4] == 'd') {
             if (signature[5] == 0) {
@@ -926,16 +930,11 @@ NSLog(@"%@", err);
                 if ([_selectorName length]) {
                     id result = [_contextualObject valueForKey:text];
                     if (!result) {
-                        if ([Definitions respondsToSelector:@selector(interfaceValueForKey:)]) {
-                            result = [Definitions interfaceValueForKey:text];
+                        NSLog(@"unable to resolve argument selectorName %@ text %@ contextualObject %@", _selectorName, text, _contextualObject);
+                        if (isnsdict(_contextualObject)) {
+                            NSLog(@"contextualObject %@", [_contextualObject allKeysAndValues]);
                         }
-                        if (!result) {
-                            NSLog(@"unable to resolve argument selectorName %@ text %@ contextualObject %@", _selectorName, text, _contextualObject);
-                            if (isnsdict(_contextualObject)) {
-                                NSLog(@"contextualObject %@", [_contextualObject allKeysAndValues]);
-                            }
-                            return nil;
-                        }
+                        return nil;
                     }
                     [_args addObject:result];
                 } else {
@@ -1012,13 +1011,6 @@ NSLog(@"%@", err);
         m = class_getClassMethod(defs, sel);
         if (m) {
             return callMethod(defs, m, _args);
-        }
-    }
-
-    if ([Definitions respondsToSelector:@selector(interfaceValueForKey:)]) {
-        id valueForKey = [Definitions interfaceValueForKey:_selectorName];
-        if (valueForKey) {
-            return valueForKey;
         }
     }
 
