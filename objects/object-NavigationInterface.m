@@ -28,13 +28,21 @@
 @implementation Definitions(jfkdlsjfklsdjfklsf)
 + (id)ObjectInterface
 {
+    if ([@"00panel" stringFromFile]) {
+        id cmd = nsarr();
+        [cmd addObject:@"./00panel"];
+        return [Definitions Panel:cmd];
+    }
+
     id loadMessage = @"00loadMessage";
     if ([loadMessage fileExists]) {
         id message = [loadMessage stringFromFile];
         id obj = [nsdict() evaluateMessage:message];
         return obj;
     } else {
-        return [Definitions ListInterface];
+        id cmd = nsarr();
+        [cmd addObject:@"hotdog-generateDirPanel.pl"];
+        return [Definitions Panel:cmd];
     }
 }
 #ifdef BUILD_FOR_IOS
@@ -43,20 +51,28 @@
 NSLog(@"ListInterface");
     id arr = [@"00index.csv" parseCSVFile];
     if (!arr) {
-        arr = [@"." contentsOfDirectory];
-        arr = [arr asFileArray];
-        for (int i=0; i<[arr count]; i++) {
-            id elt = [arr nth:i];
-            if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
-                [elt setValue:@"selectedObject|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
-            } else {
-                [elt setValue:@"selectedObject|filePath|runFileHandler" forKey:@"messageForClick"];
+        id cmd = nsarr();
+        if ([@"00ls" stringFromFile]) {
+            [cmd addObject:@"./00ls"];
+        } else {
+            [cmd addObject:@"ls"];
+            [cmd addObject:@"--group-directories-first"];
+        }
+
+        id output = [cmd runCommandAndReturnOutput];
+        if (output) {
+            id lines = [[output asString] split:@"\n"];
+            arr = [lines asFileArray];
+            for (int i=0; i<[arr count]; i++) {
+                id elt = [arr nth:i];
+                if ([[elt valueForKey:@"displayName"] hasSuffix:@"/"]) {
+                    [elt setValue:@"selectedObject|filePath|changeDirectory;ObjectInterface" forKey:@"messageForClick"];
+                } else {
+                    [elt setValue:@"0" forKey:@"drawChevron"];
+                    [elt setValue:@"selectedObject|filePath|runFileHandler" forKey:@"messageForClick"];
+                }
             }
         }
-    }
-    id preArr = [@"00preindex.csv" parseCSVFile];
-    if (preArr) {
-        arr = [preArr arrayByAddingObjectsFromArray:arr];
     }
             
     id obj = [arr asListInterface];
@@ -112,7 +128,7 @@ NSLog(@"ListInterface");
     NSLog(@"handleClassMenuForKey:%@ value:%@", key, value);
     id target = self;
     BOOL isInterface = NO;
-    if ([self isKindOfClass:[@"NavigationInterface" asClass]]) {
+    if ([self isKindOfClass:[@"NavigationStack" asClass]]) {
         isInterface = YES;
         target = [[self valueForKey:@"context"] valueForKey:@"object"];
     }
@@ -359,9 +375,9 @@ NSLog(@"target %@", target);
 @end
 
 @implementation NSObject(Jfkldslkfjsdklfj)
-- (id)asNavigationInterface
+- (id)asNavigationStack
 {
-    id obj = [@"NavigationInterface" asInstance];
+    id obj = [@"NavigationStack" asInstance];
     [obj pushObject:self];
     return obj;
 }
@@ -370,9 +386,9 @@ NSLog(@"target %@", target);
 
 
 @implementation Definitions(fjdkslfjklsdjf)
-+ (void)popFromMainInterface
++ (void)popFromNavigationStack
 {
-    [[Definitions mainInterface] popObject];
+    [[Definitions navigationStack] popObject];
 }
 
 + (int)navigationBarHeight
@@ -412,12 +428,12 @@ NSLog(@"target %@", target);
 }
 #endif
 #ifdef BUILD_FOR_LINUX
-+ (id)mainInterface
++ (id)navigationStack
 {
-    id obj = [@"mainInterface" valueForKey];
+    id obj = [@"navigationStack" valueForKey];
     if (!obj) {
-        obj = [@"NavigationInterface" asInstance];
-        [obj setAsValueForKey:@"mainInterface"];
+        obj = [@"NavigationStack" asInstance];
+        [obj setAsValueForKey:@"navigationStack"];
     }
     return obj;
 }
@@ -484,7 +500,7 @@ NSLog(@"target %@", target);
 #else
 + (id)interfaceObject
 {
-    id interface = [Definitions mainInterface];
+    id interface = [Definitions navigationStack];
     id context = [interface valueForKey:@"context"];
     id cursor = context;
     for(;;) {
@@ -499,25 +515,6 @@ NSLog(@"target %@", target);
             }
         } else {
             return obj;
-        }
-        cursor = [cursor valueForKey:@"previous"];
-    }
-    return nil;
-}
-+ (id)interfaceValueForKey:(id)key
-{
-    id interface = [Definitions mainInterface];
-    id context = [interface valueForKey:@"context"];
-    id cursor = context;
-    for(;;) {
-        if (!cursor) {
-            break;
-        }
-        id obj = [cursor valueForKey:@"object"];
-        id selectedObject = [obj valueForKey:@"selectedObject"];
-        id val = [selectedObject valueForKey:key];
-        if (val) {
-            return val;
         }
         cursor = [cursor valueForKey:@"previous"];
     }
@@ -557,39 +554,39 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
 @end
 #else
 @implementation NSDictionary(fjkldsjfklsdjfk)
-- (void)pushToMainInterface
+- (void)pushToNavigationStack
 {
     id obj = [@"ListInterface" asInstance];
     [obj setupDict:self];
-    [obj pushToMainInterface];
+    [obj pushToNavigationStack];
 }
 @end
 
 @implementation NSArray(jfkdsljfklsdjf)
-- (void)pushToMainInterface
+- (void)pushToNavigationStack
 {
     id obj = [@"ListInterface" asInstance];
     [obj setup:self];
-    [obj pushToMainInterface];
+    [obj pushToNavigationStack];
 }
 @end
 @implementation NSString(jfkldsjklfjsdkf)
-- (void)pushToMainInterface
+- (void)pushToNavigationStack
 {
-    NSLog(@"pushToMainInterface %@", self);
-    [[Definitions mainInterface] pushObject:self];
+NSLog(@"pushToNavigationStack %@", self);
+    [[Definitions navigationStack] pushObject:self];
 }
 @end
 @implementation NSObject(jfkldsjklfjsdkf)
-- (void)pushToMainInterface
+- (void)pushToNavigationStack
 {
-    NSLog(@"pushToMainInterface %@", self);
-    [[Definitions mainInterface] pushObject:self];
+NSLog(@"pushToNavigationStack %@", self);
+    [[Definitions navigationStack] pushObject:self];
 }
 @end
 #endif
 
-@interface NavigationInterface : IvarObject
+@interface NavigationStack : IvarObject
 {
     BOOL _buttonPassthrough;
     id _buttonDown;
@@ -606,7 +603,7 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
 }
 @end
 
-@implementation NavigationInterface
+@implementation NavigationStack
 - (void)drawTransitionInBitmap:(id)bitmap rect:(Int4)r
 {
 //FIXME use textures
@@ -699,13 +696,18 @@ NSLog(@"popToObject %@", [cursor valueForKey:@"object"]);
 
 - (void)popObject
 {
+NSLog(@"popObject");
     id previous = [_context valueForKey:@"previous"];
     if (previous) {
         id previousObject = [previous valueForKey:@"object"];
         if (previousObject) {
             id currentDirectory = [previousObject valueForKey:@"currentDirectory"];
+NSLog(@"currentDirectory '%@'", currentDirectory);
             if (currentDirectory) {
                 [currentDirectory changeDirectory];
+                if ([previousObject respondsToSelector:@selector(updateArrayAndTimestamp)]) {
+                    [previousObject updateArrayAndTimestamp];
+                }
                 _updateWindowName = YES;
             }
         }
@@ -718,7 +720,7 @@ NSLog(@"popToObject %@", [cursor valueForKey:@"object"]);
     if (!obj) {
         return;
     }
-    if ([obj isKindOfClass:[NavigationInterface class]]) {
+    if ([obj isKindOfClass:[NavigationStack class]]) {
 NSLog(@"pushObject:%@ not allowed", obj);
         return;
     }
@@ -952,11 +954,11 @@ NSLog(@"obj %@", obj);
                     if ([choice intValueForKey:@"drawChevron" default:1]) {
                         [choice setValue:@"message|evaluateMessageWithContext:previousObject" forKey:@"messageForClick"];
                     } else {
-                        [choice setValue:@"message|evaluateMessageWithContext:previousObject ; mainInterface | popToObject:(selectedObject|previousObject)" forKey:@"messageForClick"];
+                        [choice setValue:@"message|evaluateMessageWithContext:previousObject ; navigationStack | popToObject:(selectedObject|previousObject)" forKey:@"messageForClick"];
                     }
                     [choice setValue:obj forKey:@"previousObject"];
                 }
-                [[menu asListInterface] pushToMainInterface];
+                [[menu asListInterface] pushToNavigationStack];
             }
         }
     } else {
