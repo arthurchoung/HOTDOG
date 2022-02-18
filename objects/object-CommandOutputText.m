@@ -30,6 +30,7 @@
 {
     id process = [cmd runCommandAndReturnProcess];
     id obj = [@"CommandOutputText" asInstance];
+    [obj setValue:cmd forKey:@"command"];
     [obj setValue:process forKey:@"fileDescriptor"];
     return obj;
 }
@@ -45,10 +46,18 @@
     [obj setValue:stringFormat forKey:@"stringFormat"];
     return obj;
 }
++ (id)CommandOutputText:(id)cmd lineMessage:(id)lineMessage stringFormat:(id)stringFormat
+{
+    id obj = [Definitions CommandOutputText:cmd];
+    [obj setValue:lineMessage forKey:@"lineMessage"];
+    [obj setValue:stringFormat forKey:@"stringFormat"];
+    return obj;
+}
 @end
 
 @interface CommandOutputText : IvarObject
 {
+    id _command;
     id _fileDescriptor;
     id _lastLine;
     int _maxWidth;
@@ -73,6 +82,7 @@
             if (!line) {
                 break;
             }
+NSLog(@"CommandOutputText command '%@' readLine '%@'", _command, line);
             [self setValue:line forKey:@"lastLine"];
             if (_lineMessage) {
                 [line evaluateMessage:_lineMessage];
