@@ -41,10 +41,10 @@ hotKey,displayName,messageForClick
 ,
 ,"Quit","exit:0"
 ,
-,Enter Amiga Mode,"enterAmigaMode"
-,Enter Mac Classic Mode,"enterMacClassicMode"
-,Enter Mac Color Mode,"enterMacColorMode"
-,Enter Mac Platinum Mode,"enterMacPlatinumMode"
-,Enter Hot Dog Stand Mode,"enterHotDogStandMode"
-,Enter Atari ST Mode,"enterAtariSTMode"
-,Enter Aqua Mode,"enterAquaMode"
+,Enter Amiga Mode,"windowManager|setValue:'enterAmigaMode' forKey:'pendingMessage'"
+,Enter Mac Classic Mode,"windowManager|setValue:'enterMacClassicMode' forKey:'pendingMessage'"
+,Enter Mac Color Mode,"windowManager|setValue:'enterMacColorMode' forKey:'pendingMessage'"
+,Enter Mac Platinum Mode,"windowManager|setValue:'enterMacPlatinumMode' forKey:'pendingMessage'"
+,Enter Hot Dog Stand Mode,"windowManager|setValue:'enterHotDogStandMode' forKey:'pendingMessage'"
+,Enter Atari ST Mode,"windowManager|setValue:'enterAtariSTMode' forKey:'pendingMessage'"
+,Enter Aqua Mode,"windowManager|setValue:'enterAquaMode' forKey:'pendingMessage'"
