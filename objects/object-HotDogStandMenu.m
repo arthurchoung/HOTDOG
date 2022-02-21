@@ -33,6 +33,7 @@
     id _array;
     id _selectedObject;
     id _contextualObject;
+    int _scrollY;
 }
 @end
 
@@ -99,8 +100,10 @@
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+    Int4 origRect = r;
     [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
     [bitmap fillRect:r];
+    r.y -= _scrollY;
     [bitmap setColorIntR:0x86 g:0x8a b:0x8e a:0xff];
     [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
     [bitmap drawVerticalLineAtX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
@@ -138,7 +141,7 @@
         id rightText = [elt valueForKey:@"hotKey"];
 
         id messageForClick = [elt valueForKey:@"messageForClick"];
-        if ([messageForClick length] && [Definitions isX:_mouseX y:_mouseY insideRect:cellRect]) {
+        if ([messageForClick length] && [Definitions isX:_mouseX y:_mouseY insideRect:origRect] && [Definitions isX:_mouseX y:_mouseY insideRect:cellRect]) {
             if ([text length]) {
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:cellRect];
@@ -175,6 +178,25 @@
         }
     }
 }
+- (void)handleKeyDown:(id)event
+{
+NSLog(@"HotDogStandMenu handleKeyDown");
+    id keyString = [event valueForKey:@"keyString"];
+NSLog(@"keyString %@", keyString);
+    if ([keyString isEqual:@"up"]) {
+        _scrollY -= 20;
+    } else if ([keyString isEqual:@"down"]) {
+        _scrollY += 20;
+    }
+}
+- (void)handleScrollWheel:(id)event
+{
+NSLog(@"HotDogStandMenu handleScrollWheel");
+    int dy = [event intValueForKey:@"scrollingDeltaY"];
+NSLog(@"dy %d", dy);
+    _scrollY += dy;
+}
+
 - (void)handleMouseMoved:(id)event
 {
 NSLog(@"Menu handleMouseMoved");
