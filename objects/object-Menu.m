@@ -56,6 +56,7 @@
     id _array;
     id _selectedObject;
     id _contextualObject;
+    int _scrollY;
 }
 @end
 
@@ -152,13 +153,15 @@ NSLog(@"dealloc Menu %@", self);
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)outerRect
 {
+    Int4 origRect = outerRect;
+    outerRect.y -= _scrollY;
     Int4 r = outerRect;
     r.x += 1;
     r.y += 1;
     r.w -= 3;
     r.h -= 3;
     [bitmap setColor:@"black"];
-    [bitmap fillRect:outerRect];
+    [bitmap fillRect:origRect];
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
 
@@ -182,7 +185,7 @@ NSLog(@"dealloc Menu %@", self);
         }
         id rightText = [elt valueForKey:@"hotKey"];
         id messageForClick = [elt valueForKey:@"messageForClick"];
-        if ([messageForClick length] && [Definitions isX:_mouseX y:_mouseY insideRect:cellRect]) {
+        if ([messageForClick length] && [Definitions isX:_mouseX y:_mouseY insideRect:origRect] && [Definitions isX:_mouseX y:_mouseY insideRect:cellRect]) {
             if ([text length]) {
                 if (_closingIteration) {
                     if ((_closingIteration/20) % 2 == 0) {
@@ -225,6 +228,30 @@ NSLog(@"dealloc Menu %@", self);
             }
         }
     }
+}
+- (void)handleKeyDown:(id)event
+{
+NSLog(@"AquaMenu handleKeyDown");
+    if (_closingIteration) {
+        return;
+    }
+    id keyString = [event valueForKey:@"keyString"];
+NSLog(@"keyString %@", keyString);
+    if ([keyString isEqual:@"up"]) {
+        _scrollY -= 20;
+    } else if ([keyString isEqual:@"down"]) {
+        _scrollY += 20;
+    }
+}
+- (void)handleScrollWheel:(id)event
+{
+NSLog(@"AquaMenu handleScrollWheel");
+    if (_closingIteration) {
+        return;
+    }
+    int dy = [event intValueForKey:@"scrollingDeltaY"];
+NSLog(@"dy %d", dy);
+    _scrollY += dy;
 }
 - (void)handleMouseMoved:(id)event
 {
