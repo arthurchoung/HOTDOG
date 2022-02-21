@@ -33,6 +33,7 @@
     id _array;
     id _selectedObject;
     id _contextualObject;
+    int _scrollY;
 }
 @end
 
@@ -99,13 +100,15 @@
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)outerRect
 {
+    Int4 origRect = outerRect;
+    outerRect.y -= _scrollY;
     Int4 r = outerRect;
     r.x += 1;
     r.y += 1;
     r.w -= 2;
     r.h -= 2;
     [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
-    [bitmap fillRect:outerRect];
+    [bitmap fillRect:origRect];
     [bitmap setColor:@"white"];
     for (int i=0; i<r.h; i++) {
         [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
@@ -135,7 +138,7 @@
         r2.x += 2;
         r2.w -= 4;
         id messageForClick = [elt valueForKey:@"messageForClick"];
-        if ([messageForClick length] && [Definitions isX:_mouseX y:_mouseY insideRect:cellRect]) {
+        if ([messageForClick length] && [Definitions isX:_mouseX y:_mouseY insideRect:origRect] && [Definitions isX:_mouseX y:_mouseY insideRect:cellRect]) {
             if ([text length]) {
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:r2];
@@ -171,6 +174,24 @@
             }
         }
     }
+}
+- (void)handleKeyDown:(id)event
+{
+NSLog(@"AmigaMenu handleKeyDown");
+    id keyString = [event valueForKey:@"keyString"];
+NSLog(@"keyString %@", keyString);
+    if ([keyString isEqual:@"up"]) {
+        _scrollY -= 20;
+    } else if ([keyString isEqual:@"down"]) {
+        _scrollY += 20;
+    }
+}
+- (void)handleScrollWheel:(id)event
+{
+NSLog(@"AmigaMenu handleScrollWheel");
+    int dy = [event intValueForKey:@"scrollingDeltaY"];
+NSLog(@"dy %d", dy);
+    _scrollY += dy;
 }
 - (void)handleMouseMoved:(id)event
 {
