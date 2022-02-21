@@ -12,13 +12,13 @@ if (not $path) {
 
 
 print <<EOF;
-displayName,stringFormat,messageForClick
+displayName,messageForClick
 "$arg"
-"Portrait (left)",,"['hotdog-rotateMonitor:orientation:.pl' '$arg' 'left']|runCommandInBackground"
-"Portrait (right)",,"['hotdog-rotateMonitor:orientation:.pl' '$arg' 'right']|runCommandInBackground"
-"Landscape (normal)",,"['hotdog-rotateMonitor:orientation:.pl' '$arg' 'normal']|runCommandInBackground"
-"Landscape (inverted)",,"['hotdog-rotateMonitor:orientation:.pl' '$arg' 'inverted']|runCommandInBackground"
-,,
+"Portrait (left)","['hotdog-rotateMonitor:orientation:.pl' '$arg' 'left']|runCommandInBackground"
+"Portrait (right)","['hotdog-rotateMonitor:orientation:.pl' '$arg' 'right']|runCommandInBackground"
+"Landscape (normal)","['hotdog-rotateMonitor:orientation:.pl' '$arg' 'normal']|runCommandInBackground"
+"Landscape (inverted)","['hotdog-rotateMonitor:orientation:.pl' '$arg' 'inverted']|runCommandInBackground"
+,
 EOF
 
 @monitors = `cat $path`;
@@ -38,13 +38,13 @@ foreach $line (@monitors) {
 EOF
     } else {
         print <<EOF;
-,"$i. Swap Monitor with $name","['hotdog-swapMonitors::.pl' '$arg' '$name']|runCommandInBackground"
+"$i. Swap Monitor with $name","['hotdog-swapMonitors::.pl' '$arg' '$name']|runCommandInBackground"
 EOF
     }
 }
 
 print <<EOF;
-,,
+,
 EOF
 
 $output = `xrandr`;
@@ -91,7 +91,7 @@ EOF
 }
 
 print <<EOF;
-,,
+,
 EOF
 
 @refreshRates = split /\s+/, $refreshRates;
