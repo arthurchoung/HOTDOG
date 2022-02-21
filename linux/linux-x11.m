@@ -1851,6 +1851,30 @@ NSLog(@"hotkey keyString %@", keyString);
         }
 
         XAllowEvents(_display, ReplayKeyboard, CurrentTime);
+
+NSLog(@"********** buttonDownDict %@", _buttonDownDict);
+        if (_buttonDownDict) {
+            id dict = _buttonDownDict;
+            id object = [dict valueForKey:@"object"];
+            if ([object respondsToSelector:@selector(handleKeyDown:)]) {
+                int w = [dict intValueForKey:@"w"];
+                int h = [dict intValueForKey:@"h"];
+                id event = [self dictForKeyEvent:e w:w h:h x11dict:dict];
+                id keyString = [Definitions keyForXKeyCode:keysym modifiers:e->state];
+                [event setValue:keyString forKey:@"keyString"];
+NSLog(@"keyString %@", keyString);
+                [event setValue:nsfmt(@"%d", keysym) forKey:@"keyCode"];
+                if (e->state & Mod1Mask) {
+                    [event setValue:@"1" forKey:@"altKey"];
+                }
+                if (e->state & Mod4Mask) {
+                    [event setValue:@"1" forKey:@"windowsKey"];
+                }
+                [object handleKeyDown:event];
+                [dict setValue:@"1" forKey:@"needsRedraw"];
+            }
+        }
+
         return;
     } else {
         if (keysym == XK_Escape) {
@@ -2206,8 +2230,42 @@ NSLog(@"handleX11UnmapNotify e->event %x e->window %x", e->event, e->window);
 {
     XButtonEvent *e = eptr;
     if (_buttonDownDict) {
+        if (e->button == 4) {
+            id dict = _buttonDownDict;
+            id object = [dict valueForKey:@"object"];
+NSLog(@"handleX11ButtonPress e->button 4 object %@", object);
+            int x = [dict intValueForKey:@"x"];
+            int y = [dict intValueForKey:@"y"];
+            int w = [dict intValueForKey:@"w"];
+            int h = [dict intValueForKey:@"h"];
+            if ([object respondsToSelector:@selector(handleScrollWheel:)]) {
+                id event = [self dictForButtonEvent:e w:w h:h x11dict:dict];
+                [Definitions x11FixupEvent:event forBitmapObject:object];
+                [event setValue:@"20" forKey:@"deltaY"];
+                [event setValue:@"-20" forKey:@"scrollingDeltaY"];
+                [object handleScrollWheel:event];
+            }
+            [dict setValue:@"1" forKey:@"needsRedraw"];
+        } else if (e->button == 5) {
+            id dict = _buttonDownDict;
+            id object = [dict valueForKey:@"object"];
+NSLog(@"handleX11ButtonPress e->button 5 object %@", object);
+            int x = [dict intValueForKey:@"x"];
+            int y = [dict intValueForKey:@"y"];
+            int w = [dict intValueForKey:@"w"];
+            int h = [dict intValueForKey:@"h"];
+            if ([object respondsToSelector:@selector(handleScrollWheel:)]) {
+                id event = [self dictForButtonEvent:e w:w h:h x11dict:dict];
+                [Definitions x11FixupEvent:event forBitmapObject:object];
+                [event setValue:@"-20" forKey:@"deltaY"];
+                [event setValue:@"20" forKey:@"scrollingDeltaY"];
+                [object handleScrollWheel:event];
+            }
+            [dict setValue:@"1" forKey:@"needsRedraw"];
+        } else {
 NSLog(@"ignoring handleX11ButtonPress:%x", e->window);
-        return;
+            return;
+        }
     }
 NSLog(@"handleX11ButtonPress:%x", e->window);
 
@@ -2232,8 +2290,9 @@ NSLog(@"rootWindow object %@", _rootWindowObject);
     {
         id dict = [self dictForObjectWindow:e->window];
         if (dict) {
-            [self setValue:dict forKey:@"buttonDownDict"];
-            _buttonDownWhich = e->button;
+//only set for left button down and right button down
+//           [self setValue:dict forKey:@"buttonDownDict"];
+//            _buttonDownWhich = e->button;
 
 
             id object = [dict valueForKey:@"object"];
@@ -2244,23 +2303,27 @@ NSLog(@"rootWindow object %@", _rootWindowObject);
             [Definitions x11FixupEvent:eventDict forBitmapObject:object];
 
             if (e->button == 1) {
+                [self setValue:dict forKey:@"buttonDownDict"];
+                _buttonDownWhich = e->button;
                 if ([object respondsToSelector:@selector(handleMouseDown:)]) {
                     [object handleMouseDown:eventDict];
                 }
             } else if (e->button == 3) {
+                [self setValue:dict forKey:@"buttonDownDict"];
+                _buttonDownWhich = e->button;
                 if ([object respondsToSelector:@selector(handleRightMouseDown:)]) {
                     [object handleRightMouseDown:eventDict];
                 }
             } else if (e->button == 4) {
                 if ([object respondsToSelector:@selector(handleScrollWheel:)]) {
-                    [eventDict setValue:@"44" forKey:@"deltaY"];
-                    [eventDict setValue:@"-44" forKey:@"scrollingDeltaY"];
+                    [eventDict setValue:@"20" forKey:@"deltaY"];
+                    [eventDict setValue:@"-20" forKey:@"scrollingDeltaY"];
                     [object handleScrollWheel:eventDict];
                 }
             } else if (e->button == 5) {
                 if ([object respondsToSelector:@selector(handleScrollWheel:)]) {
-                    [eventDict setValue:@"-44" forKey:@"deltaY"];
-                    [eventDict setValue:@"44" forKey:@"scrollingDeltaY"];
+                    [eventDict setValue:@"-20" forKey:@"deltaY"];
+                    [eventDict setValue:@"20" forKey:@"scrollingDeltaY"];
                     [object handleScrollWheel:eventDict];
                 }
             } else if (e->button == 6) {
@@ -2315,7 +2378,7 @@ NSLog(@"rootWindow object %@", _rootWindowObject);
 - (void)handleX11ButtonRelease:(void *)eptr
 {
     XButtonEvent *e = eptr;
-NSLog(@"ButtonRelease window %x", e->window);
+NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e->button, _buttonDownWhich);
     if (!_buttonDownDict) {
         return;
     }
@@ -2845,6 +2908,11 @@ This should be implemented in a separate program
     } else {
         XDefineCursor(_display, _rootWindow, _leftPointerCursor);
     }
+}
+- (void)XSetInputFocus:(unsigned long)window
+{
+//FIXME use RevertToNone or RevertToPointerRoot?
+    XSetInputFocus(_display, window, RevertToNone, CurrentTime);
 }
 @end
 
