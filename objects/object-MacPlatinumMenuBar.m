@@ -279,6 +279,47 @@ NSLog(@"DEALLOC MacMenuBar");
     }
     return nil;
 }
+- (void)handleScrollWheel:(id)event
+{
+    if (!_buttonDown) {
+        return;
+    }
+
+    if (_menuDict) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        id object = [_menuDict valueForKey:@"object"];
+        if ([object respondsToSelector:@selector(handleScrollWheel:)]) {
+            int mouseRootX = [event intValueForKey:@"mouseRootX"];
+            int mouseRootY = [event intValueForKey:@"mouseRootY"];
+            int x = [_menuDict intValueForKey:@"x"];
+            int y = [_menuDict intValueForKey:@"y"];
+            int w = [_menuDict intValueForKey:@"w"];
+            int h = [_menuDict intValueForKey:@"h"];
+            id newEvent = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX-x y:mouseRootY-y w:w h:h x11dict:_menuDict];
+            [newEvent setValue:[event valueForKey:@"deltaX"] forKey:@"deltaX"];
+            [newEvent setValue:[event valueForKey:@"deltaY"] forKey:@"deltaY"];
+            [newEvent setValue:[event valueForKey:@"scrollingDeltaX"] forKey:@"scrollingDeltaX"];
+            [newEvent setValue:[event valueForKey:@"scrollingDeltaY"] forKey:@"scrollingDeltaY"];
+            [object handleScrollWheel:newEvent];
+            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
+        }
+    }
+}
+- (void)handleKeyDown:(id)event
+{
+    if (!_buttonDown) {
+        return;
+    }
+
+    if (_menuDict) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        id object = [_menuDict valueForKey:@"object"];
+        if ([object respondsToSelector:@selector(handleKeyDown:)]) {
+            [object handleKeyDown:event];
+            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
+        }
+    }
+}
 - (void)handleMouseDown:(id)event
 {
     if (_buttonDown) {
@@ -393,6 +434,7 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
     id menuDict = [windowManager openWindowForObject:obj x:x y:20 w:w+3 h:h+3];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
+    [windowManager XSetInputFocus:[menuDict unsignedLongValueForKey:@"window"]];
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
