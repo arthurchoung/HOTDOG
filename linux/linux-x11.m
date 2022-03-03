@@ -390,8 +390,7 @@ static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
 }
 - (void)showInXWindowWithWidth:(int)width height:(int)height
 {
-    id obj = [@"ListInterface" asInstance];
-    [obj setupDict:self];
+    id obj = nsfmt(@"%@", self);
     [obj showInXWindowWithWidth:width height:height];
 }
 @end
@@ -402,8 +401,7 @@ static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
 }
 - (void)showInXWindowWithWidth:(int)width height:(int)height
 {
-    id obj = [@"ListInterface" asInstance];
-    [obj setup:self];
+    id obj = nsfmt(@"%@", self);
     [obj showInXWindowWithWidth:width height:height];
 }
 @end
@@ -570,6 +568,8 @@ exit(0);
     Window _openGLWindow;
 
     id _pendingMessage;
+
+    id _menuDict;
 }
 @end
 @implementation WindowManager
@@ -1156,6 +1156,28 @@ NSLog(@"unparent object %@", dict);
     XDestroyWindow(_display, [window unsignedLongValue]);
     [dict setValue:nil forKey:@"window"];
 }
+- (id)openButtonDownMenuForObject:(id)obj x:(int)x y:(int)y w:(int)w h:(int)h
+{
+    if (!w) {
+        if ([obj respondsToSelector:@selector(preferredWidth)]) {
+            w = [obj preferredWidth];
+        } else {
+            w = 320;
+        }
+    }
+    if (!h) {
+        if ([obj respondsToSelector:@selector(preferredHeight)]) {
+            h = [obj preferredHeight];
+        } else {
+            h = 480;
+        }
+    }
+    id menuDict = [self openWindowForObject:obj x:x y:y w:w+3 h:h+3 overrideRedirect:YES];
+    [self setValue:menuDict forKey:@"buttonDownDict"];
+    [self setValue:menuDict forKey:@"menuDict"];
+    return menuDict;
+}
+
 - (unsigned long)openWindowWithName:(id)name x:(int)x y:(int)y w:(int)w h:(int)h
 {
     return [self openWindowWithName:name x:x y:y w:w h:h overrideRedirect:NO];
@@ -1883,6 +1905,7 @@ NSLog(@"keyString %@", keyString);
             [dict setValue:@"1" forKey:@"shouldCloseWindow"];
             return;
         }
+
     }
 
     if (e->window == _rootWindow) {
@@ -1909,6 +1932,30 @@ NSLog(@"keyString %@", keyString);
         }
         [object handleKeyDown:event];
         [dict setValue:@"1" forKey:@"needsRedraw"];
+    } else if ([object respondsToSelector:@selector(contextualMenu)]) {
+        id contextualObject = object;
+        id menu = [object contextualMenu];
+        id arr = nil;
+        if (isnsarr(menu)) {
+            arr = menu;
+        } else {
+            arr = [menu valueForKey:@"array"];
+            contextualObject = [menu valueForKey:@"contextualObject"];
+        }
+        if (arr) {
+            id keyString = [Definitions keyForXKeyCode:keysym modifiers:e->state];
+NSLog(@"keyString '%@'", keyString);
+            id choice = [arr objectWithValue:keyString forKey:@"hotKey"];
+NSLog(@"choice '%@'", choice);
+            if (choice) {
+                id message = [choice valueForKey:@"messageForClick"];
+                if (message) {
+NSLog(@"message '%@'", message);
+                    [object evaluateMessage:message];
+                    [dict setValue:@"1" forKey:@"needsRedraw"];
+                }
+            }
+        }
     }
 }
 
@@ -2264,8 +2311,8 @@ NSLog(@"handleX11ButtonPress e->button 5 object %@", object);
             [dict setValue:@"1" forKey:@"needsRedraw"];
         } else {
 NSLog(@"ignoring handleX11ButtonPress:%x", e->window);
-            return;
         }
+        return;
     }
 NSLog(@"handleX11ButtonPress:%x", e->window);
 
@@ -2313,6 +2360,15 @@ NSLog(@"rootWindow object %@", _rootWindowObject);
                 _buttonDownWhich = e->button;
                 if ([object respondsToSelector:@selector(handleRightMouseDown:)]) {
                     [object handleRightMouseDown:eventDict];
+                } else if ([object respondsToSelector:@selector(contextualMenu)]) {
+                    id menu = [object contextualMenu];
+                    if (isnsarr(menu)) {
+                        menu = [menu asMenu];
+                        [menu setValue:object forKey:@"contextualObject"];
+                    }
+                    if (menu) {
+                        [self openButtonDownMenuForObject:menu x:e->x_root y:e->y_root w:0 h:0];
+                    }
                 }
             } else if (e->button == 4) {
                 if ([object respondsToSelector:@selector(handleScrollWheel:)]) {
@@ -2406,6 +2462,7 @@ NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e-
     }
     [dict setValue:@"1" forKey:@"needsRedraw"];
     [self setValue:nil forKey:@"buttonDownDict"];
+    [self setValue:nil forKey:@"menuDict"];
     _buttonDownWhich = 0;
 }
 
@@ -2441,7 +2498,12 @@ NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e-
             [x11dict setValue:@"1" forKey:@"needsRedraw"];
         }
     } else {
-        id x11dict = [self dictForObjectWindow:e->window];
+        id x11dict = nil;
+        if (_buttonDownDict) {
+            x11dict = _buttonDownDict;
+        } else {
+            x11dict = [self dictForObjectWindow:e->window];
+        }
         if (x11dict) {
             id object = [x11dict valueForKey:@"object"];
             int x = [x11dict intValueForKey:@"x"];
@@ -2449,7 +2511,12 @@ NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e-
             int w = [x11dict intValueForKey:@"w"];
             int h = [x11dict intValueForKey:@"h"];
             if ([object respondsToSelector:@selector(handleMouseMoved:)]) {
-                id eventDict = [self generateEventDictRootX:e->x_root rootY:e->y_root x:e->x y:e->y w:w h:h x11dict:x11dict];
+                id eventDict = nil;
+                if (_menuDict) {
+                    eventDict = [self generateEventDictRootX:e->x_root rootY:e->y_root x:e->x_root-x y:e->y_root-y w:w h:h x11dict:x11dict];
+                } else {
+                    eventDict = [self generateEventDictRootX:e->x_root rootY:e->y_root x:e->x y:e->y w:w h:h x11dict:x11dict];
+                }
                 [Definitions x11FixupEvent:eventDict forBitmapObject:object];
                 [object handleMouseMoved:eventDict];
             }
