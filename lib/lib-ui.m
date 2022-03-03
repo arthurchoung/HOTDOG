@@ -27,6 +27,16 @@
 
 @implementation Definitions(fjkdsljfkldsjlkfsdjf)
 
++ (void)drawStripedBackgroundInBitmap:(id)bitmap rect:(Int4)r
+{
+    [bitmap setColorIntR:205 g:212 b:222 a:255];
+    [bitmap fillRectangleAtX:r.x y:r.y w:r.w h:r.h];
+    [bitmap setColorIntR:201 g:206 b:209 a:255];
+    for (int i=6; i<r.w; i+=10) {
+        [bitmap fillRectangleAtX:r.x+i y:r.y w:4 h:r.h];
+    }
+}
+
 + (Int4)centerRectX:(int)smX y:(int)smY w:(int)smW h:(int)smH inW:(int)lgW h:(int)lgH
 {
     
