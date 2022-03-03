@@ -25,6 +25,13 @@
 
 #import "HOTDOG.h"
 
+@implementation Definitions(fmeilwfmdklsjfklsdjfkl)
++ (id)CentipedeClone
+{
+    return [@"CentipedeClone" asInstance];
+}
+@end
+
 char *playerPalette = 
 ". #0000ff\n"
 "o #ffffff\n"
