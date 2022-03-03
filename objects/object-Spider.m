@@ -25,6 +25,15 @@
 
 #import "HOTDOG.h"
 
+@implementation Definitions(emjfkwlmfkldlskfm)
++ (id)Spider
+{
+    id obj = [@"Spider" asInstance];
+    [obj setup];
+    return obj;
+}
+@end
+
 #define NUMBER_OF_PILES 10
 #define NUMBER_OF_CARDS 104
 
@@ -205,34 +214,39 @@ static char *card_icon =
 }
 @end
 @implementation Spider
-+ (id)classMenu
+- (id)contextualMenu
 {
-    id menu = nsarr();
+    id arr = nsarr();
     id dict;
     dict = nsdict();
-    [dict setValue:@"toggleBoolKey:'showOverlayText'" forKey:@"message"];
+    [dict setValue:@"toggleOverlayText" forKey:@"displayName"];
+    [dict setValue:@"toggleBoolKey:'showOverlayText'" forKey:@"messageForClick"];
     [dict setValue:@"z" forKey:@"keyDown"];
-    [menu addObject:dict];
+    [arr addObject:dict];
     dict = nsdict();
-    [dict setValue:@"writeStateToFile:(homeDir:'testspider.dat')" forKey:@"message"];
-    [menu addObject:dict];
+    [dict setValue:@"writeState" forKey:@"displayName"];
+    [dict setValue:@"writeStateToFile:(homeDir:'testspider.dat')" forKey:@"messageForClick"];
+    [arr addObject:dict];
     dict = nsdict();
-    [dict setValue:@"readStateFromFile:(homeDir:'testspider.dat')" forKey:@"message"];
-    [menu addObject:dict];
+    [dict setValue:@"readState" forKey:@"displayName"];
+    [dict setValue:@"readStateFromFile:(homeDir:'testspider.dat')" forKey:@"messageForClick"];
+    [arr addObject:dict];
     dict = nsdict();
-    [dict setValue:@"fixmeMoveComplete" forKey:@"message"];
-    [menu addObject:dict];
+    [dict setValue:@"fixmeMoveComplete" forKey:@"displayName"];
+    [dict setValue:@"fixmeMoveComplete" forKey:@"messageForClick"];
+    [arr addObject:dict];
     dict = nsdict();
-    [dict setValue:@"fixmeMoveDeck" forKey:@"message"];
-    [menu addObject:dict];
+    [dict setValue:@"fixmeMoveDeck" forKey:@"displayName"];
+    [dict setValue:@"fixmeMoveDeck" forKey:@"messageForClick"];
+    [arr addObject:dict];
 #ifdef BUILD_FOR_IOS
     id mapArr = nsarr();
-    for (id elt in menu) {
+    for (id elt in arr) {
         [mapArr addObject:[[elt mutableCopy] autorelease]];
     }
-    menu = mapArr;
+    arr = mapArr;
 #endif
-    return menu;
+    return arr;
 }
 - (id)textForCardsOnTopOfCards
 {
