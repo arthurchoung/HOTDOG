@@ -25,6 +25,13 @@
 
 #import "HOTDOG.h"
 
+@implementation Definitions(fmeklwfmkldsjfmkldsklfkl)
++ (id)Calculator
+{
+    return [@"Calculator" asInstance];
+}
+@end
+
 static char *calculatorPixels =
 "  ..b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...  \n"
 " .b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b...b.. \n"
