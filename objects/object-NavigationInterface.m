@@ -90,99 +90,11 @@ NSLog(@"ListInterface");
     
     return obj;
 }
-#else
-+ (id)ListInterface
-{
-    id obj = [@"ListInterface" asInstance];
-    id currentDirectory = [@"." asRealPath];
-    [obj setValue:currentDirectory forKey:@"currentDirectory"];
-    [obj updateFromCurrentDirectory];
-    return obj;
-}
 #endif
 @end
 
-@implementation NSArray(fjkdlsjfklsdlkjf)
-- (void)generateClassMenuNamesIfNecessary
-{
-    for (int i=0; i<[self count]; i++) {
-        id elt = [self nth:i];
-        id name = [elt valueForKey:@"name"];
-        id message = [elt valueForKey:@"message"];
-        if (![name length] && [message length]) {
-            [elt setValue:message forKey:@"name"];
-        }
-    }
-}
-@end
 
 
-@implementation NSObject(fsdfjklsdjklfjsdklf)
-
-- (void)handleClassMenuKeyDown:(id)str
-{
-    [self handleClassMenuForKey:@"keyDown" value:str];
-}
-- (void)handleClassMenuForKey:(id)key value:(id)value
-{
-    NSLog(@"handleClassMenuForKey:%@ value:%@", key, value);
-    id target = self;
-    BOOL isInterface = NO;
-    if ([self isKindOfClass:[@"NavigationStack" asClass]]) {
-        isInterface = YES;
-        target = [[self valueForKey:@"context"] valueForKey:@"object"];
-    }
-
-    id classMenu = [target classMenuForObject];
-    id choice = [classMenu objectWithValue:value forKey:key];
-    if (choice) {
-NSLog(@"choice %@", [choice allKeysAndValues]);
-        id message = [choice valueForKey:@"message"];
-        if (message) {
-NSLog(@"target %@", target);
-[target evaluateMessage:message];
-        }
-        return;
-    }
-}
-
-
-
-+ (id)classMenuForObject
-{
-    NSLog(@"classMenuForObject %@", self);
-    id classMenu = nil;
-    if ([self respondsToSelector:@selector(classMenu)]) {
-        return [self classMenu];
-    }
-    if (!classMenu) {
-        Class classCursor = self;
-        while (classCursor) {
-            id path = [Definitions configDir:nsfmt(@"ClassMenus/%s.csv", class_getName(classCursor))];
-            NSLog(@"path %@", path);
-            classMenu = [path parseCSVFile];
-            if (classMenu) {
-                break;
-            }
-            classCursor = class_getSuperclass(classCursor);
-        }
-    }
-    [classMenu generateClassMenuNamesIfNecessary];
-    return classMenu;
-}
-- (id)classMenuForObject
-{
-    id result = nil;
-    if ([self respondsToSelector:@selector(classMenu)]) {
-        return [self classMenu];
-    }
-    if (!result) {
-        result = [[self class] classMenuForObject];
-    }
-    [result generateClassMenuNamesIfNecessary];
-    return result;
-}
-@end
 
 
 @implementation Definitions(jfkldsjfkldsjlkfj)
@@ -556,8 +468,7 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
 @implementation NSDictionary(fjkldsjfklsdjfk)
 - (void)pushToNavigationStack
 {
-    id obj = [@"ListInterface" asInstance];
-    [obj setupDict:self];
+    id obj = nsfmt(@"%@", self);
     [obj pushToNavigationStack];
 }
 @end
@@ -565,8 +476,7 @@ NSLog(@"is dictionary: %@", [result allKeysAndValues]);
 @implementation NSArray(jfkdsljfklsdjf)
 - (void)pushToNavigationStack
 {
-    id obj = [@"ListInterface" asInstance];
-    [obj setup:self];
+    id obj = nsfmt(@"%@", self);
     [obj pushToNavigationStack];
 }
 @end
@@ -604,6 +514,20 @@ NSLog(@"pushToNavigationStack %@", self);
 @end
 
 @implementation NavigationStack
+- (id)contextualMenu
+{
+    id obj = [_context valueForKey:@"object"];
+    if ([obj respondsToSelector:@selector(contextualMenu)]) {
+        id menu = [obj contextualMenu];
+        if (isnsarr(menu)) {
+            menu = [menu asMenu];
+            [menu setValue:obj forKey:@"contextualObject"];
+        }
+        return menu;
+    }
+    return nil;
+}
+
 - (void)drawTransitionInBitmap:(id)bitmap rect:(Int4)r
 {
 //FIXME use textures
@@ -889,23 +813,6 @@ NSLog(@"context %@", _context);
         _buttonPassthrough = YES;
     }
 }
-- (void)handleRightMouseDown:(id)event
-{
-    id obj = [_context valueForKey:@"object"];
-    int mouseY = [event intValueForKey:@"mouseY"];
-    int navigationBarHeight = [Definitions navigationBarHeight];
-    if (mouseY < navigationBarHeight) {
-        id button = [self buttonForMousePosEvent:event];
-        [self setValue:button forKey:@"rightButtonDown"];
-        _buttonPassthrough = NO;
-    } else {
-        [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - [Definitions navigationBarHeight]) forKey:@"viewHeight"];
-        if ([obj respondsToSelector:@selector(handleRightMouseDown:)]) {
-            [obj handleRightMouseDown:event];
-            _buttonPassthrough = YES;
-        }
-    }
-}
 
 - (void)handleMouseUp:(id)event
 {
@@ -929,43 +836,6 @@ NSLog(@"context %@", _context);
         if ([obj respondsToSelector:@selector(handleMouseUp:)]) {
             [Definitions fixupEvent:event forBitmapObject:obj];
             [obj handleMouseUp:event];
-        }
-        _buttonPassthrough = NO;
-    }
-}
-- (void)handleRightMouseUp:(id)event
-{
-    id obj = [_context valueForKey:@"object"];
-    if (!_buttonPassthrough) {
-        if (!_rightButtonDown) {
-            return;
-        }
-        id rightButtonDown = _rightButtonDown;
-        [self setValue:nil forKey:@"rightButtonDown"];
-        _buttonPassthrough = NO;
-        if ([rightButtonDown isEqual:_buttonHover]) {
-            if ([rightButtonDown isEqual:@"header"]) {
-NSLog(@"handleRightClick:%@", rightButtonDown);
-NSLog(@"obj %@", obj);
-                id menu = [obj classMenuForObject];
-                for (int i=0; i<[menu count]; i++) {
-                    id choice = [menu nth:i];
-                    [choice setValue:@"#{name}" forKey:@"stringFormat"];
-                    if ([choice intValueForKey:@"drawChevron" default:1]) {
-                        [choice setValue:@"message|evaluateMessageWithContext:previousObject" forKey:@"messageForClick"];
-                    } else {
-                        [choice setValue:@"message|evaluateMessageWithContext:previousObject ; navigationStack | popToObject:(selectedObject|previousObject)" forKey:@"messageForClick"];
-                    }
-                    [choice setValue:obj forKey:@"previousObject"];
-                }
-                [[menu asListInterface] pushToNavigationStack];
-            }
-        }
-    } else {
-        int navigationBarHeight = [Definitions navigationBarHeight];
-        [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - navigationBarHeight) forKey:@"viewHeight"];
-        if ([obj respondsToSelector:@selector(handleRightMouseUp:)]) {
-            [obj handleRightMouseUp:event];
         }
         _buttonPassthrough = NO;
     }
@@ -1000,30 +870,6 @@ NSLog(@"obj %@", obj);
     }
 }
 
-- (void)handleKeyDown:(id)event
-{
-    id obj = [_context valueForKey:@"object"];
-    if (!obj) {
-        return;
-    }
-
-    if ([obj respondsToSelector:@selector(handleKeyDown:)]) {
-        [obj handleKeyDown:event];
-    } else {
-        [obj handleClassMenuKeyDown:[event valueForKey:@"keyString"]];
-    }
-}
-- (void)handleKeyUp:(id)event
-{
-    id obj = [_context valueForKey:@"object"];
-    if (!obj) {
-        return;
-    }
-
-    if ([obj respondsToSelector:@selector(handleKeyUp:)]) {
-        [obj handleKeyUp:event];
-    }
-}
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
     int navigationBarHeight = [Definitions navigationBarHeight];
