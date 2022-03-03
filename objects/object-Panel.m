@@ -280,6 +280,34 @@ exit(1);
     [obj setValue:lines forKey:@"array"];
     return obj;
 }
++ (id)WifiNetworksPanel
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateWifiNetworksPanel.pl"];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    return obj;
+}
++ (id)NetworkPanel
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateNetworkPanel.pl"];
+    id observercmd = nsarr();
+    [observercmd addObject:@"hotdog-monitorNetworkInterfaces"];
+    id observer = [observercmd runCommandAndReturnProcess];
+    if (!observer) {
+NSLog(@"unable to run observer command %@", observercmd);
+exit(1);
+    }
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj setValue:observer forKey:@"observer"];
+    [obj updateArray];
+    return obj;
+}
 + (id)DrivesPanel
 {
     id generatecmd = nsarr();
@@ -358,6 +386,8 @@ exit(1);
     id _bitmap;
     Int4 _r;
     int _cursorY;
+
+    id _menuDict;
 }
 @end
 @implementation Panel
@@ -790,6 +820,24 @@ NSLog(@"waiting for input");
 }
 - (void)handleMouseMoved:(id)event
 {
+    if (_menuDict) {
+        id object = [_menuDict valueForKey:@"object"];
+        if ([object respondsToSelector:@selector(handleMouseMoved:)]) {
+            id windowManager = [event valueForKey:@"windowManager"];
+            int mouseRootX = [windowManager intValueForKey:@"mouseX"];
+            int mouseRootY = [windowManager intValueForKey:@"mouseY"];
+NSLog(@"handleMouseMoved windowManager %@", windowManager);
+            int x = [_menuDict intValueForKey:@"x"];
+            int y = [_menuDict intValueForKey:@"y"];
+            int w = [_menuDict intValueForKey:@"w"];
+            int h = [_menuDict intValueForKey:@"h"];
+            id newEvent = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX-x y:mouseRootY-y w:w h:h x11dict:_menuDict];
+            [object handleMouseMoved:newEvent];
+            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
+        }
+        return;
+    }
+
     int x = [event intValueForKey:@"mouseX"];
     int y = [event intValueForKey:@"mouseY"];
     if (_buttonDown && (_buttonType[_buttonDown-1] == 's')) {
@@ -824,6 +872,31 @@ NSLog(@"waiting for input");
 
 - (void)handleMouseUp:(id)event
 {
+    if (_menuDict) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        id object = [_menuDict valueForKey:@"object"];
+        if ([object respondsToSelector:@selector(handleMouseUp:)]) {
+            int mouseRootX = [event intValueForKey:@"mouseRootX"];
+            int mouseRootY = [event intValueForKey:@"mouseRootY"];
+            int x = [_menuDict intValueForKey:@"x"];
+            int y = [_menuDict intValueForKey:@"y"];
+            int w = [_menuDict intValueForKey:@"w"];
+            int h = [_menuDict intValueForKey:@"h"];
+            id newEvent = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX-x y:mouseRootY-y w:w h:h x11dict:_menuDict];
+            [object handleMouseUp:newEvent];
+            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
+/*
+            int closingIteration = [object intValueForKey:@"closingIteration"];
+            if (closingIteration) {
+                _closingIteration = closingIteration;
+                return;
+            }
+*/
+        }
+        [self setValue:nil forKey:@"menuDict"];
+        return;
+    }
+
     if (_buttonDown == 0) {
         return;
     }
@@ -842,8 +915,30 @@ NSLog(@"waiting for input");
 }
 - (void)handleScrollWheel:(id)event
 {
+    if (_menuDict) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        id object = [_menuDict valueForKey:@"object"];
+        if ([object respondsToSelector:@selector(handleScrollWheel:)]) {
+            int mouseRootX = [event intValueForKey:@"mouseRootX"];
+            int mouseRootY = [event intValueForKey:@"mouseRootY"];
+            int x = [_menuDict intValueForKey:@"x"];
+            int y = [_menuDict intValueForKey:@"y"];
+            int w = [_menuDict intValueForKey:@"w"];
+            int h = [_menuDict intValueForKey:@"h"];
+            id newEvent = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX-x y:mouseRootY-y w:w h:h x11dict:_menuDict];
+            [newEvent setValue:[event valueForKey:@"deltaX"] forKey:@"deltaX"];
+            [newEvent setValue:[event valueForKey:@"deltaY"] forKey:@"deltaY"];
+            [newEvent setValue:[event valueForKey:@"scrollingDeltaX"] forKey:@"scrollingDeltaX"];
+            [newEvent setValue:[event valueForKey:@"scrollingDeltaY"] forKey:@"scrollingDeltaY"];
+            [object handleScrollWheel:newEvent];
+            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
+        }
+        return;
+    }
+
     _scrollY -= [event intValueForKey:@"deltaY"];
 }
+/*
 - (void)handleRightMouseDown:(id)event
 {
     id windowManager = [event valueForKey:@"windowManager"];
@@ -854,9 +949,30 @@ NSLog(@"waiting for input");
     id obj = [[[Definitions configDir:@"Config/rootWindowMenu.csv"] parseCSVFile] asMenu];
     int w = [obj preferredWidth];
     int h = [obj preferredHeight];
-    id dict = [windowManager openWindowForObject:obj x:mouseRootX y:mouseRootY w:w+3 h:h+3];
-    [windowManager setValue:dict forKey:@"buttonDownDict"];
-    [windowManager setValue:buttonDownWhich forKey:@"buttonDownWhich"];
+    id dict = [windowManager openWindowForObject:obj x:mouseRootX y:mouseRootY w:w+3 h:h+3 overrideRedirect:YES];
+//    [windowManager setValue:dict forKey:@"buttonDownDict"];
+//    [windowManager setValue:buttonDownWhich forKey:@"buttonDownWhich"];
+    [self setValue:dict forKey:@"menuDict"];
+}
+*/
+- (void)handleRightMouseUp:(id)event
+{
+NSLog(@"handleRightMouseUp");
+    if (_menuDict) {
+        [_menuDict setValue:@"1" forKey:@"shouldCloseWindow"];
+        [self setValue:nil forKey:@"menuDict"];
+    }
+}
+- (void)handleKeyDown:(id)event
+{
+    if (_menuDict) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        id object = [_menuDict valueForKey:@"object"];
+        if ([object respondsToSelector:@selector(handleKeyDown:)]) {
+            [object handleKeyDown:event];
+            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
+        }
+    }
 }
 @end
 
