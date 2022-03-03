@@ -22,15 +22,15 @@ for(;;) {
             next;
         }
 
-        if ($name && $line =~ m/ inet /) {
+        if ($name && ($name ne 'lo') && ($line =~ m/ inet /)) {
             @tokens = split /\s+/, $line;
-            $addr = $tokens[2];
+            $addr = $name . ' ' . $tokens[2];
             next;
         }
     }
 
-    if ($name and $addr) {
-        print "$name $addr\n";
+    if ($addr) {
+        print "$addr\n";
     } else {
         print "No network\n";
     }
