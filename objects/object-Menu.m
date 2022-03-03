@@ -89,10 +89,13 @@ NSLog(@"dealloc Menu %@", self);
         if (stringFormat) {
             text = [self str:stringFormat];
         }
-        if (!text) {
+        if (![text length]) {
             text = [elt valueForKey:@"displayName"];
         }
-        if (text) {
+        if (![text length]) {
+            text = [elt valueForKey:@"messageForClick"];
+        }
+        if ([text length]) {
             int w = [bitmap bitmapWidthForText:text];
             if (w > highestWidth) {
                 highestWidth = w;
@@ -180,8 +183,11 @@ NSLog(@"dealloc Menu %@", self);
         if ([stringFormat length]) {
             text = [self str:stringFormat];
         }
-        if (!text) {
+        if (![text length]) {
             text = [elt valueForKey:@"displayName"];
+        }
+        if (![text length]) {
+            text = [elt valueForKey:@"messageForClick"];
         }
         id rightText = [elt valueForKey:@"hotKey"];
         id messageForClick = [elt valueForKey:@"messageForClick"];
