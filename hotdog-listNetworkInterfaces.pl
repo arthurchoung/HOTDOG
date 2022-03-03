@@ -13,10 +13,10 @@ sub asQuotedString
 sub dhcpcdIsRunning
 {
     my ($arg) = @_;
-    return `pgrep -fx 'dhcpcd $arg'`;
+    return `pgrep -f 'dhcpcd.*$arg'`;
 }
 
-$output = `ip -j -p link show`;
+$output = `ip -j -p address`;
 $result = decode_json($output);
 foreach $elt (@$result) {
     if (grep /^UP$/, @{$elt->{'flags'}}) {
@@ -29,12 +29,19 @@ foreach $elt (@$result) {
     } else {
         $elt->{'lowerUp'} = '0';
     }
+    $address = '';
+    foreach $addrelt (@{$elt->{'addr_info'}}) {
+        if ($addrelt->{'family'} eq 'inet') {
+            $address = $addrelt->{'local'};
+            last;
+        }
+    }
     $elt->{'dhcpcdIsRunning'} = '0';
     if ($elt->{'ifname'}) {
         if (dhcpcdIsRunning($elt->{'ifname'})) {
             $elt->{'dhcpcdIsRunning'} = '1';
         }
     }
-    print "interface:$elt->{'ifname'} type:$elt->{'link_type'} up:$elt->{'up'} lowerUp:$elt->{'lowerUp'} operstate:$elt->{'operstate'} address:$elt->{'address'} dhcpIsRunning:$elt->{'dhcpcdIsRunning'}\n";
+    print "interface:$elt->{'ifname'} type:$elt->{'link_type'} up:$elt->{'up'} lowerUp:$elt->{'lowerUp'} operstate:$elt->{'operstate'} address:$address dhcpIsRunning:$elt->{'dhcpcdIsRunning'}\n";
 }
 
