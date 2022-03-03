@@ -1,2 +1,2 @@
 displayName,messageForClick
-"Open Network Dialog...","['hotdog-openNetworkDialog.pl']|runCommandInBackground"
+"Open Network Dialog...","['hotdog' 'show' 'NetworkPanel']|runCommandInBackground"
