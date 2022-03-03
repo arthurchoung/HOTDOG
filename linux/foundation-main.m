@@ -98,35 +98,6 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                 [Definitions runWindowManagerForObject:obj];
             }
             [[Definitions navigationStack] setValue:nil forKey:@"context"];
-        } else if ((argc > 1) && !strcmp(argv[1], "ls")) {
-            id arr = nsarr();
-            for (int i=2; i<argc; i++) {
-                id filePath = nscstr(argv[i]);
-                id displayName = filePath;
-                id dict = nsdict();
-                if ([filePath isDirectory]) {
-                    displayName = [displayName cat:@"/"];
-                    [dict setValue:@"directory" forKey:@"fileType"];
-                }
-                if ([filePath isFile]) {
-                    [dict setValue:@"file" forKey:@"fileType"];
-                }
-                [dict setValue:@"#{displayName}" forKey:@"stringFormat"];
-                [dict setValue:displayName forKey:@"displayName"];
-                [dict setValue:filePath forKey:@"filePath"];
-                [dict setValue:[filePath fileModificationDate] forKey:@"fileModificationDate"];
-                [dict setValue:nsfmt(@"%lu", [filePath fileSize]) forKey:@"fileSize"];
-                [arr addObject:dict];
-            }
-            id rootObject = [Definitions navigationStack];
-            if ([arr count]) {
-                [rootObject pushObject:[arr asListInterface]];
-            } else {
-                id object = [Definitions ObjectInterface];
-                [rootObject pushObject:object];
-            }
-            [Definitions runWindowManagerForObject:rootObject];
-            [[Definitions navigationStack] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "show")) {
             id args = nsarr();
             for (int i=2; i<argc; i++) {
@@ -142,13 +113,7 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             }
         } else if ((argc == 2) && !strcmp(argv[1], ".")) {
             id obj = [Definitions ObjectInterface];
-            if ([obj isKindOfClass:[@"ListInterface" asClass]]) {
-                id nav = [Definitions navigationStack];
-                [nav pushObject:obj];
-                [Definitions runWindowManagerForObject:nav];
-            } else {
-                [Definitions runWindowManagerForObject:obj];
-            }
+            [Definitions runWindowManagerForObject:obj];
             [[Definitions navigationStack] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "lines")) {
             id lines = nil;
@@ -163,21 +128,15 @@ exit(1);
 NSLog(@"lines %@", lines);
             }
             if (lines) {
+                id arr = nsarr();
+                for (int i=0; i<[lines count]; i++) {
+                    id line = [lines nth:i];
+                    id dict = nsdict();
+                    [dict setValue:line forKey:@"line"];
+                    [arr addObject:dict];
+                }
                 id nav = [Definitions navigationStack];
-                id obj = [lines asListInterface];
-                [nav pushObject:obj];
-                [Definitions runWindowManagerForObject:nav];
-            }
-        } else if ((argc > 1) && !strcmp(argv[1], "linesfmt")) {
-            id stringFormat = nil;
-            if (argc > 2) {
-                stringFormat = nscstr(argv[2]);
-            }
-            id lines = [Definitions linesFromStandardInput];
-            if (lines) {
-                id nav = [Definitions navigationStack];
-                id obj = [lines asListInterface];
-                [obj setValue:stringFormat forKey:@"defaultStringFormat"];
+                id obj = [lines asTableInterface];
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
             }
@@ -207,18 +166,26 @@ NSLog(@"lines %@", lines);
             [ipod goToLockScreen];
             [Definitions runWindowManagerForObject:ipod];
         } else if ((argc > 1) && !strcmp(argv[1], "nav")) {
-            id args = nsarr();
-            for (int i=2; i<argc; i++) {
-                id str = nscstr(argv[i]);
-                [args addObject:str];
-            }
-            id message = [args join:@" "];
-            id object = [nsdict() evaluateMessage:message];
-            if (object) {
+            if ((argc == 3) && !strcmp(argv[2], ".")) {
+                id obj = [Definitions ObjectInterface];
                 id nav = [Definitions navigationStack];
-                [nav pushObject:object];
+                [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
                 [[Definitions navigationStack] setValue:nil forKey:@"context"];
+            } else {
+                id args = nsarr();
+                for (int i=2; i<argc; i++) {
+                    id str = nscstr(argv[i]);
+                    [args addObject:str];
+                }
+                id message = [args join:@" "];
+                id object = [nsdict() evaluateMessage:message];
+                if (object) {
+                    id nav = [Definitions navigationStack];
+                    [nav pushObject:object];
+                    [Definitions runWindowManagerForObject:nav];
+                    [[Definitions navigationStack] setValue:nil forKey:@"context"];
+                }
             }
         } else if ((argc > 1) && !strcmp(argv[1], "alert")) {
             id data = [Definitions dataFromStandardInput];
@@ -258,86 +225,6 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
                 } else {
                     [obj setValue:@"Cancel" forKey:@"cancelText"];
                 }
-                [Definitions runWindowManagerForObject:obj];
-            }
-        } else if ((argc > 1) && !strcmp(argv[1], "choose")) {
-            id stringFormat = nil;
-            if (argc > 2) {
-                stringFormat = nsfmt(@"%s", argv[2]);
-            }
-            id title = nil;
-            if (argc > 3) {
-                title = nsfmt(@"%s", argv[3]);
-            }
-            id text = nil;
-            if (argc > 4) {
-                text = nsfmt(@"%s", argv[4]);
-            }
-            id lines = [Definitions linesFromStandardInput];
-            if (lines) {
-                id obj = [@"ListInterface" asInstance];
-                [obj setValue:text forKey:@"marginText"];
-                [obj setValue:lines forKey:@"array"];
-                [obj setValue:@"20" forKey:@"cellHeight"];
-//                id obj = [lines asListInterface];
-                [obj setValue:@"selectedObject|writeToStandardOutput;'\n'|writeToStandardOutput;exit:0" forKey:@"defaultMessageForClick"];
-                [obj setValue:stringFormat forKey:@"defaultStringFormat"];
-                [obj setValue:@"0" forKey:@"defaultDrawChevron"];
-
-                id nav = [Definitions navigationStack];
-                [nav pushObject:obj];
-                [nav setValue:title forKey:@"defaultTitle"];
-                [Definitions runWindowManagerForObject:nav];
-            }
-        } else if ((argc > 1) && !strcmp(argv[1], "chooseCommandObserver")) {
-            id command = nil;
-            if (argc > 2) {
-                command = nsfmt(@"%s", argv[2]);
-            }
-            id observer = nil;
-            if (argc > 3) {
-                observer = nsfmt(@"%s", argv[3]);
-            }
-            id stringFormat = nil;
-            if (argc > 4) {
-                stringFormat = nsfmt(@"%s", argv[4]);
-            }
-            id title = nil;
-            if (argc > 5) {
-                title = nsfmt(@"%s", argv[5]);
-            }
-            id text = nil;
-            if (argc > 6) {
-                text = nsfmt(@"%s", argv[6]);
-            }
-            id observerCommand = nsarr();
-            [observerCommand addObject:observer];
-            id observerProcess = [observerCommand runCommandAndReturnProcess];
-            id obj = [@"ListInterface" asInstance];
-            [obj setValue:nsfmt(@"['%@']|runCommandAndReturnOutput|asString|lines", command) forKey:@"message"];
-            [obj setValue:observerProcess forKey:@"observer"];
-            [obj updateArray];
-            [obj setValue:text forKey:@"marginText"];
-            [obj setValue:@"20" forKey:@"cellHeight"];
-            [obj setValue:@"selectedObject|writeToStandardOutput;'\n'|writeToStandardOutput;exit:0" forKey:@"defaultMessageForClick"];
-            [obj setValue:stringFormat forKey:@"defaultStringFormat"];
-            [obj setValue:@"0" forKey:@"defaultDrawChevron"];
-
-            id nav = [Definitions navigationStack];
-            [nav pushObject:obj];
-            [nav setValue:title forKey:@"defaultTitle"];
-            [Definitions runWindowManagerForObject:nav];
-        } else if ((argc > 1) && !strcmp(argv[1], "chooseFromBlocks")) {
-            id stringFormat = nil;
-            if (argc > 2) {
-                stringFormat = nsfmt(@"%s", argv[2]);
-            }
-            id lines = [Definitions blocksFromStandardInput];
-            if (lines) {
-                id obj = [lines asListInterface];
-                [obj setValue:@"selectedObject|writeToStandardOutput;'\n'|writeToStandardOutput;exit:0" forKey:@"defaultMessageForClick"];
-                [obj setValue:stringFormat forKey:@"defaultStringFormat"];
-                [obj setValue:@"0" forKey:@"defaultDrawChevron"];
                 [Definitions runWindowManagerForObject:obj];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "progress")) {
