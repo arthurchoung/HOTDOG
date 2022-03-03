@@ -35,6 +35,14 @@ static uint64_t osx_clock()
 }
 #endif
 
+
+@implementation Definitions(jefklwmfkldmsklfmklsdf)
++ (id)Stopwatch
+{
+    return [@"Stopwatch" asInstance];
+}
+@end
+
 @interface Stopwatch : IvarObject
 {
     Int4 _elapsedTextRect;
