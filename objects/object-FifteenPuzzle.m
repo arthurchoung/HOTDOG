@@ -27,6 +27,13 @@
 
 #import "HOTDOG.h"
 
+@implementation Definitions(fjewlfiewfmklsdjfklsdjf)
++ (id)FifteenPuzzle
+{
+    return [@"FifteenPuzzle" asInstance];
+}
+@end
+
 static char *backgroundCString = 
 "    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
 "   b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b   \n"
@@ -560,38 +567,35 @@ static char *puzzleCStrings[] = {
 ,
 };
 
-static int Nr[16] = {3, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3};
-static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
-
 @interface FifteenPuzzle : IvarObject
 {
     int _x[16];
     int _y[16];
     int _flash;
+    int _needsUpdate;
     id _bitmap;
     int _piece[16];
     int _transition[16];
     int _transitionCurrentFrame;
     int _transitionMaxFrame;
-    int n;
-    int _n;
-    int N0[100];
-    int N3[100];
-    int N4[100];
-    unsigned long long N2[100];
     id _moves;
 }
 @end
 @implementation FifteenPuzzle
-+ (id)classMenu
+
+- (id)contextualMenu
 {
     id arr = nsarr();
     id dict;
     dict = nsdict();
-    [dict setValue:@"scramble" forKey:@"message"];
+    [dict setValue:@"s" forKey:@"hotKey"];
+    [dict setValue:@"scramble" forKey:@"displayName"];
+    [dict setValue:@"scramble" forKey:@"messageForClick"];
     [arr addObject:dict];
     dict = nsdict();
-    [dict setValue:@"solve" forKey:@"message"];
+    [dict setValue:@"control-v" forKey:@"hotKey"];
+    [dict setValue:@"solve" forKey:@"displayName"];
+    [dict setValue:@"solve" forKey:@"messageForClick"];
     [arr addObject:dict];
     return arr;
 }
@@ -603,6 +607,10 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
 
 - (BOOL)shouldAnimate
 {
+    if (_needsUpdate) {
+        _needsUpdate = 0;
+        return YES;
+    }
     if (_transitionCurrentFrame < _transitionMaxFrame) {
         return YES;
     }
@@ -802,109 +810,23 @@ static int Nc[16] = {3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
     return NO;
 }
 
-- (BOOL)fY
-{
-    if (N2[n]==0x123456789abcdef0) {
-        id arr = nsarr();
-        for (int g=1; g<=n; g++) {
-            [arr addObject:nsfmt(@"%c", (char)N3[g])];
-        }
-        [self setValue:arr forKey:@"moves"];
-        return YES;
-    }
-    if (N4[n]<=_n) {
-        return [self fN];
-    }
-    return NO;
-}
-- (BOOL)fN
-{
-    if (N3[n]!='u' && N0[n]/4<3) { 
-        [self fI];
-        n++;
-        if ([self fY]) {
-            return YES;
-        }
-        n--;
-    }
-    if (N3[n]!='d' && N0[n]/4>0) {
-        [self fG];
-        n++;
-        if ([self fY]) {
-            return YES;
-        }
-        n--;
-    }
-    if (N3[n]!='l' && N0[n]%4<3) {
-        [self fE];
-        n++;
-        if ([self fY]) {
-            return YES;
-        }
-        n--;
-    }
-    if (N3[n]!='r' && N0[n]%4>0) {
-        [self fL];
-        n++;
-        if ([self fY]) {
-            return YES;
-        }
-        n--;
-    }
-    return NO;
-}
-
-- (void)fI
-{
-    int g = (11-N0[n])*4;
-    unsigned long long a = N2[n]&((unsigned long long)15<<g);
-    N0[n+1]=N0[n]+4;
-    N2[n+1]=N2[n]-a+(a<<16);
-    N3[n+1]='d';
-    N4[n+1]=N4[n]+(Nr[a>>g]<=N0[n]/4?0:1);
-} 
-
-- (void)fG
-{
-    int g = (19-N0[n])*4;
-    unsigned long long a = N2[n]&((unsigned long long)15<<g);
-    N0[n+1]=N0[n]-4;
-    N2[n+1]=N2[n]-a+(a>>16);
-    N3[n+1]='u';
-    N4[n+1]=N4[n]+(Nr[a>>g]>=N0[n]/4?0:1);
-} 
-- (void)fE
-{
-    int g = (14-N0[n])*4;
-    unsigned long long a = N2[n]&((unsigned long long)15<<g);
-    N0[n+1]=N0[n]+1;
-    N2[n+1]=N2[n]-a+(a<<4);
-    N3[n+1]='r';
-    N4[n+1]=N4[n]+(Nc[a>>g]<=N0[n]%4?0:1);
-} 
-- (void)fL
-{
-    int g = (16-N0[n])*4;
-    unsigned long long a = N2[n]&((unsigned long long)15<<g);
-    N0[n+1]=N0[n]-1;
-    N2[n+1]=N2[n]-a+(a>>4);
-    N3[n+1]='l';
-    N4[n+1]=N4[n]+(Nc[a>>g]>=N0[n]%4?0:1);
-}
 - (void)solve
 {
     int spaceIndex = [self indexForEmptySpace];
 NSLog(@"spaceIndex %d", spaceIndex);
-    N0[0] = spaceIndex;
-    N2[0] = 0;
+    id g = nsarr();
     for (int i=0; i<16; i++) {
-        N2[0] <<= 4;
-        N2[0] |= (unsigned long long)(_piece[i]&0xf);
+        [g addObject:nsfmt(@"%x", _piece[i])];
     }
-    for(; ![self fY]; _n++) {
-    }
-    [_moves addObject:@"flash"];
-NSLog(@"moves %@", _moves);
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog-solveFifteenPuzzle"];
+    [cmd addObject:nsfmt(@"%d", spaceIndex)];
+    [cmd addObject:[g join:@""]];
+    id output = [[cmd runCommandAndReturnOutput] asString];
+    id lines = [output split:@"\n"];
+NSLog(@"lines '%@'", lines);
+    [lines addObject:@"flash"];
+    [self setValue:lines forKey:@"moves"];
 }
 - (void)setupTransition
 {
@@ -959,6 +881,8 @@ NSLog(@"move %@", move);
         id move = [moves randomObject];
         [self movePiece:move];
     }
+    _needsUpdate = YES;
 }
+
 @end
 
