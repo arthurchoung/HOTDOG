@@ -25,6 +25,13 @@
 
 #import "HOTDOG.h"
 
+@implementation Definitions(nfejklwnfklsdfmk)
++ (id)Breakout
+{
+    return [@"Breakout" asInstance];
+}
+@end
+
 char *brickHitPixels =
 "        \n"
 "b      b\n"
