@@ -27,6 +27,13 @@
 
 #include <math.h>
 
+@implementation Definitions(jeklwjfkldmsklfmksdfmk)
++ (id)KaboomClone
+{
+    return [@"KaboomClone" asInstance];
+}
+@end
+
 char *madBomberPalette =
 //"  #8E8E8E\n"
 ". #484800\n"
