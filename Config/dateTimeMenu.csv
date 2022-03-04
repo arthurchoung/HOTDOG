@@ -1,0 +1,3 @@
+displayName,messageForClick
+"Open Calendar Panel...","['hotdog' 'show' 'CalendarPanel']|runCommandInBackground"
+"Open Date/Time Panel...","['hotdog' 'show' 'DateTimePanel']|runCommandInBackground"

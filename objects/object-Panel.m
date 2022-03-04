@@ -280,6 +280,26 @@ exit(1);
     [obj setValue:lines forKey:@"array"];
     return obj;
 }
++ (id)CalendarPanel
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateCalendarPanel.pl"];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    return obj;
+}
++ (id)DateTimePanel
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateDateTimePanel.pl"];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    return obj;
+}
 + (id)WifiNetworksPanel
 {
     id generatecmd = nsarr();
@@ -800,6 +820,49 @@ NSLog(@"waiting for input");
 
     _cursorY += r1.h;
 }
+- (void)panelCalendarRow:(id)elts
+{
+    [self panelCalendarRow:elts square:YES bgcolor:@"white" fgcolor:@"black"];
+}
+- (void)panelCalendarRow:(id)elts square:(BOOL)square bgcolor:(id)bgcolor fgcolor:(id)fgcolor
+{
+    int count = 7;
+    int cellW = _r.w/count;
+    if (cellW == _r.w) {
+        cellW--;
+    }
+    int cellH = cellW;
+    if (!square) {
+        cellH = [_bitmap bitmapHeightForText:@"X"] + 10;
+    }
+    int rowW = cellW*count+1;
+    int offsetX = (_r.w - rowW)/2;
+    [_bitmap setColor:@"black"];
+    [_bitmap drawHorizontalLineAtX:_r.x+offsetX x:_r.x+offsetX+rowW-1 y:_cursorY];
+    _cursorY += 1;
+    if ([elts count] == 0) {
+        return;
+    }
+    [_bitmap setColor:bgcolor];
+    [_bitmap fillRectangleAtX:_r.x+offsetX y:_cursorY w:rowW h:cellH];
+    for (int i=0; i<=count; i++) {
+        id elt = [elts nth:i];
+        int x = _r.x+offsetX+i*cellW;
+        int y = _cursorY;
+        if ((i == 0) || (i == count)) {
+            [_bitmap setColor:@"black"];
+        } else {
+            [_bitmap setColor:fgcolor];
+        }
+        [_bitmap drawVerticalLineAtX:x y:y y:_cursorY+cellH-1];
+        if ([elt length]) {
+            [_bitmap setColor:fgcolor];
+            [_bitmap drawBitmapText:elt x:x+5 y:y+5];
+        }
+    }
+    _cursorY += cellH;
+}
+
 - (void)handleMouseDown:(id)event
 {
     int x = [event intValueForKey:@"mouseX"];
