@@ -26,10 +26,16 @@ for ($i=0; $i<$numElts; $i++) {
     }
     $message = '';
     if (-d $elt) {
-        $elt = "$elt/";
-        print <<EOF;
+        if ($elt =~ m/\.app$/) {
+            print <<EOF;
+$type:'$elt' message:[['hotdog' 'open' '$elt']|runCommandInBackground]
+EOF
+        } else {
+            $elt = "$elt/";
+            print <<EOF;
 $type:'$elt' message:['$elt'|changeDirectory;ObjectInterface|pushToNavigationStack]
 EOF
+        }
     } else {
         print <<EOF;
 $type:'$elt' message:['$elt'|runFileHandler]
