@@ -6,4 +6,4 @@ flexible,leftPadding,rightPadding,objectMessage,messageForClick
 ,4,4,"CommandOutputText:['hotdog-printBatteryStatus.pl' ]"
 ,4,4,"CommandOutputBitmap:['hotdog-printCPUStats.pl' ]"
 ,4,4,"CommandOutputText:['hotdog-printNetworkInfo.pl' ]","configDir:'Config/networkMenu.csv'|parseCSVFile|asMenu"
-,4,4,"CommandOutputText:['hotdog-printDateEverySecondForTimezone:text:.pl' 'Pacific/Auckland' 'AKL']"
+,4,4,"CommandOutputText:['hotdog-printDateEverySecondForTimezone:text:.pl' 'Pacific/Auckland' 'AKL']","configDir:'Config/dateTimeMenu.csv'|parseCSVFile|asMenu"
