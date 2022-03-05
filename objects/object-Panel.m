@@ -234,6 +234,27 @@ static unsigned char *button_bottom_right_squared =
 ;
 
 @implementation Definitions(fjkdlsjfklsdjfklsdfjdksjfkdsfjdskfjksdljfj)
++ (id)ContactsPanel
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateContactsPanel.pl"];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    return obj;
+}
++ (id)VCFPanel:(id)path
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateVCFPanelForFile:.pl"];
+    [generatecmd addObject:path];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    return obj;
+}
 + (id)AdventurePanel
 {
     id generatecmd = nsarr();
