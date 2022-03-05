@@ -290,6 +290,16 @@ exit(1);
     [obj updateArray];
     return obj;
 }
++ (id)VideoCamerasPanel
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateVideoCamerasPanel.pl"];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    return obj;
+}
 + (id)DateTimePanel
 {
     id generatecmd = nsarr();
