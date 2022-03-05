@@ -346,6 +346,13 @@ NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeigh
                 [Definitions dialog:classPrefix :argc-3 :&argv[3]];
             }
             exit(-1);
+        } else if ((argc > 1) && !strcmp(argv[1], "VCFPanel")) {
+            if (argc > 2) {
+                id obj = [Definitions VCFPanel:nsfmt(@"%s", argv[2])];
+                [Definitions runWindowManagerForObject:obj];
+                exit(0);
+            }
+            exit(1);
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
