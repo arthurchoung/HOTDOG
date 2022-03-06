@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
-@output = `cal`;
+$args = join ' ', @ARGV;
+
+@output = `cal $args`;
 chomp @output;
 
 @daysofweek = ();
