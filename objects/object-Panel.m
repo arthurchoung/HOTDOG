@@ -1070,4 +1070,125 @@ NSLog(@"handleRightMouseUp");
 }
 @end
 
+@implementation Definitions(fmeklwmfklsdmkflmklsdmfkl)
++ (id)CalendarYearPanel
+{
+    int year = [Definitions currentYear];
+    return [Definitions CalendarYearPanel:year];
+}
++ (id)CalendarYearPanel:(int)year
+{
+    id obj = [@"PanelGrid" asInstance];
+
+    id arr = nsarr();
+    for (int i=1; i<=12; i++) {
+        id cmd = nsarr();
+        [cmd addObject:@"hotdog-generateCalendarPanel.pl"];
+        [cmd addObject:nsfmt(@"%d", i)];
+        [cmd addObject:nsfmt(@"%d", year)];
+        [arr addObject:cmd];
+    }
+    [obj setValue:arr forKey:@"gridCommands"];
+    [obj updateArray];
+    return obj;
+}
+@end
+
+@interface PanelGrid:Panel
+{
+    id _gridCommands;
+    id _gridArray;
+}
+@end
+@implementation PanelGrid
+
+- (void)updateArray
+{
+NSLog(@"PanelGrid updateArray path %@", _currentDirectory);
+    id results = nsarr();
+    for (int i=0; i<[_gridCommands count]; i++) {
+        id elt = [_gridCommands nth:i];
+        id output = [[[elt runCommandAndReturnOutput] asString] split:@"\n"];
+        if (!output) {
+            output = @"";
+        }
+        [results addObject:output];
+    }
+    [self setValue:results forKey:@"gridArray"];
+}
+- (void)updateArrayAndTimestamp
+{
+NSLog(@"PanelGrid updateArrayAndTimestamp path %@", _currentDirectory);
+    time_t timestamp = [_currentDirectory fileModificationTimestamp];
+    id results = nsarr();
+    for (int i=0; i<[_gridCommands count]; i++) {
+        id elt = [_gridCommands nth:i];
+        id output = [[[elt runCommandAndReturnOutput] asString] split:@"\n"];
+        if (!output) {
+            output = @"";
+        }
+        [results addObject:output];
+    }
+    [self setValue:results forKey:@"gridArray"];
+    _timestamp = timestamp;
+}
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+{
+    [Definitions drawHorizontalStripesInBitmap:bitmap rect:r];
+
+    [self setValue:nsarr() forKey:@"buttons"];
+
+    if (_waitForObserver && !_lastLine) {
+NSLog(@"waiting for input");
+        return;
+    }
+
+    [self setValue:bitmap forKey:@"bitmap"];
+
+    int rowCursorY = -_scrollY + r.y + 5;
+    int nextCursorY = rowCursorY;
+
+    int gridWidth = r.w / 3;
+    for (int i=0; i<[_gridArray count]; i++) {
+        id arr = [_gridArray nth:i];
+
+        _cursorY = rowCursorY;
+
+        Int4 gridRect;
+        int gridX = i%3;
+        gridRect.x = r.x + gridWidth*gridX + 3;
+        gridRect.y = _cursorY; 
+        gridRect.w = gridWidth - 6;
+        gridRect.h = r.h;
+
+        _r = gridRect;
+
+        for (int j=0; j<[arr count]; j++) {
+            if (_cursorY >= r.y + r.h) {
+                break;
+            }
+            if ([_buttons count] >= MAX_RECT) {
+                [self panelText:@"MAX_RECT reached"];
+                goto end;
+            }
+            id elt = [arr nth:j];
+            [self evaluateMessage:elt];
+        }
+
+        if (_cursorY > nextCursorY) {
+            nextCursorY = _cursorY;
+        }
+        if (gridX == 2) {
+            rowCursorY = nextCursorY;
+        }
+    }
+
+
+end:
+    [self setValue:nil forKey:@"bitmap"];
+}
+- (void)panelHorizontalStripes
+{
+}
+@end
 
