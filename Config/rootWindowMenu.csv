@@ -1,5 +1,5 @@
 hotKey,displayName,messageForClick
-,Main,"['hotdog' 'show' 'homeDir|changeDirectory;AmigaDrives']|runCommandInBackground"
+,"Main Menu","['hotdog']|runCommandInBackground"
 "F1",XTerm,"[ 'hotdog-xterm.sh' ] | runCommandInBackground"
 ,Chromium,"[ 'chromium' ] | runCommandInBackground"
 ,
@@ -11,20 +11,13 @@ hotKey,displayName,messageForClick
 ,AmigaSay,"['hotdog' 'show' 'AmigaSay']|runCommandInBackground"
 ,AtariSTDrives,"['hotdog' 'show' 'homeDir|changeDirectory;AtariSTDrives']|runCommandInBackground"
 ,AtariSTTrash,"['hotdog' 'show' 'AtariSTTrash']|runCommandInBackground"
-,Breakout,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Breakout')|runCommandInBackground"
-,CentipedeClone,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/CentipedeClone')|runCommandInBackground"
-,"FifteenPuzzle","NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/FifteenPuzzle')|runCommandInBackground"
 ,Home,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(homeDir) | runCommandInBackground"
-,HomeScreen,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/HomeScreen')|runCommandInBackground"
 ,HotDogStandPrograms,"['hotdog' 'show' 'HotDogStandPrograms']|runCommandInBackground"
-,KaboomClone,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/KaboomClone')|runCommandInBackground"
-,LockScreen,"['hotdog' 'show' 'LockScreen']|runCommandInBackground"
 ,MacClassicDrives,"['hotdog' 'show' 'MacClassicDrives']|runCommandInBackground"
 ,MacClassicTrash,"['hotdog' 'show' 'MacClassicTrash']|runCommandInBackground"
 ,MacColorDrives,"['hotdog' 'show' 'MacColorDrives']|runCommandInBackground"
 ,MacColorTrash,"['hotdog' 'show' 'MacColorTrash']|runCommandInBackground"
 ,MacPlatinumTrash,"['hotdog' 'show' 'MacPlatinumTrash']|runCommandInBackground"
-,Spider,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Spider')|runCommandInBackground"
 ,
 "F9","Toggle Expose Mode","toggleExposeMode"
 ,"Take Screenshot of Root Window","['hotdog-takeScreenshotRootWindow.pl']|runCommandInBackground"
