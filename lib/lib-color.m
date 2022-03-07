@@ -51,6 +51,11 @@
 
 
 @implementation NSString(fjksdjfklsdjklfjskldf)
+- (id)asRGBColor
+{
+    id color = [self asColor];
+    return [color stringToIndex:7];
+}
 - (id)asColor
 {
     if ([self hasPrefix:@"#"]) {
