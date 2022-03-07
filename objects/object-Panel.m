@@ -894,6 +894,38 @@ NSLog(@"waiting for input");
     _cursorY += cellH;
 }
 
+- (void)panelChatBubble:(id)text
+{
+    [self panelChatBubble:text fgcolor:@"black" bgcolor:@"white"];
+}
+- (void)panelChatBubble:(id)text fgcolor:(id)fgcolor bgcolor:(id)bgcolor
+{
+    fgcolor = [fgcolor asRGBColor];
+    bgcolor = [bgcolor asRGBColor];
+    Int4 r = _r;
+    r.x += 5;
+    r.y = _cursorY;
+    r.w -= 30;
+    int h = [Definitions drawChatBubbleInBitmap:_bitmap rect:r text:text fgcolor:fgcolor bgcolor:bgcolor flipHorizontal:NO flipVertical:YES];
+    _cursorY += h;
+}
+
+- (void)panelRightSideChatBubble:(id)text
+{
+    [self panelRightSideChatBubble:text fgcolor:@"black" bgcolor:@"white"];
+}
+- (void)panelRightSideChatBubble:(id)text fgcolor:(id)fgcolor bgcolor:(id)bgcolor
+{
+    fgcolor = [fgcolor asRGBColor];
+    bgcolor = [bgcolor asRGBColor];
+    Int4 r = _r;
+    r.x += 25;
+    r.y = _cursorY;
+    r.w -= 30;
+    int h = [Definitions drawChatBubbleInBitmap:_bitmap rect:r text:text fgcolor:fgcolor bgcolor:bgcolor flipHorizontal:YES flipVertical:YES];
+    _cursorY += h;
+}
+
 - (void)handleMouseDown:(id)event
 {
     int x = [event intValueForKey:@"mouseX"];
