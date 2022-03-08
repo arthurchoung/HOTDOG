@@ -100,6 +100,14 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                 }
                 [[Definitions navigationStack] setValue:nil forKey:@"context"];
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "stringFromFile")) {
+            if (argc > 2) {
+                id obj = [nsfmt(@"%s", argv[2]) stringFromFile];
+//NSLog(@"message %@", message);
+                if (obj) {
+                    [Definitions runWindowManagerForObject:obj];
+                }
+            }
         } else if ((argc > 1) && !strcmp(argv[1], "show")) {
             id args = nsarr();
             for (int i=2; i<argc; i++) {
