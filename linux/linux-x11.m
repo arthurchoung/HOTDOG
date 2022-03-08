@@ -1381,7 +1381,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
 //            [bitmap fillRectangleAtX:0 y:0 w:w h:h];
             [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:w h:h]];
         } else {
-            [bitmap setColor:@"white"];
+            [bitmap setColor:@"#ffff88"];
             [bitmap fillRect:[Definitions rectWithX:0 y:0 w:w h:h]];
             [bitmap setColor:@"black"];
             id text = [object description];
