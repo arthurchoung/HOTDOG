@@ -9,7 +9,7 @@ suffix,message
 .wav
 .pdf,"NSArray|addObject:'mupdf'|addObject:(self)|runCommandInBackground|returnNil"
 .html,"NSArray|addObject:'firefox'|addObject:(self)|runCommandInBackground|returnNil"
-.txt,"stringFromFile"
+.txt,"NSArray|addObject:'hotdog'|addObject:'stringFromFile'|addObject:(self)|runCommandInBackground|returnNil"
 .csv,"parseCSVFile|asListInterface"
 .jpg,"jpegFromFile"
 .jpeg,"jpegFromFile"
