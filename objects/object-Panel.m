@@ -301,6 +301,29 @@ exit(1);
     [obj setValue:lines forKey:@"array"];
     return obj;
 }
++ (id)WorldClockPanel
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateWorldClockPanel.pl"];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    [obj setValue:nil forKey:@"generateCommand"];
+    return obj;
+}
++ (id)WorldClockPanel:(id)region
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateWorldClockPanel.pl"];
+    [generatecmd addObject:region];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    [obj setValue:nil forKey:@"generateCommand"];
+    return obj;
+}
 + (id)CalendarPanel
 {
     id generatecmd = nsarr();
