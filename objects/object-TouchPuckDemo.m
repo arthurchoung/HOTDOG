@@ -32,7 +32,7 @@
 + (id)TouchPuckDemo:(id)path
 {
     id obj = [@"TouchPuckDemo" asInstance];
-    if (![obj openTrackpad:[path UTF8String]]) {
+    if (![obj openTrackpad:path]) {
 NSLog(@"Unable to open trackpad device '%@'\n", path);
         exit(1);
     }
@@ -71,11 +71,11 @@ NSLog(@"Unable to open trackpad device '%@'\n", path);
 @end
 @implementation TouchPuckDemo
 
-- (int)openTrackpad:(char *)path
+- (int)openTrackpad:(id)path
 {
-    _trackpadFD = open(path, O_RDONLY|O_NONBLOCK);
+    _trackpadFD = open([path UTF8String], O_RDONLY|O_NONBLOCK);
     if (_trackpadFD < 0) {
-fprintf(stderr, "unable to open %s", path);
+NSLog(@"unable to open %@", path);
         return 0;
     }
     _trackpadIsOpen = 1;
