@@ -33,28 +33,21 @@
     int monitorWidth = [monitor intValueForKey:@"width"];
     int monitorHeight = [monitor intValueForKey:@"height"];
     
-    id arr = nsarr();
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog-packRectanglesIntoWidth:height:..."];
+    [cmd addObject:nsfmt(@"%d", monitorWidth)];
+    [cmd addObject:nsfmt(@"%d", monitorHeight)];
     for (int i=0; i<[windows count]; i++) {
         id window = [windows nth:i];
         int x = [window intValueForKey:@"x"];
         int y = [window intValueForKey:@"y"];
-        id str = nsfmt(@"id:%@ x:%d y:%d w:%d h:%d\n",
-            [window valueForKey:@"window"],
-            x - monitorX,
-            y - monitorY,
-            [window intValueForKey:@"w"],
-            [window intValueForKey:@"h"]);
-        [arr addObject:str];
+        [cmd addObject:nsfmt(@"id:%@", [window valueForKey:@"window"])];
+        [cmd addObject:nsfmt(@"x:%d", x - monitorX)];
+        [cmd addObject:nsfmt(@"y:%d", y - monitorY)];
+        [cmd addObject:nsfmt(@"w:%d", [window intValueForKey:@"w"])];
+        [cmd addObject:nsfmt(@"h:%d", [window intValueForKey:@"h"])];
     }
-    id str = [arr join:@""];
-    id cmd = nsarr();
-    [cmd addObject:@"hotdog-packRectanglesIntoWidth:height:.pl"];
-    [cmd addObject:nsfmt(@"%d", monitorWidth)];
-    [cmd addObject:nsfmt(@"%d", monitorHeight)];
-    id process = [cmd runCommandAndReturnProcess];
-    [process writeString:str];
-    [process closeInput];
-    id data = [process readAllDataFromOutputThenCloseAndWait];
+    id data = [cmd runCommandAndReturnOutput];
     id results = [[data asString] split:@"\n"];
     for (int i=0; i<[results count]; i++) {
         id elt = [results nth:i];

@@ -12,4 +12,5 @@ gcc -o hotdog-monitorBlockDevices hotdog-monitorBlockDevices.c
 gcc -o hotdog-monitorNetworkInterfaces hotdog-monitorNetworkInterfaces.c
 gcc -o hotdog-monitorMonitors hotdog-monitorMonitors.c
 g++ -o hotdog-solveFifteenPuzzle hotdog-solveFifteenPuzzle.cpp
+gcc -o hotdog-packRectanglesIntoWidth:height:... hotdog-packRectanglesIntoWidth:height:....c
 
