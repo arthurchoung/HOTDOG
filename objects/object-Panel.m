@@ -382,6 +382,20 @@ exit(1);
     [obj updateArray];
     return obj;
 }
++ (id)Panel:(id)generatecmd observer:(id)observercmd
+{
+    id observer = [observercmd runCommandAndReturnProcess];
+    if (!observer) {
+NSLog(@"unable to run observer command %@", observercmd);
+exit(1);
+    }
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj setValue:observer forKey:@"observer"];
+    [obj updateArray];
+    return obj;
+}
 + (id)DrivesPanel
 {
     id generatecmd = nsarr();
