@@ -437,34 +437,6 @@ NSLog(@"ListInterface");
 
 
 
-#ifdef BUILD_FOR_IOS
-@implementation NSObject(jfkdlsjfkldsjfklsjf)
-- (void)pushToMainInterface
-{
-NSLog(@"NSObject pushToMainInterface");
-    id result = self;
-    id obj = nil;
-    if ([result isKindOfClass:[UIViewController class]]) {
-    } else if ([result isKindOfClass:[UIView class]]) {
-        result = [result asViewController];
-    } else if ([result isKindOfClass:[NSArray class]]) {
-        result = [result asArrayViewController];
-    } else if ([result isKindOfClass:[NSDictionary class]]) {
-NSLog(@"is dictionary: %@", [result allKeysAndValues]);
-        result = [result asKeyValueArray];
-        result = [result asArrayViewController];
-    } else {
-        obj = result;
-        result = [result asObjectViewController];
-    }
-    if (result) {
-        if (result != [[Definitions mainInterface] topViewController]) {
-            [[Definitions mainInterface] pushViewController:result animated:1];
-        }
-    }
-}
-@end
-#else
 @implementation NSDictionary(fjkldsjfklsdjfk)
 - (void)pushToNavigationStack
 {
@@ -494,7 +466,6 @@ NSLog(@"pushToNavigationStack %@", self);
     [[Definitions navigationStack] pushObject:self];
 }
 @end
-#endif
 
 @interface NavigationStack : IvarObject
 {
