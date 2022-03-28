@@ -220,6 +220,7 @@ static unsigned char blue_button_right[] = {
     char _buttonDown;
     char _buttonHover;
     int _dialogMode;
+    id _partialLine;
 }
 @end
 @implementation AquaProgramBox
@@ -238,7 +239,7 @@ static unsigned char blue_button_right[] = {
     }
     return 0;
 }
-- (void)handleFileDescriptor
+- (void)handleFileDescriptorOld
 {
     if (_eof) {
         return;
@@ -268,6 +269,53 @@ static unsigned char blue_button_right[] = {
     }
     id line = nsfmt(@"%s", p);
     [self setValue:line forKey:@"line"];
+}
+- (void)handleFileDescriptor
+{
+    if (_eof) {
+        return;
+    }
+    char buf[BUFSIZE];
+    int n = read(0, buf, BUFSIZE-1);
+    if (n < 0) {
+        // error, actually
+        _eof = YES;
+        return;
+    }
+    if (n == 0) {
+        _eof = YES;
+        return;
+    }
+    int sep = (_separator) ? _separator : '\r';
+    buf[n] = 0;
+    char *p = &buf[0];
+    for(;;) {
+        char *q = strchr(p, sep);
+        if (q) {
+            id line = nscstrn(p, q-p);
+            q++;
+            if (_partialLine) {
+                line = nsfmt(@"%@%@", _partialLine, line);
+                [self setValue:line forKey:@"line"];
+                [self setValue:nil forKey:@"partialLine"];
+            } else {
+                [self setValue:line forKey:@"line"];
+            }
+            p = q;
+        } else {
+            if (*p) {
+                id line = nsfmt(@"%s", p);
+                if (_partialLine) {
+                    line = nsfmt(@"%@%@", _partialLine, line);
+                    [self setValue:line forKey:@"partialLine"];
+                } else {
+                    [self setValue:line forKey:@"partialLine"];
+                }
+            }
+            break;
+        }
+    }
+
 }
 - (void)endIteration:(id)event
 {
