@@ -20,17 +20,20 @@
 
 use JSON;
 
-sub asQuotedString
-{
-    my ($str) = @_;
-    $str =~ s/\\/\\\\/g;
-    $str =~ s/\"/\\\"/g;
-    return '"' . $str . '"';
-}
+@keys = ('type', 'fstype', 'size', 'mountpoint', 'label', 'vendor', 'model');
 
-$output = `lsblk --json -l -p -o PATH,FSTYPE,SIZE,MOUNTPOINT,LABEL`;
+$output = `lsblk --json -l -p -o PATH,TYPE,FSTYPE,SIZE,MOUNTPOINT,LABEL,VENDOR,MODEL`;
 $result = decode_json($output);
 $blockdevices = $result->{'blockdevices'};
 foreach $elt (@$blockdevices) {
-    print "device:$elt->{path} fstype:$elt->{fstype} size:$elt->{size} mountpoint:$elt->{mountpoint} label:$elt->{label}\n";
+    $path = $elt->{'path'};
+    $path =~ s/([%\s])/sprintf '%%%02x', ord $1/eg;
+    @arr = map {
+        $key = $_;
+        $val = $elt->{$key};
+        $val =~ s/([%\s])/sprintf '%%%02x', ord $1/eg;
+        "$key:$val"
+    } @keys;
+    $str = join ' ', @arr;
+    print "device:$elt->{path} $str\n";
 }
