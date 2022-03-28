@@ -151,6 +151,15 @@
 }
 @end
 
+@implementation NSString(fewnkflmsdklfmkldsmfkl)
+- (id)runCommandAndReturnOutput
+{
+    id cmd = nsarr();
+    [cmd addObject:self];
+    return [cmd runCommandAndReturnOutput];
+}
+@end
+
 @implementation NSArray(jfklsdjkf)
 - (id)runAsArgumentsForCommandAndReturnOutput:(id)command
 {
@@ -530,7 +539,15 @@ NSLog(@"write result %d", result);
     return nil;
 }
 
+@end
 
+@implementation NSString(fefjksdfjklsdmfklemimfkwnkflmsdklfmkldsmfkl)
+- (id)runCommandAndReturnProcess
+{
+    id cmd = nsarr();
+    [cmd addObject:self];
+    return [cmd runCommandAndReturnProcess];
+}
 @end
 
 @implementation NSArray(jfkldsjflksdkljf)
