@@ -12,6 +12,7 @@ You'll also need the following packages installed:
 sudo apt install libjson-perl
 sudo apt install feh
 sudo apt install compton
+sudo apt install xterm
 ```
 
 Install the .deb file:
@@ -41,6 +42,7 @@ sudo apt install g++
 sudo apt install libjson-perl
 sudo apt install feh
 sudo apt install compton
+sudo apt install xterm
 
 git clone https://github.com/arthurchoung/HOTDOG
 cd HOTDOG
