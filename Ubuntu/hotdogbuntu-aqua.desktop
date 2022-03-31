@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=HOTDOGbuntu Aqua
+Comment=HOTDOGbuntu Aqua
+Exec=hotdogbuntu-aqua.sh
+Icon=
+Type=Application
+DesktopNames=HOTDOGbuntu Aqua
+

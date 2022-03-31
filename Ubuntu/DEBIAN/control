@@ -1,0 +1,8 @@
+Package: HOTDOGbuntu
+Version: 20211029
+Architecture: amd64
+Depends: libjson-perl, feh, compton
+Maintainer: Arthur Choung <arthur@hotdoglinux.com>
+Description: HOTDOG + Ubuntu = HOTDOGbuntu
+ Horrible Obsolete Typeface and Dreadful Onscreen Graphics
+
