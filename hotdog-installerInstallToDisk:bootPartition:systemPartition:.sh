@@ -70,7 +70,7 @@ fi
 
 # check if partition is vfat
 if ! blkid -s TYPE -o value "$BOOTDEVICE" | grep '^vfat$' >/dev/null ; then
-    echo "Error, boot partition $BOOTDEVICE is not vfat"
+    echo "Error, boot partition $BOOTDEVICE is not formatted as vfat"
     exit 1
 fi
 
