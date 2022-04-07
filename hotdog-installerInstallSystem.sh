@@ -22,13 +22,13 @@ if [ "x$UUID" = "x" ]; then
 fi
 
 #
-# Install Packages in /InstallerPackages*
+# Install Packages in /mntinstaller/InstallerPackages*
 #
 
-COUNT=$( find /InstallerPackages*/*.t?z | wc -l )
+COUNT=$( find /mntinstaller/InstallerPackages*/*.t?z | wc -l )
 INDEX=1
 
-for package in /InstallerPackages*/*.t?z ; do
+for package in /mntinstaller/InstallerPackages*/*.t?z ; do
     echo "[$INDEX/$COUNT]"
     echo
     if ! installpkg -root $ROOTDIR -terse -priority ADD $package ; then
@@ -57,13 +57,13 @@ printf "%-16s %-16s %-11s %-16s %-3s %s\n" "proc" "/proc" "proc" "defaults" "0" 
 printf "%-16s %-16s %-11s %-16s %-3s %s\n" "tmpfs" "/dev/shm" "tmpfs" "nosuid,nodev,noexec" "0" "0" >> $ROOTDIR/etc/fstab
 
 #
-# Copy /InstallerCustom*
+# Copy /mntinstaller/InstallerCustom*
 #
 
-for custom in /InstallerCustom* ; do
+for custom in /mntinstaller/InstallerCustom* ; do
     echo "Copying $custom..."
     echo -e -n "\r"
-    cp -a -T $custom $ROOTDIR
+    cp -R -P -T $custom $ROOTDIR
 done
 
 # If running in Amiga mode then use the Amiga xdm config
