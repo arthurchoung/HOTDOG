@@ -1,0 +1,40 @@
+palette
+b #000000
+. #ff0000
+X #ffff00
+o #0000ff
+O #aa55aa
++ #55aaaa
+@ #00ffff
+# #868a8e
+$ #c3c7cb
+% #ffffff
+
+pixels
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 
+b@$@$@$@$@$@$@$@$@$@$@$@$@$@$b#
+b$@$@$@$@$@$@$@$@$@$@$@$@$@$@b#
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb#
+b%%%%%%%%%%%%%%%%%%%%%%%%%%%%b#
+b%%%%%%%%%%%%%%%%%%%%%%%%%%%%b#
+b%%%%bbb%%%%%%bbb%%%%%###b%%%b#
+b%%%b%%b%%%%%b++b%%%%%#oob%%%b#
+b%%bbbbbb%%%b++bb%%%%%#oob%%%b#
+b%%b$$$$b%%%#bb%b%%%%#####b%%b#
+b%%#bbbbb%%%%%bbb%%%%bbbbbb%%b#
+b%%%%%%%%%%%%%%%%%%%%%%%%%%%%b#
+b%%bbbbbb%%%bbbbbb%%%bbbbbb%%b#
+b%%%%%%%%%%%%%%%%%%%%%%%%%%%%b#
+b%%%%%%%%%%%%%%%%%%%%%%%%%%%%b#
+b%%%%%%b%%%%%b%%bb%%%%bbb%%%%b#
+b%%%%%OO%%%%b%%b.b%%%b@o@b%%%b#
+b%%%%O%O%%%%b%bXb%%%%b@oob%%%b#
+b%%%ObOb%%%%%bXb%%%%%b@@@b%%%b#
+b%%OO%%OO%%%%bb%%%%%%%bbb%%%%b#
+b%%%%%%%%%%%%%%%%%%%%%%%%%%%%b#
+b%%bbbbbb%%%bbbbbb%%%bbbbbb%%b#
+b%%%%%%%%%%%%%%%%%%%%%%%%%%%%b#
+b%%%%%%%%%%%%%%%%%%%%%%%%%%%%b#
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb#
+ ##############################
+

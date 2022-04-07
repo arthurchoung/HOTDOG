@@ -1,0 +1,42 @@
+palette
+b #000000
+. #ffffff
+
+highlightedPalette
+. #000000
+b #ffffff
+
+pixels
+        bbbbbb        
+       b......b       
+ bbbbbbbbbbbbbbbbbbbb 
+b....................b
+bbbbbbbbbbbbbbbbbbbbbb
+ b..................b 
+ b..................b 
+ b..b...b...b...b...b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b...b...b...b...b..b 
+ b..b...b...b...b...b 
+ b..................b 
+ b..................b 
+ bbbbbbbbbbbbbbbbbbbb 
+
