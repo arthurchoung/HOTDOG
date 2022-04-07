@@ -3,8 +3,8 @@ hotKey,displayName,messageForClick
 "F1",XTerm,"[ 'hotdog-xterm.sh' ] | runCommandInBackground"
 ,Chromium,"[ 'chromium' ] | runCommandInBackground"
 ,
-,Calculator,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Calculator')|runCommandInBackground"
-,Stopwatch,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Stopwatch')|runCommandInBackground"
+,Calculator,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Calculator.app')|runCommandInBackground"
+,Stopwatch,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Stopwatch.app')|runCommandInBackground"
 ,
 ,AmigaDrives,"['hotdog' 'show' 'homeDir|changeDirectory;AmigaDrives']|runCommandInBackground"
 ,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
