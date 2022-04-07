@@ -32,5 +32,29 @@ To set up the installation of Hot Dog Linux, click Continue.\
     exit 1
 fi
 
-hotdog show "Panel:'hotdog-installerGeneratePanel.pl' observer:'hotdog-monitorBlockDevices'"
+if ! [ -d /mntinstaller ]; then
+    # Directory /mntinstaller does not exit
+    PATH="/root:$PATH" dialog --msgbox "Error, /mntinstaller either does not exist or is not a directory" 16 68
+    exit 1
+fi
+
+if ! findmnt -P -M /mntinstaller ; then
+    DEVICE=$( findfs LABEL=HOTDOGINSTALLER )
+    if [ $? -ne 0 ]; then
+        # Unable to find HOTDOGINSTALLER
+        PATH="/root:$PATH" dialog --msgbox "Error, unable to find installer device" 16 68
+        exit 1
+    fi
+    if ! mount -o ro "$DEVICE" /mntinstaller ; then
+        # Unable to mount $DEVICE
+        PATH="/root:$PATH" dialog --msgbox "Error, unable to mount device $DEVICE" 16 68
+        exit 1
+    fi
+fi
+
+RESULTS=( $( PATH="/root:$PATH" hotdog-installerChooseDisk.pl ) )
+if [ ${#RESULTS[@]} -eq 3 ]; then
+    TEXT=$( PATH="/root:$PATH" hotdog-installerInstallToDisk:bootPartition:systemPartition:.sh ${RESULTS[0]} ${RESULTS[1]} ${RESULTS[2]} )
+    PATH="/root:$PATH" dialog --msgbox "$TEXT" 16 68
+fi
 
