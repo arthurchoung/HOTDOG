@@ -570,6 +570,8 @@ exit(0);
     id _pendingMessage;
 
     id _menuDict;
+
+    time_t _desktopPathTimestamp;
 }
 @end
 @implementation WindowManager
@@ -1574,7 +1576,14 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                     }
                     _backgroundUpdateTimestamp = timestamp;
                 }
+            } else {
+                time_t timestamp = [[Definitions execDir:@"Desktop"] fileModificationTimestamp];
+                if (timestamp != _desktopPathTimestamp) {
+                    [self handleDesktopPath];
+                    _desktopPathTimestamp = timestamp;
+                }
             }
+
 
             for (int i=0; i<[_objectWindows count]; i++) {
                 id elt = [_objectWindows nth:i];
@@ -2707,8 +2716,6 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
     XDeleteProperty(_display, win, prop);
 }
 
-/*
-This should be implemented in a separate program
 - (void)handleDesktopPath
 {
     id contents = [[Definitions execDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
@@ -2795,7 +2802,6 @@ This should be implemented in a separate program
         [dict setValue:@"1" forKey:@"needsRedraw"];
     }
 }
-*/
 
 - (void)focusTopmostWindow
 {
