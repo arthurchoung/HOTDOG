@@ -38,7 +38,7 @@ fi
 
 # check if partition is vfat
 if ! blkid -s TYPE -o value "$BOOTDEVICE" | grep '^vfat$' >/dev/null ; then
-    echo "Error, partition is not vfat"
+    echo "Error, partition is not formatted as vfat"
     exit 1
 fi
 
@@ -55,7 +55,7 @@ if ! mount "$BOOTDEVICE" "$MOUNTPOINT" ; then
     exit 1
 fi
 
-cp /InstallerMBRBootloader/* "$MOUNTPOINT"
+cp /mntinstaller/InstallerMBRBootloader/* "$MOUNTPOINT"
 sed -i "s/__UUID__/$UUID/g" "$MOUNTPOINT/syslinux.cfg"
 
 umount "$MOUNTPOINT"
