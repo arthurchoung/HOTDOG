@@ -1576,7 +1576,7 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                         }
                     }
                 } else {
-                    time_t timestamp = [[Definitions execDir:@"Desktop"] fileModificationTimestamp];
+                    time_t timestamp = [[Definitions configDir:@"Desktop"] fileModificationTimestamp];
                     if (timestamp != _desktopPathTimestamp) {
                         [self handleDesktopPath];
                         _desktopPathTimestamp = timestamp;
@@ -2719,7 +2719,7 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
 
 - (void)handleDesktopPath
 {
-    id contents = [[Definitions execDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
+    id contents = [[Definitions configDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
     for (int i=0; i<[_objectWindows count]; i++) {
         id dict = [_objectWindows nth:i];
         id filePath = [dict valueForKey:@"filePath"];
