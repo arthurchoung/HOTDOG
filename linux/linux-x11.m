@@ -1560,9 +1560,10 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                 [self setValue:nil forKey:@"pendingMessage"];
             }
 
-            if (!_isWindowManager) {
-                time_t timestamp = time(0);
-                if (timestamp != _backgroundUpdateTimestamp) {
+            time_t timestamp = time(0);
+            if (timestamp != _backgroundUpdateTimestamp) {
+
+                if (!_isWindowManager) {
                     for (int i=0; i<[_objectWindows count]; i++) {
                         id elt = [_objectWindows nth:i];
                         id obj = [elt valueForKey:@"object"];
@@ -1574,16 +1575,16 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                             [elt setValue:@"1" forKey:@"needsRedraw"];
                         }
                     }
-                    _backgroundUpdateTimestamp = timestamp;
+                } else {
+                    time_t timestamp = [[Definitions execDir:@"Desktop"] fileModificationTimestamp];
+                    if (timestamp != _desktopPathTimestamp) {
+                        [self handleDesktopPath];
+                        _desktopPathTimestamp = timestamp;
+                    }
                 }
-            } else {
-                time_t timestamp = [[Definitions execDir:@"Desktop"] fileModificationTimestamp];
-                if (timestamp != _desktopPathTimestamp) {
-                    [self handleDesktopPath];
-                    _desktopPathTimestamp = timestamp;
-                }
-            }
 
+                _backgroundUpdateTimestamp = timestamp;
+            }
 
             for (int i=0; i<[_objectWindows count]; i++) {
                 id elt = [_objectWindows nth:i];
@@ -2719,7 +2720,6 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
 - (void)handleDesktopPath
 {
     id contents = [[Definitions execDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
-    id closeList = nsarr();
     for (int i=0; i<[_objectWindows count]; i++) {
         id dict = [_objectWindows nth:i];
         id filePath = [dict valueForKey:@"filePath"];
@@ -2727,18 +2727,8 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
             continue;
         }
         if ([contents containsObject:filePath]) {
-            id timestamp = nsfmt(@"%ld", (long long)[filePath fileModificationTimestamp]);
-            if ([[dict valueForKey:@"fileTimestamp"] isEqual:timestamp]) {
-                continue;
-            } else {
-                [closeList addObject:dict];
-                continue;
-            }
+            continue;
         }
-        [closeList addObject:dict];
-    }
-    for (int i=0; i<[closeList count]; i++) {
-        id dict = [closeList nth:i];
         [dict setValue:@"1" forKey:@"shouldCloseWindow"];
     }
 
@@ -2752,23 +2742,17 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
     int cursorY = 30;
     for (int i=0; i<[contents count]; i++) {
         id path = [contents nth:i];
+        if ([[path lastPathComponent] hasPrefix:@"."]) {
+            continue;
+        }
+        id data = [path dataFromFile];
+        if ([data length]) {
+            [data appendBytes:"\n\n" length:2];
+        }
         id dict = [self dictForObjectFilePath:path];
         if (!dict) {
-            id obj = nil;
-            if ([[path lastPathComponent] containsString:@"."]) {
-                id extension = [path pathExtension];
-                if (extension) {
-                    obj = [extension asInstance];
-                }
-            }
-            if (!obj) {
-                obj = [@"CommandOutputBitmap" asInstance];
-                id data = [path dataFromFile];
-                if ([data length]) {
-                    [data appendBytes:"\n\n" length:2];
-                }
-                [obj handleData:data];
-            }
+            id obj = [@"CommandOutputBitmap" asInstance];
+            [obj handleData:data];
             int w = 16;
             if ([obj respondsToSelector:@selector(preferredWidth)]) {
                 int preferredWidth = [obj preferredWidth];
@@ -2797,7 +2781,10 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
             [dict setValue:@"1" forKey:@"isIcon"];
             [dict setValue:path forKey:@"filePath"];
             [dict setValue:@"1" forKey:@"transparent"];
-            [dict setValue:nsfmt(@"%ld", (long long)[path fileModificationTimestamp]) forKey:@"fileTimestamp"];
+        } else {
+            id obj = [dict valueForKey:@"object"];
+            [obj setValue:nil forKey:@"firstLine"];
+            [obj handleData:data];
         }
         [dict setValue:@"1" forKey:@"needsRedraw"];
     }
