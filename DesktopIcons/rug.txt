@@ -1,5 +1,5 @@
 messageForDoubleClick
-"It's a rug.\n\nIt really ties the screen together."|showAlert
+['hotdog' 'alert']|runCommandInBackgroundAndWriteStringToStandardInput:"It's a rug.\n\nIt really ties the screen together."
 
 palette
 " #000000
