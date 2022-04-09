@@ -4,7 +4,11 @@ For more information, please visit http://hotdoglinux.com
 
 ## Download
 
-Live Image based on Slackware Live
+Installer ISO based on Slackware64 (1.52 GB)
+
+Minimal ISO based on Slackware64 that runs from RAM (195 MB)
+
+Boot with Legacy BIOS, untested on virtual machines
 
 http://hotdoglinux.com/download/
 
