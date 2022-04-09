@@ -38,6 +38,8 @@ if ! [ -d /mntinstaller ]; then
     exit 1
 fi
 
+DIDMOUNTINSTALLER=0
+
 if ! findmnt -P -M /mntinstaller ; then
     DEVICE=$( findfs LABEL=HOTDOGINSTALLER )
     if [ $? -ne 0 ]; then
@@ -50,11 +52,21 @@ if ! findmnt -P -M /mntinstaller ; then
         PATH="/root:$PATH" dialog --msgbox "Error, unable to mount device $DEVICE" 16 68
         exit 1
     fi
+    DIDMOUNTINSTALLER=1
 fi
+
+TEXT=""
 
 RESULTS=( $( PATH="/root:$PATH" hotdog-installerChooseDisk.pl ) )
 if [ ${#RESULTS[@]} -eq 3 ]; then
     TEXT=$( PATH="/root:$PATH" hotdog-installerInstallToDisk:bootPartition:systemPartition:.sh ${RESULTS[0]} ${RESULTS[1]} ${RESULTS[2]} )
-    PATH="/root:$PATH" dialog --msgbox "$TEXT" 16 68
+else
+    TEXT="Installation aborted."
 fi
+
+if [ $DIDMOUNTINSTALLER -eq 1 ]; then
+    umount /mntinstaller
+fi
+
+PATH="/root:$PATH" dialog --msgbox "$TEXT" 16 68
 
