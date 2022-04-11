@@ -12,9 +12,9 @@ if ($output ne 'OK') {
 }
 system('sudo', '-A', 'umount', $path);
 if ($? != 0) {
-    `echo "Unable to unmount $path" | hotdog alert`;
+    system('hotdog', 'alert', "Unable to unmount $path");
     exit 1;
 }
-`echo "$path has been unmounted" | hotdog alert`;
+system('hotdog', 'alert', "$path has been unmounted");
 exit 0;
 
