@@ -226,21 +226,40 @@ NSLog(@"lines %@", lines);
                 [Definitions runWindowManagerForObject:obj];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "confirm")) {
-            id data = [Definitions dataFromStandardInput];
-            id text = [data asString];
+            id okText = @"OK";
+            id cancelText = @"Cancel";
+            if (argc > 2) {
+                okText = nsfmt(@"%s", argv[2]);
+            }
+            if (argc > 3) {
+                cancelText = nsfmt(@"%s", argv[3]);
+            }
+            id text = nil;
+            if (argc > 4) {
+                for (int i=4; i<argc; i++) {
+                    if (!text) {
+                        text = nsfmt(@"%s", argv[i]);
+                    } else {
+                        text = nsfmt(@"%@\n%s", text, argv[i]);
+                    }
+                }
+            } else {
+                id data = [Definitions dataFromStandardInput];
+                text = [data asString];
+            }
             if ([text length]) {
-                id obj = [@"ConfirmationDialog" asInstance];
+                id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
+                id obj = nil;
+                if ([hotdogMode isEqual:@"aqua"]) {
+                    obj = [@"AquaAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"amiga"]) {
+                    obj = [@"AmigaAlert" asInstance];
+                } else {
+                    obj = [@"MacAlert" asInstance];
+                }
                 [obj setValue:text forKey:@"text"];
-                if (argc > 2) {
-                    [obj setValue:nsfmt(@"%s", argv[2]) forKey:@"okText"];
-                } else {
-                    [obj setValue:@"OK" forKey:@"okText"];
-                }
-                if (argc > 3) {
-                    [obj setValue:nsfmt(@"%s", argv[3]) forKey:@"cancelText"];
-                } else {
-                    [obj setValue:@"Cancel" forKey:@"cancelText"];
-                }
+                [obj setValue:okText forKey:@"okText"];
+                [obj setValue:cancelText forKey:@"cancelText"];
                 [Definitions runWindowManagerForObject:obj];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "progress")) {
