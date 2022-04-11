@@ -1,16 +1,8 @@
 #!/usr/bin/perl
 
-$result = undef;
-
-if ($ENV{'HOTDOG_MODE'} eq 'amiga') {
-    $result = `hotdog show "'AmigaAlert'|asInstance|setValue:'Shutdown?' forKey:'text'|setValue:'Shutdown' forKey:'okText'|setValue:'Cancel' forKey:'cancelText'"`;
-} elsif ($ENV{'HOTDOG_MODE'} eq 'aqua') {
-    $result = `hotdog show "'AquaAlert'|asInstance|setValue:'Shutdown?' forKey:'text'|setValue:'Shutdown' forKey:'okText'|setValue:'Cancel' forKey:'cancelText'"`;
-} else {
-    $result = `echo "Shutdown?" | hotdog confirm Shutdown`;
-}
-
+$result = `hotdog confirm Shutdown Cancel 'Shutdown?'`;
 chomp $result;
+
 if ($result eq 'Shutdown') {
     system("sudo -A poweroff");
 }
