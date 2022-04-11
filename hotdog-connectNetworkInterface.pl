@@ -8,7 +8,7 @@ if (not $interface) {
 $dhcpcd = `pgrep -f 'dhcpcd.*$interface'`;
 chomp $dhcpcd;
 if ($dhcpcd) {
-    `echo "dhcpcd for $interface already running\n\npid $dhcpcd" | hotdog alert`;
+    system('hotdog', 'alert', "dhcpcd for $interface already running", '', "pid $dhcpcd");
     exit 1;
 }
 
@@ -45,14 +45,14 @@ if (open FH, "sudo -A dhcpcd -4 $interface 2>&1 | hotdog progress |") {
     }
     close(FH);
     if ($addr) {
-        `echo "Obtained address $addr" | hotdog alert`;
+        system('hotdog', 'alert', "Obtained address $addr");
     } else {
         $dhcpcd = `pgrep -f 'dhcpcd.*$interface'`;
         chomp $dhcpcd;
         if ($dhcpcd) {
             `sudo -A kill $dhcpcd`;
         }
-        `echo "Unable to obtain address" | hotdog alert`;
+        system('hotdog', 'alert', 'Unable to obtain address');
     }
 }
 
