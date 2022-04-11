@@ -79,6 +79,17 @@ BOOL isnsstr(id obj)//$;
 
 @implementation Definitions
 
++ (id)valueForEnvironmentVariable:(id)key
+{
+    if (!key) {
+        return nil;
+    }
+    char *str = getenv([key UTF8String]);
+    if (!str) {
+        return nil;
+    }
+    return nsfmt(@"%s", str);
+}
 + (void)setValue:(id)val forEnvironmentVariable:(id)key
 {
     setenv([key UTF8String], [val UTF8String], 1);
