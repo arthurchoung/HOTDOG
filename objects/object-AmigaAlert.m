@@ -53,6 +53,7 @@
     char _buttonHover;
     int _dialogMode;
     int _x11WaitForFocusOutThenClose;
+    int _returnKey;
 }
 @end
 
@@ -111,7 +112,13 @@
         _okRect.y = r.y+r.h-40;
         _okRect.w = innerWidth+16;
         _okRect.h = 30;
+        BOOL okButtonDown = NO;
         if ((_buttonDown == 'o') && (_buttonHover == 'o')) {
+            okButtonDown = YES;
+        } else if (_returnKey) {
+            okButtonDown = YES;
+        }
+        if (okButtonDown) {
             [bitmap setColor:@"black"];
             [bitmap fillRect:_okRect];
         }
@@ -212,6 +219,28 @@
     }
     _buttonDown = 0;
     _buttonHover = 0;
+}
+- (void)handleKeyDown:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        _returnKey = 1;
+    }
+}
+- (void)handleKeyUp:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        if (_returnKey) {
+            if (_dialogMode) {
+                exit(0);
+            }
+            printf("%@\n", _okText);
+            id x11dict = [event valueForKey:@"x11dict"];
+            [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+            _returnKey = 0;
+        }
+    }
 }
 @end
 
