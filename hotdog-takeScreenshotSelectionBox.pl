@@ -13,11 +13,13 @@ for ($i=0;;$i++) {
     last;
 }
 
+sleep 1;
+
 system(qq{import "$path"});
 if ($? != 0) {
-    system(qq{echo "Unable to take screen shot: $?" | hotdog alert});
-    exit 0;
+    system('hotdog', 'alert', "Unable to take screen shot: $?");
+    exit 1;
 }
 
-system(qq{echo "'Screen shot is located at '$path'" | hotdog alert});
+system('hotdog', 'alert', "Screen shot is located at '$path'");
 
