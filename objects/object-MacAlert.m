@@ -53,6 +53,7 @@
     char _buttonHover;
     int _dialogMode;
     int _x11WaitForFocusOutThenClose;
+    int _returnKey;
 }
 @end
 
@@ -96,7 +97,13 @@
         _okRect = [Definitions rectWithX:r.w-88 y:r.h-21-28 w:70 h:28];
         Int4 innerRect = _okRect;
         innerRect.y += 1;
+        BOOL okButtonDown = NO;        
         if ((_buttonDown == 'o') && (_buttonHover == 'o')) {
+            okButtonDown = YES;
+        } else if (_returnKey) {
+            okButtonDown = YES;
+        }
+        if (okButtonDown) {
             char *palette = ". #000000\nb #000000\nw #ffffff\n";
             [Definitions drawDefaultButtonInBitmap:bitmap rect:_okRect palette:palette];
             [bitmap setColorIntR:255 g:255 b:255 a:255];
@@ -183,6 +190,28 @@
     }
     _buttonDown = 0;
     _buttonHover = 0;
+}
+- (void)handleKeyDown:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        _returnKey = 1;
+    }
+}
+- (void)handleKeyUp:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        if (_returnKey) {
+            if (_dialogMode) {
+                exit(0);
+            }
+            printf("%@\n", _okText);
+            id x11dict = [event valueForKey:@"x11dict"];
+            [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+            _returnKey = 0;
+        }
+    }
 }
 @end
 
