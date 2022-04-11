@@ -107,12 +107,12 @@
             char *palette = ". #000000\nb #000000\nw #ffffff\n";
             [Definitions drawDefaultButtonInBitmap:bitmap rect:_okRect palette:palette];
             [bitmap setColorIntR:255 g:255 b:255 a:255];
-            [bitmap drawBitmapText:@"OK" centeredInRect:innerRect];
+            [bitmap drawBitmapText:_okText centeredInRect:innerRect];
         } else {
             char *palette = ". #ffffff\nb #000000\nw #ffffff\n";
             [Definitions drawDefaultButtonInBitmap:bitmap rect:_okRect palette:palette];
             [bitmap setColorIntR:0 g:0 b:0 a:255];
-            [bitmap drawBitmapText:@"OK" centeredInRect:innerRect];
+            [bitmap drawBitmapText:_okText centeredInRect:innerRect];
         }
     } else {
         _okRect.x = 0;
