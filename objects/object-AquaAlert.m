@@ -225,6 +225,7 @@ static unsigned char blue_button_right[] = {
     char _buttonHover;
     int _dialogMode;
     int _x11WaitForFocusOutThenClose;
+    int _returnKey;
 }
 @end
 
@@ -361,6 +362,28 @@ static unsigned char blue_button_right[] = {
     }
     _buttonDown = 0;
     _buttonHover = 0;
+}
+- (void)handleKeyDown:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        _returnKey = 1;
+    }
+}
+- (void)handleKeyUp:(id)event
+{
+    id str = [event valueForKey:@"keyString"];
+    if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
+        if (_returnKey) {
+            if (_dialogMode) {
+                exit(0);
+            }
+            printf("%@\n", _okText);
+            id x11dict = [event valueForKey:@"x11dict"];
+            [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+            _returnKey = 0;
+        }
+    }
 }
 - (void)drawButtonInBitmap:(id)bitmap rect:(Int4)r :(unsigned char *)left :(unsigned char *)middle :(unsigned char *)right
 {
