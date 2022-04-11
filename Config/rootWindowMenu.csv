@@ -2,10 +2,10 @@ hotKey,displayName,messageForClick
 ,"Main Menu","['hotdog']|runCommandInBackground"
 "F1",XTerm,"[ 'hotdog-xterm.sh' ] | runCommandInBackground"
 ,Chromium,"[ 'chromium' ] | runCommandInBackground"
-,
+,,
 ,Calculator,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Calculator.app')|runCommandInBackground"
 ,Stopwatch,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'MainMenu/Stopwatch.app')|runCommandInBackground"
-,
+,,
 ,AmigaDrives,"['hotdog' 'show' 'homeDir|changeDirectory;AmigaDrives']|runCommandInBackground"
 ,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
 ,AmigaSay,"['hotdog' 'show' 'AmigaSay']|runCommandInBackground"
@@ -18,7 +18,7 @@ hotKey,displayName,messageForClick
 ,MacColorDrives,"['hotdog' 'show' 'MacColorDrives']|runCommandInBackground"
 ,MacColorTrash,"['hotdog' 'show' 'MacColorTrash']|runCommandInBackground"
 ,MacPlatinumTrash,"['hotdog' 'show' 'MacPlatinumTrash']|runCommandInBackground"
-,
+,,
 "F9","Toggle Expose Mode","toggleExposeMode"
 ,"Take Screenshot of Root Window","['hotdog-takeScreenshotRootWindow.pl']|runCommandInBackground"
 ,"Take Screenshot of Focus Window","NSArray|addObject:'hotdog-takeScreenshotForWindow:.pl'|addObject:(currentWindow|window)|runCommandInBackground"
@@ -26,14 +26,14 @@ hotKey,displayName,messageForClick
 ,"Drives Panel","['hotdog' 'show' 'DrivesPanel']|runCommandInBackground"
 ,"Audio Panel","['hotdog-openAudioPanel.sh']|runCommandInBackground"
 ,"About This Computer","['hotdog' 'show' 'MacAboutThisComputer']|runCommandInBackground"
-,
+,,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
-,
+,,
 ,"About HOT DOG","[ 'hotdog-showAbout.pl' ]|runCommandInBackground"
-,
+,,
 ,"Quit","exit:0"
-,
+,,
 ,Enter Amiga Mode,"windowManager|setValue:'enterAmigaMode' forKey:'pendingMessage'"
 ,Enter Mac Classic Mode,"windowManager|setValue:'enterMacClassicMode' forKey:'pendingMessage'"
 ,Enter Mac Color Mode,"windowManager|setValue:'enterMacColorMode' forKey:'pendingMessage'"
