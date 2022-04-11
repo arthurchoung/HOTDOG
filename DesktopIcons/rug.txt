@@ -1,5 +1,5 @@
 messageForDoubleClick
-['hotdog' 'alert']|runCommandInBackgroundAndWriteStringToStandardInput:"It's a rug.\n\nIt really ties the screen together."
+['hotdog' 'alert' "It's a rug." '' 'It really ties the screen together.']|runCommandInBackground
 
 palette
 " #000000
