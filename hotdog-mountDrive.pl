@@ -33,7 +33,7 @@ EOF
             $str =~ s/%([0-9a-fA-F]{2})/chr(hex($1))/eg;
             if ($mountpoint eq $str) {
                 # FIXME: should sanitize $mountpoint
-                `echo "$mountpoint is already in use" | hotdog alert`;
+                system('hotdog', 'alert', "$mountpoint is already in use");
                 goto loop;
             }
         }
@@ -41,7 +41,7 @@ EOF
 
     system('sudo', '-A', 'mount', $device, $mountpoint);
     if ($? != 0) {
-        `echo "Unable to mount $device at $mountpoint" | hotdog alert`;
+        system('hotdog', 'alert', "Unable to mount $device at $mountpoint");
         exit 1;
     }
 
