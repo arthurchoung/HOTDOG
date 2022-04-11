@@ -198,26 +198,32 @@ NSLog(@"lines %@", lines);
                 }
             }
         } else if ((argc > 1) && !strcmp(argv[1], "alert")) {
-            id data = [Definitions dataFromStandardInput];
-            id str = [data asString];
-            if ([str length]) {
-                int x = 0;
-                int y = 0;
-                int w = 400;
-                int h = [Definitions preferredHeightForBitmapMessageAlert:str width:400];
-                id monitor = [Definitions monitorForX:0 y:0];
-                if (monitor) {
-                    int monitorX = [monitor intValueForKey:@"x"];
-                    int monitorY = [monitor intValueForKey:@"y"];
-                    int monitorWidth = [monitor intValueForKey:@"width"];
-                    int monitorHeight = [monitor intValueForKey:@"height"];
-NSLog(@"*** monitor %d %d %d %d", monitorX, monitorY, monitorWidth, monitorHeight);
-                    Int4 r = [Definitions centerRectX:0 y:0 w:w h:h inW:monitorWidth h:monitorHeight];
-                    x = monitorX + r.x;
-                    y = monitorY + r.y;
+            id str = nil;
+            if (argc > 2) {
+                for (int i=2; i<argc; i++) {
+                    if (!str) {
+                        str = nsfmt(@"%s", argv[i]);
+                    } else {
+                        str = nsfmt(@"%@\n%s", str, argv[i]);
+                    }
                 }
-                id obj = [str asBitmapMessageAlert];
-                [Definitions runWindowManagerForObject:obj x:x y:y w:w h:h];
+            } else {
+                id data = [Definitions dataFromStandardInput];
+                str = [data asString];
+            }
+            if ([str length]) {
+                id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
+                id obj = nil;
+                if ([hotdogMode isEqual:@"aqua"]) {
+                    obj = [@"AquaAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"amiga"]) {
+                    obj = [@"AmigaAlert" asInstance];
+                } else {
+                    obj = [@"MacAlert" asInstance];
+                }
+                [obj setValue:str forKey:@"text"];
+                [obj setValue:@"OK" forKey:@"okText"];
+                [Definitions runWindowManagerForObject:obj];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "confirm")) {
             id data = [Definitions dataFromStandardInput];
