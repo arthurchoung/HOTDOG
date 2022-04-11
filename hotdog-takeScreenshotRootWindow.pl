@@ -15,9 +15,9 @@ for ($i=0;;$i++) {
 
 system(qq{import -window root "$path"});
 if ($? != 0) {
-    system(qq{echo "Unable to take screen shot" | hotdog alert});
+    system('hotdog', 'alert', 'Unable to take screen shot');
     exit 0;
 }
 
-system(qq{echo "'Screen shot is located at '$path'" | hotdog alert});
+system('hotdog', 'alert', "Screen shot is located at '$path'");
 
