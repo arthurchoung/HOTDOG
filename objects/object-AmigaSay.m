@@ -232,7 +232,14 @@ static char *open_trash_can_pixels =
 {
 NSLog(@"handleMouseDown");
     if (!_animating) {
-        id text = [Definitions inputTextWithAlert:@"What should I say?"];
+        id inputcmd = nsarr();
+        [inputcmd addObject:@"hotdog"];
+        [inputcmd addObject:@"input"];
+        [inputcmd addObject:@"OK"];
+        [inputcmd addObject:@"Cancel"];
+        [inputcmd addObject:@"What should I say?"];
+        id text = [[inputcmd runCommandAndReturnOutput] asString];
+        [text chomp];
         if ([text length]) {
             _animating = 1;
             id cmd = nsarr();
