@@ -443,9 +443,6 @@ NSLog(@"lines %@", lines);
         } else if ((argc > 1) && !strcmp(argv[1], "progress")) {
             id obj = [@"Progress" asInstance];
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "amigadrives")) {
-            id obj = [Definitions AmigaDrives];
-            [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "amigadir")) {
             if (argc > 2) {
                 id filePath = nscstr(argv[2]);
@@ -455,9 +452,6 @@ NSLog(@"lines %@", lines);
             }
 
             id obj = [Definitions AmigaDir];
-            [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "amigagurumeditation")) {
-            id obj = [Definitions AmigaGuruMeditation];
             [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "amigabuiltindir")) {
             if (argc > 2) {
