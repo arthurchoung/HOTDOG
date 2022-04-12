@@ -501,9 +501,6 @@ NSLog(@"lines %@", lines);
         } else if ((argc > 1) && !strcmp(argv[1], "macclassictrash")) {
             id obj = [Definitions MacClassicTrash];
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "maccolordrives")) {
-            id obj = [Definitions MacColorDrives];
-            [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "maccolordir")) {
             if (argc > 2) {
                 id filePath = nscstr(argv[2]);
