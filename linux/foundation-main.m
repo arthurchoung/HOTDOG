@@ -514,9 +514,6 @@ NSLog(@"lines %@", lines);
 
             id obj = [Definitions MacColorDir];
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "maccolortrash")) {
-            id obj = [Definitions MacColorTrash];
-            [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "dialog")) {
             if (argc > 3) {
                 char *classPrefix = "Amiga";
