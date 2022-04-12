@@ -529,23 +529,6 @@ NSLog(@"lines %@", lines);
         } else if ((argc > 1) && !strcmp(argv[1], "hotdogstandprograms")) {
             id obj = [Definitions HotDogStandPrograms];
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "aquaalert")) {
-            if (argc > 2) {
-                id str = nsfmt(@"%s", argv[2]);
-                id obj = [@"AquaAlert" asInstance];
-                [obj setValue:str forKey:@"text"];
-                [obj setValue:@"OK" forKey:@"okText"];
-                [Definitions runWindowManagerForObject:obj];
-            } else {
-                id data = [Definitions dataFromStandardInput];
-                id str = [data asString];
-                if ([str length]) {
-                    id obj = [@"AquaAlert" asInstance];
-                    [obj setValue:str forKey:@"text"];
-                    [obj setValue:@"OK" forKey:@"okText"];
-                    [Definitions runWindowManagerForObject:obj];
-                }
-            }
         } else if ((argc > 1) && !strcmp(argv[1], "dialog")) {
             if (argc > 3) {
                 char *classPrefix = "Amiga";
