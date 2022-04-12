@@ -523,9 +523,6 @@ NSLog(@"lines %@", lines);
         } else if ((argc > 1) && !strcmp(argv[1], "ataristdrives")) {
             id obj = [Definitions AtariSTDrives];
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "ataristtrash")) {
-            id obj = [Definitions AtariSTTrash];
-            [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "dialog")) {
             if (argc > 3) {
                 char *classPrefix = "Amiga";
