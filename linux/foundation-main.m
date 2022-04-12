@@ -262,6 +262,184 @@ NSLog(@"lines %@", lines);
                 [obj setValue:cancelText forKey:@"cancelText"];
                 [Definitions runWindowManagerForObject:obj];
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "checklist")) {
+            id text = @"Checklist";
+            id okText = @"OK";
+            id cancelText = @"Cancel";
+            if (argc > 2) {
+                okText = (argv[2]) ? nsfmt(@"%s", argv[2]) : nil;
+            }
+            if (argc > 3) {
+                cancelText = (argv[3]) ? nsfmt(@"%s", argv[3]) : nil;
+            }
+            if (argc > 4) {
+                text = nsfmt(@"%s", argv[4]);
+            }
+            id arr = nsarr();
+            if (argc > 5) {
+                for (int i=5; i+2<argc; i+=3) {
+                    id dict = nsdict();
+                    [dict setValue:nsfmt(@"%s", argv[i]) forKey:@"tag"];
+                    [dict setValue:nsfmt(@"%s", argv[i+1]) forKey:@"checked"];
+                    [dict setValue:nsfmt(@"%s", argv[i+2]) forKey:@"text"];
+                    [arr addObject:dict];
+                }
+            }
+            id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
+            id obj = nil;
+            if ([hotdogMode isEqual:@"aqua"]) {
+                obj = [@"AquaChecklist" asInstance];
+            } else if ([hotdogMode isEqual:@"amiga"]) {
+                obj = [@"AmigaChecklist" asInstance];
+            } else {
+                obj = [@"MacChecklist" asInstance];
+            }
+            [obj setValue:@"1" forKey:@"dialogMode"];
+            [obj setValue:text forKey:@"text"];
+            [obj setValue:arr forKey:@"array"];
+            [obj setValue:okText forKey:@"okText"];
+            [obj setValue:cancelText forKey:@"cancelText"];
+            for (int i=0; i<[arr count]; i++) {
+                id elt = [arr nth:i];
+                if ([elt intValueForKey:@"checked"]) {
+                    [obj setChecked:YES forIndex:i];
+                }
+            }
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "radio")) {
+            id text = @"Radio";
+            id okText = @"OK";
+            id cancelText = @"Cancel";
+            if (argc > 2) {
+                okText = (argv[2]) ? nsfmt(@"%s", argv[2]) : nil;
+            }
+            if (argc > 3) {
+                cancelText = (argv[3]) ? nsfmt(@"%s", argv[3]) : nil;
+            }
+            if (argc > 4) {
+                text = nsfmt(@"%s", argv[4]);
+            }
+            id arr = nsarr();
+            if (argc > 5) {
+                for (int i=5; i+2<argc; i+=3) {
+                    id dict = nsdict();
+                    [dict setValue:nsfmt(@"%s", argv[i]) forKey:@"tag"];
+                    [dict setValue:nsfmt(@"%s", argv[i+1]) forKey:@"selected"];
+                    [dict setValue:nsfmt(@"%s", argv[i+2]) forKey:@"text"];
+                    [arr addObject:dict];
+                }
+            }
+            id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
+            id obj = nil;
+            if ([hotdogMode isEqual:@"aqua"]) {
+                obj = [@"AquaRadio" asInstance];
+            } else if ([hotdogMode isEqual:@"amiga"]) {
+                obj = [@"AmigaRadio" asInstance];
+            } else {
+                obj = [@"MacRadio" asInstance];
+            }
+            [obj setValue:@"1" forKey:@"dialogMode"];
+            [obj setValue:text forKey:@"text"];
+            [obj setValue:arr forKey:@"array"];
+            [obj setValue:okText forKey:@"okText"];
+            [obj setValue:cancelText forKey:@"cancelText"];
+            for (int i=0; i<[arr count]; i++) {
+                id elt = [arr nth:i];
+                if ([elt intValueForKey:@"selected"]) {
+                    [obj setValue:nsfmt(@"%d", i) forKey:@"selectedIndex"];
+                    break;
+                }
+            }
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "input")) {
+            id okText = @"OK";
+            id cancelText = @"Cancel";
+            id text = @"";
+            id fieldText = @"";
+            id initialText = nil;
+
+            if (argc > 2) {
+                okText = (argv[2]) ? nsfmt(@"%s", argv[2]) : nil;
+            }
+            if (argc > 3) {
+                cancelText = (argv[3]) ? nsfmt(@"%s", argv[3]) : nil;
+            }
+            if (argc > 4) {
+                text = nsfmt(@"%s", argv[4]);
+            }
+            if (argc > 5) {
+                fieldText = nsfmt(@"%s", argv[5]);
+            }
+            if (argc > 6) {
+                initialText = nsfmt(@"%s", argv[6]);
+            }
+
+            id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
+            id obj = nil;
+            if ([hotdogMode isEqual:@"aqua"]) {
+                obj = [@"AquaTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"amiga"]) {
+                obj = [@"AmigaTextFields" asInstance];
+            } else {
+                obj = [@"MacTextFields" asInstance];
+            }
+            [obj setValue:@"1" forKey:@"dialogMode"];
+
+            [obj setValue:text forKey:@"text"];
+            [obj setValue:okText forKey:@"okText"];
+            [obj setValue:cancelText forKey:@"cancelText"];
+
+            id fields = nsarr();
+            [fields addObject:fieldText];
+            [obj setValue:fields forKey:@"fields"];
+
+            if (initialText) {
+                id buffers = nsarr();
+                [buffers addObject:initialText];
+                [obj setValue:buffers forKey:@"buffers"];
+            }
+
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "password")) {
+            id okText = @"OK";
+            id cancelText = @"Cancel";
+            id text = @"";
+            id fieldText = @"";
+
+            if (argc > 2) {
+                okText = (argv[2]) ? nsfmt(@"%s", argv[2]) : nil;
+            }
+            if (argc > 3) {
+                cancelText = (argv[3]) ? nsfmt(@"%s", argv[3]) : nil;
+            }
+            if (argc > 4) {
+                text = nsfmt(@"%s", argv[4]);
+            }
+            if (argc > 5) {
+                fieldText = nsfmt(@"%s", argv[5]);
+            }
+
+            id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
+            id obj = nil;
+            if ([hotdogMode isEqual:@"aqua"]) {
+                obj = [@"AquaTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"amiga"]) {
+                obj = [@"AmigaTextFields" asInstance];
+            } else {
+                obj = [@"MacTextFields" asInstance];
+            }
+            [obj setValue:@"1" forKey:@"dialogMode"];
+
+            [obj setValue:@"1" forKey:@"hidden"];
+            [obj setValue:text forKey:@"text"];
+            [obj setValue:okText forKey:@"okText"];
+            [obj setValue:cancelText forKey:@"cancelText"];
+
+            id fields = nsarr();
+            [fields addObject:fieldText];
+            [obj setValue:fields forKey:@"fields"];
+
+            [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "progress")) {
             id obj = [@"Progress" asInstance];
             [Definitions runWindowManagerForObject:obj];
