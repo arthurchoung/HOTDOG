@@ -17,7 +17,7 @@ Enter mount point for $device:
 (mount points that are already in use: $mountlist)
 EOF
 
-    $mountpoint = `hotdog dialog mac --stdout --inputbox "$text" 1 1`;
+    $mountpoint = `hotdog input OK Cancel "$text" 'Mount point:'`;
     chomp $mountpoint;
     if ($? != 0) {
         exit 1;
