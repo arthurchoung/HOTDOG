@@ -9,10 +9,7 @@ Download the .deb file from http://hotdoglinux.com/download/
 You'll also need the following packages installed:
 
 ```
-sudo apt install libjson-perl
-sudo apt install feh
-sudo apt install compton
-sudo apt install xterm
+sudo apt install libjson-perl feh compton xterm -y
 ```
 
 Install the .deb file:
@@ -30,20 +27,7 @@ This is just to see if it runs. Slackware is preferred.
 ## To compile
 
 ```
-sudo apt install git
-sudo apt install gobjc
-sudo apt install libx11-dev
-sudo apt install libxext-dev
-sudo apt install libxfixes-dev
-sudo apt install libgl-dev
-sudo apt install libasound-dev
-sudo apt install g++
-
-sudo apt install libjson-perl
-sudo apt install feh
-sudo apt install compton
-sudo apt install xterm
-
+sudo apt install git gobjc libx11-dev libxext-dev libxext-dev libxfixes-dev libgl-dev libasound-dev g++ libjson-perl feh compton xterm 
 git clone https://github.com/arthurchoung/HOTDOG
 cd HOTDOG
 ```
