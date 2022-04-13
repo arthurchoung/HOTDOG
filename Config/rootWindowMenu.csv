@@ -23,7 +23,7 @@ hotKey,displayName,messageForClick
 ,"Take Screenshot of Root Window","['hotdog-takeScreenshotRootWindow.pl']|runCommandInBackground"
 ,"Take Screenshot of Focus Window","NSArray|addObject:'hotdog-takeScreenshotForWindow:.pl'|addObject:(currentWindow|window)|runCommandInBackground"
 ,"Take Screenshot with Selection Box","NSArray|addObject:'hotdog-takeScreenshotSelectionBox.pl'|runCommandInBackground"
-,"Drives Panel","['hotdog' 'show' 'DrivesPanel']|runCommandInBackground"
+,"Drives","['hotdog' 'drives']|runCommandInBackground"
 ,"Audio Panel","['hotdog-openAudioPanel.sh']|runCommandInBackground"
 ,"About This Computer","['hotdog' 'show' 'MacAboutThisComputer']|runCommandInBackground"
 ,,
