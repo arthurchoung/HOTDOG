@@ -292,7 +292,7 @@ static id wbDiskPixels =
                 if ([mountpoint length]) {
                     id cmd = nsarr();
                     [cmd addObject:@"hotdog"];
-                    [cmd addObject:@"amigadir"];
+                    [cmd addObject:@"dir"];
                     [cmd addObject:mountpoint];
                     [cmd runCommandInBackground];
                 } else {
