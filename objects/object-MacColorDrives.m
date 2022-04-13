@@ -229,7 +229,7 @@ static id computerPixels =
                 if ([mountpoint length]) {
                     id cmd = nsarr();
                     [cmd addObject:@"hotdog"];
-                    [cmd addObject:@"maccolordir"];
+                    [cmd addObject:@"dir"];
                     [cmd addObject:mountpoint];
                     [cmd runCommandInBackground];
                 }
