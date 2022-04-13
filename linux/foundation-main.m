@@ -95,10 +95,10 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                     id nav = [Definitions navigationStack];
                     [nav pushObject:obj];
                     [Definitions runWindowManagerForObject:nav];
+                    [[Definitions navigationStack] setValue:nil forKey:@"context"];
                 } else {
                     [Definitions runWindowManagerForObject:obj];
                 }
-                [[Definitions navigationStack] setValue:nil forKey:@"context"];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "stringFromFile")) {
             if (argc > 2) {
@@ -443,7 +443,26 @@ NSLog(@"lines %@", lines);
         } else if ((argc > 1) && !strcmp(argv[1], "progress")) {
             id obj = [@"Progress" asInstance];
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "amigadir")) {
+        } else if ((argc > 1) && !strcmp(argv[1], "drives")) {
+            id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
+            id obj = nil;
+            if ([hotdogMode isEqual:@"aqua"]) {
+                obj = [Definitions MacColorDrives];
+            } else if ([hotdogMode isEqual:@"amiga"]) {
+                obj = [Definitions AmigaDrives];
+            } else if ([hotdogMode isEqual:@"macclassic"]) {
+                obj = [Definitions MacClassicDrives];
+            } else if ([hotdogMode isEqual:@"maccolor"]) {
+                obj = [Definitions MacColorDrives];
+            } else if ([hotdogMode isEqual:@"atarist"]) {
+                obj = [Definitions AtariSTDrives];
+            } else if ([hotdogMode isEqual:@"hotdogstand"]) {
+                obj = [Definitions HotDogStandPrograms];
+            } else {
+                obj = [Definitions MacColorDrives];
+            }
+            [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "dir")) {
             if (argc > 2) {
                 id filePath = nscstr(argv[2]);
                 if ([filePath isDirectory]) {
@@ -451,8 +470,32 @@ NSLog(@"lines %@", lines);
                 }
             }
 
-            id obj = [Definitions AmigaDir];
+            id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
+            id obj = nil;
+            BOOL clearNavigationStack = NO;
+            if ([hotdogMode isEqual:@"aqua"]) {
+                obj = [Definitions ObjectInterface];
+                if (obj) {
+                    if ([obj isKindOfClass:[@"Panel" asClass]]) {
+                        id nav = [Definitions navigationStack];
+                        [nav pushObject:obj];
+                        obj = nav;
+                        clearNavigationStack = YES;
+                    }
+                }
+            } else if ([hotdogMode isEqual:@"amiga"]) {
+                obj = [Definitions AmigaDir];
+            } else if ([hotdogMode isEqual:@"macclassic"]) {
+                obj = [Definitions MacClassicDir];
+            } else if ([hotdogMode isEqual:@"maccolor"]) {
+                obj = [Definitions MacColorDir];
+            } else {
+                obj = [Definitions MacColorDir];
+            }
             [Definitions runWindowManagerForObject:obj];
+            if (clearNavigationStack) {
+                [[Definitions navigationStack] setValue:nil forKey:@"context"];
+            }
         } else if ((argc > 1) && !strcmp(argv[1], "amigabuiltindir")) {
             if (argc > 2) {
                 id name = nscstr(argv[2]);
@@ -462,26 +505,6 @@ NSLog(@"lines %@", lines);
                 id obj = [Definitions AmigaBuiltInDir:nil];
                 [Definitions runWindowManagerForObject:obj];
             }
-        } else if ((argc > 1) && !strcmp(argv[1], "macclassicdir")) {
-            if (argc > 2) {
-                id filePath = nscstr(argv[2]);
-                if ([filePath isDirectory]) {
-                    chdir(argv[2]);
-                }
-            }
-
-            id obj = [Definitions MacClassicDir];
-            [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "maccolordir")) {
-            if (argc > 2) {
-                id filePath = nscstr(argv[2]);
-                if ([filePath isDirectory]) {
-                    chdir(argv[2]);
-                }
-            }
-
-            id obj = [Definitions MacColorDir];
-            [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "dialog")) {
             if (argc > 3) {
                 char *classPrefix = "Amiga";
