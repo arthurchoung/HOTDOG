@@ -369,7 +369,7 @@ static id documentPixels =
                     if ([filePath isDirectory]) {
                         id cmd = nsarr();
                         [cmd addObject:@"hotdog"];
-                        [cmd addObject:@"macclassicdir"];
+                        [cmd addObject:@"dir"];
                         [cmd addObject:filePath];
                         [cmd runCommandInBackground];
                     }
