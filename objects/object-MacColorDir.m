@@ -302,7 +302,7 @@ static id readmePixels =
             struct timeval tv;
             gettimeofday(&tv, NULL);
             id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
-            if ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3) {
+            if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
                 id filePath = [_selected valueForKey:@"filePath"];
                 if ([filePath length]) {
                     if ([filePath isDirectory]) {
