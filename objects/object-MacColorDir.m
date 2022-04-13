@@ -179,6 +179,14 @@ static id readmePixels =
 }
 @end
 @implementation MacColorDir
+- (int)preferredWidth
+{
+    return 600;
+}
+- (int)preferredHeight
+{
+    return 360;
+}
 - (void)updateFromCurrentDirectory:(Int4)r
 {
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
@@ -308,7 +316,7 @@ static id readmePixels =
                     if ([filePath isDirectory]) {
                         id cmd = nsarr();
                         [cmd addObject:@"hotdog"];
-                        [cmd addObject:@"maccolordir"];
+                        [cmd addObject:@"dir"];
                         [cmd addObject:filePath];
                         [cmd runCommandInBackground];
                     }
