@@ -292,6 +292,9 @@ static uint64_t osx_clock()
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+    [bitmap setColor:@"black"];
+    [bitmap fillRect:r];
+
     [self calculateRects:r];
 /*
     Int4 topRect = [Definitions rectWithX:r.x y:r.y+r.h-20.0*4 w:r.w h:20.0*4];
@@ -373,6 +376,8 @@ static uint64_t osx_clock()
         int textWidth = [bitmap bitmapWidthForText:@"00:00.0"];
         int textHeight = [bitmap bitmapHeightForText:lapStr];
         id textBitmap = [Definitions bitmapWithWidth:textWidth+3 height:textHeight];
+        [textBitmap setColor:@"black"];
+        [textBitmap fillRectangleAtX:0 y:0 w:textWidth+3 h:textHeight];
         [textBitmap setColorIntR:255 g:255 b:255 a:255];
         [textBitmap drawBitmapText:lapStr x:1 y:0];
         [bitmap drawBitmap:textBitmap x:textRect.x y:textRect.y w:textRect.w h:textRect.h];
