@@ -217,6 +217,14 @@ static id documentPixels =
 }
 @end
 @implementation MacClassicDir
+- (int)preferredWidth
+{
+    return 600;
+}
+- (int)preferredHeight
+{
+    return 360;
+}
 - (void)updateFromCurrentDirectory:(Int4)r
 {
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
@@ -297,18 +305,19 @@ static id documentPixels =
             id palette = [elt valueForKey:@"selectedPalette"];
             id pixels = [elt valueForKey:@"selectedPixels"];
             if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y+23];
+                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
             }
         } else {
             id palette = [elt valueForKey:@"palette"];
             id pixels = [elt valueForKey:@"pixels"];
             if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y+23];
+                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
             }
         }
         id filePath = [elt valueForKey:@"filePath"];
-        [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-2+23];
+        [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-2];
     }
+/*
     int infoBarHeight = 30;
     if (infoBarHeight) {
         [bitmap setColor:@"black"];
@@ -318,6 +327,7 @@ static id documentPixels =
         [bitmap setColorIntR:0 g:0 b:0 a:255];
         [bitmap drawBitmapText:@"16 items        3,622K in disk           6,453K available" x:20 y:r.y+5];
     }
+*/
     {
         char *left = [leftArrowPixels UTF8String];
         char *middle = [bottomScrollBarPixels UTF8String];
@@ -353,7 +363,7 @@ static id documentPixels =
             struct timeval tv;
             gettimeofday(&tv, NULL);
             id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
-            if ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3) {
+            if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
                 id filePath = [_selected valueForKey:@"filePath"];
                 if ([filePath length]) {
                     if ([filePath isDirectory]) {
