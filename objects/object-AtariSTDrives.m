@@ -240,7 +240,7 @@ static id diskPixels =
                 if ([mountpoint length]) {
                     id cmd = nsarr();
                     [cmd addObject:@"hotdog"];
-                    [cmd addObject:@"macclassicdir"];
+                    [cmd addObject:@"dir"];
                     [cmd addObject:mountpoint];
                     [cmd runCommandInBackground];
                 }
