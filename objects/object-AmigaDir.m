@@ -1203,7 +1203,7 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
                         if ([filePath isDirectory]) {
                             id cmd = nsarr();
                             [cmd addObject:@"hotdog"];
-                            [cmd addObject:@"amigadir"];
+                            [cmd addObject:@"dir"];
                             [cmd addObject:filePath];
                             [cmd runCommandInBackground];
                         } else {
