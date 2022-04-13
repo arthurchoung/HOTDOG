@@ -312,7 +312,6 @@ NSLog(@"OUT OF MEMORY! NSAutoreleasePool -addObject: newAlloc %d", newAlloc);
     }
     return NO;
 }
-// FIXME: Should valueForKey related methods get copied from NSString???
 + (void)setValue:(id)val forKey:(id)key
 {
 }
@@ -326,14 +325,6 @@ NSLog(@"OUT OF MEMORY! NSAutoreleasePool -addObject: newAlloc %d", newAlloc);
 }
 - (void)setValue:(id)val forKey:(id)key
 {
-}
-- (id)valueForKey:(id)key
-{
-    return nil;
-}
-- (BOOL)hasKey:(id)key
-{
-    return NO;
 }
 #ifndef BUILD_WITH_GNUSTEP_RUNTIME
 - (BOOL)isEqual:(id)obj
