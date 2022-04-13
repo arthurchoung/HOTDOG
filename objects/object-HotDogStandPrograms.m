@@ -88,6 +88,14 @@ static id programsPixels =
 }
 @end
 @implementation HotDogStandPrograms
+- (int)preferredWidth
+{
+    return 600;
+}
+- (int)preferredHeight
+{
+    return 360;
+}
 - (void)updateArray:(Int4)r
 {
     id cmd = nsarr();
@@ -100,14 +108,24 @@ static id programsPixels =
     id results = nsarr();
     for (int i=0; i<[lines count]; i++) {
         id line = [lines nth:i];
-        id device = [line valueForKey:@"device"];
-        id mountpoint = [line valueForKey:@"mountpoint"];
-        if (![device length] || ![mountpoint length]) {
+        id device = [[line valueForKey:@"device"] percentDecode];
+        id mountpoint = [[line valueForKey:@"mountpoint"] percentDecode];
+        if (![device length] && ![mountpoint length]) {
             continue;
         }
+        id fstype = [[line valueForKey:@"fstype"] percentDecode];
+        id size = [[line valueForKey:@"size"] percentDecode];
+        id label = [[line valueForKey:@"label"] percentDecode];
+        id vendor = [[line valueForKey:@"vendor"] percentDecode];
+        id model = [[line valueForKey:@"model"] percentDecode];
         id dict = nsdict();
         [dict setValue:device forKey:@"device"];
         [dict setValue:mountpoint forKey:@"mountpoint"];
+        [dict setValue:fstype forKey:@"fstype"];
+        [dict setValue:size forKey:@"size"];
+        [dict setValue:label forKey:@"label"];
+        [dict setValue:vendor forKey:@"vendor"];
+        [dict setValue:model forKey:@"model"];
         [dict setValue:nsfmt(@"%d", x) forKey:@"x"];
         [dict setValue:nsfmt(@"%d", y) forKey:@"y"];
         [dict setValue:nsfmt(@"%d", w) forKey:@"w"];
@@ -118,6 +136,10 @@ static id programsPixels =
         [dict setValue:programsPixels forKey:@"selectedPixels"];
         [results addObject:dict];
         y += h + 30;
+        if (y > r.h-5-30) {
+            y = 5;
+            x += 120;
+        }
     }
     [self setValue:results forKey:@"array"];
 }
@@ -154,7 +176,10 @@ static id programsPixels =
                 [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
             }
         }
-        id text = [elt valueForKey:@"device"];
+        id text = [elt valueForKey:@"mountpoint"];
+        if (![text length]) {
+            text = [elt valueForKey:@"device"];
+        }
         if ([text length]) {
             if (_selected == elt) {
                 int textWidth = [Definitions bitmapWidthForText:text];
@@ -189,7 +214,7 @@ static id programsPixels =
             struct timeval tv;
             gettimeofday(&tv, NULL);
             id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
-            if ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3) {
+            if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
                 id mountpoint = [_selected valueForKey:@"mountpoint"];
                 if ([mountpoint length]) {
                     id cmd = nsarr();
@@ -223,5 +248,71 @@ static id programsPixels =
     [self setValue:nil forKey:@"buttonDown"];
 }
 
+- (void)handleRightMouseDown:(id)event
+{
+    int mouseX = [event intValueForKey:@"mouseX"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
+        int x = [elt intValueForKey:@"x"];
+        int y = [elt intValueForKey:@"y"];
+        int w = [elt intValueForKey:@"w"];
+        int h = [elt intValueForKey:@"h"];
+        if ((mouseX >= x) && (mouseX < x+w) && (mouseY >= y) && (mouseY < y+h)) {
+            [self setValue:elt forKey:@"selected"];
+            id arr = nsarr();
+            id device = [_selected valueForKey:@"device"];
+            id mountpoint = [_selected valueForKey:@"mountpoint"];
+            id fstype = [_selected valueForKey:@"fstype"];
+            id size = [_selected valueForKey:@"size"];
+            id label = [_selected valueForKey:@"label"];
+            id vendor = [_selected valueForKey:@"vendor"];
+            id model = [_selected valueForKey:@"model"];
+            id dict = nil;
+            dict = nsdict();
+            [dict setValue:nsfmt(@"Device: %@", device) forKey:@"displayName"];
+            [arr addObject:dict];
+            dict = nsdict();
+            [dict setValue:nsfmt(@"Mountpoint: %@", mountpoint) forKey:@"displayName"];
+            [arr addObject:dict];
+            dict = nsdict();
+            [dict setValue:nsfmt(@"File System: %@", fstype) forKey:@"displayName"];
+            [arr addObject:dict];
+            dict = nsdict();
+            [dict setValue:nsfmt(@"Size: %@", size) forKey:@"displayName"];
+            [arr addObject:dict];
+            dict = nsdict();
+            [dict setValue:nsfmt(@"Label: %@", label) forKey:@"displayName"];
+            [arr addObject:dict];
+            dict = nsdict();
+            [dict setValue:nsfmt(@"Vendor: %@", vendor) forKey:@"displayName"];
+            [arr addObject:dict];
+            dict = nsdict();
+            [dict setValue:nsfmt(@"Model: %@", model) forKey:@"displayName"];
+            [arr addObject:dict];
+            [arr addObject:nsdict()];
+            if ([mountpoint length]) {
+                dict = nsdict();
+                [dict setValue:@"Unmount" forKey:@"displayName"];
+                [dict setValue:nsfmt(@"NSArray|addObject:'hotdog-unmountDrive.pl'|addObject:'%@'|runCommandAndReturnOutput;setValue:'0' forKey:'timestamp'", mountpoint) forKey:@"messageForClick"];
+                [arr addObject:dict];
+            } else if ([device length]) {
+                dict = nsdict();
+                [dict setValue:@"Mount" forKey:@"displayName"];
+                [dict setValue:nsfmt(@"NSArray|addObject:'hotdog-mountDrive.pl'|addObject:'%@'|runCommandAndReturnOutput;setValue:'0' forKey:'timestamp'", device) forKey:@"messageForClick"];
+                [arr addObject:dict];
+            }
+            if ([arr count]) {
+                id menu = [arr asMenu];
+                [menu setValue:self forKey:@"contextualObject"];
+                int mouseRootX = [event intValueForKey:@"mouseRootX"];
+                int mouseRootY = [event intValueForKey:@"mouseRootY"];
+                id windowManager = [event valueForKey:@"windowManager"];
+                [windowManager openButtonDownMenuForObject:menu x:mouseRootX y:mouseRootY w:0 h:0];
+            }
+            break;
+        }
+    }
+}
 @end
 
