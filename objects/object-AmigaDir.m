@@ -1193,7 +1193,7 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
             struct timeval tv;
             gettimeofday(&tv, NULL);
             id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
-            if ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3) {
+            if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
                 id command = [_selected valueForKey:@"doubleClickCommand"];
                 if (command) {
                     [command runCommandInBackground];
