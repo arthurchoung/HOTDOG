@@ -167,7 +167,7 @@ exit(1);
         [dhcpcdcmd addObject:@"-f"];
         [dhcpcdcmd addObject:nsfmt(@"dhcpcd.*%@", interface)];
         id dhcpcd = [[dhcpcdcmd runCommandAndReturnOutput] asString];
-        [dhcpcd chomp];
+        dhcpcd = [dhcpcd chomp];
         id wirelesscmd = nsarr();
         [wirelesscmd addObject:@"iwconfig"];
         [wirelesscmd addObject:interface];
