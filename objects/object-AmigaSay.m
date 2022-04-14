@@ -239,7 +239,7 @@ NSLog(@"handleMouseDown");
         [inputcmd addObject:@"Cancel"];
         [inputcmd addObject:@"What should I say?"];
         id text = [[inputcmd runCommandAndReturnOutput] asString];
-        [text chomp];
+        text = [text chomp];
         if ([text length]) {
             _animating = 1;
             id cmd = nsarr();
