@@ -101,7 +101,16 @@ static id diskPixels =
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksfjdsklfjksdljfdkslmvdj)
 + (id)AtariSTDrives
 {
+    id observercmd = nsarr();
+    [observercmd addObject:@"hotdog-monitorBlockDevices"];
+    id observer = [observercmd runCommandAndReturnProcess];
+    if (!observer) {
+NSLog(@"unable to run observer command %@", observercmd);
+exit(1);
+    }
+
     id obj = [@"AtariSTDrives" asInstance];
+    [obj setValue:observer forKey:@"observer"];
     return obj;
 }
 @end
@@ -115,9 +124,37 @@ static id diskPixels =
     int _buttonDownOffsetY;
     id _buttonDownTimestamp;
     id _selected;
+    id _observer;
 }
 @end
 @implementation AtariSTDrives
+- (int)fileDescriptor
+{
+    if (_observer) {
+        return [_observer fileDescriptor];
+    }
+    return -1;
+}
+- (void)handleFileDescriptor
+{
+    if (_observer) {
+        [_observer handleFileDescriptor];
+        id data = [_observer valueForKey:@"data"];
+        id lastLine = nil;
+        for(;;) {
+            id line = [data readLine];
+//NSLog(@"line '%@'", line);
+            if (!line) {
+                break;
+            }
+            lastLine = line;
+        }
+        if (lastLine) {
+            _timestamp = 0;
+        }
+        return;
+    }
+}
 - (int)preferredWidth
 {
     return 600;
