@@ -71,7 +71,10 @@ NSLog(@"Unable to run observer command %@", observercmd);
 exit(1);
     }
 
-    return [Definitions TableInterface:cmd observer:observer];
+    id table = [Definitions TableInterface:cmd observer:observer];
+    [table setValue:@"1" forKey:@"sortReverse"];
+    [table setValue:@"pctcpu" forKey:@"sortKey"];
+    return table;
 }
 @end
 
