@@ -25,6 +25,29 @@
 
 #import "HOTDOG.h"
 
+@implementation NSString(jfkdlsjfklsdjf)
+- (int)x
+{
+    id tokens = [self split];
+    return [[tokens nth:0] intValue];
+}
+- (int)y
+{
+    id tokens = [self split];
+    return [[tokens nth:1] intValue];
+}
+- (int)w
+{
+    id tokens = [self split];
+    return [[tokens nth:2] intValue];
+}
+- (int)h
+{
+    id tokens = [self split];
+    return [[tokens nth:3] intValue];
+}
+@end
+
 @implementation NSString(jfksdljfklsdjfsdfjksdjfkdsjfksdjfkiji)
 - (void)addToArray:(id)arr
 {
@@ -525,7 +548,7 @@ loop:
         }
         q++;
     }
-    return nscstrn(p, q-p);
+    return [nscstrn(p, q-p) percentDecode];
 }
 - (double)doubleValueForKey:(id)key
 {
