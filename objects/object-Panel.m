@@ -233,6 +233,43 @@ static unsigned char *button_bottom_right_squared =
 "bbbb\n"
 ;
 
+@implementation NSString(fekwlfmklsdmfklsdklfmlsd)
+- (id)panelFromCSVFile
+{
+    id arr = [self parseCSVFile];
+    id results = nsarr();
+    [results addObject:@"panelHorizontalStripes"];
+    id name = [self lastPathComponent];
+    if (name) {
+        [results addObject:@"panelText:''"];
+        [results addObject:nsfmt(@"panelText:%@", [name asQuotedString])];
+    }
+    [results addObject:@"panelText:''"];
+    int count = [arr count];
+    for (int i=0; i<count; i++) {
+        id type = @"panelMiddleButton";
+        if (i == 0) {
+            type = @"panelTopButton";
+        } else if (i == count-1) {
+            type = @"panelBottomButton";
+        }
+        id elt = [arr nth:i];
+        id displayName = [elt valueForKey:@"displayName"];
+        id messageForClick = [elt valueForKey:@"messageForClick"];
+        if (displayName && messageForClick) {
+            [results addObject:nsfmt(@"%@:%@ message:%@", type, [displayName asQuotedString], [messageForClick asQuotedString])];
+        } else if (displayName) {
+            [results addObject:nsfmt(@"%@:%@", type, [displayName asQuotedString])];
+        } else {
+            [results addObject:nsfmt(@"%@:''", type)];
+        }
+    }
+    id panel = [@"Panel" asInstance];
+    [panel setValue:results forKey:@"array"];
+    return panel;
+}
+@end
+
 @implementation Definitions(fjkdlsjfklsdjfklsdfjdksjfkdsfjdskfjksdljfj)
 + (id)ContactsPanel
 {
