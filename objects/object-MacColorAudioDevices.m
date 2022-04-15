@@ -149,8 +149,8 @@ exit(1);
     id results = nsarr();
     for (int i=0; i<[lines count]; i++) {
         id line = [lines nth:i];
-        id name = [[line valueForKey:@"name"] percentDecode];
-        id displayName = [[line valueForKey:@"displayName"] percentDecode];
+        id name = [line valueForKey:@"name"];
+        id displayName = [line valueForKey:@"displayName"];
         if (![name length] && ![displayName length]) {
             continue;
         }
