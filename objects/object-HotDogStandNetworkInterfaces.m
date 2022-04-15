@@ -148,15 +148,15 @@ exit(1);
     id results = nsarr();
     for (int i=0; i<[lines count]; i++) {
         id line = [lines nth:i];
-        id interface = [[line valueForKey:@"interface"] percentDecode];
+        id interface = [line valueForKey:@"interface"];
         if (![interface length]) {
             continue;
         }
-        id type = [[line valueForKey:@"type"] percentDecode];
-        id up = [[line valueForKey:@"up"] percentDecode];
-        id lowerUp= [[line valueForKey:@"lowerUp"] percentDecode];
-        id operstate = [[line valueForKey:@"operstate"] percentDecode];
-        id address = [[line valueForKey:@"address"] percentDecode];
+        id type = [line valueForKey:@"type"];
+        id up = [line valueForKey:@"up"];
+        id lowerUp = [line valueForKey:@"lowerUp"];
+        id operstate = [line valueForKey:@"operstate"];
+        id address = [line valueForKey:@"address"];
         id dhcpcdcmd = nsarr();
         [dhcpcdcmd addObject:@"pgrep"];
         [dhcpcdcmd addObject:@"-f"];
