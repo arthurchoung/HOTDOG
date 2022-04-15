@@ -108,6 +108,13 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                     [Definitions runWindowManagerForObject:obj];
                 }
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "panelFromCSVFile")) {
+            if (argc > 2) {
+                id obj = [nsfmt(@"%s", argv[2]) panelFromCSVFile];
+                if (obj) {
+                    [Definitions runWindowManagerForObject:obj];
+                }
+            }
         } else if ((argc > 1) && !strcmp(argv[1], "show")) {
             id args = nsarr();
             for (int i=2; i<argc; i++) {
@@ -119,12 +126,10 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             id object = [nsdict() evaluateMessage:message];
             if (object) {
                 [Definitions runWindowManagerForObject:object];
-                [[Definitions navigationStack] setValue:nil forKey:@"context"];
             }
         } else if ((argc == 2) && !strcmp(argv[1], ".")) {
             id obj = [Definitions ObjectInterface];
             [Definitions runWindowManagerForObject:obj];
-            [[Definitions navigationStack] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "lines")) {
             id lines = nil;
             if (argc > 2) {
