@@ -108,16 +108,16 @@ static id programsPixels =
     id results = nsarr();
     for (int i=0; i<[lines count]; i++) {
         id line = [lines nth:i];
-        id device = [[line valueForKey:@"device"] percentDecode];
-        id mountpoint = [[line valueForKey:@"mountpoint"] percentDecode];
+        id device = [line valueForKey:@"device"];
+        id mountpoint = [line valueForKey:@"mountpoint"];
         if (![device length] && ![mountpoint length]) {
             continue;
         }
-        id fstype = [[line valueForKey:@"fstype"] percentDecode];
-        id size = [[line valueForKey:@"size"] percentDecode];
-        id label = [[line valueForKey:@"label"] percentDecode];
-        id vendor = [[line valueForKey:@"vendor"] percentDecode];
-        id model = [[line valueForKey:@"model"] percentDecode];
+        id fstype = [line valueForKey:@"fstype"];
+        id size = [line valueForKey:@"size"];
+        id label = [line valueForKey:@"label"];
+        id vendor = [line valueForKey:@"vendor"];
+        id model = [line valueForKey:@"model"];
         id dict = nsdict();
         [dict setValue:device forKey:@"device"];
         [dict setValue:mountpoint forKey:@"mountpoint"];
