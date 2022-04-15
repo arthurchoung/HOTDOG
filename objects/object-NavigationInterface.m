@@ -34,6 +34,7 @@
         return [Definitions Panel:cmd];
     }
 
+    // FIXME: Somehow fileExists does not work unless it's a variable
     id loadMessage = @"00loadMessage";
     if ([loadMessage fileExists]) {
         id message = [loadMessage stringFromFile];
