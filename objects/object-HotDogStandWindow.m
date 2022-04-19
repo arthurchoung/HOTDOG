@@ -29,6 +29,7 @@
 + (void)enterHotDogStandMode
 {
     id windowManager = [@"windowManager" valueForKey];
+    [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
 
     [Definitions setValue:@"hotdogstand" forEnvironmentVariable:@"HOTDOG_MODE"];
