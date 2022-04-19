@@ -25,6 +25,19 @@
 
 #import "HOTDOG.h"
 
+// FIXME: Couple of hacks, fix later
+@implementation Definitions(fmekwlfeiosmfklxdvmosjdfiosdf)
++ (id)PercentString:(id)val
+{
+    return nsfmt(@"%@%%", val);
+}
++ (id)MuteString
+{
+    return @"Mute";
+}
+@end
+
+
 @implementation Definitions(fjkdlsfjlksdjkf)
 + (id)CommandOutputText:(id)cmd
 {
