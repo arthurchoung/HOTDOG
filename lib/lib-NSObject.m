@@ -38,14 +38,6 @@
 {
     return nil;
 }
-- (id)if:(id)message
-{
-    id result = [self evaluateMessage:message];
-    if ([result intValue]) {
-        return self;
-    }
-    return nil;
-}
 - (id)asPercentageInt
 {
     return nsfmt(@"%d%%", (int)([self doubleValue]*100.0));
@@ -238,7 +230,7 @@
     if ([result intValue]) {
         return [self evaluateMessage:thenMessage];
     }
-    return nil;
+    return self;
 }
 - (id)ifFalse:(id)ifMessage then:(id)thenMessage
 {
@@ -246,7 +238,7 @@
     if (![result intValue]) {
         return [self evaluateMessage:thenMessage];
     }
-    return nil;
+    return self;
 }
 - (id)ifTrue:(id)ifMessage then:(id)thenMessage else:(id)elseMessage
 {
@@ -272,7 +264,7 @@
     if ([result intValue]) {
         return [self evaluateMessage:thenMessage];
     }
-    return nil;
+    return self;
 }
 - (id)if:(id)ifMessage then:(id)thenMessage else:(id)elseMessage
 {
@@ -367,15 +359,6 @@
     return ([self compare:obj] > 0) ? NO : YES;
 }
 
-- (BOOL)isTrue
-{
-    return YES;
-}
-
-- (BOOL)isFalse
-{
-    return NO;
-}
 
 
 - (double)doubleValue
