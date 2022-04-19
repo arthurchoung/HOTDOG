@@ -327,6 +327,7 @@ static unsigned char yellow_down_rgb[] = {
 + (void)enterAquaMode
 {
     id windowManager = [@"windowManager" valueForKey];
+    [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
 
     [Definitions setValue:@"aqua" forEnvironmentVariable:@"HOTDOG_MODE"];
