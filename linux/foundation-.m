@@ -312,6 +312,9 @@ NSLog(@"OUT OF MEMORY! NSAutoreleasePool -addObject: newAlloc %d", newAlloc);
     }
     return NO;
 }
++ (void)setNilValueForKey:(id)key
+{
+}
 + (void)setValue:(id)val forKey:(id)key
 {
 }
@@ -322,6 +325,9 @@ NSLog(@"OUT OF MEMORY! NSAutoreleasePool -addObject: newAlloc %d", newAlloc);
 + (BOOL)hasKey:(id)key
 {
     return NO;
+}
+- (void)setNilValueForKey:(id)key
+{
 }
 - (void)setValue:(id)val forKey:(id)key
 {
@@ -525,6 +531,9 @@ NSLog(@"WARNING: no autorelease pool");
     }
     return NO;
 }
++ (void)setNilValueForKey:(id)key
+{
+}
 + (void)setValue:(id)val forKey:(id)key
 {
 }
@@ -535,6 +544,9 @@ NSLog(@"WARNING: no autorelease pool");
 + (BOOL)hasKey:(id)key
 {
     return NO;
+}
+- (void)setNilValueForKey:(id)key
+{
 }
 - (void)setValue:(id)val forKey:(id)key
 {
@@ -1972,6 +1984,10 @@ NSLog(@"alloc %d", _alloc);
         }
     }
     return arr;
+}
+- (void)setNilValueForKey:(id)key
+{
+    [self setValue:nil forKey:key];
 }
 - (void)setValue:(id)val forKey:(id)key
 {
