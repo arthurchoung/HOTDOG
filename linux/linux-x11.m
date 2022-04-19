@@ -1580,6 +1580,21 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                     if (timestamp != _desktopPathTimestamp) {
                         [self handleDesktopPath];
                         _desktopPathTimestamp = timestamp;
+                    } else {
+                        for (int i=0; i<[_objectWindows count]; i++) {
+                            id elt = [_objectWindows nth:i];
+                            if (![elt intValueForKey:@"isIcon"]) {
+                                continue;
+                            }
+                            id obj = [elt valueForKey:@"object"];
+                            if ([obj respondsToSelector:@selector(handleBackgroundUpdate:)]) {
+                                id dict = nsdict();
+                                [dict setValue:self forKey:@"windowManager"];
+                                [dict setValue:elt forKey:@"x11dict"];
+                                [obj handleBackgroundUpdate:dict];
+                                [elt setValue:@"1" forKey:@"needsRedraw"];
+                            }
+                        }
                     }
                 }
 
@@ -2745,14 +2760,9 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
         if ([[path lastPathComponent] hasPrefix:@"."]) {
             continue;
         }
-        id data = [path dataFromFile];
-        if ([data length]) {
-            [data appendBytes:"\n\n" length:2];
-        }
         id dict = [self dictForObjectFilePath:path];
         if (!dict) {
-            id obj = [@"CommandOutputBitmap" asInstance];
-            [obj handleData:data];
+            id obj = [path iconFromFile];
             int w = 16;
             if ([obj respondsToSelector:@selector(preferredWidth)]) {
                 int preferredWidth = [obj preferredWidth];
@@ -2782,9 +2792,27 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
             [dict setValue:path forKey:@"filePath"];
             [dict setValue:@"1" forKey:@"transparent"];
         } else {
-            id obj = [dict valueForKey:@"object"];
-            [obj setValue:nil forKey:@"firstLine"];
-            [obj handleData:data];
+            id icon = [path iconFromFile];
+            id fileDict = [icon valueForKey:@"fileDict"];
+            if (fileDict) {
+                id obj = [dict valueForKey:@"object"];
+                [obj setValue:fileDict forKey:@"fileDict"];
+                int w = 16;
+                if ([obj respondsToSelector:@selector(preferredWidth)]) {
+                    int preferredWidth = [obj preferredWidth];
+                    if (preferredWidth) {
+                        w = preferredWidth;
+                    }
+                }
+                int h = 16;
+                if ([obj respondsToSelector:@selector(preferredHeight)]) {
+                    int preferredHeight = [obj preferredHeight];
+                    if (preferredHeight) {
+                        h = preferredHeight;
+                    }
+                }
+                [dict setValue:nsfmt(@"%d %d", w, h) forKey:@"resizeWindow"];
+            }
         }
         [dict setValue:@"1" forKey:@"needsRedraw"];
     }
@@ -2972,7 +3000,7 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
 - (void)XSetInputFocus:(unsigned long)window
 {
 //FIXME use RevertToNone or RevertToPointerRoot?
-    XSetInputFocus(_display, window, RevertToNone, CurrentTime);
+    XSetInputFocus(_display, window, RevertToPointerRoot, CurrentTime);
 }
 @end
 
