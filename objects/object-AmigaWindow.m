@@ -37,6 +37,7 @@
 + (void)enterAmigaMode
 {
     id windowManager = [@"windowManager" valueForKey];
+    [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
 
     [Definitions setValue:@"amiga" forEnvironmentVariable:@"HOTDOG_MODE"];
