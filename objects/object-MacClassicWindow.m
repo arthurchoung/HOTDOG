@@ -30,6 +30,7 @@
 + (void)enterMacClassicMode
 {
     id windowManager = [@"windowManager" valueForKey];
+    [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
 
     [Definitions setValue:@"macclassic" forEnvironmentVariable:@"HOTDOG_MODE"];
