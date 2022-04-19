@@ -29,6 +29,7 @@
 + (void)enterMacColorMode
 {
     id windowManager = [@"windowManager" valueForKey];
+    [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
 
     [Definitions setValue:@"maccolor" forEnvironmentVariable:@"HOTDOG_MODE"];
