@@ -10,7 +10,8 @@ mkdir -p $PKG/usr/bin
 find $SRC/hotdog* -executable -type f -exec cp -a {} $PKG/usr/bin \;
 # Configuration files end up in /etc/HOTDOG
 mkdir -p $PKG/etc/HOTDOG
-cp -a $SRC/Config $SRC/MainMenu $SRC/Wallpaper $PKG/etc/HOTDOG
+cp -a $SRC/Config $SRC/DesktopIcons $SRC/MainMenu $SRC/Sounds $SRC/Wallpaper $PKG/etc/HOTDOG
+mkdir -p $PKG/etc/HOTDOG/Desktop
 mkdir -p $PKG/etc/HOTDOG/Temp
 chmod 1777 $PKG/etc/HOTDOG/Temp
 mkdir -p $PKG/usr/share/xsessions
