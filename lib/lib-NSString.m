@@ -25,6 +25,28 @@
 
 #import "HOTDOG.h"
 
+@implementation NSString(fjkdlsjfkldsjkflskdjf)
+- (id)split:(id)separator maxTokens:(int)maxTokens
+{
+    if (maxTokens < 1) {
+        return nil;
+    }
+    if (maxTokens == 1) {
+        id arr = nsarr();
+        [arr addObject:self];
+        return arr;
+    }
+    id tokens = [self componentsSeparatedByString:separator];
+    if ([tokens length] <= maxTokens) {
+        return tokens;
+    }
+    id last = [[tokens subarrayFromIndex:maxTokens-1] join:separator];
+    id results = [tokens subarrayToIndex:maxTokens-1];
+    results = [results arrayByAddingObject:last];
+    return results;
+}
+@end
+
 @implementation NSString(jfkdlsjfklsdjf)
 - (int)x
 {
