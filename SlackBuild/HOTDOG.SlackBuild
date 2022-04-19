@@ -80,7 +80,7 @@ mkdir -p $PKG/usr/bin
 find hotdog* -executable -type f -exec cp -a {} $PKG/usr/bin \;
 # Configuration files end up in /etc/HOTDOG
 mkdir -p $PKG/etc/HOTDOG
-cp -a Config DesktopIcons MainMenu Wallpaper $PKG/etc/HOTDOG
+cp -a Config DesktopIcons MainMenu Sounds Wallpaper $PKG/etc/HOTDOG
 mkdir -p $PKG/etc/HOTDOG/Desktop
 mkdir -p $PKG/etc/HOTDOG/Temp
 chmod 1777 $PKG/etc/HOTDOG/Temp
