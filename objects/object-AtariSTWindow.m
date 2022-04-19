@@ -29,6 +29,7 @@
 + (void)enterAtariSTMode
 {
     id windowManager = [@"windowManager" valueForKey];
+    [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
 
     [Definitions setValue:@"atarist" forEnvironmentVariable:@"HOTDOG_MODE"];
