@@ -33,6 +33,7 @@
     char *palette = [Definitions cStringForMacPlatinumBackgroundPalette];
 
     id windowManager = [@"windowManager" valueForKey];
+    [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
 
     [Definitions setValue:@"macplatinum" forEnvironmentVariable:@"HOTDOG_MODE"];
