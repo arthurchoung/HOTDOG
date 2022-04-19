@@ -44,14 +44,6 @@
     id _pixels;
     id _palette;
     id _highlightedPalette;
-    id _messageForDoubleClick;
-    id _messageForDragAndDrop;
-
-    BOOL _buttonDown;
-    int _buttonDownX;
-    int _buttonDownY;
-    int _buttonDownRootX;
-    int _buttonDownRootY;
 }
 @end
 @implementation CommandOutputBitmap
@@ -80,7 +72,7 @@
             if (!lines) {
                 break;
             }
-            id arr = [@"pixels palette highlightedPalette messageForDoubleClick messageForDragAndDrop" split];
+            id arr = [@"pixels palette highlightedPalette" split];
             if ([arr containsObject:_firstLine]) {
                 [self setValue:lines forKey:_firstLine];
                 [self setValue:nil forKey:@"firstLine"];
@@ -138,120 +130,5 @@
     }
 
     [bitmap drawCString:[_pixels UTF8String] palette:[_highlightedPalette UTF8String] x:r.x y:r.y];
-}
-- (void)handleMouseDown:(id)event
-{
-NSLog(@"CommandOutputBitmap handleMouseDown");
-    id windowManager = [event valueForKey:@"windowManager"];
-    id x11dict = [event valueForKey:@"x11dict"];
-    [windowManager setFocusDict:nil];
-    _buttonDown = YES;
-    _buttonDownX = [event intValueForKey:@"mouseX"];
-    _buttonDownY = [event intValueForKey:@"mouseY"];
-    _buttonDownRootX = [event intValueForKey:@"mouseRootX"];
-    _buttonDownRootY = [event intValueForKey:@"mouseRootY"];
-    [windowManager raiseObjectWindow:x11dict];
-    [x11dict setValue:[x11dict valueForKey:@"x"] forKey:@"beforeDragX"];
-    [x11dict setValue:[x11dict valueForKey:@"y"] forKey:@"beforeDragY"];
-}
-- (void)handleMouseMoved:(id)event
-{
-    if (!_buttonDown) {
-        return;
-    }
-    id windowManager = [event valueForKey:@"windowManager"];
-    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
-    int mouseRootX = [event intValueForKey:@"mouseRootX"];
-    int mouseRootY = [event intValueForKey:@"mouseRootY"];
-    id x11dict = [event valueForKey:@"x11dict"];
-
-    int newX = mouseRootX - _buttonDownX;
-    if (newX < -1) {
-        newX = -1;
-    }
-    int newY = mouseRootY - _buttonDownY;
-    if (newY < 0) {
-        newY = 0;
-    }
-    id monitor = [Definitions monitorForX:newX y:newY];
-    int maxY = [monitor intValueForKey:@"height"] - 19;
-    if (newY < menuBarHeight) {
-        newY = menuBarHeight;
-    }
-    if (newY > maxY) {
-        newY = maxY;
-    }
-    [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-}
-- (void)handleMouseUp:(id)event
-{
-    if (!_buttonDown) {
-        return;
-    }
-    _buttonDown = NO;
-    int mouseRootX = [event intValueForKey:@"mouseRootX"];
-    int mouseRootY = [event intValueForKey:@"mouseRootY"];
-    id windowManager = [event valueForKey:@"windowManager"];
-    id x11dict = [event valueForKey:@"x11dict"];
-    unsigned long window = [x11dict unsignedLongValueForKey:@"window"];
-    [x11dict setValue:@"1" forKey:@"needsRedraw"];
-/*
-    unsigned long underneathWindow = [windowManager topMostWindowUnderneathWindow:window x:mouseRootX y:mouseRootY];
-    if (underneathWindow) {
-        id underneathDict = [windowManager dictForObjectWindow:underneathWindow];
-        id object = [underneathDict valueForKey:@"object"];
-[nsfmt(@"drag and drop underneathDict %@ x11dict %@", underneathDict, x11dict) showAlert];
-        if ([object respondsToSelector:@selector(handleDragAndDrop::)]) {
-            [object handleDragAndDrop:x11dict :underneathDict];
-        } else {
-            id messageForDragAndDrop = [object valueForKey:@"messageForDragAndDrop"];
-            if (messageForDragAndDrop) {
-                [nsdict() evaluateMessage:messageForDragAndDrop];
-            }
-        }
-    }
-*/
-    id xNumber = [x11dict valueForKey:@"x"];
-    id yNumber = [x11dict valueForKey:@"y"];
-    id beforeDragXNumber = [x11dict valueForKey:@"beforeDragX"];
-    id beforeDragYNumber = [x11dict valueForKey:@"beforeDragY"];
-    if ([xNumber isEqual:beforeDragXNumber]) {
-        if ([yNumber isEqual:beforeDragYNumber]) {
-            struct timeval tv;
-            gettimeofday(&tv, NULL);
-            id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
-
-            id selectedTimestamp = [x11dict valueForKey:@"selectedTimestamp"];
-            if (selectedTimestamp) {
-                if ([timestamp doubleValue]-[selectedTimestamp doubleValue] <= 0.3) {
-                    if ([_messageForDoubleClick length]) {
-                        [nsdict() evaluateMessage:_messageForDoubleClick];
-                    } else {
-                        [@"doubleClick" showAlert];
-                    }
-                }
-            }
-            if (0/*e->state & ShiftMask*/) {
-                selectedTimestamp = (selectedTimestamp) ? nil : timestamp;
-                [x11dict setValue:selectedTimestamp forKey:@"selectedTimestamp"];
-                [x11dict setValue:@"1" forKey:@"needsRedraw"];
-            } else {
-                id objectWindows = [windowManager valueForKey:@"objectWindows"];
-                for (int i=0; i<[objectWindows count]; i++) {
-                    id elt = [objectWindows nth:i];
-                    if (![elt intValueForKey:@"isIcon"]) {
-                        continue;
-                    }
-                    if ([elt valueForKey:@"selectedTimestamp"]) {
-                        [elt setValue:nil forKey:@"selectedTimestamp"];
-                        [elt setValue:@"1" forKey:@"needsRedraw"];
-                    }
-                }
-                selectedTimestamp = timestamp;
-                [x11dict setValue:selectedTimestamp forKey:@"selectedTimestamp"];
-                [x11dict setValue:@"1" forKey:@"needsRedraw"];
-            }
-        }
-    }
 }
 @end
