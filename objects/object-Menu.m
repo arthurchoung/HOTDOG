@@ -39,6 +39,8 @@
         className = @"AtariSTMenu";
     } else if ([windowClassName isEqual:@"AquaWindow"]) {
         className = @"AquaMenu";
+    } else if ([windowClassName isEqual:@"ScaledWindow"]) {
+        className = @"AmigaMenu";
     }
     id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
