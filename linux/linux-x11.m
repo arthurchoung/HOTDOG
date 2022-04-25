@@ -986,6 +986,12 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     } else if ([x11HasChildMask isEqual:@"macplatinum"]) {
         //FIXME Mac Platinum
         XFillRectangle(_display, shape_pixmap, shape_gc, w-15, h-15, 15, 15);
+    } else if ([x11HasChildMask hasPrefix:@"bottomRightCorner"]) {
+        int maskWidth = [x11HasChildMask intValueForKey:@"w"];
+        int maskHeight = [x11HasChildMask intValueForKey:@"h"];
+        if ((maskWidth > 0) && (maskHeight > 0)) {
+            XFillRectangle(_display, shape_pixmap, shape_gc, w-maskWidth, h-maskHeight, maskWidth, maskHeight);
+        }
     }
     XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
     XFreeGC(_display, shape_gc);
