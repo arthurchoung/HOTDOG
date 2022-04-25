@@ -336,6 +336,7 @@ static unsigned char yellow_down_rgb[] = {
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
     [windowManager reparentAllWindows:@"AquaWindow"];
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
+    [windowManager setValue:@"20" forKey:@"menuBarHeight"];
     id menuBar = [windowManager openWindowForObject:[Definitions AquaMenuBar] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
