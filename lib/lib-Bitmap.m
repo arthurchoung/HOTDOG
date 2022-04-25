@@ -145,6 +145,13 @@ NSLog(@"Out of memory!");
     return _bitmapStride;
 }
 
+- (void)useFont:(unsigned char **)fontCStrings :(int *)fontWidths :(int *)fontHeights :(int *)fontXSpacings
+{
+    _fontCStrings = fontCStrings;
+    _fontWidths = fontWidths;
+    _fontHeights = fontHeights;
+    _fontXSpacings = fontXSpacings;
+}
 - (void)useAtariSTFont
 {
     _fontCStrings = [Definitions arrayOfCStringsForAtariSTFont];
