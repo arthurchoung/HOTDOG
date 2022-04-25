@@ -1,0 +1,4 @@
+#define maccolor_width 2
+#define maccolor_height 2
+static unsigned char maccolor_bits[] = {
+   0x02, 0x01};
