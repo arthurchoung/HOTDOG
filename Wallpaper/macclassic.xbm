@@ -1,0 +1,4 @@
+#define macclassic_width 2
+#define macclassic_height 2
+static unsigned char macclassic_bits[] = {
+   0x02, 0x01};
