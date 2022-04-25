@@ -39,6 +39,7 @@
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
     [windowManager reparentAllWindows:@"AtariSTWindow"];
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
+    [windowManager setValue:@"20" forKey:@"menuBarHeight"];
     id menuBar = [windowManager openWindowForObject:[@"AtariSTMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
