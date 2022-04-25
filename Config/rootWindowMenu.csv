@@ -30,3 +30,5 @@ hotKey,displayName,messageForClick
 ,Enter Hot Dog Stand Mode,"windowManager|setValue:'enterHotDogStandMode' forKey:'pendingMessage'"
 ,Enter Atari ST Mode,"windowManager|setValue:'enterAtariSTMode' forKey:'pendingMessage'"
 ,Enter Aqua Mode,"windowManager|setValue:'enterAquaMode' forKey:'pendingMessage'"
+,Enter Scaled Mode x2,"windowManager|setValue:'enterScaledMode:2' forKey:'pendingMessage'"
+,Enter Scaled Mode x3,"windowManager|setValue:'enterScaledMode:3' forKey:'pendingMessage'"
