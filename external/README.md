@@ -1,12 +1,13 @@
 These are external to HOTDOG and are included for convenience.
 
-Previously, GNUstep's Objective-C runtime was used, but HOTDOG is not
-compatible with the most recent versions because of the change in the
-memory layout. This is a version of the runtime with the old memory
-layout that should still work. It needs to be compiled with clang. HOTDOG
-needs to be compiled with clang as well. It supports things like fast
-enumeration (for...in), object literals (array @[] and dictionary @{}
-syntax), blocks (needs libBlocksruntime), etc.
+Previously, GNUstep's libobjc2 Objective-C runtime was used, but HOTDOG
+is not compatible with the most recent versions because of the change in
+the memory layout. This is a version of the runtime with the old memory
+layout that should still work. It needs to be compiled with clang, and
+HOTDOG will need to be compiled with clang as well, if it is to be used
+with libobjc2. It supports things like fast enumeration (for...in), object
+literals (array @[] and dictionary @{} syntax), blocks (needs
+libBlocksruntime), etc.
 
 GCC's Objective-C runtime is preferred because the code can be compiled
 on OS X Tiger (using Apple's runtime). The new features are kind of nice,
