@@ -9,9 +9,9 @@ with libobjc2. It supports things like fast enumeration (for...in), object
 literals (array @[] and dictionary @{} syntax), blocks (needs
 libBlocksruntime), etc.
 
-GCC's Objective-C runtime is preferred because the code can be compiled
-on OS X Tiger (using Apple's runtime). The new features are kind of nice,
-but not essential.
+GCC's Objective-C runtime is preferred on Linux for compatibility with older
+versions of OS X (and potentially NeXTSTEP). The new features are kind of
+nice, but not essential.
 
 Support for ARM was added by taking the objc_msgSend assembly routine
 from a newer version of libobjc2.
