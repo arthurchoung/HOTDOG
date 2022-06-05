@@ -4,11 +4,19 @@ For more information, please visit http://hotdoglinux.com
 
 ## Download
 
-Installer ISO based on Slackware64 (1.52 GB)
+Installer ISO based on Slackware64 (1.28 GB)
 
-Minimal ISO based on Slackware64 that runs from RAM (195 MB)
+Minimal ISO based on Slackware64 that runs from RAM (192 MB)
 
-Boot with Legacy BIOS, untested on virtual machines
+Boot with Legacy BIOS.
+
+If using VirtualBox, 3D acceleration should be enabled.
+
+This is a multilib system, the only 32-bit application included is Wine.
+
+It comes with the 64-bit gcc only, so the included gcc cannot create 32 bit binaries.
+
+It is a stripped down system that does not include systemd, wayland, elogind, polkit, or NetworkManager.
 
 http://hotdoglinux.com/download/
 
