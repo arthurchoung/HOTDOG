@@ -31,13 +31,13 @@
 {
     return YES;
 }
-- (void)beginIteration:(id)event rect:(Int4)r
+- (void)handleBackgroundUpdate:(id)event
 {
     _iteration++;
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
-    if (_iteration/60 % 2 == 0) {
+    if (_iteration % 2 == 0) {
         [bitmap setColor:@"red"];
         [bitmap fillRect:r];
         Int4 r1 = [Definitions rectWithPadding:r w:-8 h:-8];
