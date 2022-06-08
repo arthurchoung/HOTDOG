@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>HOT DOG Linux</title>
+</head>
+<body style="background-color:yellow;">
+<div style="width:80%; margin:auto; background-color:white;border: 1px solid black;">
+<div style="border: 4px solid red;">
+<div style="border: 1px solid black; padding-left:1em; padding-right:1em;">
+<h1 align=center><img src="logo.png" style="padding-bottom:4px"> HOT DOG Linux <img src="logo.png" style="padding-bottom:4px"></h1>
+<hr style="clear:both">
+
+<h2>How To Show A Password Dialog</h2>
+
+From the shell, run the command:
+
+<pre>
+$ hotdog password OK Cancel "This is a password dialog." "Enter password:"
+</pre>
+
+<p>
+The second argument contains the text for the OK button.
+
+<p>
+The third argument contains the text for the Cancel button.
+
+<p>
+The fourth argument contains the text for the dialog.
+
+<p>
+The fifth argument contains the label text for the field.
+
+<p>
+<img src="password.png">
+
+<hr>
+
+<p>
+The style of dialog will be determined by the environment variable HOTDOG_MODE.
+
+<p>
+To force a dialog to be in a specific style:
+
+<pre>
+$ HOTDOG_MODE="amiga" hotdog password OK Cancel "This is a password dialog." "Enter password:"
+
+$ HOTDOG_MODE="macclassic" hotdog password OK Cancel "This is a password dialog." "Enter password:"
+
+$ HOTDOG_MODE="aqua" hotdog password OK Cancel "This is a password dialog." "Enter password:"
+</pre>
+
+<hr>
+
+<p>
+If the user clicks the OK button, then the contents of the password field will be written to STDOUT followed by a newline, and the exit code will be 0.
+
+<p>
+If the user clicks the Cancel button or the user closes the dialog, possibly by clicking the window close button or hitting the Escape key, then nothing will be written to STDOUT, and the exit code will be 1.
+
+</div>
+</div>
+</div>
+</body>
+</html>
+
