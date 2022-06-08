@@ -1,0 +1,69 @@
+<html>
+<head>
+<title>HOT DOG Linux</title>
+</head>
+<body style="background-color:yellow;">
+<div style="width:80%; margin:auto; background-color:white;border: 1px solid black;">
+<div style="border: 4px solid red;">
+<div style="border: 1px solid black; padding-left:1em; padding-right:1em;">
+<h1 align=center><img src="logo.png" style="padding-bottom:4px"> HOT DOG Linux <img src="logo.png" style="padding-bottom:4px"></h1>
+<hr style="clear:both">
+
+<h2>How To Show A Radio Button Dialog</h2>
+
+From the shell, run the command:
+
+<pre>
+$ hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+
+<p>
+The second argument contains the text for the OK button.
+
+<p>
+The third argument contains the text for the Cancel button.
+
+<p>
+The fourth argument contains the text for the dialog.
+
+<p>
+The rest of the arguments are interpreted in groups of 3. Each group represents a radio button.
+<p>
+The first argument in the group is a tag name for the radio button. This will be printed when the radio button is selected and the OK button is clicked.
+<p>
+The second argument in the group indicates whether or not the radio button is selected when the dialog first opens.
+<p>
+The third argument in the group is the text for the radio button. This will be displayed next to the radio button.
+<p>
+<img src="radio.png">
+
+<hr>
+
+<p>
+The style of dialog will be determined by the environment variable HOTDOG_MODE.
+
+<p>
+To force a dialog to be in a specific style:
+
+<pre>
+$ HOTDOG_MODE="amiga" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+
+$ HOTDOG_MODE="macclassic" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+
+$ HOTDOG_MODE="aqua" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+
+<hr>
+
+<p>
+If the user clicks the OK button, then the tag name for the currently selected radio button will be written to STDOUT, and the exit code will be 0.
+
+<p>
+If the user clicks the Cancel button or the user closes the dialog, possibly by clicking the window close button or hitting the Escape key, then nothing will be written to STDOUT, and the exit code will be 1.
+
+</div>
+</div>
+</div>
+</body>
+</html>
+
