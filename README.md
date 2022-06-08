@@ -16,7 +16,7 @@ This is a multilib system, the only 32-bit application included is Wine.
 
 It comes with the 64-bit gcc only, so the included gcc cannot create 32 bit binaries.
 
-It is a stripped down system that does not include systemd, wayland, elogind, polkit, or NetworkManager.
+It is a stripped down system that does not include systemd, wayland, elogind, polkit, pulseaudio, or NetworkManager.
 
 http://hotdoglinux.com/download/
 
