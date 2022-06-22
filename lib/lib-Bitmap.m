@@ -577,14 +577,6 @@ NSLog(@"Out of memory!");
         }
     }
 }
-- (void)drawCircleAtX:(int)x y:(int)y r:(int)radius
-{
-    [self fillRect:[Definitions rectWithX:x-radius y:y-radius w:radius+radius h:radius+radius]];
-}
-- (void)fillCircleAtX:(int)x y:(int)y r:(int)radius
-{
-    [self fillRect:[Definitions rectWithX:x-radius y:y-radius w:radius+radius h:radius+radius]];
-}
 - (void)fillRectangleAtX:(int)x1 y:(int)y1 x:(int)x2 y:(int)y2
 {
     if (x2 < x1) {
