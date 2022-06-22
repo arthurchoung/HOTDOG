@@ -32,12 +32,12 @@
 }
 @end
 
-char *playerPalette = 
+static char *playerPalette = 
 ". #0000ff\n"
 "o #ffffff\n"
 ;
 
-char *playerPixels = 
+static char *playerPixels = 
 "   .   \n"
 "   .   \n"
 "   o   \n"
@@ -49,7 +49,7 @@ char *playerPixels =
 "  ooo  \n"
 "  ooo  \n"
 ;
-char *playerDeadPixels = 
+static char *playerDeadPixels = 
 "       \n"
 "       \n"
 "       \n"
@@ -62,11 +62,11 @@ char *playerDeadPixels =
 "       \n"
 ;
 
-char *bulletPalette = 
+static char *bulletPalette = 
 ". #ffffff\n"
 ;
 
-char *bulletPixels =
+static char *bulletPixels =
 ".\n"
 ".\n"
 ".\n"
@@ -75,15 +75,15 @@ char *bulletPixels =
 ".\n"
 ;
 
-char *mushroomPalette = 
+static char *mushroomPalette = 
 "o #ff0000\n"
 "X #ffffff\n"
 ;
-char *mushroom2Palette = 
+static char *mushroom2Palette = 
 "o #000000\n"
 ;
 
-char *mushroomPixels =
+static char *mushroomPixels =
 "  oooo  \n"
 " oXXXXo \n"
 "oXXXXXXo\n"
@@ -93,7 +93,7 @@ char *mushroomPixels =
 "  oXXo  \n"
 "  oooo  \n"
 ;
-char *mushroom2Pixels =
+static char *mushroom2Pixels =
 "  ....  \n"
 " .XXXX. \n"
 ".XXXXXX.\n"
@@ -103,7 +103,7 @@ char *mushroom2Pixels =
 "oooXoooo\n"
 "oooooooo\n"
 ;
-char *mushroom3Pixels =
+static char *mushroom3Pixels =
 "  ....  \n"
 " .XXXX. \n"
 ".XXXXXX.\n"
@@ -113,7 +113,7 @@ char *mushroom3Pixels =
 "oooooooo\n"
 "oooooooo\n"
 ;
-char *mushroom4Pixels =
+static char *mushroom4Pixels =
 "  ....  \n"
 " .XXXX. \n"
 ".XXoXXX.\n"
@@ -123,7 +123,7 @@ char *mushroom4Pixels =
 "oooooooo\n"
 "oooooooo\n"
 ;
-char *centipedePalette = 
+static char *centipedePalette = 
 ". #ffffff\n"
 "X #00ff00\n"
 "o #ffffff\n"
@@ -179,7 +179,7 @@ char *centipedePalette =
 "  XXoo \n"\
 "     . \n"
 
-char *centipedePixels[8] = {
+static char *centipedePixels[8] = {
     CENTIPEDE1PIXELS,
     CENTIPEDE2PIXELS,
     CENTIPEDE3PIXELS,
