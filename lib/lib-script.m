@@ -381,6 +381,14 @@ NSLog(@"Bad signature");
             } else if (signature[0] == '@') {
                 id (*func)(id, SEL, int) = imp;
                 return func(target, sel, [[args nth:0] intValue]);
+            } else if (signature[0] == 'C') {
+                unsigned char (*func)(id, SEL, int) = imp;
+                unsigned char val = func(target, sel, [[args nth:0] intValue]);
+                return nsfmt(@"%u", val);
+            } else if (signature[0] == 'i') {
+                int (*func)(id, SEL, int) = imp;
+                int val = func(target, sel, [[args nth:0] intValue]);
+                return nsfmt(@"%d", val);
             }
         } else if (signature[4] == 'i') {
             if (signature[5] == 0) {
@@ -1035,7 +1043,7 @@ NSLog(@"%@", err);
         }
     }
 
-    NSLog(@"unable to resolve selector %@ sent to class %s", _selectorName, object_getClassName(_recipient));
+//    NSLog(@"unable to resolve selector %@ sent to class %s", _selectorName, object_getClassName(_recipient));
     
     return nil;
 }
