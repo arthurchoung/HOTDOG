@@ -32,7 +32,7 @@
 }
 @end
 
-char *brickHitPixels =
+static char *brickHitPixels =
 "        \n"
 "b      b\n"
 " b    b \n"
@@ -43,7 +43,7 @@ char *brickHitPixels =
 "        \n"
 ;
 
-char *brickLeftPixels =
+static char *brickLeftPixels =
 " \n"
 "b\n"
 "b\n"
@@ -53,7 +53,7 @@ char *brickLeftPixels =
 "b\n"
 " \n"
 ;
-char *brickMiddlePixels =
+static char *brickMiddlePixels =
 "b\n"
 "b\n"
 "b\n"
@@ -64,12 +64,12 @@ char *brickMiddlePixels =
 "b\n"
 ;
 
-char *paddlePalette = 
+static char *paddlePalette = 
 ". #000000\n"
 "b #ffffff\n"
 ;
 
-char *paddlePixels =
+static char *paddlePixels =
 "  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
 " b....................................b \n"
 "b..bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..b\n"
@@ -83,11 +83,11 @@ char *paddlePixels =
 "  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
 ;
 
-char *ballPalette = 
+static char *ballPalette = 
 ". #ffffff\n"
 ;
 
-char *ballPixels = 
+static char *ballPixels = 
 "  ....  \n"
 " ...... \n"
 "........\n"
