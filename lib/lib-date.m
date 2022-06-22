@@ -413,6 +413,9 @@
     if ([self length] == 27) {
         return YES;
     }
+    if ([self length] == 30) {
+        return YES;
+    }
     return NO;
 }
 - (int)year
