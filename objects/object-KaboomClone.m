@@ -34,7 +34,7 @@
 }
 @end
 
-char *madBomberPalette =
+static char *madBomberPalette =
 //"  #8E8E8E\n"
 ". #484800\n"
 "X #69690F\n"
@@ -45,7 +45,7 @@ char *madBomberPalette =
 "# #D6D6D6\n"
 //"$ #527E2D\n"
 ;
-char *madBomberPixels = 
+static char *madBomberPixels = 
 "       ...........       \n"
 "       ...........       \n"
 "   XXXXXXXXXXXXXXXXXX    \n"
@@ -108,7 +108,7 @@ char *madBomberPixels =
 "$$$@@@@$$$$$$$$$$$@@@$$$$\n"
 ;
 
-char *bucketPalette = 
+static char *bucketPalette = 
 "  #527E2D\n"
 ". #A2A22A\n"
 "X #545CD6\n"
@@ -116,7 +116,7 @@ char *bucketPalette =
 "O #69690F\n"
 ;
 
-char *bucketPixels =
+static char *bucketPixels =
 "       ....................................       \n"
 "       ....................................       \n"
 "       XXXXXXXXXXXXXXXXXXXXXXXXXXXXX              \n"
@@ -134,10 +134,10 @@ char *bucketPixels =
 "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n"
 "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n"
 ;
-char *splashPalette =
+static char *splashPalette =
 "# #545CD6\n"
 ;
-char *splashPixels =
+static char *splashPixels =
 "................#######.......#######...............\n"
 "................#######.......#######...............\n"
 ".########....................................#######\n"
@@ -151,11 +151,11 @@ char *splashPixels =
 ".########..............#######...............#######\n"
 ".########..............#######...............#######\n"
 ;
-char *splash2Palette =
+static char *splash2Palette =
 //"  #527E2D\n"
 "# #545CD6\n"
 ;
-char *splash2Pixels =
+static char *splash2Pixels =
 "########                                    ####### \n"
 "########                                    ####### \n"
 "                      #######                       \n"
@@ -169,10 +169,10 @@ char *splash2Pixels =
 "                                                    \n"
 "                                                    \n"
 ;
-char *splash3Palette =
+static char *splash3Palette =
 "$ #545CD6\n"
 ;
-char *splash3Pixels =
+static char *splash3Pixels =
 "OOOOOOOO$$$$$$$OOOOOOOOOOOOOOOOOOOOO$$$$$$$$OOOOOOOO\n"
 "OOOOOOOO$$$$$$$OOOOOOOOOOOOOOOOOOOOO$$$$$$$$OOOOOOOO\n"
 "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n"
@@ -188,7 +188,7 @@ char *splash3Pixels =
 "OOOOOOOOOOOOOOOOOOOOOO$$$$$$$OOOOOOOOOOOOOOOOOOOOOOO\n"
 "OOOOOOOOOOOOOOOOOOOOOO$$$$$$$OOOOOOOOOOOOOOOOOOOOOOO\n"
 ;
-char *bombPalette = 
+static char *bombPalette = 
 //"  #527E2D\n"
 ". #AAAAAA\n"
 "X #000000\n"
@@ -196,7 +196,7 @@ char *bombPalette =
 "O #6F6F6F\n"
 "+ #8E8E8E\n"
 ;
-char *bombPixels = 
+static char *bombPixels = 
 "                  \n"
 "                  \n"
 "                  \n"
@@ -228,7 +228,7 @@ char *bombPixels =
 "       XXX        \n"
 "       XXX        \n"
 ;
-char *bomb2Palette =
+static char *bomb2Palette =
 "  #8E8E8E\n"
 //". #527E2D\n"
 "X #FC9090\n"
@@ -242,7 +242,7 @@ char *bomb2Palette =
 "& #69690F\n"
 "* #FFFFFF\n"
 ;
-char *bomb2Pixels = 
+static char *bomb2Pixels = 
 ".......XXXX.......\n"
 ".......XXXX.......\n"
 ".......XXXXXXX....\n"
@@ -274,7 +274,7 @@ char *bomb2Pixels =
 ".......OOOO.......\n"
 ".......OOOO.......\n"
 ;
-char *bomb3Palette =
+static char *bomb3Palette =
 "  #8E8E8E\n"
 //". #527E2D\n"
 "X #FC9090\n"
@@ -288,7 +288,7 @@ char *bomb3Palette =
 "& #69690F\n"
 "* #FFFFFF\n"
 ;
-char *bomb3Pixels =
+static char *bomb3Pixels =
 "..................\n"
 "..................\n"
 "..................\n"
