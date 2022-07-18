@@ -2130,6 +2130,17 @@ NSLog(@"_NET_WM_WINDOW_TYPE: %s\n", str);
                     XFree(str);
                 }
             }
+        } else if (!strcmp(atom, "WM_NORMAL_HINTS")) {
+            id normalHints = [self XGetWMNormalHints:e->window];
+NSLog(@"WM_NORMAL_HINTS %@", normalHints);
+            // FIXME
+            // Move the window back and forth to trigger a redraw when WM_NORMAL_HINTS changes
+            // Seems to fix the no-redrawing problem with x64sc (VICE) which uses GTK3
+            // But there should be a better way
+            XWindowAttributes attrs;
+            XGetWindowAttributes(_display, e->window, &attrs);
+            [self XMoveWindow:e->window :attrs.x :attrs.y+1];
+            [self XMoveWindow:e->window :attrs.x :attrs.y];
         }
         XFree(atom);
     }
