@@ -41,42 +41,12 @@
 @end
 
 @implementation TextMenuItem
-- (int)preferredWidth
+- (id)text
 {
-    id str = [self str:_text];
-    int w = [Definitions bitmapWidthForText:str];
-    if (w) {
-        return w;
+    if (!_text) {
+        return nil;
     }
-    return 10;
-}
-- (int)preferredWidthForBitmap:(id)bitmap
-{
-    id str = [self str:_text];
-    int w = [bitmap bitmapWidthForText:str];
-    if (w) {
-        return w;
-    }
-    return 10;
-}
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
-{
-    id str = [self str:_text];
-    int textW = [bitmap bitmapWidthForText:str];
-    if (textW > r.w) {
-        str = [bitmap fitBitmapString:str width:r.w];
-    }
-    [bitmap drawBitmapText:str x:r.x y:r.y+3];
-}
-- (void)drawHighlightedInBitmap:(id)bitmap rect:(Int4)r
-{
-    id str = [self str:_text];
-    int textW = [bitmap bitmapWidthForText:str];
-    if (textW > r.w) {
-        str = [bitmap fitBitmapString:str width:r.w];
-    }
-    [bitmap setColorIntR:255 g:255 b:255 a:255];
-    [bitmap drawBitmapText:str x:r.x y:r.y+3];
+    return [self str:_text];
 }
 
 
