@@ -95,10 +95,13 @@ BOOL isnsstr(id obj)//$;
     setenv([key UTF8String], [val UTF8String], 1);
 }
 
+#ifdef BUILD_FOR_MEDMOS
+#else
 + (id)processID
 {
     return nsfmt(@"%d", getpid());
 }
+#endif
 + (double)percentageChangeFrom:(double)from to:(double)to
 {
     return ((to - from) / from) * 100.0;
@@ -112,6 +115,9 @@ BOOL isnsstr(id obj)//$;
 {
     exit(code);
 }
+
+#ifdef BUILD_FOR_MEDMOS
+#else
 
 + (id)arrayOfRandomDoubles:(int)count
 {
@@ -153,6 +159,8 @@ BOOL isnsstr(id obj)//$;
 #endif
     return n;
 }
+
+#endif
 
 @end
 
