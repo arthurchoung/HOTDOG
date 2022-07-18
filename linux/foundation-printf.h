@@ -46,6 +46,7 @@ extern "C" {
 #endif
 
 int foundation_vasprintf(char **strp, const char *fmt, va_list ap);
+int foundation_vsprintf(char *buffer, const char *format, va_list ap);
 
 #if 0
 
