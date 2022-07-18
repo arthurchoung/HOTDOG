@@ -42,6 +42,10 @@
 
 #include "foundation-printf.h"
 
+#ifdef BUILD_FOR_MEDMOS
+#include "MEDMOS.h"
+#endif
+
 struct simple_buffer {
     char *bytes;
     int alloc;
@@ -1010,5 +1014,11 @@ int foundation_vasprintf(char **strp, const char *fmt, va_list ap)
     }
     *strp = sbuf.bytes;
     return result;
+}
+
+int foundation_vsprintf(char* buffer, const char* format, va_list ap)
+{
+  const int ret = _vsnprintf(_out_buffer, buffer, (size_t)-1, format, ap);
+  return ret;
 }
 
