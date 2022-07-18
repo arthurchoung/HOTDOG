@@ -29,6 +29,14 @@
 
 #define MAX_CHARS_TO_DRAW 20
 
+static char *amigaPalette =
+"b #000000\n"
+". #000022\n"
+"* #ff8800\n"
+"X #0055aa\n"
+"o #ffffff\n"
+;
+
 static id leftScrollArrowPalette =
 @". #000022\n"
 @"* #ff8800\n"
@@ -717,7 +725,7 @@ static char *openTrashCanPixels =
 }
 + (void)drawAmigaHorizontalScrollBarInBitmap:(id)bitmap x:(int)x0 y:(int)y0 w:(int)w
 {
-    char *palette = [Definitions cStringForAmigaPalette];
+    char *palette = amigaPalette;
 
     char *left = [Definitions cStringForAmigaHorizontalScrollBarLeft];
     char *middle = [Definitions cStringForAmigaHorizontalScrollBarMiddle];
@@ -783,7 +791,7 @@ static char *openTrashCanPixels =
 }
 + (void)drawAmigaFuelGaugeInBitmap:(id)bitmap x:(int)x0 y:(int)y0 h:(int)h
 {
-    char *palette = [Definitions cStringForAmigaPalette];
+    char *palette = amigaPalette;
 
     char *top = [Definitions cStringForAmigaFuelGaugeTop];
     char *middle = [Definitions cStringForAmigaFuelGaugeMiddle];
@@ -904,7 +912,7 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
 }
 + (void)drawAmigaVerticalScrollBarInBitmap:(id)bitmap x:(int)x0 y:(int)y0 h:(int)h
 {
-    char *palette = [Definitions cStringForAmigaPalette];
+    char *palette = amigaPalette;
 
     char *top = [Definitions cStringForAmigaVerticalScrollBarTop];
     char *middle = [Definitions cStringForAmigaVerticalScrollBarMiddle];
