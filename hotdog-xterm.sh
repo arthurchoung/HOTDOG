@@ -6,6 +6,8 @@ elif [ "x$HOTDOG_MODE" = "xhotdogstand" ]; then
     xterm -geometry 80x50 -bg '#0055aa' -fg white -cr '#ffff00' +bc +uc
 elif [ "x$HOTDOG_MODE" = "xaqua" ]; then
     xterm -geometry 80x50 -bg black -fg white -cr '#ffff00' +bc +uc
+elif [ "x$HOTDOG_MODE" = "xwinmac" ]; then
+    xterm -geometry 80x50 -bg black -fg white -cr '#ffff00' +bc +uc
 else
     xterm -geometry 80x50 -bg white -fg black +bc +uc
 fi
