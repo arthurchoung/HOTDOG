@@ -28,40 +28,83 @@
 @implementation Definitions(jfovcnvieiwejfklsdjfklsdjlkfjsdlkfj)
 + (void)enterHotDogStandMode
 {
+    [Definitions enterHotDogStandMode:1];
+}
++ (void)enterHotDogStandMode:(int)scaling
+{
+    if (scaling < 1) {
+        scaling = 1;
+    }
+    [Definitions setValue:nsfmt(@"%d", scaling) forEnvironmentVariable:@"HOTDOG_SCALING"];
+
     id windowManager = [@"windowManager" valueForKey];
     [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
 
-    [Definitions setValue:@"hotdogstand" forEnvironmentVariable:@"HOTDOG_MODE"];
+    [Definitions setValue:@"red" forEnvironmentVariable:@"HOTDOG_HASFOCUSBORDERCOLOR"];
+    [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
+    [Definitions setValue:@"red" forEnvironmentVariable:@"HOTDOG_NOFOCUSBORDERCOLOR"];
+    [Definitions setValue:@"red" forEnvironmentVariable:@"HOTDOG_NOFOCUSTITLEBARCOLOR"];
+    [Definitions setValue:@"winmac" forEnvironmentVariable:@"HOTDOG_MODE"];
     [windowManager setBackgroundForCString:"b\n" palette:"b #ffff00\n"];
     id rootWindowObject = [@"MacRootWindow" asInstance];
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
-    [windowManager reparentAllWindows:@"HotDogStandWindow"];
+    [windowManager reparentAllWindows:@"WinMacWindow"];
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
-    [windowManager setValue:@"20" forKey:@"menuBarHeight"];
-    id menuBar = [windowManager openWindowForObject:[@"HotDogStandMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
+    int h = 20*scaling;
+    [windowManager setValue:nsfmt(@"%d", h) forKey:@"menuBarHeight"];
+    id menuBar = [windowManager openWindowForObject:[@"HotDogStandMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
     [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
 }
 @end
-@implementation Definitions(fjkencinidlsjfiowejfklsdjfklsdkljf)
 
-+ (char *)cStringForHotDogStandHasFocusPalette
+@implementation Definitions(jfovcnvieiwejfklsdjfklsdjlkfjsdlkffdjskfjklsdjfklj)
++ (void)enterWinMacMode
 {
-    return
-"b #000000\n"
-". #ff0000\n"
-"X #ffff00\n"
-"o #868a8e\n"
-"O #c3c7cb\n"
-"+ #ffffff\n"
-"t #000000\n"
-;
+    [Definitions enterWinMacMode:1];
 }
-+ (char *)cStringForHotDogStandActiveTitleBarLeft
++ (void)enterWinMacMode:(int)scaling
 {
-    return
+    if (scaling < 1) {
+        scaling = 1;
+    }
+    [Definitions setValue:nsfmt(@"%d", scaling) forEnvironmentVariable:@"HOTDOG_SCALING"];
+
+    id windowManager = [@"windowManager" valueForKey];
+    [windowManager setFocusDict:nil];
+    [windowManager unparentAllWindows];
+
+    [Definitions setValue:@"#ff8800" forEnvironmentVariable:@"HOTDOG_HASFOCUSBORDERCOLOR"];
+    [Definitions setValue:@"#ff8800" forEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
+    [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_NOFOCUSBORDERCOLOR"];
+    [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_NOFOCUSTITLEBARCOLOR"];
+    [Definitions setValue:@"winmac" forEnvironmentVariable:@"HOTDOG_MODE"];
+    [windowManager setBackgroundForCString:"b\n" palette:"b #0055aa\n"];
+    id rootWindowObject = [@"MacRootWindow" asInstance];
+    [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
+    [windowManager reparentAllWindows:@"WinMacWindow"];
+    [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
+    int h = 20*scaling;
+    [windowManager setValue:nsfmt(@"%d", h) forKey:@"menuBarHeight"];
+    id menuBar = [windowManager openWindowForObject:[@"HotDogStandMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
+    [windowManager setValue:menuBar forKey:@"menuBar"];
+    [windowManager setFocusDict:nil];
+    [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
+}
+@end
+
+static id paletteFormat =
+@"b #000000\n"
+@". %@\n"
+@"X #ffff00\n"
+@"o #868a8e\n"
+@"O #c3c7cb\n"
+@"+ #ffffff\n"
+@"t %@\n"
+;
+static char *activeTitleBarLeftPixels =
 "bbbbbbbbbbbbbbbbbbbbbbb\n"
 "b.....................b\n"
 "b.....................b\n"
@@ -86,10 +129,7 @@
 "b..bOOOOOOOOOOOOOOOOOOb\n"
 "bbbbbbbbbbbbbbbbbbbbbbb\n"
 ;
-}
-+ (char *)cStringForHotDogStandActiveTitleBarMiddle
-{
-    return
+static char *activeTitleBarMiddlePixels =
 "b\n"
 ".\n"
 ".\n"
@@ -114,10 +154,7 @@
 "t\n"
 "b\n"
 ;
-}
-+ (char *)cStringForHotDogStandActiveTitleBarRight
-{
-    return
+static char *activeTitleBarRightPixels =
 "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 "...................b.....................b\n"
 "...................b.....................b\n"
@@ -142,16 +179,10 @@
 "booooooooooooooooooboooooooooooooooooob..b\n"
 "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 ;
-}
-+ (char *)cStringForHotDogStandLeftBorderMiddle
-{
-    return
+static char *leftBorderMiddlePixels =
 "b..b\n"
 ;
-}
-+ (char *)cStringForHotDogStandLeftBorderBottom
-{
-    return
+static char *leftBorderBottomPixels =
 "bbbb\n"
 "b..b\n"
 "b..b\n"
@@ -172,46 +203,28 @@
 "b..b\n"
 "b..b\n"
 ;
-}
-
-+ (char *)cStringForHotDogStandBottomBorderLeft
-{
-    return
+static char *bottomBorderLeftPixels =
 "b..bbbbbbbbbbbbbbbbbbbb\n"
 "b.....................b\n"
 "b.....................b\n"
 "bbbbbbbbbbbbbbbbbbbbbbb\n"
 ;
-}
-+ (char *)cStringForHotDogStandBottomBorderMiddle
-{
-    return
+static char *bottomBorderMiddlePixels =
 "b\n"
 ".\n"
 ".\n"
 "b\n"
 ;
-}
-+ (char *)cStringForHotDogStandBottomBorderRight
-{
-    return
+static char *bottomBorderRightPixels =
 "bbbbbbbbbbbbbbbbbbbb..b\n"
 "b.....................b\n"
 "b.....................b\n"
 "bbbbbbbbbbbbbbbbbbbbbbb\n"
 ;
-}
-
-
-+ (char *)cStringForHotDogStandRightBorderMiddle
-{
-    return
+static char *rightBorderMiddlePixels =
 "b..b\n"
 ;
-}
-+ (char *)cStringForHotDogStandRightBorderBottom
-{
-    return
+static char *rightBorderBottomPixels =
 "bbbb\n"
 "b..b\n"
 "b..b\n"
@@ -232,12 +245,7 @@
 "b..b\n"
 "b..b\n"
 ;
-}
-
-
-+ (char *)cStringForHotDogStandMinimizeButtonDown
-{
-    return
+static char *minimizeButtonDownPixels =
 "oooooooooooooooooo\n"
 "oOOOOOOOOOOOOOOOOO\n"
 "oOOOOOOOOOOOOOOOOO\n"
@@ -257,11 +265,7 @@
 "oOOOOOOOOOOOOOOOOO\n"
 "oOOOOOOOOOOOOOOOOO\n"
 ;
-}
-
-+ (char *)cStringForHotDogStandMaximizeButtonDown
-{
-    return
+static char *maximizeButtonDownPixels =
 "oooooooooooooooooo\n"
 "oOOOOOOOOOOOOOOOOO\n"
 "oOOOOOOOOOOOOOOOOO\n"
@@ -281,11 +285,7 @@
 "oOOOOOOOOOOOOOOOOO\n"
 "oOOOOOOOOOOOOOOOOO\n"
 ;
-}
-
-+ (char *)cStringForHotDogStandCloseButtonDown
-{
-    return
+static char *closeButtonDownPixels =
 "oooooooooooooooooo\n"
 "oooooooooooooooooo\n"
 "oooooooooooooooooo\n"
@@ -305,10 +305,7 @@
 "oooooooooooooooooo\n"
 "oooooooooooooooooo\n"
 ;
-}
-+ (char *)cStringForHotDogStandSmallCloseButton
-{
-    return
+static char *smallCloseButtonPixels =
 "OOOOOOOOOOOOOOOOOO\n"
 "OOOOOOOOOOOOOOOOOO\n"
 "OOOOOOOOOOOOOOOOOO\n"
@@ -328,11 +325,7 @@
 "OOOOOOOOOOOOOOOOOO\n"
 "OOOOOOOOOOOOOOOOOO\n"
 ;
-}
-
-+ (char *)cStringForHotDogStandSmallCloseButtonDown
-{
-    return
+static char *smallCloseButtonDownPixels =
 "oooooooooooooooooo\n"
 "oooooooooooooooooo\n"
 "oooooooooooooooooo\n"
@@ -352,11 +345,7 @@
 "oooooooooooooooooo\n"
 "oooooooooooooooooo\n"
 ;
-}
-
-+ (char *)cStringForHotDogStandRevertButton
-{
-    return
+static char *revertButtonPixels =
 "+++++++++++++++++o\n"
 "+OOOOOOOOOOOOOOOoo\n"
 "+OOOOOOOOOOOOOOOoo\n"
@@ -376,11 +365,7 @@
 "+ooooooooooooooooo\n"
 "oooooooooooooooooo\n"
 ;
-}
-
-+ (char *)cStringForHotDogStandRevertButtonDown
-{
-    return
+static char *revertButtonDownPixels =
 "oooooooooooooooooo\n"
 "oOOOOOOOOOOOOOOOOO\n"
 "oOOOOOOOOOOOOOOOOO\n"
@@ -400,14 +385,8 @@
 "oOOOOOOOOOOOOOOOOO\n"
 "oOOOOOOOOOOOOOOOOO\n"
 ;
-}
 
-
-
-
-@end
-
-@interface HotDogStandWindow : IvarObject
+@interface WinMacWindow : IvarObject
 {
     int _leftBorder;
     int _rightBorder;
@@ -431,74 +410,161 @@
     Int4 _minimizeButtonRect;
     Int4 _maximizeButtonRect;
     Int4 _resizeButtonRect;
+
+    id _hasFocusPalette;
+    id _noFocusPalette;
+
+    // setPixelScale:
+    int _pixelScaling;
+    id _scaledFont;
+    id _scaledActiveTitleBarLeftPixels;
+    int _scaledActiveTitleBarLeftWidth;
+    id _scaledActiveTitleBarMiddlePixels;
+    int _scaledActiveTitleBarHeight;
+    id _scaledActiveTitleBarRightPixels;
+    int _scaledActiveTitleBarRightWidth;
+    id _scaledLeftBorderMiddlePixels;
+    id _scaledLeftBorderBottomPixels;
+    id _scaledBottomBorderLeftPixels;
+    id _scaledBottomBorderMiddlePixels;
+    id _scaledBottomBorderRightPixels;
+    id _scaledRightBorderMiddlePixels;
+    id _scaledRightBorderBottomPixels;
+    id _scaledMinimizeButtonDownPixels;
+    id _scaledMaximizeButtonDownPixels;
+    id _scaledCloseButtonDownPixels;
 }
 @end
-@implementation HotDogStandWindow
+@implementation WinMacWindow
 - (id)init
 {
     self = [super init];
     if (self) {
-        _leftBorder = 4;
-        _rightBorder = 4;
-        _topBorder = 23;
-        _bottomBorder = 4;
-        _hasShadow = 0;
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        [self setPixelScaling:scaling];
+        id color1 = [Definitions valueForEnvironmentVariable:@"HOTDOG_HASFOCUSBORDERCOLOR"];
+        color1 = (color1) ? [color1 asRGBColor] : @"#ff0000";
+        id color2 = [Definitions valueForEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
+        color2 = (color2) ? [color2 asRGBColor] : @"#ff0000";
+        id color3 = [Definitions valueForEnvironmentVariable:@"HOTDOG_NOFOCUSBORDERCOLOR"];
+        color3 = (color3) ? [color3 asRGBColor] : @"#ff0000";
+        id color4 = [Definitions valueForEnvironmentVariable:@"HOTDOG_NOFOCUSTITLEBARCOLOR"];
+        color4 = (color4) ? [color4 asRGBColor] : @"#ff0000";
+        
+        [self setValue:nsfmt(paletteFormat, color1, color2) forKey:@"hasFocusPalette"];
+        [self setValue:nsfmt(paletteFormat, color3, color4) forKey:@"noFocusPalette"];
     }
     return self;
+}
+- (void)setPixelScaling:(int)scaling
+{
+    _pixelScaling = scaling;
+
+    _leftBorder = 4*scaling;
+    _rightBorder = 4*scaling;
+    _topBorder = 23*scaling;
+    _bottomBorder = 4*scaling;
+    _hasShadow = 0;
+
+    id obj;
+    obj = [Definitions scaleFont:scaling
+                    :[Definitions arrayOfCStringsForWinSystemFont]
+                    :[Definitions arrayOfWidthsForWinSystemFont]
+                    :[Definitions arrayOfHeightsForWinSystemFont]
+                    :[Definitions arrayOfXSpacingsForWinSystemFont]];
+    [self setValue:obj forKey:@"scaledFont"];
+
+    obj = [nsfmt(@"%s", activeTitleBarLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveTitleBarLeftPixels"];
+    _scaledActiveTitleBarLeftWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", activeTitleBarMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveTitleBarMiddlePixels"];
+    _scaledActiveTitleBarHeight = [Definitions heightForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", activeTitleBarRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveTitleBarRightPixels"];
+    _scaledActiveTitleBarRightWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", leftBorderMiddlePixels) asXScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledLeftBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", leftBorderBottomPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledLeftBorderBottomPixels"];
+
+    obj = [nsfmt(@"%s", bottomBorderLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderLeftPixels"];
+
+    obj = [nsfmt(@"%s", bottomBorderMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", bottomBorderRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderRightPixels"];
+
+    obj = [nsfmt(@"%s", rightBorderMiddlePixels) asXScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledRightBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", rightBorderBottomPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledRightBorderBottomPixels"];
+
+    obj = [nsfmt(@"%s", minimizeButtonDownPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledMinimizeButtonDownPixels"];
+
+    obj = [nsfmt(@"%s", maximizeButtonDownPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledMaximizeButtonDownPixels"];
+
+    obj = [nsfmt(@"%s", closeButtonDownPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledCloseButtonDownPixels"];
 }
 
 - (void)calculateRects:(Int4)r
 {
-    char *titleBarLeft = [Definitions cStringForHotDogStandActiveTitleBarLeft];
-    char *titleBarMiddle = [Definitions cStringForHotDogStandActiveTitleBarMiddle];
-    char *titleBarRight = [Definitions cStringForHotDogStandActiveTitleBarRight];
-    int titleBarLeftWidth = [Definitions widthForCString:titleBarLeft];
-    int titleBarRightWidth = [Definitions widthForCString:titleBarRight];
-    int titleBarHeight = [Definitions heightForCString:titleBarMiddle];
-
-    _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:titleBarHeight];
+    _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:_scaledActiveTitleBarHeight];
     _titleBarTextRect = _titleBarRect;
-    _titleBarTextRect.x = titleBarLeftWidth+4;
-    _titleBarTextRect.w -= titleBarLeftWidth+4;
-    _titleBarTextRect.w -= titleBarRightWidth+4;
+    _titleBarTextRect.x = _scaledActiveTitleBarLeftWidth+4*_pixelScaling;
+    _titleBarTextRect.w -= _scaledActiveTitleBarLeftWidth+4*_pixelScaling;
+    _titleBarTextRect.w -= _scaledActiveTitleBarRightWidth+4*_pixelScaling;
 
     _leftBorderRect = r;
-    _leftBorderRect.y += titleBarHeight;
-    _leftBorderRect.h -= titleBarHeight;
+    _leftBorderRect.y += _scaledActiveTitleBarHeight;
+    _leftBorderRect.h -= _scaledActiveTitleBarHeight;
     _leftBorderRect.h -= _bottomBorder;
     _leftBorderRect.w = _leftBorder;
 
     _rightBorderRect = r;
     _rightBorderRect.x += r.w-_rightBorder;
-    _rightBorderRect.y += titleBarHeight;
-    _rightBorderRect.h -= titleBarHeight;
+    _rightBorderRect.y += _scaledActiveTitleBarHeight;
+    _rightBorderRect.h -= _scaledActiveTitleBarHeight;
     _rightBorderRect.h -= _bottomBorder;
     _rightBorderRect.w = _rightBorder;
 
     _topBorderRect = _titleBarRect;
-    _topBorderRect.h = 4;
+    _topBorderRect.h = 4*_pixelScaling;
 
     _bottomBorderRect = _titleBarRect;
     _bottomBorderRect.y += r.h-_bottomBorder;
     _bottomBorderRect.h = _bottomBorder;
 
     _closeButtonRect = _titleBarRect;
-    _closeButtonRect.x += 4;
-    _closeButtonRect.y += 4;
-    _closeButtonRect.w = 18;
-    _closeButtonRect.h = 18;
+    _closeButtonRect.x += 4*_pixelScaling;
+    _closeButtonRect.y += 4*_pixelScaling;
+    _closeButtonRect.w = 18*_pixelScaling;
+    _closeButtonRect.h = 18*_pixelScaling;
 
     _minimizeButtonRect = _titleBarRect;
-    _minimizeButtonRect.x = _minimizeButtonRect.x+_minimizeButtonRect.w-4-18-1-18;
-    _minimizeButtonRect.y += 4;
-    _minimizeButtonRect.w = 18;
-    _minimizeButtonRect.h = 18;
+    _minimizeButtonRect.x = _minimizeButtonRect.x+_minimizeButtonRect.w-(4+18+1+18)*_pixelScaling;
+    _minimizeButtonRect.y += 4*_pixelScaling;
+    _minimizeButtonRect.w = 18*_pixelScaling;
+    _minimizeButtonRect.h = 18*_pixelScaling;
 
     _maximizeButtonRect = _titleBarRect;
-    _maximizeButtonRect.x = _maximizeButtonRect.x+_maximizeButtonRect.w-4-18;
-    _maximizeButtonRect.y += 4;
-    _maximizeButtonRect.w = 18;
-    _maximizeButtonRect.h = 18;
+    _maximizeButtonRect.x = _maximizeButtonRect.x+_maximizeButtonRect.w-(4+18)*_pixelScaling;
+    _maximizeButtonRect.y += 4*_pixelScaling;
+    _maximizeButtonRect.w = 18*_pixelScaling;
+    _maximizeButtonRect.h = 18*_pixelScaling;
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
@@ -506,20 +572,17 @@
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
-    [bitmap useWinSystemFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
 
-    char *palette = [Definitions cStringForHotDogStandHasFocusPalette];
+    char *palette = [_hasFocusPalette UTF8String];
     int hasFocus = [context intValueForKey:@"hasFocus"];
     if (!hasFocus) {
-        palette = 
-"b #000000\n"
-". #ff0000\n"
-"X #ffff00\n"
-"o #868a8e\n"
-"O #c3c7cb\n"
-"+ #ffffff\n"
-"t #ff0000\n"
-;
+        palette = [_noFocusPalette UTF8String];
     }
 
     [self calculateRects:r];
@@ -529,9 +592,9 @@
     [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
     [bitmap drawVerticalLineAtX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
     {
-        char *left = [Definitions cStringForHotDogStandActiveTitleBarLeft];
-        char *middle = [Definitions cStringForHotDogStandActiveTitleBarMiddle];
-        char *right = [Definitions cStringForHotDogStandActiveTitleBarRight];
+        char *left = [_scaledActiveTitleBarLeftPixels UTF8String];
+        char *middle = [_scaledActiveTitleBarMiddlePixels UTF8String];
+        char *right = [_scaledActiveTitleBarRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
     }
     if (_titleBarTextRect.w > 0) {
@@ -540,56 +603,57 @@
             text = @"(no title)";
         }
 
-        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14];
+        text = [[[bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling] split:@"\n"] nth:0];
         if (text) {
-            int textWidth = [Definitions bitmapWidthForText:text];
-            int backWidth = textWidth + 14;
+            int textWidth = [bitmap bitmapWidthForText:text];
+            int backWidth = textWidth + 14*_pixelScaling;
             int backX = _titleBarTextRect.x + ((_titleBarTextRect.w - backWidth) / 2);
-            int textX = backX + 7;
+            int textX = backX + 7*_pixelScaling;
             if (hasFocus) {
                 [bitmap setColor:@"white"];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+7];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+7*_pixelScaling];
             } else {
                 [bitmap setColor:@"white"];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+7];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+7*_pixelScaling];
             }
         }
     }
 
     {
-        char *middle = [Definitions cStringForHotDogStandLeftBorderMiddle];
-        char *bottom = [Definitions cStringForHotDogStandLeftBorderBottom];
+        char *middle = [_scaledLeftBorderMiddlePixels UTF8String];
+        char *bottom = [_scaledLeftBorderBottomPixels UTF8String];
         [Definitions drawInBitmap:bitmap top:middle palette:palette middle:middle palette:palette bottom:bottom palette:palette x:_leftBorderRect.x y:_leftBorderRect.y h:_leftBorderRect.h];
     }
     {
-        char *top = [Definitions cStringForHotDogStandRightBorderMiddle];
+        char *top = [_scaledRightBorderMiddlePixels UTF8String];
         char *middle = top;
-        char *bottom = [Definitions cStringForHotDogStandRightBorderBottom];
+        char *bottom = [_scaledRightBorderBottomPixels UTF8String];
         [Definitions drawInBitmap:bitmap top:top palette:palette middle:middle palette:palette bottom:bottom palette:palette x:_rightBorderRect.x y:_rightBorderRect.y h:_rightBorderRect.h];
     }
 
     {
         Int4 r = _bottomBorderRect;
-        char *left = [Definitions cStringForHotDogStandBottomBorderLeft];
-        char *middle = [Definitions cStringForHotDogStandBottomBorderMiddle];
-        char *right = [Definitions cStringForHotDogStandBottomBorderRight];
+        char *left = [_scaledBottomBorderLeftPixels UTF8String];
+        char *middle = [_scaledBottomBorderMiddlePixels UTF8String];
+        char *right = [_scaledBottomBorderRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y w:r.w palette:palette];
     }
 
     if (hasFocus) {
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
-            char *closeButtonDown = [Definitions cStringForHotDogStandCloseButtonDown];
+            char *closeButtonDown = [_scaledCloseButtonDownPixels UTF8String];
             [bitmap drawCString:closeButtonDown palette:palette x:_closeButtonRect.x y:_closeButtonRect.y];
         }
         if ((_buttonDown == 'm') && (_buttonHover == 'm')) {
-            char *minimizeButtonDown = [Definitions cStringForHotDogStandMinimizeButtonDown];
+            char *minimizeButtonDown = [_scaledMinimizeButtonDownPixels UTF8String];
             [bitmap drawCString:minimizeButtonDown palette:palette x:_minimizeButtonRect.x y:_minimizeButtonRect.y];
         }
         if ((_buttonDown == 'M') && (_buttonHover == 'M')) {
-            char *maximizeButtonDown = [Definitions cStringForHotDogStandMaximizeButtonDown];
+            char *maximizeButtonDown = [_scaledMaximizeButtonDownPixels UTF8String];
             [bitmap drawCString:maximizeButtonDown palette:palette x:_maximizeButtonRect.x y:_maximizeButtonRect.y];
         }
         if (_buttonDown == 't') {
+// FIXME: pixel scaling
             char *black = "b #000000\n";
             char *white = "b #ffffff\n";
             char *gray  = "b #55aaaa\n";
@@ -753,6 +817,7 @@
             }
         }
         if (_buttonDown == 'r') {
+// FIXME: pixel scaling
             char *palette = "b #000000\nw #ffffff\n";
             char *h = [Definitions cStringForMacWindowSelectionHorizontal];
             char *v = [Definitions cStringForMacWindowSelectionVertical];
@@ -769,34 +834,34 @@
 }
 - (char)borderForX:(int)x y:(int)y w:(int)w h:(int)h
 {
-    if ((y >= 0) && (y < 4)) {
-        if ((x >= 0) && (x < 23)) {
+    if ((y >= 0) && (y < 4*_pixelScaling)) {
+        if ((x >= 0) && (x < 23*_pixelScaling)) {
             return '7';
-        } else if ((x >= w-23) && (x < w)) {
+        } else if ((x >= w-23*_pixelScaling) && (x < w)) {
             return '9';
         } else {
             return '8';
         }
-    } else if ((y >= h-4) && (y < h)) {
-        if ((x >= 0) && (x < 23)) {
+    } else if ((y >= h-4*_pixelScaling) && (y < h)) {
+        if ((x >= 0) && (x < 23*_pixelScaling)) {
             return '1';
-        } else if ((x >= w-23) && (x < w)) {
+        } else if ((x >= w-23*_pixelScaling) && (x < w)) {
             return '3';
         } else {
             return '2';
         }
-    } else if ((x >= 0) && (x < 4)) {
-        if ((y >= 0) && (y < 23)) {
+    } else if ((x >= 0) && (x < 4*_pixelScaling)) {
+        if ((y >= 0) && (y < 23*_pixelScaling)) {
             return '7';
-        } else if ((y >= h-23) && (y < h)) {
+        } else if ((y >= h-23*_pixelScaling) && (y < h)) {
             return '1';
         } else {
             return '4';
         }
-    } else if ((x >= w-4) && (x < w)) {
-        if ((y >= 0) && (y < 23)) {
+    } else if ((x >= w-4*_pixelScaling) && (x < w)) {
+        if ((y >= 0) && (y < 23*_pixelScaling)) {
             return '9';
-        } else if ((y >= h-23) && (y < h)) {
+        } else if ((y >= h-23*_pixelScaling) && (y < h)) {
             return '3';
         } else {
             return '6';
