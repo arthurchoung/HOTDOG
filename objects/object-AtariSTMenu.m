@@ -34,6 +34,9 @@
     id _selectedObject;
     id _contextualObject;
     int _scrollY;
+
+    int _pixelScaling;
+    id _scaledFont;
 }
 @end
 
@@ -44,13 +47,33 @@
     self = [super init];
     if (self) {
         _hasShadow = 0;
+
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        _pixelScaling = scaling;
+
+        id obj;
+        obj = [Definitions scaleFont:scaling
+                        :[Definitions arrayOfCStringsForAtariSTFont]
+                        :[Definitions arrayOfWidthsForAtariSTFont]
+                        :[Definitions arrayOfHeightsForAtariSTFont]
+                        :[Definitions arrayOfXSpacingsForAtariSTFont]];
+        [self setValue:obj forKey:@"scaledFont"];
     }
     return self;
 }
 - (int)preferredWidth
 {
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
-    [bitmap useAtariSTFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
     int highestWidth = 0;
     int highestRightWidth = 0;
     for (int i=0; i<[_array count]; i++) {
@@ -78,16 +101,16 @@
         }
     }
     if (highestWidth && highestRightWidth) {
-        return highestWidth + 8 + highestRightWidth + 18;
+        return highestWidth + 8*_pixelScaling + highestRightWidth + 18*_pixelScaling;
     }
     if (highestWidth) {
-        return highestWidth + 8 + 18;
+        return highestWidth + 8*_pixelScaling + 18*_pixelScaling;
     }
     return 1;
 }
 - (int)preferredHeight
 {
-    int h = [_array count]*16;
+    int h = [_array count]*16*_pixelScaling;
     if (h) {
         return h;
     }
@@ -100,6 +123,13 @@
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
     Int4 origRect = r;
     r.y -= _scrollY;
     [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
@@ -119,15 +149,13 @@
     r.w -= 4;
     r.h -= 4;
 
-    [bitmap useAtariSTFont];
-
     [self setValue:nil forKey:@"selectedObject"];
     id arr = _array;
     int numberOfCells = [arr count];
     if (!numberOfCells) {
         return;
     }
-    int cellHeight = 16;
+    int cellHeight = 16*_pixelScaling;
     for (int i=0; i<numberOfCells; i++) {
         Int4 cellRect = [Definitions rectWithX:r.x y:r.y+i*cellHeight w:r.w h:cellHeight];
         id elt = [arr nth:i];
@@ -145,7 +173,7 @@
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:cellRect];
                 [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
-                [bitmap drawBitmapText:text x:cellRect.x+4+18 y:cellRect.y];
+                [bitmap drawBitmapText:text x:cellRect.x+(4+18)*_pixelScaling y:cellRect.y];
             } else {
                 [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
                 [bitmap drawHorizontalDashedLineAtX:cellRect.x x:cellRect.x+cellRect.w y:cellRect.y+cellRect.h/2 dashLength:1];
@@ -155,12 +183,12 @@
             if ([text length]) {
                 if ([messageForClick length]) {
                     [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
-                    [bitmap drawBitmapText:text x:cellRect.x+4+18 y:cellRect.y];
+                    [bitmap drawBitmapText:text x:cellRect.x+(4+18)*_pixelScaling y:cellRect.y];
                 } else {
                     [bitmap setColor:@"black"];
                     [bitmap fillRect:cellRect];
                     [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
-                    [bitmap drawBitmapText:text x:cellRect.x+4+18 y:cellRect.y];
+                    [bitmap drawBitmapText:text x:cellRect.x+(4+18)*_pixelScaling y:cellRect.y];
                 }
             } else {
                 [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];

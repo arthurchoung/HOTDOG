@@ -28,6 +28,15 @@
 @implementation Definitions(jfoiwejfklsdjfklsdjlkfjsdejwfjkdlkfj)
 + (void)enterAtariSTMode
 {
+    [Definitions enterAtariSTMode:1];
+}
++ (void)enterAtariSTMode:(int)scaling
+{
+    if (scaling < 1) {
+        scaling = 1;
+    }
+    [Definitions setValue:nsfmt(@"%d", scaling) forEnvironmentVariable:@"HOTDOG_SCALING"];
+
     id windowManager = [@"windowManager" valueForKey];
     [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
@@ -39,17 +48,16 @@
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
     [windowManager reparentAllWindows:@"AtariSTWindow"];
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
-    [windowManager setValue:@"20" forKey:@"menuBarHeight"];
-    id menuBar = [windowManager openWindowForObject:[@"AtariSTMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
+    int h = 20*scaling;
+    [windowManager setValue:nsfmt(@"%d", h) forKey:@"menuBarHeight"];
+    id menuBar = [windowManager openWindowForObject:[@"AtariSTMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
     [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
 }
 @end
-@implementation Definitions(fjkdlsjfiowejfklsdjfklsdjfieiikljf)
-+ (char *)cStringForAtariSTInactiveTitleBarLeft
-{
-    return
+
+static char *inactiveTitleBarLeftPixels =
 "..\n"
 "..\n"
 "..\n"
@@ -73,10 +81,7 @@
 "..\n"
 "..\n"
 ;
-}
-+ (char *)cStringForAtariSTInactiveTitleBarMiddle
-{
-    return
+static char *inactiveTitleBarMiddlePixels =
 "..\n"
 "..\n"
 "XX\n"
@@ -100,10 +105,7 @@
 "..\n"
 "..\n"
 ;
-}
-+ (char *)cStringForAtariSTInactiveTitleBarRight
-{
-    return
+static char *inactiveTitleBarRightPixels =
 "..    \n"
 "..    \n"
 "......\n"
@@ -127,10 +129,7 @@
 "......\n"
 "......\n"
 ;
-}
-+ (char *)cStringForAtariSTInactiveBottomBorderLeft
-{
-    return
+static char *inactiveBottomBorderLeftPixels =
 "..\n"
 "..\n"
 "..\n"
@@ -158,10 +157,7 @@
 "  \n"
 "  \n"
 ;
-}
-+ (char *)cStringForAtariSTInactiveBottomBorderMiddle
-{
-    return
+static char *inactiveBottomBorderMiddlePixels =
 ".\n"
 ".\n"
 "X\n"
@@ -189,10 +185,7 @@
 ".\n"
 ".\n"
 ;
-}
-+ (char *)cStringForAtariSTInactiveBottomBorderRight
-{
-    return
+static char *inactiveBottomBorderRightPixels =
 "............................\n"
 "............................\n"
 "..XXXXXXXXXXXXXXXXXXXX......\n"
@@ -220,11 +213,8 @@
 "............................\n"
 "............................\n"
 ;
-}
 
-+ (char *)cStringForAtariSTActiveTitleBarLeft
-{
-    return
+static char *activeTitleBarLeftPixels =
 "..........................\n"
 "..........................\n"
 "..XXXXXXXXXXXXXXXXXXXX....\n"
@@ -248,10 +238,7 @@
 "..........................\n"
 "..........................\n"
 ;
-}
-+ (char *)cStringForAtariSTActiveTitleBarMiddle
-{
-    return
+static char *activeTitleBarMiddlePixels =
 "....\n"
 "....\n"
 "..XX\n"
@@ -275,10 +262,7 @@
 "....\n"
 "....\n"
 ;
-}
-+ (char *)cStringForAtariSTActiveTitleBarRight
-{
-    return
+static char *activeTitleBarRightPixels =
 "..........................    \n"
 "..........................    \n"
 "....XXXXXXXXXXXXXXXXXXXX......\n"
@@ -302,17 +286,11 @@
 "..............................\n"
 "..............................\n"
 ;
-}
-+ (char *)cStringForAtariSTLeftBorderMiddle
-{
-    return
+static char *leftBorderMiddlePixels =
 "..\n"
 ;
-}
 
-+ (char *)cStringForAtariSTBottomBorderLeft
-{
-    return
+static char *bottomBorderLeftPixels =
 "........................\n"
 "........................\n"
 "..XXXXXXXXXXXXXXXXXXXX..\n"
@@ -340,10 +318,7 @@
 "  ......................\n"
 "  ......................\n"
 ;
-}
-+ (char *)cStringForAtariSTBottomBorderMiddle
-{
-    return
+static char *bottomBorderMiddlePixels =
 ".\n"
 ".\n"
 "X\n"
@@ -371,10 +346,7 @@
 ".\n"
 ".\n"
 ;
-}
-+ (char *)cStringForAtariSTBottomBorderRight
-{
-    return
+static char *bottomBorderRightPixels =
 "..................................................\n"
 "..................................................\n"
 "..XXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXXX......\n"
@@ -402,12 +374,9 @@
 "..................................................\n"
 "..................................................\n"
 ;
-}
 
 
-+ (char *)cStringForAtariSTRightBorderTop
-{
-    return
+static char *rightBorderTopPixels =
 "..XXXXXXXXXXXXXXXXXXXX......\n"
 "..XXXXXXXXXXXXXXXXXXXX......\n"
 "..XXXXXXXX....XXXXXXXX......\n"
@@ -429,16 +398,10 @@
 "............................\n"
 "............................\n"
 ;
-}
-+ (char *)cStringForAtariSTRightBorderMiddle
-{
-    return
+static char *rightBorderMiddlePixels =
 "..XXXXXXXXXXXXXXXXXXXX......\n"
 ;
-}
-+ (char *)cStringForAtariSTRightBorderBottom
-{
-    return
+static char *rightBorderBottomPixels =
 "............................\n"
 "............................\n"
 "..XXXXXXXXXXXXXXXXXXXX......\n"
@@ -460,20 +423,14 @@
 "..XXXXXXXX....XXXXXXXX......\n"
 "..XXXXXXXX....XXXXXXXX......\n"
 ;
-}
 
-+ (char *)cStringForAtariSTInactiveRightBorderMiddle
-{
-    return
+static char *inactiveRightBorderMiddlePixels =
 "..XXXXXXXXXXXXXXXXXXXX......\n"
 ;
-}
 
 
 
-+ (char *)cStringForAtariSTCloseButton
-{
-    return
+static char *closeButtonPixels =
 "XXXXXXXXXXXXXXXXXXXX\n"
 "XXXXXXXXXXXXXXXXXXXX\n"
 "XXXXXX........XXXXXX\n"
@@ -493,9 +450,7 @@
 "XXXXXXXXXXXXXXXXXXXX\n"
 "XXXXXXXXXXXXXXXXXXXX\n"
 ;
-}
 
-@end
 
 @interface AtariSTWindow : IvarObject
 {
@@ -519,6 +474,30 @@
     Int4 _closeButtonRect;
     Int4 _maximizeButtonRect;
     Int4 _resizeButtonRect;
+
+    // setPixelScale:
+    int _pixelScaling;
+    id _scaledFont;
+    id _scaledInactiveTitleBarLeftPixels;
+    id _scaledInactiveTitleBarMiddlePixels;
+    id _scaledInactiveTitleBarRightPixels;
+    id _scaledInactiveBottomBorderLeftPixels;
+    id _scaledInactiveBottomBorderMiddlePixels;
+    id _scaledInactiveBottomBorderRightPixels;
+    id _scaledActiveTitleBarLeftPixels;
+    int _scaledTitleBarLeftWidth;
+    id _scaledActiveTitleBarMiddlePixels;
+    int _scaledTitleBarHeight;
+    id _scaledActiveTitleBarRightPixels;
+    id _scaledLeftBorderMiddlePixels;
+    id _scaledBottomBorderLeftPixels;
+    id _scaledBottomBorderMiddlePixels;
+    id _scaledBottomBorderRightPixels;
+    id _scaledRightBorderTopPixels;
+    id _scaledRightBorderMiddlePixels;
+    id _scaledRightBorderBottomPixels;
+    id _scaledInactiveRightBorderMiddlePixels;
+    id _scaledCloseButtonPixels;
 }
 @end
 @implementation AtariSTWindow
@@ -526,38 +505,108 @@
 {
     self = [super init];
     if (self) {
-        _leftBorder = 2;
-        _rightBorder = 28;
-        _topBorder = 22;
-        _bottomBorder = 26;
-        _hasShadow = -1;
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        [self setPixelScaling:scaling];
+
     }
     return self;
 }
 
+- (void)setPixelScaling:(int)scaling
+{
+    _pixelScaling = scaling;
+
+    _leftBorder = 2*_pixelScaling;
+    _rightBorder = 28*_pixelScaling;
+    _topBorder = 22*_pixelScaling;
+    _bottomBorder = 26*_pixelScaling;
+    _hasShadow = -1;
+
+    id obj;
+    obj = [Definitions scaleFont:scaling
+                    :[Definitions arrayOfCStringsForAtariSTFont]
+                    :[Definitions arrayOfWidthsForAtariSTFont]
+                    :[Definitions arrayOfHeightsForAtariSTFont]
+                    :[Definitions arrayOfXSpacingsForAtariSTFont]];
+    [self setValue:obj forKey:@"scaledFont"];
+
+    obj = [nsfmt(@"%s", inactiveTitleBarLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveTitleBarLeftPixels"];
+
+    obj = [nsfmt(@"%s", inactiveTitleBarMiddlePixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveTitleBarMiddlePixels"];
+
+    obj = [nsfmt(@"%s", inactiveTitleBarRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveTitleBarRightPixels"];
+
+    obj = [nsfmt(@"%s", inactiveBottomBorderLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveBottomBorderLeftPixels"];
+
+    obj = [nsfmt(@"%s", inactiveBottomBorderMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveBottomBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", inactiveBottomBorderRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveBottomBorderRightPixels"];
+
+    obj = [nsfmt(@"%s", activeTitleBarLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveTitleBarLeftPixels"];
+    _scaledTitleBarLeftWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", activeTitleBarMiddlePixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveTitleBarMiddlePixels"];
+    _scaledTitleBarHeight = [Definitions heightForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", activeTitleBarRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveTitleBarRightPixels"];
+
+    obj = [nsfmt(@"%s", leftBorderMiddlePixels) asXScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledLeftBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", bottomBorderLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderLeftPixels"];
+
+    obj = [nsfmt(@"%s", bottomBorderMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", bottomBorderRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderRightPixels"];
+
+    obj = [nsfmt(@"%s", rightBorderTopPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledRightBorderTopPixels"];
+
+    obj = [nsfmt(@"%s", rightBorderMiddlePixels) asXScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledRightBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", rightBorderBottomPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledRightBorderBottomPixels"];
+
+    obj = [nsfmt(@"%s", inactiveRightBorderMiddlePixels) asXScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveRightBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", closeButtonPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledCloseButtonPixels"];
+}
+
 - (void)calculateRects:(Int4)r
 {
-    char *titleBarLeft = [Definitions cStringForAtariSTActiveTitleBarLeft];
-    char *titleBarMiddle = [Definitions cStringForAtariSTActiveTitleBarMiddle];
-    char *titleBarRight = [Definitions cStringForAtariSTActiveTitleBarRight];
-    int titleBarLeftWidth = [Definitions widthForCString:titleBarLeft];
-    int titleBarHeight = [Definitions heightForCString:titleBarMiddle];
-
-    _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:titleBarHeight];
+    _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:_scaledTitleBarHeight];
     _titleBarTextRect = _titleBarRect;
-    _titleBarTextRect.x = titleBarLeftWidth+4;
-    _titleBarTextRect.w -= titleBarLeftWidth+4;
+    _titleBarTextRect.x = _scaledTitleBarLeftWidth+4*_pixelScaling;
+    _titleBarTextRect.w -= _scaledTitleBarLeftWidth+4*_pixelScaling;
 
     _leftBorderRect = r;
-    _leftBorderRect.y += titleBarHeight;
-    _leftBorderRect.h -= titleBarHeight;
+    _leftBorderRect.y += _scaledTitleBarHeight;
+    _leftBorderRect.h -= _scaledTitleBarHeight;
     _leftBorderRect.h -= _bottomBorder;
     _leftBorderRect.w = _leftBorder;
 
     _rightBorderRect = r;
     _rightBorderRect.x += r.w-_rightBorder;
-    _rightBorderRect.y += titleBarHeight;
-    _rightBorderRect.h -= titleBarHeight;
+    _rightBorderRect.y += _scaledTitleBarHeight;
+    _rightBorderRect.h -= _scaledTitleBarHeight;
     _rightBorderRect.h -= _bottomBorder;
     _rightBorderRect.w = _rightBorder;
 
@@ -566,16 +615,16 @@
     _bottomBorderRect.h = _bottomBorder;
 
     _closeButtonRect = _titleBarRect;
-    _closeButtonRect.x += 2;
-    _closeButtonRect.y += 2;
-    _closeButtonRect.w = 20;
-    _closeButtonRect.h = 18;
+    _closeButtonRect.x += 2*_pixelScaling;
+    _closeButtonRect.y += 2*_pixelScaling;
+    _closeButtonRect.w = 20*_pixelScaling;
+    _closeButtonRect.h = 18*_pixelScaling;
 
     _maximizeButtonRect = _titleBarRect;
-    _maximizeButtonRect.x = _maximizeButtonRect.x+_maximizeButtonRect.w-6-20;
-    _maximizeButtonRect.y += 2;
-    _maximizeButtonRect.w = 20;
-    _maximizeButtonRect.h = 18;
+    _maximizeButtonRect.x = _maximizeButtonRect.x+_maximizeButtonRect.w-(6+20)*_pixelScaling;
+    _maximizeButtonRect.y += 2*_pixelScaling;
+    _maximizeButtonRect.w = 20*_pixelScaling;
+    _maximizeButtonRect.h = 18*_pixelScaling;
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
@@ -583,7 +632,13 @@
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
-    [bitmap useAtariSTFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
     char *palette = ". #000000\nX #eeeeee\n";
     int hasFocus = [context intValueForKey:@"hasFocus"];
 
@@ -594,14 +649,14 @@
     [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
     [bitmap drawVerticalLineAtX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
     if (hasFocus) {
-        char *left = [Definitions cStringForAtariSTActiveTitleBarLeft];
-        char *middle = [Definitions cStringForAtariSTActiveTitleBarMiddle];
-        char *right = [Definitions cStringForAtariSTActiveTitleBarRight];
+        char *left = [_scaledActiveTitleBarLeftPixels UTF8String];
+        char *middle = [_scaledActiveTitleBarMiddlePixels UTF8String];
+        char *right = [_scaledActiveTitleBarRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
     } else {
-        char *left = [Definitions cStringForAtariSTInactiveTitleBarLeft];
-        char *middle = [Definitions cStringForAtariSTInactiveTitleBarMiddle];
-        char *right = [Definitions cStringForAtariSTInactiveTitleBarRight];
+        char *left = [_scaledInactiveTitleBarLeftPixels UTF8String];
+        char *middle = [_scaledInactiveTitleBarMiddlePixels UTF8String];
+        char *right = [_scaledInactiveTitleBarRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
     }
     if (_titleBarTextRect.w > 0) {
@@ -610,35 +665,35 @@
             text = @"(no title)";
         }
 
-        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14];
+        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling];
         if (text) {
             int textWidth = [bitmap bitmapWidthForText:text];
-            int backWidth = textWidth + 14;
+            int backWidth = textWidth + 14*_pixelScaling;
             int backX = _titleBarTextRect.x + ((_titleBarTextRect.w - backWidth) / 2);
-            int textX = backX + 7;
+            int textX = backX + 7*_pixelScaling;
             if (hasFocus) {
                 [bitmap setColor:@"white"];
-                [bitmap fillRect:[Definitions rectWithX:backX y:_titleBarTextRect.y+4 w:backWidth h:16]];
+                [bitmap fillRect:[Definitions rectWithX:backX y:_titleBarTextRect.y+4*_pixelScaling w:backWidth h:16*_pixelScaling]];
                 [bitmap setColorIntR:0 g:0 b:0 a:255];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4*_pixelScaling];
             } else {
                 [bitmap setColorIntR:0 g:0 b:0 a:255];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4*_pixelScaling];
             }
         }
     }
 
     {
-        char *middle = [Definitions cStringForAtariSTLeftBorderMiddle];
+        char *middle = [_scaledLeftBorderMiddlePixels UTF8String];
         [Definitions drawInBitmap:bitmap top:middle palette:palette middle:middle palette:palette bottom:middle palette:palette x:_leftBorderRect.x y:_leftBorderRect.y h:_leftBorderRect.h];
     }
     if (hasFocus) {
-        char *top = [Definitions cStringForAtariSTRightBorderTop];
-        char *middle = [Definitions cStringForAtariSTRightBorderMiddle];
-        char *bottom = [Definitions cStringForAtariSTRightBorderBottom];
+        char *top = [_scaledRightBorderTopPixels UTF8String];
+        char *middle = [_scaledRightBorderMiddlePixels UTF8String];
+        char *bottom = [_scaledRightBorderBottomPixels UTF8String];
         [Definitions drawInBitmap:bitmap top:top palette:palette middle:middle palette:palette bottom:bottom palette:palette x:_rightBorderRect.x y:_rightBorderRect.y h:_rightBorderRect.h];
     } else {
-        char *top = [Definitions cStringForAtariSTInactiveRightBorderMiddle];
+        char *top = [_scaledInactiveRightBorderMiddlePixels UTF8String];
         char *middle = top;
         char *bottom = top;
         [Definitions drawInBitmap:bitmap top:middle palette:palette middle:middle palette:palette bottom:bottom palette:palette x:_rightBorderRect.x y:_rightBorderRect.y h:_rightBorderRect.h];
@@ -646,30 +701,31 @@
 
     if (hasFocus) {
         Int4 r = _bottomBorderRect;
-        char *left = [Definitions cStringForAtariSTBottomBorderLeft];
-        char *middle = [Definitions cStringForAtariSTBottomBorderMiddle];
-        char *right = [Definitions cStringForAtariSTBottomBorderRight];
+        char *left = [_scaledBottomBorderLeftPixels UTF8String];
+        char *middle = [_scaledBottomBorderMiddlePixels UTF8String];
+        char *right = [_scaledBottomBorderRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y w:r.w palette:palette];
     } else {
         Int4 r = _bottomBorderRect;
-        char *left = [Definitions cStringForAtariSTInactiveBottomBorderLeft];
-        char *middle = [Definitions cStringForAtariSTInactiveBottomBorderMiddle];
-        char *right = [Definitions cStringForAtariSTInactiveBottomBorderRight];
+        char *left = [_scaledInactiveBottomBorderLeftPixels UTF8String];
+        char *middle = [_scaledInactiveBottomBorderMiddlePixels UTF8String];
+        char *right = [_scaledInactiveBottomBorderRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y w:r.w palette:palette];
     }
 
     if (hasFocus) {
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
             char *reversePalette = "X #000000\n. #ffffff\n";
-            char *closeButton = [Definitions cStringForAtariSTCloseButton];
+            char *closeButton = [_scaledCloseButtonPixels UTF8String];
             [bitmap drawCString:closeButton palette:reversePalette x:_closeButtonRect.x y:_closeButtonRect.y];
         }
         if ((_buttonDown == 'm') && (_buttonHover == 'm')) {
             char *reversePalette = "X #000000\n. #ffffff\n";
-            char *maximizeButton = [Definitions cStringForAtariSTCloseButton];
+            char *maximizeButton = [_scaledCloseButtonPixels UTF8String];
             [bitmap drawCString:maximizeButton palette:reversePalette x:_maximizeButtonRect.x y:_maximizeButtonRect.y];
         }
         if ((_buttonDown == 't') || (_buttonDown == 'r')) {
+//FIXME pixelScaling
             char *black = "b #000000\n";
             char *white = "b #ffffff\n";
             for (int i=4; i<r.w; i+=2) {
@@ -706,6 +762,7 @@
             }
         }
         if (_buttonDown == 'r') {
+//FIXME pixelScaling
             char *black = "b #000000\n";
             char *white = "b #ffffff\n";
             for (int i=4; i<r.w-28; i+=2) {
@@ -745,8 +802,8 @@
     int mouseY = [event intValueForKey:@"mouseY"];
     int viewWidth = [event intValueForKey:@"viewWidth"];
     int viewHeight = [event intValueForKey:@"viewHeight"];
-    if (mouseX >= viewWidth-28) {
-        if (mouseY >= viewHeight-26) {
+    if (mouseX >= viewWidth-28*_pixelScaling) {
+        if (mouseY >= viewHeight-26*_pixelScaling) {
             _buttonDown = 'r';
             _buttonDownX = mouseX;
             _buttonDownY = mouseY;

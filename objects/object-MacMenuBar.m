@@ -25,28 +25,20 @@
 
 #import "HOTDOG.h"
 
-@implementation Definitions(fjklesjkfljskdlfjklsdjfklsd)
-+ (char *)cStringForUpperLeftMenuBar
-{
-    return
+static char *upperLeftMenuBarPixels =
 "bbbbb\n"
 "bbb..\n"
 "bb...\n"
 "b....\n"
 "b....\n"
 ;
-}
-+ (char *)cStringForUpperRightMenuBar
-{
-    return
+static char *upperRightMenuBarPixels =
 "bbbbb\n"
 "..bbb\n"
 "...bb\n"
 "....b\n"
 "....b\n"
 ;
-}
-@end
 
 @interface MacMenuBar : IvarObject
 {
@@ -57,6 +49,9 @@
     id _selectedDict;
     id _menuDict;
     id _array;
+
+    int _pixelScaling;
+    id _scaledFont;
 }
 @end
 
@@ -82,12 +77,27 @@
 {
     self = [super init];
     if (self) {
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        [self setPixelScaling:scaling];
         id configPath = [Definitions configDir:@"Config/menuBar.csv"];
         [self setValue:configPath forKey:@"configPath"];
     }
     return self;
 }
 
+- (void)setPixelScaling:(int)scaling
+{
+    _pixelScaling = scaling;
+    id scaledFont = [Definitions scaleFont:scaling
+                        :[Definitions arrayOfCStringsForChicagoFont]
+                        :[Definitions arrayOfWidthsForChicagoFont]
+                        :[Definitions arrayOfHeightsForChicagoFont]
+                        :[Definitions arrayOfXSpacingsForChicagoFont]];
+    [self setValue:scaledFont forKey:@"scaledFont"];
+}
 - (void)updateMenuBar
 {
     id arr = [_configPath parseCSVFile];
@@ -323,26 +333,37 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
         h = [obj preferredHeight];
     }
     id windowManager = [@"windowManager" valueForKey];
-    id menuDict = [windowManager openWindowForObject:obj x:x y:19 w:w+3 h:h+3];
+    id menuDict = [windowManager openWindowForObject:obj x:x y:19*_pixelScaling w:w+3 h:h+3];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
     [windowManager XSetInputFocus:[menuDict unsignedLongValueForKey:@"window"]];
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
-    char *leftCornerStr = [Definitions cStringForUpperLeftMenuBar];
-    int leftCornerWidth = [Definitions widthForCString:leftCornerStr];
-    char *rightCornerStr = [Definitions cStringForUpperRightMenuBar];
-    int rightCornerWidth = [Definitions widthForCString:rightCornerStr];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
 
-    [bitmap setColor:@"white"];
-    [bitmap fillRect:r];
-    [bitmap setColor:@"black"];
-    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+19];
+    char *leftCornerStr = upperLeftMenuBarPixels;
+    int leftCornerWidth = [Definitions widthForCString:leftCornerStr];
+    char *rightCornerStr = upperRightMenuBarPixels;
+    int rightCornerWidth = [Definitions widthForCString:rightCornerStr];
 
     id windowManager = [@"windowManager" valueForKey];
     int mouseRootX = [windowManager intValueForKey:@"mouseX"];
     id mouseMonitor = [Definitions monitorForX:mouseRootX y:0];
+
+    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
+    [bitmap setColor:@"white"];
+    [bitmap fillRect:r];
+    [bitmap setColor:@"black"];
+    for (int i=0; i<_pixelScaling; i++) {
+        [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+menuBarHeight-1-i];
+    }
+
 
     id monitors = [Definitions monitorConfig];
     for (int monitorI=0; monitorI<[monitors count]; monitorI++) {
@@ -363,16 +384,15 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
                 monitorIndex++;
             }
             [bitmap setColorIntR:0 g:0 b:0 a:255];
-            [bitmap drawBitmapText:[text join:@""] x:monitorX+leftCornerWidth*2 y:4];
+            [bitmap drawBitmapText:[text join:@""] x:monitorX+leftCornerWidth*2 y:4*_pixelScaling];
         }
     }
 
     int mouseMonitorX = [mouseMonitor intValueForKey:@"x"];
     int mouseMonitorWidth = [mouseMonitor intValueForKey:@"width"];
 
+    int flexibleIndex = -1;
     {
-        int flexibleIndex = -1;
-
         int x = leftCornerWidth;
         for (int i=0; i<[_array count]; i++) {
             id elt = [_array nth:i];
@@ -382,17 +402,43 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
             }
             int flexible = [elt intValueForKey:@"flexible"];
             int leftPadding = [elt intValueForKey:@"leftPadding"];
+            leftPadding *= _pixelScaling;
             int rightPadding = [elt intValueForKey:@"rightPadding"];
+            rightPadding *= _pixelScaling;
             int w = 0;
             if (flexible) {
                 flexibleIndex = i;
             } else {
-                if ([obj respondsToSelector:@selector(preferredWidthForBitmap:)]) {
-                    w = [obj preferredWidthForBitmap:bitmap]+leftPadding+rightPadding;
-                } else if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                    w = [obj preferredWidth]+leftPadding+rightPadding;
+                int highestWidth = [elt intValueForKey:@"highestWidth"];
+                id text = nil;
+                if ([obj respondsToSelector:@selector(text)]) {
+                    text = [obj text];
+                }
+                if (!text) {
+                    text = [obj valueForKey:@"text"];
+                }
+                if (text) {
+                    w = [bitmap bitmapWidthForText:text];
+                    w += leftPadding+rightPadding;
+                    if (w > highestWidth) {
+                        [elt setValue:nsfmt(@"%d", w) forKey:@"highestWidth"];
+                    } else {
+                        w = highestWidth;
+                    }
                 } else {
-                    w = 100;
+                    id pixels = [obj valueForKey:@"pixels"];
+                    if (pixels) {
+                        w = [Definitions widthForCString:[pixels UTF8String]];
+                        w *= _pixelScaling;
+                        w += leftPadding+rightPadding;
+                        if (w > highestWidth) {
+                            [elt setValue:nsfmt(@"%d", w) forKey:@"highestWidth"];
+                        } else {
+                            w = highestWidth;
+                        }
+                    } else {
+                        w = 100;
+                    }
                 }
             }
             [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
@@ -406,20 +452,35 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
                 {
                     id elt = [_array nth:flexibleIndex];
                     int leftPadding = [elt intValueForKey:@"leftPadding"];
+                    leftPadding *= _pixelScaling;
                     int rightPadding = [elt intValueForKey:@"rightPadding"];
+                    rightPadding *= _pixelScaling;
                     int oldX = [elt intValueForKey:@"x"];
                     int newW = remainingX - leftPadding - rightPadding;
                     if (newW > 0) {
                         id obj = [elt valueForKey:@"object"];
-                        if ([obj respondsToSelector:@selector(preferredWidthForBitmap:)]) {
-                            int w = [obj preferredWidthForBitmap:bitmap]+leftPadding+rightPadding;
+                        id text = nil;
+                        if ([obj respondsToSelector:@selector(text)]) {
+                            text = [obj text];
+                        }
+                        if (!text) {
+                            text = [obj valueForKey:@"text"];
+                        }
+                        if (text) {
+                            int w = [bitmap bitmapWidthForText:text];
+                            w += leftPadding+rightPadding;
                             if (w < newW) {
                                 newW = w;
                             }
-                        } else if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                            int w = [obj preferredWidth]+leftPadding+rightPadding;
-                            if (w < newW) {
-                                newW = w;
+                        } else {
+                            id pixels = [obj valueForKey:@"pixels"];
+                            if (pixels) {
+                                int w = [Definitions widthForCString:[pixels UTF8String]];
+                                w *= _pixelScaling;
+                                w += leftPadding+rightPadding;
+                                if (w < newW) {
+                                    newW = w;
+                                }
                             }
                         }
                         [elt setValue:nsfmt(@"%d", oldX+leftPadding) forKey:@"x"];
@@ -443,36 +504,85 @@ NSLog(@"MacMenuBar handleMouseUp event %@", event);
         r1.w = [elt intValueForKey:@"width"];
 
         Int4 r2 = r1;
-        r2.y += 1;
-        r2.h -= 1;
+        r2.y += 1*_pixelScaling;
+        r2.h -= 1*_pixelScaling;
         id obj = [elt valueForKey:@"object"];
         int leftPadding = [elt intValueForKey:@"leftPadding"];
+        leftPadding *= _pixelScaling;
         int rightPadding = [elt intValueForKey:@"rightPadding"];
+        rightPadding *= _pixelScaling;
         if ((_buttonDown || (_closingIteration > 0)) && (_selectedDict == elt)) {
-            if ([obj respondsToSelector:@selector(drawHighlightedInBitmap:rect:)]) {
+            id text = nil;
+            if ([obj respondsToSelector:@selector(text)]) {
+                text = [obj text];
+            }
+            if (!text) {
+                text = [obj valueForKey:@"text"];
+            }
+            if (text) {
+                Int4 r3 = r2;
+                r3.x += leftPadding;
+                r3.w -= leftPadding+rightPadding;
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:r2];
-
-                Int4 r3 = r2;
-                r3.x += leftPadding;
-                r3.w -= leftPadding+rightPadding;
-                [obj drawHighlightedInBitmap:bitmap rect:r3];
-            } else if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
-                Int4 r3 = r2;
-                r3.x += leftPadding;
-                r3.w -= leftPadding+rightPadding;
-                [bitmap setColor:@"black"];
-                [obj drawInBitmap:bitmap rect:r3];
+                [bitmap setColor:@"white"];
+                if (i == flexibleIndex) {
+                    int textWidth = [bitmap bitmapWidthForText:text];
+                    if (textWidth > r3.w) {
+                        text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
+                    }
+                }
+                [bitmap drawBitmapText:text x:r3.x y:r3.y+3*_pixelScaling];
             } else {
+                id palette = [obj valueForKey:@"highlightedPalette"];
+                if (!palette) {
+                    palette = [obj valueForKey:@"palette"];
+                }
+                if (palette) {
+                    id pixels = [obj valueForKey:@"pixels"];
+                    if (pixels) {
+                        Int4 r3 = r2;
+                        r3.x += leftPadding;
+                        r3.w -= leftPadding+rightPadding;
+                        [bitmap setColor:@"black"];
+                        [bitmap fillRect:r2];
+                        pixels = [pixels asXYScaledPixels:_pixelScaling];
+                        [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r3.x y:r3.y];
+                    }
+                }
             }
         } else {
-            if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
+            id text = nil;
+            if ([obj respondsToSelector:@selector(text)]) {
+                text = [obj text];
+            }
+            if (!text) {
+                text = [obj valueForKey:@"text"];
+            }
+            if (text) {
                 Int4 r3 = r2;
                 r3.x += leftPadding;
                 r3.w -= leftPadding+rightPadding;
                 [bitmap setColor:@"black"];
-                [obj drawInBitmap:bitmap rect:r3];
+                if (i == flexibleIndex) {
+                    int textWidth = [bitmap bitmapWidthForText:text];
+                    if (textWidth > r3.w) {
+                        text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
+                    }
+                }
+                [bitmap drawBitmapText:text x:r3.x y:r3.y+3*_pixelScaling];
             } else {
+                id palette = [obj valueForKey:@"palette"];
+                if (palette) {
+                    id pixels = [obj valueForKey:@"pixels"];
+                    if (pixels) {
+                        Int4 r3 = r2;
+                        r3.x += leftPadding;
+                        r3.w -= leftPadding+rightPadding;
+                        pixels = [pixels asXYScaledPixels:_pixelScaling];
+                        [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r3.x y:r3.y];
+                    }
+                }
             }
         }
     }

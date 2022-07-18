@@ -29,6 +29,15 @@
 @implementation Definitions(jfoiwcciiejfklsdjfklsdjlkfjsdlkfj)
 + (void)enterMacClassicMode
 {
+    [Definitions enterMacClassicMode:1];
+}
++ (void)enterMacClassicMode:(int)scaling
+{
+    if (scaling < 1) {
+        scaling = 1;
+    }
+    [Definitions setValue:nsfmt(@"%d", scaling) forEnvironmentVariable:@"HOTDOG_SCALING"];
+
     id windowManager = [@"windowManager" valueForKey];
     [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
@@ -48,17 +57,16 @@
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
     [windowManager reparentAllWindows:@"MacClassicWindow"];
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
-    [windowManager setValue:@"20" forKey:@"menuBarHeight"];
-    id menuBar = [windowManager openWindowForObject:[@"MacMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
+    int h = 20*scaling;
+    [windowManager setValue:nsfmt(@"%d", h) forKey:@"menuBarHeight"];
+    id menuBar = [windowManager openWindowForObject:[@"MacMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
     [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
 }
 @end
-@implementation Definitions(fjkdlemdisjfiowejfklsdjfklsdkljf)
-+ (char *)cStringForMacClassicInactiveTitleBarLeft
-{
-    return
+
+static char *inactiveTitleBarLeftPixels =
 "b\n"
 "b\n"
 "b\n"
@@ -79,10 +87,7 @@
 "b\n"
 "b\n"
 ;
-}
-+ (char *)cStringForMacClassicInactiveTitleBarMiddle
-{
-    return
+static char *inactiveTitleBarMiddlePixels =
 "b\n"
 ".\n"
 ".\n"
@@ -103,10 +108,7 @@
 ".\n"
 "b\n"
 ;
-}
-+ (char *)cStringForMacClassicInactiveTitleBarRight
-{
-    return
+static char *inactiveTitleBarRightPixels =
 "b \n"
 "bb\n"
 "bb\n"
@@ -127,10 +129,7 @@
 "bb\n"
 "bb\n"
 ;
-}
-+ (char *)cStringForMacClassicInactiveBottomBorderLeft
-{
-    return
+static char *inactiveBottomBorderLeftPixels =
 "b\n"
 "b\n"
 "b\n"
@@ -149,10 +148,7 @@
 "b\n"
 " \n"
 ;
-}
-+ (char *)cStringForMacClassicInactiveBottomBorderMiddle
-{
-    return
+static char *inactiveBottomBorderMiddlePixels =
 "b\n"
 ".\n"
 ".\n"
@@ -171,10 +167,7 @@
 "b\n"
 "b\n"
 ;
-}
-+ (char *)cStringForMacClassicInactiveBottomBorderRight
-{
-    return
+static char *inactiveBottomBorderRightPixels =
 "bbbbbbbbbbbbbbbbb\n"
 "b..............bb\n"
 "b..............bb\n"
@@ -193,11 +186,8 @@
 "bbbbbbbbbbbbbbbbb\n"
 "bbbbbbbbbbbbbbbbb\n"
 ;
-}
 
-+ (char *)cStringForMacClassicActiveTitleBarLeft
-{
-    return
+static char *activeTitleBarLeftPixels =
 "bbbbbbbbbbbbbbbbbbbbb\n"
 "b....................\n"
 "b....................\n"
@@ -218,10 +208,7 @@
 "b....................\n"
 "bbbbbbbbbbbbbbbbbbbbb\n"
 ;
-}
-+ (char *)cStringForMacClassicActiveTitleBarMiddle
-{
-    return
+static char *activeTitleBarMiddlePixels =
 "b\n"
 ".\n"
 ".\n"
@@ -242,10 +229,7 @@
 ".\n"
 "b\n"
 ;
-}
-+ (char *)cStringForMacClassicActiveTitleBarRight
-{
-    return
+static char *activeTitleBarRightPixels =
 "bbbbbbbbbbbbbbbbbbbbb.\n"
 "....................bb\n"
 "....................bb\n"
@@ -266,17 +250,11 @@
 "....................bb\n"
 "bbbbbbbbbbbbbbbbbbbbbb\n"
 ;
-}
-+ (char *)cStringForMacClassicLeftBorderMiddle
-{
-    return
+static char *leftBorderMiddlePixels =
 "b\n"
 ;
-}
 
-+ (char *)cStringForMacClassicBottomBorderLeft
-{
-    return
+static char *bottomBorderLeftPixels =
 "b\n"
 "b\n"
 "b\n"
@@ -295,10 +273,7 @@
 "b\n"
 ".\n"
 ;
-}
-+ (char *)cStringForMacClassicBottomBorderMiddle
-{
-    return
+static char *bottomBorderMiddlePixels =
 " \n"
 " \n"
 " \n"
@@ -317,10 +292,7 @@
 "b\n"
 "b\n"
 ;
-}
-+ (char *)cStringForMacClassicBottomBorderRight
-{
-    return
+static char *bottomBorderRightPixels =
 "bbbbbbbbbbbbbbbbb\n"
 "b..............bb\n"
 "b..............bb\n"
@@ -339,36 +311,20 @@
 "bbbbbbbbbbbbbbbbb\n"
 "bbbbbbbbbbbbbbbbb\n"
 ;
-}
 
-+ (char *)cStringForMacClassicRightBorderTop
-{
-    return "";
-}
+static char *rightBorderTopPixels = "";
 
-+ (char *)cStringForMacClassicRightBorderMiddle
-{
-    return
+static char *rightBorderMiddlePixels =
 "bb\n"
 ;
-}
-+ (char *)cStringForMacClassicRightBorderBottom
-{
-    return "";
-}
-+ (char *)cStringForMacClassicInactiveRightBorderMiddle
-{
-    return
+
+static char *rightBorderBottomPixels = "";
+
+static char *inactiveRightBorderMiddlePixels =
 "bb\n"
 ;
-}
 
-
-
-
-+ (char *)cStringForMacClassicCloseButtonDown
-{
-    return
+static char *closeButtonDownPixels =
 "bbbbbbbbbbb\n"
 "b....b....b\n"
 "b.b..b..b.b\n"
@@ -381,9 +337,6 @@
 "b....b....b\n"
 "bbbbbbbbbbb\n"
 ;
-}
-
-@end
 
 @interface MacClassicWindow : IvarObject
 {
@@ -408,6 +361,30 @@
     Int4 _closeButtonRect;
     Int4 _maximizeButtonRect;
     Int4 _resizeButtonRect;
+
+    // setPixelScale:
+    int _pixelScaling;
+    id _scaledFont;
+    id _scaledInactiveTitleBarLeftPixels;
+    id _scaledInactiveTitleBarMiddlePixels;
+    id _scaledInactiveTitleBarRightPixels;
+    id _scaledInactiveBottomBorderLeftPixels;
+    id _scaledInactiveBottomBorderMiddlePixels;
+    id _scaledInactiveBottomBorderRightPixels;
+    id _scaledActiveTitleBarLeftPixels;
+    int _scaledActiveTitleBarLeftWidth;
+    id _scaledActiveTitleBarMiddlePixels;
+    int _scaledActiveTitleBarHeight;
+    id _scaledActiveTitleBarRightPixels;
+    id _scaledLeftBorderMiddlePixels;
+    id _scaledBottomBorderLeftPixels;
+    id _scaledBottomBorderMiddlePixels;
+    id _scaledBottomBorderRightPixels;
+    id _scaledRightBorderTopPixels;
+    id _scaledRightBorderMiddlePixels;
+    id _scaledRightBorderBottomPixels;
+    id _scaledInactiveRightBorderMiddlePixels;
+    id _scaledCloseButtonDownPixels;
 }
 @end
 @implementation MacClassicWindow
@@ -415,57 +392,126 @@
 {
     self = [super init];
     if (self) {
-        _leftBorder = 1;
-        _rightBorder = 1+1;
-        _topBorder = 19;
-        _bottomBorder = 1+1;
-        _hasShadow = 1;
-        [self setValue:@"macclassic" forKey:@"x11HasChildMask"];
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        [self setPixelScaling:scaling];
+
     }
     return self;
+}
+- (void)setPixelScaling:(int)scaling
+{
+    _pixelScaling = scaling;
+
+    _leftBorder = 1*scaling;
+    _rightBorder = 1*scaling+1;
+    _topBorder = 19*scaling;
+    _bottomBorder = 1*scaling+1;
+    _hasShadow = 1;
+    [self setValue:@"macclassic" forKey:@"x11HasChildMask"];
+
+    id obj;
+    obj = [Definitions scaleFont:scaling
+                    :[Definitions arrayOfCStringsForChicagoFont]
+                    :[Definitions arrayOfWidthsForChicagoFont]
+                    :[Definitions arrayOfHeightsForChicagoFont]
+                    :[Definitions arrayOfXSpacingsForChicagoFont]];
+    [self setValue:obj forKey:@"scaledFont"];
+
+    obj = [nsfmt(@"%s", inactiveTitleBarLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveTitleBarLeftPixels"];
+
+    obj = [nsfmt(@"%s", inactiveTitleBarMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveTitleBarMiddlePixels"];
+
+    obj = [nsfmt(@"%s", inactiveTitleBarRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveTitleBarRightPixels"];
+
+    obj = [nsfmt(@"%s", inactiveBottomBorderLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveBottomBorderLeftPixels"];
+
+    obj = [nsfmt(@"%s", inactiveBottomBorderMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveBottomBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", inactiveBottomBorderRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveBottomBorderRightPixels"];
+
+    obj = [nsfmt(@"%s", activeTitleBarLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveTitleBarLeftPixels"];
+    _scaledActiveTitleBarLeftWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", activeTitleBarMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveTitleBarMiddlePixels"];
+    _scaledActiveTitleBarHeight = [Definitions heightForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", activeTitleBarRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveTitleBarRightPixels"];
+
+    obj = [nsfmt(@"%s", leftBorderMiddlePixels) asXScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledLeftBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", bottomBorderLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderLeftPixels"];
+
+    obj = [nsfmt(@"%s", bottomBorderMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", bottomBorderRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderRightPixels"];
+
+    obj = nsfmt(@"%s", rightBorderTopPixels);
+    [self setValue:obj forKey:@"scaledRightBorderTopPixels"];
+
+    obj = [nsfmt(@"%s", rightBorderMiddlePixels) asXScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledRightBorderMiddlePixels"];
+
+    obj = nsfmt(@"%s", rightBorderBottomPixels);
+    [self setValue:obj forKey:@"scaledRightBorderBottomPixels"];
+
+    obj = [nsfmt(@"%s", inactiveRightBorderMiddlePixels) asXScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveRightBorderMiddlePixels"];
+
+    obj = [nsfmt(@"%s", closeButtonDownPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledCloseButtonDownPixels"];
 }
 
 - (void)calculateRects:(Int4)r
 {
-    char *titleBarLeft = [Definitions cStringForMacClassicActiveTitleBarLeft];
-    char *titleBarMiddle = [Definitions cStringForMacClassicActiveTitleBarMiddle];
-    char *titleBarRight = [Definitions cStringForMacClassicActiveTitleBarRight];
-    int titleBarLeftWidth = [Definitions widthForCString:titleBarLeft];
-    int titleBarHeight = [Definitions heightForCString:titleBarMiddle];
-
-    _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:titleBarHeight];
+    _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:_scaledActiveTitleBarHeight];
     _titleBarTextRect = _titleBarRect;
-    _titleBarTextRect.x = titleBarLeftWidth+4;
-    _titleBarTextRect.w -= titleBarLeftWidth+4;
+    _titleBarTextRect.x = _scaledActiveTitleBarLeftWidth+4*_pixelScaling;
+    _titleBarTextRect.w -= (_scaledActiveTitleBarLeftWidth+4*_pixelScaling)*2;
 
     _leftBorderRect = r;
-    _leftBorderRect.y += titleBarHeight;
-    _leftBorderRect.h -= titleBarHeight;
-    _leftBorderRect.h -= _bottomBorder+15;
+    _leftBorderRect.y += _scaledActiveTitleBarHeight;
+    _leftBorderRect.h -= _scaledActiveTitleBarHeight;
+    _leftBorderRect.h -= _bottomBorder+15*_pixelScaling;
     _leftBorderRect.w = _leftBorder;
 
     _rightBorderRect = r;
     _rightBorderRect.x += r.w-_rightBorder;
-    _rightBorderRect.y += titleBarHeight;
-    _rightBorderRect.h -= titleBarHeight;
-    _rightBorderRect.h -= _bottomBorder+15;
+    _rightBorderRect.y += _scaledActiveTitleBarHeight;
+    _rightBorderRect.h -= _scaledActiveTitleBarHeight;
+    _rightBorderRect.h -= _bottomBorder+15*_pixelScaling;
     _rightBorderRect.w = _rightBorder;
 
     _bottomBorderRect = _titleBarRect;
-    _bottomBorderRect.y += r.h-(_bottomBorder+15);
-    _bottomBorderRect.h = _bottomBorder+15;
+    _bottomBorderRect.y += r.h-(_bottomBorder+15*_pixelScaling);
+    _bottomBorderRect.h = _bottomBorder+15*_pixelScaling;
 
     _closeButtonRect = _titleBarRect;
-    _closeButtonRect.x += 9;
-    _closeButtonRect.y += 4;
-    _closeButtonRect.w = 11;
-    _closeButtonRect.h = 11;
+    _closeButtonRect.x += 9*_pixelScaling;
+    _closeButtonRect.y += 4*_pixelScaling;
+    _closeButtonRect.w = 11*_pixelScaling;
+    _closeButtonRect.h = 11*_pixelScaling;
 
     _maximizeButtonRect = _titleBarRect;
-    _maximizeButtonRect.x = _maximizeButtonRect.x+_maximizeButtonRect.w-21;
-    _maximizeButtonRect.y += 4;
-    _maximizeButtonRect.w = 11;
-    _maximizeButtonRect.h = 11;
+    _maximizeButtonRect.x = _maximizeButtonRect.x+_maximizeButtonRect.w-21*_pixelScaling;
+    _maximizeButtonRect.y += 4*_pixelScaling;
+    _maximizeButtonRect.w = 11*_pixelScaling;
+    _maximizeButtonRect.h = 11*_pixelScaling;
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
@@ -473,6 +519,13 @@
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
     char *palette = "b #000000\n";
     int hasFocus = [context intValueForKey:@"hasFocus"];
 
@@ -483,14 +536,14 @@
     [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
     [bitmap drawVerticalLineAtX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
     if (hasFocus) {
-        char *left = [Definitions cStringForMacClassicActiveTitleBarLeft];
-        char *middle = [Definitions cStringForMacClassicActiveTitleBarMiddle];
-        char *right = [Definitions cStringForMacClassicActiveTitleBarRight];
+        char *left = [_scaledActiveTitleBarLeftPixels UTF8String];
+        char *middle = [_scaledActiveTitleBarMiddlePixels UTF8String];
+        char *right = [_scaledActiveTitleBarRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
     } else {
-        char *left = [Definitions cStringForMacClassicInactiveTitleBarLeft];
-        char *middle = [Definitions cStringForMacClassicInactiveTitleBarMiddle];
-        char *right = [Definitions cStringForMacClassicInactiveTitleBarRight];
+        char *left = [_scaledInactiveTitleBarLeftPixels UTF8String];
+        char *middle = [_scaledInactiveTitleBarMiddlePixels UTF8String];
+        char *right = [_scaledInactiveTitleBarRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
     }
     if (_titleBarTextRect.w > 0) {
@@ -499,35 +552,35 @@
             text = @"(no title)";
         }
 
-        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14];
+        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling];
         if (text) {
-            int textWidth = [Definitions bitmapWidthForText:text];
-            int backWidth = textWidth + 14;
+            int textWidth = [bitmap bitmapWidthForText:text];
+            int backWidth = textWidth + 14*_pixelScaling;
             int backX = _titleBarTextRect.x + ((_titleBarTextRect.w - backWidth) / 2);
-            int textX = backX + 7;
+            int textX = backX + 7*_pixelScaling;
             if (hasFocus) {
                 [bitmap setColor:@"white"];
-                [bitmap fillRect:[Definitions rectWithX:backX y:_titleBarTextRect.y+2 w:backWidth h:16]];
+                [bitmap fillRect:[Definitions rectWithX:backX y:_titleBarTextRect.y+2*_pixelScaling w:backWidth h:16*_pixelScaling]];
                 [bitmap setColorIntR:0 g:0 b:0 a:255];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4*_pixelScaling];
             } else {
                 [bitmap setColorIntR:0 g:0 b:0 a:255];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4*_pixelScaling];
             }
         }
     }
 
     {
-        char *middle = [Definitions cStringForMacClassicLeftBorderMiddle];
+        char *middle = [_scaledLeftBorderMiddlePixels UTF8String];
         [Definitions drawInBitmap:bitmap top:middle palette:palette middle:middle palette:palette bottom:middle palette:palette x:_leftBorderRect.x y:_leftBorderRect.y h:_leftBorderRect.h];
     }
     if (hasFocus) {
-        char *top = [Definitions cStringForMacClassicRightBorderTop];
-        char *middle = [Definitions cStringForMacClassicRightBorderMiddle];
-        char *bottom = [Definitions cStringForMacClassicRightBorderBottom];
+        char *top = [_scaledRightBorderTopPixels UTF8String];
+        char *middle = [_scaledRightBorderMiddlePixels UTF8String];
+        char *bottom = [_scaledRightBorderBottomPixels UTF8String];
         [Definitions drawInBitmap:bitmap top:top palette:palette middle:middle palette:palette bottom:bottom palette:palette x:_rightBorderRect.x y:_rightBorderRect.y h:_rightBorderRect.h];
     } else {
-        char *top = [Definitions cStringForMacClassicInactiveRightBorderMiddle];
+        char *top = [_scaledInactiveRightBorderMiddlePixels UTF8String];
         char *middle = top;
         char *bottom = top;
         [Definitions drawInBitmap:bitmap top:middle palette:palette middle:middle palette:palette bottom:bottom palette:palette x:_rightBorderRect.x y:_rightBorderRect.y h:_rightBorderRect.h];
@@ -535,29 +588,30 @@
 
     if (hasFocus) {
         Int4 r = _bottomBorderRect;
-        char *left = [Definitions cStringForMacClassicBottomBorderLeft];
-        char *middle = [Definitions cStringForMacClassicBottomBorderMiddle];
-        char *right = [Definitions cStringForMacClassicBottomBorderRight];
+        char *left = [_scaledBottomBorderLeftPixels UTF8String];
+        char *middle = [_scaledBottomBorderMiddlePixels UTF8String];
+        char *right = [_scaledBottomBorderRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y w:r.w palette:palette];
     } else {
         Int4 r = _bottomBorderRect;
-        char *left = [Definitions cStringForMacClassicInactiveBottomBorderLeft];
-        char *middle = [Definitions cStringForMacClassicInactiveBottomBorderMiddle];
-        char *right = [Definitions cStringForMacClassicInactiveBottomBorderRight];
+        char *left = [_scaledInactiveBottomBorderLeftPixels UTF8String];
+        char *middle = [_scaledInactiveBottomBorderMiddlePixels UTF8String];
+        char *right = [_scaledInactiveBottomBorderRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y w:r.w palette:palette];
     }
 
     if (hasFocus) {
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
-            char *closeButtonDown = [Definitions cStringForMacClassicCloseButtonDown];
+            char *closeButtonDown = [_scaledCloseButtonDownPixels UTF8String];
             [bitmap drawCString:closeButtonDown palette:palette x:_closeButtonRect.x y:_closeButtonRect.y];
         }
         if ((_buttonDown == 'm') && (_buttonHover == 'm')) {
             char *maximizePalette = "b #000000\n. #ffffff\n";
-            char *maximizeButtonDown = [Definitions cStringForMacClassicCloseButtonDown];
+            char *maximizeButtonDown = [_scaledCloseButtonDownPixels UTF8String];
             [bitmap drawCString:maximizeButtonDown palette:maximizePalette x:_maximizeButtonRect.x y:_maximizeButtonRect.y];
         }
         if (_buttonDown == 't') {
+// FIXME pixelScaling
             char *palette = "b #000000\nw #ffffff\n";
             char *h = [Definitions cStringForMacWindowSelectionHorizontal];
             char *v = [Definitions cStringForMacWindowSelectionVertical];
@@ -567,6 +621,7 @@
             [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+r.h-1 w:r.w palette:palette];
         }
         if (_buttonDown == 'r') {
+// FIXME pixelScaling
             char *palette = "b #000000\nw #ffffff\n";
             char *h = [Definitions cStringForMacWindowSelectionHorizontal];
             char *v = [Definitions cStringForMacWindowSelectionVertical];
@@ -590,8 +645,8 @@
     int mouseY = [event intValueForKey:@"mouseY"];
     int viewWidth = [event intValueForKey:@"viewWidth"];
     int viewHeight = [event intValueForKey:@"viewHeight"];
-    if (mouseX >= viewWidth-17) {
-        if (mouseY >= viewHeight-17) {
+    if (mouseX >= viewWidth-17*_pixelScaling) {
+        if (mouseY >= viewHeight-17*_pixelScaling) {
             _buttonDown = 'r';
             _buttonDownX = mouseX;
             _buttonDownY = mouseY;

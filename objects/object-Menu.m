@@ -39,8 +39,8 @@
         className = @"AtariSTMenu";
     } else if ([windowClassName isEqual:@"AquaWindow"]) {
         className = @"AquaMenu";
-    } else if ([windowClassName isEqual:@"ScaledWindow"]) {
-        className = @"AmigaMenu";
+    } else if ([windowClassName isEqual:@"WinMacWindow"]) {
+        className = @"HotDogStandMenu";
     }
     id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
@@ -59,6 +59,9 @@
     id _selectedObject;
     id _contextualObject;
     int _scrollY;
+
+    int _pixelScaling;
+    id _scaledFont;
 }
 @end
 
@@ -74,6 +77,20 @@ NSLog(@"dealloc Menu %@", self);
 {
     self = [super init];
     if (self) {
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        _pixelScaling = scaling;
+
+        id obj;
+        obj = [Definitions scaleFont:scaling
+                        :[Definitions arrayOfCStringsForChicagoFont]
+                        :[Definitions arrayOfWidthsForChicagoFont]
+                        :[Definitions arrayOfHeightsForChicagoFont]
+                        :[Definitions arrayOfXSpacingsForChicagoFont]];
+        [self setValue:obj forKey:@"scaledFont"];
+
         _hasShadow = 1;
     }
     return self;
@@ -81,7 +98,12 @@ NSLog(@"dealloc Menu %@", self);
 - (int)preferredWidth
 {
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
-    [bitmap useChicagoFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
     int highestWidth = 0;
     int highestRightWidth = 0;
     for (int i=0; i<[_array count]; i++) {
@@ -112,16 +134,16 @@ NSLog(@"dealloc Menu %@", self);
         }
     }
     if (highestWidth && highestRightWidth) {
-        return highestWidth + 8 + highestRightWidth + 26;
+        return highestWidth + 8*_pixelScaling + highestRightWidth + 26*_pixelScaling;
     }
     if (highestWidth) {
-        return highestWidth + 8;
+        return highestWidth + 8*_pixelScaling;
     }
     return 1;
 }
 - (int)preferredHeight
 {
-    int h = [_array count]*20;
+    int h = [_array count]*20*_pixelScaling;
     if (h) {
         return h;
     }
@@ -158,6 +180,13 @@ NSLog(@"dealloc Menu %@", self);
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)outerRect
 {
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
     Int4 origRect = outerRect;
     outerRect.y -= _scrollY;
     Int4 r = outerRect;
@@ -205,10 +234,10 @@ NSLog(@"dealloc Menu %@", self);
                     [bitmap fillRect:cellRect];
                 }
                 [bitmap setColorIntR:255 g:255 b:255 a:255];
-                [bitmap drawBitmapText:text x:cellRect.x+4 y:cellRect.y+4];
+                [bitmap drawBitmapText:text x:cellRect.x+4*_pixelScaling y:cellRect.y+4*_pixelScaling];
                 if ([rightText length]) {
                     int w = [bitmap bitmapWidthForText:rightText];
-                    [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-w y:cellRect.y+4];
+                    [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-w-4*_pixelScaling y:cellRect.y+4*_pixelScaling];
                 }
             } else {
                 [bitmap setColor:@"black"];
@@ -219,16 +248,16 @@ NSLog(@"dealloc Menu %@", self);
             if ([text length]) {
                 if ([messageForClick length]) {
                     [bitmap setColor:@"black"];
-                    [bitmap drawBitmapText:text x:cellRect.x+4 y:cellRect.y+4];
+                    [bitmap drawBitmapText:text x:cellRect.x+4*_pixelScaling y:cellRect.y+4*_pixelScaling];
                     if ([rightText length]) {
                         int w = [bitmap bitmapWidthForText:rightText];
-                        [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-w y:cellRect.y+4];
+                        [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-w-4*_pixelScaling y:cellRect.y+4*_pixelScaling];
                     }
                 } else {
                     [bitmap setColor:@"black"];
                     [bitmap fillRect:cellRect];
                     [bitmap setColorIntR:255 g:255 b:255 a:255];
-                    [bitmap drawBitmapText:text x:cellRect.x+4 y:cellRect.y+4];
+                    [bitmap drawBitmapText:text x:cellRect.x+4*_pixelScaling y:cellRect.y+4*_pixelScaling];
                 }
             } else {
                 [bitmap setColor:@"black"];

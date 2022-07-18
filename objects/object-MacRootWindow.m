@@ -25,35 +25,6 @@
 
 #import "HOTDOG.h"
 
-@implementation Definitions(jfoiwejfklsdjfklsdjlkfjsdlkfj)
-+ (void)enterMacColorMode
-{
-    id windowManager = [@"windowManager" valueForKey];
-    [windowManager setFocusDict:nil];
-    [windowManager unparentAllWindows];
-
-    [Definitions setValue:@"maccolor" forEnvironmentVariable:@"HOTDOG_MODE"];
-
-    char *backgroundCString =
-"ab\n"
-"ba\n"
-;
-    char *backgroundPalette =
-"a #606060\n"
-"b #a0a0a0\n"
-;
-    [windowManager setBackgroundForCString:backgroundCString palette:backgroundPalette];
-    id rootWindowObject = [@"MacRootWindow" asInstance];
-    [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
-    [windowManager reparentAllWindows:@"MacColorWindow"];
-    [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
-    [windowManager setValue:@"20" forKey:@"menuBarHeight"];
-    id menuBar = [windowManager openWindowForObject:[@"MacMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
-    [windowManager setValue:menuBar forKey:@"menuBar"];
-    [windowManager setFocusDict:nil];
-    [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
-}
-@end
 
 @interface MacRootWindow : IvarObject
 @end

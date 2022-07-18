@@ -26,16 +26,17 @@
 #import "HOTDOG.h"
 
 @implementation Definitions(ifjeowjfkldsjfkldsjkflsjdlkfjdifieqf)
-+ (void)testAddAmigaWindow
-{
-    id windowManager = [@"windowManager" valueForKey];
-    id obj = [@"AmigaWindow" asInstance];
-    int w = 200;
-    int h = 100;
-    [windowManager openWindowForObject:obj x:100 y:200 w:w h:h];
-}
 + (void)enterAmigaMode
 {
+    [Definitions enterAmigaMode:1];
+}
++ (void)enterAmigaMode:(int)scaling
+{
+    if (scaling < 1) {
+        scaling = 1;
+    }
+    [Definitions setValue:nsfmt(@"%d", scaling) forEnvironmentVariable:@"HOTDOG_SCALING"];
+
     id windowManager = [@"windowManager" valueForKey];
     [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
@@ -59,43 +60,36 @@
 ;
 */
     [windowManager setBackgroundForCString:backgroundCString palette:backgroundPalette];
+
     id rootWindowObject = [@"MacRootWindow" asInstance];
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
     [windowManager reparentAllWindows:@"AmigaWindow"];
     id oldMenuBar = [windowManager valueForKey:@"menuBar"];
     [oldMenuBar setValue:@"1" forKey:@"shouldCloseWindow"];
-    [windowManager setValue:@"20" forKey:@"menuBarHeight"];
-    id menuBar = [windowManager openWindowForObject:[@"AmigaMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
+    int h = 20*scaling;
+    [windowManager setValue:nsfmt(@"%d", h) forKey:@"menuBarHeight"];
+    id menuBar = [windowManager openWindowForObject:[@"AmigaMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
     [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
 }
 @end
-@implementation Definitions(fjkdlsjfiowejfklsdjfklsdkljfvjjidfj)
 
-+ (char *)cStringForAmigaPalette
-{
-    return
+static char *amigaPalette =
 "b #000000\n"
 ". #000022\n"
 "* #ff8800\n"
 "X #0055aa\n"
 "o #ffffff\n"
 ;
-}
-+ (char *)cStringForAmigaHighlightedPalette
-{
-    return
+static char *amigaHighlightedPalette =
 "b #000000\n"
 "o #000022\n"
 "X #ff8800\n"
 "* #0055aa\n"
 ". #ffffff\n"
 ;
-}
-+ (char *)cStringForAmigaTitleBarTextBackground
-{
-    return
+static char *titleBarTextBackgroundPixels =
 "o\n"
 "o\n"
 "o\n"
@@ -117,10 +111,7 @@
 "o\n"
 "o\n"
 ;
-}
-+ (char *)cStringForAmigaTitleBarCloseButton
-{
-    return
+static char *titleBarCloseButtonPixels =
 "XXooooooooooooooooooooXX\n"
 "XXooooooooooooooooooooXX\n"
 "XXooXXXXXXXXXXXXXXXXooXX\n"
@@ -142,10 +133,7 @@
 "XXooooooooooooooooooooXX\n"
 "XXooooooooooooooooooooXX\n"
 ;
-}
-+ (char *)cStringForAmigaTitleBarLowerButton
-{
-    return
+static char *titleBarLowerButtonPixels =
 "XXooooooooooooooooooooooXX\n"
 "XXooooooooooooooooooooooXX\n"
 "XXooXXXXXXXXXXXXXXooooooXX\n"
@@ -167,10 +155,7 @@
 "XXooooooooooooooooooooooXX\n"
 "XXooooooooooooooooooooooXX\n"
 ;
-}
-+ (char *)cStringForAmigaTitleBarRaiseButton
-{
-    return
+static char *titleBarRaiseButtonPixels =
 "XXooooooooooooooooooooooXX\n"
 "XXooooooooooooooooooooooXX\n"
 "XXoo..............ooooooXX\n"
@@ -192,10 +177,7 @@
 "XXooooooooooooooooooooooXX\n"
 "XXooooooooooooooooooooooXX\n"
 ;
-}
-+ (char *)cStringForAmigaTitleBarLeft
-{
-    return
+static char *titleBarLeftPixels =
 "oooooooooooooooooooooooooooooo\n"
 "oooooooooooooooooooooooooooooo\n"
 "oooooooooooooooooooooooooooooo\n"
@@ -217,10 +199,7 @@
 "oooooooooooooooooooooooooooooo\n"
 "oooooooooooooooooooooooooooooo\n"
 ;
-}
-+ (char *)cStringForAmigaTitleBarMiddle
-{
-    return
+static char *titleBarMiddlePixels =
 "o\n"
 "o\n"
 "o\n"
@@ -242,10 +221,7 @@
 "o\n"
 "o\n"
 ;
-}
-+ (char *)cStringForInactiveAmigaTitleBar
-{
-    return
+static char *inactiveAmigaTitleBarPixels =
 "    \n"
 "    \n"
 "    \n"
@@ -267,10 +243,7 @@
 "    \n"
 "    \n"
 ;
-}
-+ (char *)cStringForAmigaTitleBarRight
-{
-    return
+static char *titleBarRightPixels =
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
@@ -292,21 +265,39 @@
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
 "oooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n"
 ;
-}
-+ (char *)cStringForAmigaBottomBorder
-{
-    return
+static char *bottomBorderPixels =
 "o\n"
 "o\n"
 ;
-}
-+ (char *)cStringForAmigaLeftBorder
-{
-    return
+static char *leftBorderPixels =
 "oo\n"
 "oo\n"
 ;
-}
+static char *rightBorderPixels =
+"oo\n"
+"oo\n"
+;
+static char *resizeButtonPixels =
+"oooooooooooooooo\n"
+"oooooooooooooooo\n"
+"ooXXXXXXoooooooo\n"
+"ooXXXXXXoooooooo\n"
+"ooXXooXXoooooooo\n"
+"ooXXooXXoooooooo\n"
+"ooXXXXXXXXXXXXoo\n"
+"ooXXXXXXXXXXXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXooooXXoo\n"
+"ooooooXXXXXXXXoo\n"
+"ooooooXXXXXXXXoo\n"
+"oooooooooooooooo\n"
+"oooooooooooooooo\n"
+;
+/*
 + (void)drawAmigaBottomBorderInBitmap:(id)bitmap rect:(Int4)r
 {
     char *palette = [Definitions cStringForAmigaPalette];
@@ -334,13 +325,6 @@
         [bitmap drawCString:middle palette:palette x:r.x y:y];
     }
 }
-+ (char *)cStringForAmigaRightBorder
-{
-    return
-"oo\n"
-"oo\n"
-;
-}
 + (void)drawAmigaRightBorderInBitmap:(id)bitmap rect:(Int4)r
 {
     char *palette = [Definitions cStringForAmigaPalette];
@@ -355,30 +339,7 @@
         [bitmap drawCString:middle palette:palette x:r.x y:y];
     }
 }
-+ (char *)cStringForAmigaResizeButton
-{
-    return
-"oooooooooooooooo\n"
-"oooooooooooooooo\n"
-"ooXXXXXXoooooooo\n"
-"ooXXXXXXoooooooo\n"
-"ooXXooXXoooooooo\n"
-"ooXXooXXoooooooo\n"
-"ooXXXXXXXXXXXXoo\n"
-"ooXXXXXXXXXXXXoo\n"
-"ooooooXXooooXXoo\n"
-"ooooooXXooooXXoo\n"
-"ooooooXXooooXXoo\n"
-"ooooooXXooooXXoo\n"
-"ooooooXXooooXXoo\n"
-"ooooooXXooooXXoo\n"
-"ooooooXXXXXXXXoo\n"
-"ooooooXXXXXXXXoo\n"
-"oooooooooooooooo\n"
-"oooooooooooooooo\n"
-;
-}
-@end
+*/
 
 
 @interface AmigaWindow : IvarObject
@@ -400,6 +361,31 @@
     Int4 _lowerButtonRect;
     Int4 _raiseButtonRect;
     Int4 _titleTextRect;
+
+    // setPixelScale:
+    int _pixelScaling;
+    id _scaledFont;
+    id _scaledTitleBarLeftPixels;
+    id _scaledTitleBarMiddlePixels;
+    id _scaledTitleBarRightPixels;
+    int _scaledTitleBarHeight;
+    id _scaledCloseButtonPixels;
+    int _scaledCloseButtonWidth;
+    id _scaledLowerButtonPixels;
+    int _scaledLowerButtonWidth;
+    id _scaledRaiseButtonPixels;
+    int _scaledRaiseButtonWidth;
+    id _scaledLeftBorderPixels;
+    int _scaledLeftBorderWidth;
+    id _scaledBottomBorderPixels;
+    int _scaledBottomBorderHeight;
+    id _scaledRightBorderPixels;
+    int _scaledRightBorderWidth;
+    id _scaledResizeButtonPixels;
+    int _scaledResizeButtonWidth;
+    int _scaledResizeButtonHeight;
+    id _scaledInactiveTitleBarPixels;
+    id _scaledTextBackgroundPixels;
 }
 @end
 @implementation AmigaWindow
@@ -407,53 +393,96 @@
 {
     self = [super init];
     if (self) {
-        _topBorder = 20;
-        _leftBorder = 2;
-        _rightBorder = 2;
-        _bottomBorder = 2;
-        [self setValue:@"amiga" forKey:@"x11HasChildMask"];
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        [self setPixelScaling:scaling];
     }
     return self;
 }
+- (void)setPixelScaling:(int)scaling
+{
+    _pixelScaling = scaling;
+
+    _topBorder = 20*scaling;
+    _leftBorder = 2*scaling;
+    _rightBorder = 2*scaling;
+    _bottomBorder = 2*scaling;
+
+    [self setValue:nsfmt(@"bottomRightCorner w:%d h:%d", 14*scaling, 16*scaling) forKey:@"x11HasChildMask"];
+
+    id obj;
+    obj = [Definitions scaleFont:scaling
+                    :[Definitions arrayOfCStringsForTopazFont]
+                    :[Definitions arrayOfWidthsForTopazFont]
+                    :[Definitions arrayOfHeightsForTopazFont]
+                    :[Definitions arrayOfXSpacingsForTopazFont]];
+    [self setValue:obj forKey:@"scaledFont"];
+
+    obj = [nsfmt(@"%s", titleBarLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledTitleBarLeftPixels"];
+
+    obj = [nsfmt(@"%s", titleBarMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledTitleBarMiddlePixels"];
+    _scaledTitleBarHeight = [Definitions heightForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", titleBarRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledTitleBarRightPixels"];
+
+    obj = [nsfmt(@"%s", titleBarCloseButtonPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledCloseButtonPixels"];
+    _scaledCloseButtonWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", titleBarLowerButtonPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledLowerButtonPixels"];
+    _scaledLowerButtonWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", titleBarRaiseButtonPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledRaiseButtonPixels"];
+    _scaledRaiseButtonWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", leftBorderPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledLeftBorderPixels"];
+    _scaledLeftBorderWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", bottomBorderPixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledBottomBorderPixels"];
+    _scaledBottomBorderHeight = [Definitions heightForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", rightBorderPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledRightBorderPixels"];
+    _scaledRightBorderWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", resizeButtonPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledResizeButtonPixels"];
+    _scaledResizeButtonWidth = [Definitions widthForCString:[obj UTF8String]];
+    _scaledResizeButtonHeight = [Definitions heightForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", inactiveAmigaTitleBarPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveTitleBarPixels"];
+
+    obj = [nsfmt(@"%s", titleBarTextBackgroundPixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledTextBackgroundPixels"];
+}
+
 - (void)calculateRects:(Int4)r
 {
-    char *titleBarMiddle = [Definitions cStringForAmigaTitleBarMiddle];
-    int titleBarHeight = [Definitions heightForCString:titleBarMiddle];
-    char *closeButton = [Definitions cStringForAmigaTitleBarCloseButton];
-    int closeButtonWidth = [Definitions widthForCString:closeButton];
-    char *lowerButton = [Definitions cStringForAmigaTitleBarLowerButton];
-    int lowerButtonWidth = [Definitions widthForCString:lowerButton];
-    char *raiseButton = [Definitions cStringForAmigaTitleBarRaiseButton];
-    int raiseButtonWidth = [Definitions widthForCString:raiseButton];
-
-    _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:titleBarHeight];
-    _closeButtonRect = [Definitions rectWithX:r.x+4 y:r.y w:closeButtonWidth h:titleBarHeight];
-    _lowerButtonRect = [Definitions rectWithX:r.x+r.w-3-lowerButtonWidth-raiseButtonWidth+2 y:r.y w:lowerButtonWidth h:titleBarHeight];
-    _raiseButtonRect = [Definitions rectWithX:r.x+r.w-3-raiseButtonWidth y:r.y w:raiseButtonWidth h:titleBarHeight];
-    _titleTextRect.x = r.x+4+closeButtonWidth+2;
-    _titleTextRect.y = r.y+2;
-    _titleTextRect.w = _lowerButtonRect.x - _titleTextRect.x - 2;
-    _titleTextRect.h = titleBarHeight;
+    _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:_scaledTitleBarHeight];
+    _closeButtonRect = [Definitions rectWithX:r.x+4*_pixelScaling y:r.y w:_scaledCloseButtonWidth h:_scaledTitleBarHeight];
+    _lowerButtonRect = [Definitions rectWithX:r.x+r.w-3*_pixelScaling-_scaledLowerButtonWidth-_scaledRaiseButtonWidth+2*_pixelScaling y:r.y w:_scaledLowerButtonWidth h:_scaledTitleBarHeight];
+    _raiseButtonRect = [Definitions rectWithX:r.x+r.w-3*_pixelScaling-_scaledRaiseButtonWidth y:r.y w:_scaledRaiseButtonWidth h:_scaledTitleBarHeight];
+    _titleTextRect.x = r.x+4*_pixelScaling+_scaledCloseButtonWidth+2*_pixelScaling;
+    _titleTextRect.y = r.y+2*_pixelScaling;
+    _titleTextRect.w = _lowerButtonRect.x - _titleTextRect.x - 2*_pixelScaling;
+    _titleTextRect.h = _scaledTitleBarHeight;
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
     [self calculateRects:r];
-    char *palette = [Definitions cStringForAmigaPalette];
-    char *highlightedPalette = [Definitions cStringForAmigaHighlightedPalette];
-    char *titleBarLeft = [Definitions cStringForAmigaTitleBarLeft];
-    char *titleBarMiddle = [Definitions cStringForAmigaTitleBarMiddle];
-    char *titleBarRight = [Definitions cStringForAmigaTitleBarRight];
-    char *inactiveTitleBar = [Definitions cStringForInactiveAmigaTitleBar];
-    int titleBarHeight = [Definitions heightForCString:titleBarMiddle];
-    char *bottomBorder = [Definitions cStringForAmigaBottomBorder];
-    int bottomBorderHeight = [Definitions heightForCString:bottomBorder];
-    char *leftBorder = [Definitions cStringForAmigaLeftBorder];
-    int leftBorderWidth = [Definitions widthForCString:leftBorder];
-    char *rightBorder = [Definitions cStringForAmigaRightBorder];
-    int rightBorderWidth = [Definitions widthForCString:rightBorder];
-    char *resizeButton = [Definitions cStringForAmigaResizeButton];
-    int resizeButtonWidth = [Definitions widthForCString:resizeButton];
-    int resizeButtonHeight = [Definitions heightForCString:resizeButton];
+    char *palette = amigaPalette;
+    char *highlightedPalette = amigaHighlightedPalette;
+/*
     [bitmap setColor:@"#0055aa"];
     for (int i=0; i<r.h; i+=2) {
         [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
@@ -462,39 +491,81 @@
     for (int i=1; i<r.h; i+=2) {
         [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+i];
     }
-    [Definitions drawAmigaRightBorderInBitmap:bitmap rect:[Definitions rectWithX:r.x+r.w-rightBorderWidth y:r.y+titleBarHeight w:rightBorderWidth h:r.h-titleBarHeight-bottomBorderHeight]];
-    [Definitions drawAmigaLeftBorderInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+titleBarHeight w:leftBorderWidth h:r.h-titleBarHeight-bottomBorderHeight]];
-    [Definitions drawAmigaBottomBorderInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+r.h-bottomBorderHeight w:r.w-resizeButtonWidth h:bottomBorderHeight]];
-    [Definitions drawInBitmap:bitmap left:titleBarLeft middle:titleBarMiddle right:titleBarRight x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w palette:palette];
+*/
+{
+    Int4 r1;
+    r1.x = r.x+r.w-_scaledRightBorderWidth;
+    r1.y = r.y+_scaledTitleBarHeight;
+    r1.w = _scaledRightBorderWidth;
+    r1.h = r.h-_scaledTitleBarHeight-_scaledBottomBorderHeight;
+    int heightForMiddle = [Definitions heightForCString:[_scaledRightBorderPixels UTF8String]];
+    int widthForMiddle = [Definitions widthForCString:[_scaledRightBorderPixels UTF8String]];
+    for (int y=r1.y; y<r1.y+r1.h; y+=heightForMiddle) {
+        [bitmap drawCString:[_scaledRightBorderPixels UTF8String] palette:palette x:r1.x y:y];
+    }
+}
+{
+    Int4 r1;
+    r1.x = r.x;
+    r1.y = r.y+_scaledTitleBarHeight;
+    r1.w = _scaledLeftBorderWidth;
+    r1.h = r.h-_scaledTitleBarHeight-_scaledBottomBorderHeight;
+    int heightForMiddle = [Definitions heightForCString:[_scaledLeftBorderPixels UTF8String]];
+    int widthForMiddle = [Definitions widthForCString:[_scaledLeftBorderPixels UTF8String]];
+    for (int y=r1.y; y<r1.y+r1.h; y+=heightForMiddle) {
+        [bitmap drawCString:[_scaledLeftBorderPixels UTF8String] palette:palette x:r1.x y:y];
+    }
+}
+{
+    Int4 r1;
+    r1.x = r.x;
+    r1.y = r.y+r.h-_scaledBottomBorderHeight;
+    r1.w = r.w-_scaledResizeButtonWidth;
+    r1.h = _scaledBottomBorderHeight;
+    int widthForMiddle = [Definitions widthForCString:[_scaledBottomBorderPixels UTF8String]];
+    int x;
+    for (x=0; x<r.w; x+=widthForMiddle) {
+        [bitmap drawCString:[_scaledBottomBorderPixels UTF8String] palette:palette x:r1.x+x y:r1.y];
+    }
+}
 
-    [bitmap drawCString:[Definitions cStringForAmigaTitleBarCloseButton] palette:((_buttonDown=='c' && _buttonHover=='c') ? highlightedPalette : palette) x:_closeButtonRect.x y:_closeButtonRect.y];
-    [bitmap drawCString:[Definitions cStringForAmigaTitleBarLowerButton] palette:palette x:_lowerButtonRect.x y:_lowerButtonRect.y];
-    [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:palette x:_raiseButtonRect.x y:_raiseButtonRect.y];
+
+
+    [Definitions drawInBitmap:bitmap left:[_scaledTitleBarLeftPixels UTF8String] middle:[_scaledTitleBarMiddlePixels UTF8String] right:[_scaledTitleBarRightPixels UTF8String] x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w palette:palette];
+
+    [bitmap drawCString:[_scaledCloseButtonPixels UTF8String] palette:((_buttonDown=='c' && _buttonHover=='c') ? highlightedPalette : palette) x:_closeButtonRect.x y:_closeButtonRect.y];
+    [bitmap drawCString:[_scaledLowerButtonPixels UTF8String] palette:palette x:_lowerButtonRect.x y:_lowerButtonRect.y];
+    [bitmap drawCString:[_scaledRaiseButtonPixels UTF8String] palette:palette x:_raiseButtonRect.x y:_raiseButtonRect.y];
     if (_buttonDown == _buttonHover) {
         if (_buttonDown == 'l') {
-            [bitmap drawCString:[Definitions cStringForAmigaTitleBarLowerButton] palette:highlightedPalette x:_lowerButtonRect.x y:_lowerButtonRect.y];
+            [bitmap drawCString:[_scaledLowerButtonPixels UTF8String] palette:highlightedPalette x:_lowerButtonRect.x y:_lowerButtonRect.y];
         } else if (_buttonDown == 'r') {
-            [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:highlightedPalette x:_raiseButtonRect.x y:_raiseButtonRect.y];
+            [bitmap drawCString:[_scaledRaiseButtonPixels UTF8String] palette:highlightedPalette x:_raiseButtonRect.x y:_raiseButtonRect.y];
         }
     }
-    [bitmap drawCString:[Definitions cStringForAmigaResizeButton] palette:((_buttonDown=='s') ? highlightedPalette : palette) x:r.x+r.w-resizeButtonWidth y:r.y+r.h-resizeButtonHeight];
+    [bitmap drawCString:[_scaledResizeButtonPixels UTF8String] palette:((_buttonDown=='s') ? highlightedPalette : palette) x:r.x+r.w-_scaledResizeButtonWidth y:r.y+r.h-_scaledResizeButtonHeight];
 
-    [bitmap useTopazFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
     id text = [context valueForKey:@"name"];
     if (!text) {
         text = @"(no title)";
     }
     int textWidth = [bitmap bitmapWidthForText:text];
-    char *textBackgroundCString = [Definitions cStringForAmigaTitleBarTextBackground];
-    [Definitions drawInBitmap:bitmap left:textBackgroundCString middle:textBackgroundCString right:textBackgroundCString x:_titleTextRect.x y:_titleBarRect.y w:textWidth+3 palette:palette];
+    [Definitions drawInBitmap:bitmap left:[_scaledTextBackgroundPixels UTF8String] middle:[_scaledTextBackgroundPixels UTF8String] right:[_scaledTextBackgroundPixels UTF8String] x:_titleTextRect.x y:_titleBarRect.y w:textWidth+3*_pixelScaling palette:palette];
     [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
     [bitmap drawBitmapText:text x:_titleTextRect.x y:_titleTextRect.y];
 
     if (![context intValueForKey:@"hasFocus"]) {
         Int4 rr = _titleBarRect;
-        [Definitions drawInBitmap:bitmap left:inactiveTitleBar middle:inactiveTitleBar right:inactiveTitleBar x:_titleTextRect.x y:_titleBarRect.y w:_titleTextRect.w palette:palette];
+        [Definitions drawInBitmap:bitmap left:[_scaledInactiveTitleBarPixels UTF8String] middle:[_scaledInactiveTitleBarPixels UTF8String] right:[_scaledInactiveTitleBarPixels UTF8String] x:_titleTextRect.x y:_titleBarRect.y w:_titleTextRect.w palette:palette];
     }
 }
+
 - (void)handleMouseDown:(id)event
 {
     id windowManager = [event valueForKey:@"windowManager"];
@@ -504,8 +575,8 @@
     int mouseY = [event intValueForKey:@"mouseY"];
     int viewWidth = [event intValueForKey:@"viewWidth"];
     int viewHeight = [event intValueForKey:@"viewHeight"];
-    if (mouseX >= viewWidth-16) {
-        if (mouseY >= viewHeight-16) {
+    if (mouseX >= viewWidth-16*_pixelScaling) {
+        if (mouseY >= viewHeight-16*_pixelScaling) {
             _buttonDown = 's';
             _buttonDownX = mouseX;
             _buttonDownY = mouseY;

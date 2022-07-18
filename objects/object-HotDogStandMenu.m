@@ -34,6 +34,9 @@
     id _selectedObject;
     id _contextualObject;
     int _scrollY;
+
+    int _pixelScaling;
+    id _scaledFont;
 }
 @end
 
@@ -43,6 +46,20 @@
 {
     self = [super init];
     if (self) {
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        _pixelScaling = scaling;
+
+        id obj;
+        obj = [Definitions scaleFont:scaling
+                        :[Definitions arrayOfCStringsForWinSystemFont]
+                        :[Definitions arrayOfWidthsForWinSystemFont]
+                        :[Definitions arrayOfHeightsForWinSystemFont]
+                        :[Definitions arrayOfXSpacingsForWinSystemFont]];
+        [self setValue:obj forKey:@"scaledFont"];
+
         _hasShadow = 1;
     }
     return self;
@@ -50,7 +67,12 @@
 - (int)preferredWidth
 {
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
-    [bitmap useWinSystemFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
     int highestWidth = 0;
     int highestRightWidth = 0;
     for (int i=0; i<[_array count]; i++) {
@@ -78,16 +100,16 @@
         }
     }
     if (highestWidth && highestRightWidth) {
-        return highestWidth + 8 + 12 + highestRightWidth + 26;
+        return highestWidth + 8*_pixelScaling + 12*_pixelScaling + highestRightWidth + 26*_pixelScaling;
     }
     if (highestWidth) {
-        return highestWidth + 8 + 12;
+        return highestWidth + 8*_pixelScaling + 12*_pixelScaling;
     }
     return 1;
 }
 - (int)preferredHeight
 {
-    int h = [_array count]*18;
+    int h = [_array count]*18*_pixelScaling;
     if (h) {
         return h;
     }
@@ -100,10 +122,18 @@
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
     Int4 origRect = r;
     [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
     [bitmap fillRect:r];
     r.y -= _scrollY;
+//FIXME pixelScaling
     [bitmap setColorIntR:0x86 g:0x8a b:0x8e a:0xff];
     [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
     [bitmap drawVerticalLineAtX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
@@ -118,15 +148,13 @@
     r.w -= 3;
     r.h -= 3;
 
-    [bitmap useWinSystemFont];
-
     [self setValue:nil forKey:@"selectedObject"];
     id arr = _array;
     int numberOfCells = [arr count];
     if (!numberOfCells) {
         return;
     }
-    int cellHeight = 18;
+    int cellHeight = 18*_pixelScaling;
     for (int i=0; i<numberOfCells; i++) {
         Int4 cellRect = [Definitions rectWithX:r.x y:r.y+i*cellHeight w:r.w h:cellHeight];
         id elt = [arr nth:i];
@@ -146,10 +174,10 @@
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:cellRect];
                 [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
-                [bitmap drawBitmapText:text x:cellRect.x+4+12 y:cellRect.y+2];
+                [bitmap drawBitmapText:text x:cellRect.x+(4+12)*_pixelScaling y:cellRect.y+2*_pixelScaling];
                 if ([rightText length]) {
                     int w = [bitmap bitmapWidthForText:rightText];
-                    [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-6-w y:cellRect.y+2];
+                    [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-w-(4+6)*_pixelScaling y:cellRect.y+2*_pixelScaling];
                 }
             } else {
                 [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
@@ -160,16 +188,16 @@
             if ([text length]) {
                 if ([messageForClick length]) {
                     [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
-                    [bitmap drawBitmapText:text x:cellRect.x+4+12 y:cellRect.y+2];
+                    [bitmap drawBitmapText:text x:cellRect.x+(4+12)*_pixelScaling y:cellRect.y+2*_pixelScaling];
                     if ([rightText length]) {
                         int w = [bitmap bitmapWidthForText:rightText];
-                        [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-4-6-w y:cellRect.y+2];
+                        [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-w-(4+6)*_pixelScaling y:cellRect.y+2*_pixelScaling];
                     }
                 } else {
                     [bitmap setColor:@"black"];
                     [bitmap fillRect:cellRect];
                     [bitmap setColorIntR:0xff g:0xff b:0xff a:0xff];
-                    [bitmap drawBitmapText:text x:cellRect.x+4+12 y:cellRect.y+2];
+                    [bitmap drawBitmapText:text x:cellRect.x+(4+12)*_pixelScaling y:cellRect.y+2*_pixelScaling];
                 }
             } else {
                 [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];

@@ -42,6 +42,9 @@
     id _selectedObject;
     id _contextualObject;
     int _scrollY;
+
+    int _pixelScaling;
+    id _scaledFont;
 }
 @end
 
@@ -52,11 +55,36 @@
 NSLog(@"dealloc Menu %@", self);
     [super dealloc];
 }
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        _pixelScaling = scaling;
+
+        id obj;
+        obj = [Definitions scaleFont:scaling
+                        :[Definitions arrayOfCStringsForWinSystemFont]
+                        :[Definitions arrayOfWidthsForWinSystemFont]
+                        :[Definitions arrayOfHeightsForWinSystemFont]
+                        :[Definitions arrayOfXSpacingsForWinSystemFont]];
+        [self setValue:obj forKey:@"scaledFont"];
+    }
+    return self;
+}
 
 - (int)preferredWidth
 {
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
-    [bitmap useWinSystemFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
     int highestWidth = 0;
     int highestRightWidth = 0;
     for (int i=0; i<[_array count]; i++) {
@@ -84,16 +112,16 @@ NSLog(@"dealloc Menu %@", self);
         }
     }
     if (highestWidth && highestRightWidth) {
-        return highestWidth + 30 + highestRightWidth + 26;
+        return highestWidth + 30*_pixelScaling + highestRightWidth + 26*_pixelScaling;
     }
     if (highestWidth) {
-        return highestWidth + 30;
+        return highestWidth + 30*_pixelScaling;
     }
     return 1;
 }
 - (int)preferredHeight
 {
-    int h = [_array count]*20;
+    int h = [_array count]*20*_pixelScaling;
     if (h) {
         return h;
     }
@@ -130,8 +158,15 @@ NSLog(@"dealloc Menu %@", self);
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)outerRect
 {
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
+//FIXME pixelScaling
     Int4 origRect = outerRect;
-[bitmap useWinSystemFont];
 outerRect.y -= _scrollY;
     Int4 r = outerRect;
     r.x += 1;
@@ -174,10 +209,10 @@ outerRect.y -= _scrollY;
                     [Definitions drawHorizontalStripesInBitmap:bitmap rect:cellRect colors:@"#3165b5" :@"#3063b0"];
                 }
                 [bitmap setColorIntR:255 g:255 b:255 a:255];
-                [bitmap drawBitmapText:text x:cellRect.x+20 y:cellRect.y+4];
+                [bitmap drawBitmapText:text x:cellRect.x+20*_pixelScaling y:cellRect.y+4*_pixelScaling];
                 if ([rightText length]) {
                     int w = [bitmap bitmapWidthForText:rightText];
-                    [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-10-w y:cellRect.y+4];
+                    [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-w-10*_pixelScaling y:cellRect.y+4*_pixelScaling];
                 }
             } else {
                 [bitmap setColor:@"#8c8c8c"];
@@ -188,16 +223,16 @@ outerRect.y -= _scrollY;
             if ([text length]) {
                 if ([messageForClick length]) {
                     [bitmap setColor:@"black"];
-                    [bitmap drawBitmapText:text x:cellRect.x+20 y:cellRect.y+4];
+                    [bitmap drawBitmapText:text x:cellRect.x+20*_pixelScaling y:cellRect.y+4*_pixelScaling];
                     if ([rightText length]) {
                         int w = [bitmap bitmapWidthForText:rightText];
-                        [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-10-w y:cellRect.y+4];
+                        [bitmap drawBitmapText:rightText x:cellRect.x+cellRect.w-w-10*_pixelScaling y:cellRect.y+4*_pixelScaling];
                     }
                 } else {
                     [bitmap setColor:@"black"];
                     [bitmap fillRect:cellRect];
                     [bitmap setColorIntR:255 g:255 b:255 a:255];
-                    [bitmap drawBitmapText:text x:cellRect.x+20 y:cellRect.y+4];
+                    [bitmap drawBitmapText:text x:cellRect.x+20*_pixelScaling y:cellRect.y+4*_pixelScaling];
                 }
             } else {
                 [bitmap setColor:@"#8c8c8c"];

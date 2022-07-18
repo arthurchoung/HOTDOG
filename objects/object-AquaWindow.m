@@ -326,6 +326,15 @@ static unsigned char yellow_down_rgb[] = {
 @implementation Definitions(ifjeowjfkldsjfkldsjkflsjdlkfjdifieqfdsjfksdjkf)
 + (void)enterAquaMode
 {
+    [Definitions enterAquaMode:1];
+}
++ (void)enterAquaMode:(int)scaling
+{
+    if (scaling < 1) {
+        scaling = 1;
+    }
+    [Definitions setValue:nsfmt(@"%d", scaling) forEnvironmentVariable:@"HOTDOG_SCALING"];
+
     id windowManager = [@"windowManager" valueForKey];
     [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
@@ -336,8 +345,9 @@ static unsigned char yellow_down_rgb[] = {
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
     [windowManager reparentAllWindows:@"AquaWindow"];
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
-    [windowManager setValue:@"20" forKey:@"menuBarHeight"];
-    id menuBar = [windowManager openWindowForObject:[Definitions AquaMenuBar] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:[windowManager intValueForKey:@"menuBarHeight"]];
+    int h = 20*scaling;
+    [windowManager setValue:nsfmt(@"%d", h) forKey:@"menuBarHeight"];
+    id menuBar = [windowManager openWindowForObject:[Definitions AquaMenuBar] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
     [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
@@ -368,6 +378,10 @@ static unsigned char yellow_down_rgb[] = {
     Int4 _yellowButtonRect;
     Int4 _greenButtonRect;
     Int4 _rightButtonRect;
+
+    // setPixelScale:
+    int _pixelScaling;
+    id _scaledFont;
 }
 @end
 @implementation AquaWindow
@@ -375,26 +389,52 @@ static unsigned char yellow_down_rgb[] = {
 {
     self = [super init];
     if (self) {
-        _topBorder = 22;
-        _leftBorder = 2;
-        _rightBorder = 2;
-        _bottomBorder = 2;
-        _hasShadow = -2;
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        [self setPixelScaling:scaling];
+
     }
     return self;
 }
+- (void)setPixelScaling:(int)scaling
+{
+    _pixelScaling = scaling;
+
+    _topBorder = 22*_pixelScaling;
+    _leftBorder = 2*_pixelScaling;
+    _rightBorder = 2*_pixelScaling;
+    _bottomBorder = 2*_pixelScaling;
+    _hasShadow = -2;
+
+    id obj;
+    obj = [Definitions scaleFont:scaling
+                    :[Definitions arrayOfCStringsForWinSystemFont]
+                    :[Definitions arrayOfWidthsForWinSystemFont]
+                    :[Definitions arrayOfHeightsForWinSystemFont]
+                    :[Definitions arrayOfXSpacingsForWinSystemFont]];
+    [self setValue:obj forKey:@"scaledFont"];
+}
+
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
-[bitmap useWinSystemFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
     int hasFocus = [context intValueForKey:@"hasFocus"];
 
-    _titleBarRect = [Definitions rectWithX:r.x y:r.y+2 w:r.w h:_topBorder-2];
-    _leftButtonsRect = [Definitions rectWithX:r.x+8 y:r.y+2 w:14*3+7*2 h:_topBorder-4];
-    _redButtonRect = [Definitions rectWithX:r.x+8 y:r.y+2 w:14 h:_topBorder-4];
-    _yellowButtonRect = [Definitions rectWithX:r.x+8+14+7 y:r.y+2 w:14 h:_topBorder-4];
-    _greenButtonRect = [Definitions rectWithX:r.x+8+14+7+14+7 y:r.y+2 w:14 h:_topBorder-4];
-    _rightButtonRect = [Definitions rectWithX:r.x+r.w-8-20 y:r.y+2 w:20 h:_topBorder-4];
-    _titleBarTextRect = [Definitions rectWithX:r.x+_leftButtonsRect.w+5 y:r.y w:r.w-_leftButtonsRect.w*2-10 h:_topBorder];
+    _titleBarRect = [Definitions rectWithX:r.x y:r.y+2*_pixelScaling w:r.w h:_topBorder-2*_pixelScaling];
+    _leftButtonsRect = [Definitions rectWithX:r.x+8*_pixelScaling y:r.y+2*_pixelScaling w:(14*3+7*2)*_pixelScaling h:_topBorder-4*_pixelScaling];
+    _redButtonRect = [Definitions rectWithX:r.x+8*_pixelScaling y:r.y+2*_pixelScaling w:14*_pixelScaling h:_topBorder-4*_pixelScaling];
+    _yellowButtonRect = [Definitions rectWithX:r.x+(8+14+7)*_pixelScaling y:r.y+2*_pixelScaling w:14*_pixelScaling h:_topBorder-4*_pixelScaling];
+    _greenButtonRect = [Definitions rectWithX:r.x+(8+14+7+14+7)*_pixelScaling y:r.y+2*_pixelScaling w:14*_pixelScaling h:_topBorder-4*_pixelScaling];
+    _rightButtonRect = [Definitions rectWithX:r.x+r.w-(8+20)*_pixelScaling y:r.y+2*_pixelScaling w:20*_pixelScaling h:_topBorder-4*_pixelScaling];
+    _titleBarTextRect = [Definitions rectWithX:r.x+_leftButtonsRect.w+5*_pixelScaling y:r.y w:r.w-_leftButtonsRect.w*2-10*_pixelScaling h:_topBorder];
 
     [bitmap setColor:@"#cacaca"];
     [bitmap fillRect:r];
@@ -474,54 +514,54 @@ static unsigned char yellow_down_rgb[] = {
             text = @"(no title)";
         }
 
-        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14];
+        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling];
         if (text) {
-            int textWidth = [Definitions bitmapWidthForText:text];
-            int backWidth = textWidth + 14;
+            int textWidth = [bitmap bitmapWidthForText:text];
+            int backWidth = textWidth + 14*_pixelScaling;
             int backX = _titleBarTextRect.x + ((_titleBarTextRect.w - backWidth) / 2);
-            int textX = backX + 7;
+            int textX = backX + 7*_pixelScaling;
             if (hasFocus) {
                 [bitmap setColor:@"black"];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+6];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+6*_pixelScaling];
             } else {
                 [bitmap setColor:@"#808080"];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+6];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+6*_pixelScaling];
             }
         }
     }
 }
 - (char)borderForX:(int)x y:(int)y w:(int)w h:(int)h
 {
-    if ((y >= 0) && (y < 4)) {
-        if ((x >= 0) && (x < 23)) {
+    if ((y >= 0) && (y < 4*_pixelScaling)) {
+        if ((x >= 0) && (x < 23*_pixelScaling)) {
             return '7';
-        } else if ((x >= w-23) && (x < w)) {
+        } else if ((x >= w-23*_pixelScaling) && (x < w)) {
             return '9';
         } else {
             return '8';
         }
-    } else if ((y >= h-4) && (y < h)) {
-        if ((x >= 0) && (x < 23)) {
+    } else if ((y >= h-4*_pixelScaling) && (y < h)) {
+        if ((x >= 0) && (x < 23*_pixelScaling)) {
             return '1';
-        } else if ((x >= w-23) && (x < w)) {
+        } else if ((x >= w-23*_pixelScaling) && (x < w)) {
             return '3';
         } else {
             return '2';
         }
-    } else if ((x >= 0) && (x < 4)) {
-        if ((y >= 0) && (y < 23)) {
+    } else if ((x >= 0) && (x < 4*_pixelScaling)) {
+        if ((y >= 0) && (y < 23*_pixelScaling)) {
             return '7';
 //return '4';
-        } else if ((y >= h-23) && (y < h)) {
+        } else if ((y >= h-23*_pixelScaling) && (y < h)) {
             return '1';
         } else {
             return '4';
         }
-    } else if ((x >= w-4) && (x < w)) {
-        if ((y >= 0) && (y < 23)) {
+    } else if ((x >= w-4*_pixelScaling) && (x < w)) {
+        if ((y >= 0) && (y < 23*_pixelScaling)) {
             return '9';
 //return '6';
-        } else if ((y >= h-23) && (y < h)) {
+        } else if ((y >= h-23*_pixelScaling) && (y < h)) {
             return '3';
         } else {
             return '6';
@@ -865,16 +905,16 @@ static unsigned char yellow_down_rgb[] = {
     int bitmapHeight = [bitmap bitmapHeight];
     int bitmapBytesPerRow = bitmapWidth*4;
 
-    if (bitmapWidth < (left[1]+middle[1]+right[1])) {
+    if (bitmapWidth < (left[1]+middle[1]+right[1])*_pixelScaling) {
         return;
     }
-    if (bitmapHeight < left[3]) {
+    if (bitmapHeight < left[3]*_pixelScaling) {
         return;
     }
-    if (bitmapHeight < middle[3]) {
+    if (bitmapHeight < middle[3]*_pixelScaling) {
         return;
     }
-    if (bitmapHeight < right[3]) {
+    if (bitmapHeight < right[3]*_pixelScaling) {
         return;
     }
 
@@ -887,13 +927,13 @@ static unsigned char yellow_down_rgb[] = {
     int bytes_per_row;
 
     width = rgb[1];
-    w1 = width;
+    w1 = width*_pixelScaling;
     height = rgb[3];
     bytes_per_row = width*3;
-    for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
+    for (int y=0; y<height*_pixelScaling; y++) {
+        for (int x=0; x<width*_pixelScaling; x++) {
             int i = y*bitmapBytesPerRow + x*4;
-            int j = y*bytes_per_row + x*3;
+            int j = (y/_pixelScaling)*bytes_per_row + (x/_pixelScaling)*3;
             pixelBytes[i] = rgb[4+j+2];
             pixelBytes[i+1] = rgb[4+j+1];
             pixelBytes[i+2] = rgb[4+j+0];
@@ -904,14 +944,14 @@ static unsigned char yellow_down_rgb[] = {
     rgb = right;
 
     width = rgb[1];
-    w2 = width;
+    w2 = width*_pixelScaling;
     height = rgb[3];
     bytes_per_row = width*3;
-int offset = (bitmapWidth - width) * 4;
-    for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
+int offset = (bitmapWidth - w2) * 4;
+    for (int y=0; y<height*_pixelScaling; y++) {
+        for (int x=0; x<width*_pixelScaling; x++) {
             int i = y*bitmapBytesPerRow + x*4 + offset;
-            int j = y*bytes_per_row + x*3;
+            int j = (y/_pixelScaling)*bytes_per_row + (x/_pixelScaling)*3;
             pixelBytes[i] = rgb[4+j+2];
             pixelBytes[i+1] = rgb[4+j+1];
             pixelBytes[i+2] = rgb[4+j+0];
@@ -924,8 +964,8 @@ int offset = (bitmapWidth - width) * 4;
     width = rgb[1];
     height = rgb[3];
     bytes_per_row = width*3;
-    for (int y=0; y<height; y++) {
-        int j = y*bytes_per_row;
+    for (int y=0; y<height*_pixelScaling; y++) {
+        int j = (y/_pixelScaling)*bytes_per_row;
         for (int x=w1; x<bitmapWidth-w2; x++) {
             int i = y*bitmapBytesPerRow + x*4;
             pixelBytes[i] = rgb[4+j+2];

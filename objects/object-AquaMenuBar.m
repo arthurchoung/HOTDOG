@@ -29,8 +29,6 @@
 + (id)AquaMenuBar
 {
     id obj = [@"AquaMenuBar" asInstance];
-    id configPath = [Definitions configDir:@"Config/menuBar.csv"];
-    [obj setValue:configPath forKey:@"configPath"];
     return obj;
 }
 @end
@@ -97,6 +95,10 @@ static char *menu_bar_middle =
     id _selectedDict;
     id _menuDict;
     id _array;
+
+    int _pixelScaling;
+    id _scaledFont;
+    id _scaledMenuBarMiddlePixels;
 }
 @end
 
@@ -116,6 +118,33 @@ static char *menu_bar_middle =
         [self setValue:dict forKey:@"selectedDict"];
         _closingIteration = duration;
     }
+}
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        [self setPixelScaling:scaling];
+        id configPath = [Definitions configDir:@"Config/menuBar.csv"];
+        [self setValue:configPath forKey:@"configPath"];
+    }
+    return self;
+}
+- (void)setPixelScaling:(int)scaling
+{
+    _pixelScaling = scaling;
+    id scaledFont = [Definitions scaleFont:scaling
+                        :[Definitions arrayOfCStringsForWinSystemFont]
+                        :[Definitions arrayOfWidthsForWinSystemFont]
+                        :[Definitions arrayOfHeightsForWinSystemFont]
+                        :[Definitions arrayOfXSpacingsForWinSystemFont]];
+    [self setValue:scaledFont forKey:@"scaledFont"];
+
+    id obj = [nsfmt(@"%s", menu_bar_middle) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledMenuBarMiddlePixels"];
 }
 
 - (void)updateMenuBar
@@ -356,20 +385,29 @@ NSLog(@"DEALLOC AquaMenuBar");
         h = [obj preferredHeight];
     }
     id windowManager = [@"windowManager" valueForKey];
-    id menuDict = [windowManager openWindowForObject:obj x:x y:19 w:w+3 h:h+3];
+    id menuDict = [windowManager openWindowForObject:obj x:x y:19*_pixelScaling w:w+3 h:h+3];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
 [windowManager XSetInputFocus:[menuDict unsignedLongValueForKey:@"window"]];
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
-[bitmap useWinSystemFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
     char *leftCornerStr = menu_bar_upper_left_corner;
     int leftCornerWidth = [Definitions widthForCString:menu_bar_upper_left_corner];
     char *rightCornerStr = menu_bar_upper_right_corner;
     int rightCornerWidth = [Definitions widthForCString:menu_bar_upper_right_corner];
 
-    [Definitions drawInBitmap:bitmap left:menu_bar_middle middle:menu_bar_middle right:menu_bar_middle x:r.x y:r.y w:r.w palette:menu_bar_palette];
+    {
+        char *cstr = [_scaledMenuBarMiddlePixels UTF8String];
+        [Definitions drawInBitmap:bitmap left:cstr middle:cstr right:cstr x:r.x y:r.y w:r.w palette:menu_bar_palette];
+    }
 
     id windowManager = [@"windowManager" valueForKey];
     int mouseRootX = [windowManager intValueForKey:@"mouseX"];
@@ -394,17 +432,16 @@ NSLog(@"DEALLOC AquaMenuBar");
                 monitorIndex++;
             }
             [bitmap setColorIntR:0 g:0 b:0 a:255];
-            [bitmap drawBitmapText:[text join:@""] x:monitorX+10 y:4];
+            [bitmap drawBitmapText:[text join:@""] x:monitorX+10*_pixelScaling y:4*_pixelScaling];
         }
     }
 
     int mouseMonitorX = [mouseMonitor intValueForKey:@"x"];
     int mouseMonitorWidth = [mouseMonitor intValueForKey:@"width"];
 
+    int flexibleIndex = -1;
     {
-        int flexibleIndex = -1;
-
-        int x = 10;
+        int x = 10*_pixelScaling;
         for (int i=0; i<[_array count]; i++) {
             id elt = [_array nth:i];
             id obj = [elt valueForKey:@"object"];
@@ -413,46 +450,88 @@ NSLog(@"DEALLOC AquaMenuBar");
             }
             int flexible = [elt intValueForKey:@"flexible"];
             int leftPadding = [elt intValueForKey:@"leftPadding"];
+            leftPadding *= _pixelScaling;
             int rightPadding = [elt intValueForKey:@"rightPadding"];
+            rightPadding *= _pixelScaling;
             int w = 0;
             if (flexible) {
                 flexibleIndex = i;
             } else {
-                if ([obj respondsToSelector:@selector(preferredWidthForBitmap:)]) {
-                    w = [obj preferredWidthForBitmap:bitmap]+leftPadding+rightPadding;
-                } else if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                    w = [obj preferredWidth]+leftPadding+rightPadding;
+                int highestWidth = [elt intValueForKey:@"highestWidth"];
+                id text = nil;
+                if ([obj respondsToSelector:@selector(text)]) {
+                    text = [obj text];
+                }
+                if (!text) {
+                    text = [obj valueForKey:@"text"];
+                }
+                if (text) {
+                    w = [bitmap bitmapWidthForText:text];
+                    w += leftPadding+rightPadding;
+                    if (w > highestWidth) {
+                        [elt setValue:nsfmt(@"%d", w) forKey:@"highestWidth"];
+                    } else {
+                        w = highestWidth;
+                    }
                 } else {
-                    w = 100;
+                    id pixels = [obj valueForKey:@"pixels"];
+                    if (pixels) {
+                        w = [Definitions widthForCString:[pixels UTF8String]];
+                        w *= _pixelScaling;
+                        w += leftPadding+rightPadding;
+                        if (w > highestWidth) {
+                            [elt setValue:nsfmt(@"%d", w) forKey:@"highestWidth"];
+                        } else {
+                            w = highestWidth;
+                        }
+                    } else {
+                        w = 100;
+                    }
                 }
             }
             [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
             [elt setValue:nsfmt(@"%d", w) forKey:@"width"];
             x += w;
         }
-        int maxX = mouseMonitorWidth - 10;
+        int maxX = mouseMonitorWidth - 10*_pixelScaling;
         int remainingX = maxX - x;
         if (remainingX > 0) {
             if (flexibleIndex != -1) {
                 {
                     id elt = [_array nth:flexibleIndex];
                     int leftPadding = [elt intValueForKey:@"leftPadding"];
+                    leftPadding *= _pixelScaling;
                     int rightPadding = [elt intValueForKey:@"rightPadding"];
+                    rightPadding *= _pixelScaling;
                     int oldX = [elt intValueForKey:@"x"];
                     int newW = remainingX - leftPadding - rightPadding;
                     if (newW > 0) {
                         id obj = [elt valueForKey:@"object"];
-                        if ([obj respondsToSelector:@selector(preferredWidthForBitmap:)]) {
-                            int w = [obj preferredWidthForBitmap:bitmap]+leftPadding+rightPadding;
+                        id text = nil;
+                        if ([obj respondsToSelector:@selector(text)]) {
+                            text = [obj text];
+                        }
+                        if (!text) {
+                            text = [obj valueForKey:@"text"];
+                        }
+                        if (text) {
+                            int w = [bitmap bitmapWidthForText:text];
+                            w += leftPadding+rightPadding;
                             if (w < newW) {
                                 newW = w;
                             }
-                        } else if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                            int w = [obj preferredWidth]+leftPadding+rightPadding;
-                            if (w < newW) {
-                                newW = w;
+                        } else {
+                            id pixels = [obj valueForKey:@"pixels"];
+                            if (pixels) {
+                                int w = [Definitions widthForCString:[pixels UTF8String]];
+                                w *= _pixelScaling;
+                                w += leftPadding+rightPadding;
+                                if (w < newW) {
+                                    newW = w;
+                                }
                             }
                         }
+
                         [elt setValue:nsfmt(@"%d", oldX+leftPadding) forKey:@"x"];
                         [elt setValue:nsfmt(@"%d", newW) forKey:@"width"];
                     }
@@ -474,13 +553,22 @@ NSLog(@"DEALLOC AquaMenuBar");
         r1.w = [elt intValueForKey:@"width"];
 
         Int4 r2 = r1;
-        r2.y += 1;
-        r2.h -= 1;
+r2.y += 1*_pixelScaling;
+r2.h -= 1*_pixelScaling;
         id obj = [elt valueForKey:@"object"];
         int leftPadding = [elt intValueForKey:@"leftPadding"];
+        leftPadding *= _pixelScaling;
         int rightPadding = [elt intValueForKey:@"rightPadding"];
+        rightPadding *= _pixelScaling;
         if ((_buttonDown || (_closingIteration > 0)) && (_selectedDict == elt)) {
-            if ([obj respondsToSelector:@selector(drawHighlightedInBitmap:rect:)]) {
+            id text = nil;
+            if ([obj respondsToSelector:@selector(text)]) {
+                text = [obj text];
+            }
+            if (!text) {
+                text = [obj valueForKey:@"text"];
+            }
+            if (text) {
                 [Definitions drawHorizontalStripesInBitmap:bitmap rect:r1 colors:@"#2e61af" :@"#2c60ae"];
                 [bitmap setColor:@"#2c60ae"];
                 [bitmap drawHorizontalLineAtX:r1.x x:r1.x+r1.w-1 y:r1.y];
@@ -488,23 +576,66 @@ NSLog(@"DEALLOC AquaMenuBar");
                 Int4 r3 = r2;
                 r3.x += leftPadding;
                 r3.w -= leftPadding+rightPadding;
-                [obj drawHighlightedInBitmap:bitmap rect:r3];
-            } else if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
-                Int4 r3 = r2;
-                r3.x += leftPadding;
-                r3.w -= leftPadding+rightPadding;
-                [bitmap setColor:@"black"];
-                [obj drawInBitmap:bitmap rect:r3];
+                if (i == flexibleIndex) {
+                    int textWidth = [bitmap bitmapWidthForText:text];
+                    if (textWidth > r3.w) {
+                        text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
+                    }
+                }
+                [bitmap setColor:@"white"];
+                [bitmap drawBitmapText:text x:r3.x y:r3.y+3*_pixelScaling];
             } else {
+                id palette = [obj valueForKey:@"highlightedPalette"];
+                if (!palette) {
+                    palette = [obj valueForKey:@"palette"];
+                }
+                if (palette) {
+                    id pixels = [obj valueForKey:@"pixels"];
+                    if (pixels) {
+                        [Definitions drawHorizontalStripesInBitmap:bitmap rect:r1 colors:@"#2e61af" :@"#2c60ae"];
+                        [bitmap setColor:@"#2c60ae"];
+                        [bitmap drawHorizontalLineAtX:r1.x x:r1.x+r1.w-1 y:r1.y];
+
+                        Int4 r3 = r2;
+                        r3.x += leftPadding;
+                        r3.w -= leftPadding+rightPadding;
+                        pixels = [pixels asXYScaledPixels:_pixelScaling];
+                        [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r3.x y:r3.y];
+                    }
+                }
             }
         } else {
-            if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
+            id text = nil;
+            if ([obj respondsToSelector:@selector(text)]) {
+                text = [obj text];
+            }
+            if (!text) {
+                text = [obj valueForKey:@"text"];
+            }
+            if (text) {
                 Int4 r3 = r2;
                 r3.x += leftPadding;
                 r3.w -= leftPadding+rightPadding;
                 [bitmap setColor:@"black"];
-                [obj drawInBitmap:bitmap rect:r3];
+                if (i == flexibleIndex) {
+                    int textWidth = [bitmap bitmapWidthForText:text];
+                    if (textWidth > r3.w) {
+                        text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
+                    }
+                }
+                [bitmap drawBitmapText:text x:r3.x y:r3.y+3*_pixelScaling];
             } else {
+                id palette = [obj valueForKey:@"palette"];
+                if (palette) {
+                    id pixels = [obj valueForKey:@"pixels"];
+                    if (pixels) {
+                        Int4 r3 = r2;
+                        r3.x += leftPadding;
+                        r3.w -= leftPadding+rightPadding;
+                        pixels = [pixels asXYScaledPixels:_pixelScaling];
+                        [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r3.x y:r3.y];
+                    }
+                }
             }
         }
     }

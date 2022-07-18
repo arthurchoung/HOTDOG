@@ -25,6 +25,82 @@
 
 #import "HOTDOG.h"
 
+static char *amigaPalette =
+"b #000000\n"
+". #000022\n"
+"* #ff8800\n"
+"X #0055aa\n"
+"o #ffffff\n"
+;
+
+static char *titleBarTextBackgroundPixels =
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+"o\n"
+;
+static char *titleBarLowerButtonPixels =
+"XXooooooooooooooooooooooXX\n"
+"XXooooooooooooooooooooooXX\n"
+"XXooXXXXXXXXXXXXXXooooooXX\n"
+"XXooXXXXXXXXXXXXXXooooooXX\n"
+"XXooXXooooooooooXXooooooXX\n"
+"XXooXXooooooooooXXooooooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXoo..............ooXX\n"
+"XXooXXXX..............ooXX\n"
+"XXooXXXX..............ooXX\n"
+"XXoooooo..............ooXX\n"
+"XXoooooo..............ooXX\n"
+"XXoooooo..............ooXX\n"
+"XXoooooo..............ooXX\n"
+"XXooooooooooooooooooooooXX\n"
+"XXooooooooooooooooooooooXX\n"
+;
+static char *titleBarRaiseButtonPixels =
+"XXooooooooooooooooooooooXX\n"
+"XXooooooooooooooooooooooXX\n"
+"XXoo..............ooooooXX\n"
+"XXoo..............ooooooXX\n"
+"XXoo....XXXXXXXXXXXXXXooXX\n"
+"XXoo....XXXXXXXXXXXXXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXoo....XXooooooooooXXooXX\n"
+"XXooooooXXooooooooooXXooXX\n"
+"XXooooooXXooooooooooXXooXX\n"
+"XXooooooXXXXXXXXXXXXXXooXX\n"
+"XXooooooXXXXXXXXXXXXXXooXX\n"
+"XXooooooooooooooooooooooXX\n"
+"XXooooooooooooooooooooooXX\n"
+;
+
+
 @interface AmigaMenuBar : IvarObject
 {
     id _configPath;
@@ -35,6 +111,13 @@
     id _selectedDict;
     id _menuDict;
     id _array;
+
+    // setPixelScaling:
+    int _pixelScaling;
+    id _scaledFont;
+    id _textBackgroundPixels;
+    id _titleBarRaiseButtonPixels;
+    id _titleBarLowerButtonPixels;
 }
 @end
 
@@ -60,12 +143,35 @@
 {
     self = [super init];
     if (self) {
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling < 1) {
+            scaling = 1;
+        }
+        [self setPixelScaling:scaling];
         id configPath = [Definitions configDir:@"Config/menuBar.csv"];
         [self setValue:configPath forKey:@"configPath"];
     }
     return self;
 }
 
+- (void)setPixelScaling:(int)scaling
+{
+    _pixelScaling = scaling;
+    id scaledFont = [Definitions scaleFont:scaling
+                        :[Definitions arrayOfCStringsForTopazFont]
+                        :[Definitions arrayOfWidthsForTopazFont]
+                        :[Definitions arrayOfHeightsForTopazFont]
+                        :[Definitions arrayOfXSpacingsForTopazFont]];
+    [self setValue:scaledFont forKey:@"scaledFont"];
+
+    id pixels;
+    pixels = [nsfmt(@"%s", titleBarTextBackgroundPixels) asXYScaledPixels:scaling];
+    [self setValue:pixels forKey:@"textBackgroundPixels"];
+    pixels = [nsfmt(@"%s", titleBarRaiseButtonPixels) asXYScaledPixels:scaling];
+    [self setValue:pixels forKey:@"titleBarRaiseButtonPixels"];
+    pixels = [nsfmt(@"%s", titleBarLowerButtonPixels) asXYScaledPixels:scaling];
+    [self setValue:pixels forKey:@"titleBarLowerButtonPixels"];
+}
 - (void)updateMenuBar
 {
     id arr = [_configPath parseCSVFile];
@@ -207,6 +313,7 @@ NSLog(@"DEALLOC AmigaMenuBar");
     id windowManager = [event valueForKey:@"windowManager"];
     int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
+NSLog(@"handleMouseDown menuBarHeight %d mouseRootY %d", menuBarHeight, mouseRootY);
     if (mouseRootY >= menuBarHeight) {
         return;
     }
@@ -291,6 +398,7 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
     if (!obj) {
         return;
     }
+
     id monitor = [Definitions monitorForX:mouseRootX y:0];
     int monitorX = [monitor intValueForKey:@"x"];
     int monitorWidth = [monitor intValueForKey:@"width"];
@@ -309,18 +417,22 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
         h = [obj preferredHeight];
     }
     id windowManager = [@"windowManager" valueForKey];
-    id menuDict = [windowManager openWindowForObject:obj x:x y:18 w:w+3 h:h+3];
+    id menuDict = [windowManager openWindowForObject:obj x:x y:18*_pixelScaling w:w+3 h:h+3];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
     [windowManager XSetInputFocus:[menuDict unsignedLongValueForKey:@"window"]];
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
-    [bitmap useTopazFont];
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
 
-    char *palette = [Definitions cStringForAmigaPalette];
-    char *textBackgroundCString = [Definitions cStringForAmigaTitleBarTextBackground];
-    [Definitions drawInBitmap:bitmap left:textBackgroundCString middle:textBackgroundCString right:textBackgroundCString x:r.x y:r.y w:r.w palette:palette];
+    char *palette = amigaPalette;
+    [Definitions drawInBitmap:bitmap left:[_textBackgroundPixels UTF8String] middle:[_textBackgroundPixels UTF8String] right:[_textBackgroundPixels UTF8String] x:r.x y:r.y w:r.w palette:palette];
 
     id windowManager = [@"windowManager" valueForKey];
     int mouseRootX = [windowManager intValueForKey:@"mouseX"];
@@ -345,7 +457,7 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
                 monitorIndex++;
             }
             [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
-            [bitmap drawBitmapText:[text join:@""] x:monitorX+5*2 y:2];
+            [bitmap drawBitmapText:[text join:@""] x:monitorX+5*2*_pixelScaling y:2*_pixelScaling];
         }
     }
 
@@ -355,16 +467,15 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
     if (_rightButtonDown) {
         id text = @"Workbench release.       1911192 free memory";
         [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
-        [bitmap drawBitmapText:text x:mouseMonitorX+5 y:2];
-        [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-3 y:0];
-        [bitmap drawCString:[Definitions cStringForAmigaTitleBarLowerButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-24-3 y:0];
+        [bitmap drawBitmapText:text x:mouseMonitorX+5*_pixelScaling y:2*_pixelScaling];
+        [bitmap drawCString:[_titleBarRaiseButtonPixels UTF8String] palette:palette x:mouseMonitorX+mouseMonitorWidth-(26+3)*_pixelScaling y:0];
+        [bitmap drawCString:[_titleBarLowerButtonPixels UTF8String] palette:palette x:mouseMonitorX+mouseMonitorWidth-(26+24+3)*_pixelScaling y:0];
         return;
     }
 
+    int flexibleIndex = -1;
     {
-        int flexibleIndex = -1;
-
-        int x = 5;
+        int x = 5*_pixelScaling;
         for (int i=0; i<[_array count]; i++) {
             id elt = [_array nth:i];
             id obj = [elt valueForKey:@"object"];
@@ -373,46 +484,88 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
             }
             int flexible = [elt intValueForKey:@"flexible"];
             int leftPadding = [elt intValueForKey:@"leftPadding"];
+            leftPadding *= _pixelScaling;
             int rightPadding = [elt intValueForKey:@"rightPadding"];
+            rightPadding *= _pixelScaling;
             int w = 0;
             if (flexible) {
                 flexibleIndex = i;
             } else {
-                if ([obj respondsToSelector:@selector(preferredWidthForBitmap:)]) {
-                    w = [obj preferredWidthForBitmap:bitmap]+leftPadding+rightPadding;
-                } else if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                    w = [obj preferredWidth]+leftPadding+rightPadding;
+                int highestWidth = [elt intValueForKey:@"highestWidth"];
+                id text = nil;
+                if ([obj respondsToSelector:@selector(text)]) {
+                    text = [obj text];
+                }
+                if (!text) {
+                    text = [obj valueForKey:@"text"];
+                }
+                if (text) {
+                    w = [bitmap bitmapWidthForText:text];
+                    w += leftPadding+rightPadding;
+                    if (w > highestWidth) {
+                        [elt setValue:nsfmt(@"%d", w) forKey:@"highestWidth"];
+                    } else {
+                        w = highestWidth;
+                    }
                 } else {
-                    w = 100;
+                    id pixels = [obj valueForKey:@"pixels"];
+                    if (pixels) {
+                        w = [Definitions widthForCString:[pixels UTF8String]];
+                        w *= _pixelScaling;
+                        w += leftPadding+rightPadding;
+                        if (w > highestWidth) {
+                            [elt setValue:nsfmt(@"%d", w) forKey:@"highestWidth"];
+                        } else {
+                            w = highestWidth;
+                        }
+                    } else {
+                        w = 100;
+                    }
                 }
             }
             [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
             [elt setValue:nsfmt(@"%d", w) forKey:@"width"];
             x += w;
         }
-        int maxX = mouseMonitorWidth - (5 + 26 + 24 + 3);
+        int maxX = mouseMonitorWidth - (5 + 26 + 24 + 3)*_pixelScaling;
         int remainingX = maxX - x;
         if (remainingX > 0) {
             if (flexibleIndex != -1) {
                 {
                     id elt = [_array nth:flexibleIndex];
                     int leftPadding = [elt intValueForKey:@"leftPadding"];
+                    leftPadding *= _pixelScaling;
                     int rightPadding = [elt intValueForKey:@"rightPadding"];
+                    rightPadding *= _pixelScaling;
                     int oldX = [elt intValueForKey:@"x"];
                     int newW = remainingX - leftPadding - rightPadding;
                     if (newW > 0) {
                         id obj = [elt valueForKey:@"object"];
-                        if ([obj respondsToSelector:@selector(preferredWidthForBitmap:)]) {
-                            int w = [obj preferredWidthForBitmap:bitmap]+leftPadding+rightPadding;
+                        id text = nil;
+                        if ([obj respondsToSelector:@selector(text)]) {
+                            text = [obj text];
+                        }
+                        if (!text) {
+                            text = [obj valueForKey:@"text"];
+                        }
+                        if (text) {
+                            int w = [bitmap bitmapWidthForText:text];
+                            w += leftPadding+rightPadding;
                             if (w < newW) {
                                 newW = w;
                             }
-                        } else if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                            int w = [obj preferredWidth]+leftPadding+rightPadding;
-                            if (w < newW) {
-                                newW = w;
+                        } else {
+                            id pixels = [obj valueForKey:@"pixels"];
+                            if (pixels) {
+                                int w = [Definitions widthForCString:[pixels UTF8String]];
+                                w *= _pixelScaling;
+                                w += leftPadding+rightPadding;
+                                if (w < newW) {
+                                    newW = w;
+                                }
                             }
                         }
+
                         [elt setValue:nsfmt(@"%d", oldX+leftPadding) forKey:@"x"];
                         [elt setValue:nsfmt(@"%d", newW) forKey:@"width"];
                     }
@@ -426,7 +579,6 @@ NSLog(@"AmigaMenuBar handleMouseUp event %@", event);
         }
     }
 
-BOOL first = YES;
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
         Int4 r1 = r;
@@ -435,41 +587,89 @@ BOOL first = YES;
         r1.w = [elt intValueForKey:@"width"];
 
         Int4 r2 = r1;
-if (first) {
-first = NO;
-} else {
-        r2.y -= 2;
-}
         id obj = [elt valueForKey:@"object"];
         int leftPadding = [elt intValueForKey:@"leftPadding"];
+        leftPadding *= _pixelScaling;
         int rightPadding = [elt intValueForKey:@"rightPadding"];
+        rightPadding *= _pixelScaling;
         if ((_buttonDown || (_closingIteration > 0)) && (_selectedDict == elt)) {
-            if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
+            id text = nil;
+            if ([obj respondsToSelector:@selector(text)]) {
+                text = [obj text];
+            }
+            if (!text) {
+                text = [obj valueForKey:@"text"];
+            }
+            if (text) {
+                Int4 r3 = r2;
+                r3.x += leftPadding;
+                r3.w -= leftPadding+rightPadding;
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:r2];
-                Int4 r3 = r2;
-                r3.x += leftPadding;
-                r3.w -= leftPadding+rightPadding;
-                r3.y += 1;
-                r3.h -= 1;
                 [bitmap setColorIntR:0xff g:0x88 b:0x00 a:0xff];
-                [obj drawInBitmap:bitmap rect:r3];
+                if (i == flexibleIndex) {
+                    int textWidth = [bitmap bitmapWidthForText:text];
+                    if (textWidth > r3.w) {
+                        text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
+                    }
+                }
+                [bitmap drawBitmapText:text x:r3.x y:r3.y+2*_pixelScaling];
             } else {
+                id palette = [obj valueForKey:@"highlightedPalette"];
+                if (!palette) {
+                    palette = [obj valueForKey:@"palette"];
+                }
+                if (palette) {
+                    id pixels = [obj valueForKey:@"pixels"];
+                    if (pixels) {
+                        Int4 r3 = r2;
+                        r3.x += leftPadding;
+                        r3.w -= leftPadding+rightPadding;
+                        [bitmap setColor:@"black"];
+                        [bitmap fillRect:r2];
+//                        [bitmap setColorIntR:0xff g:0x88 b:0x00 a:0xff];
+                        pixels = [pixels asXYScaledPixels:_pixelScaling];
+                        [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r3.x y:r3.y];
+                    }
+                }
             }
         } else {
-            if ([obj respondsToSelector:@selector(drawInBitmap:rect:)]) {
+            id text = nil;
+            if ([obj respondsToSelector:@selector(text)]) {
+                text = [obj text];
+            }
+            if (!text) {
+                text = [obj valueForKey:@"text"];
+            }
+            if (text) {
                 Int4 r3 = r2;
                 r3.x += leftPadding;
                 r3.w -= leftPadding+rightPadding;
-                r3.y += 1;
-                r3.h -= 1;
                 [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
-                [obj drawInBitmap:bitmap rect:r3];
+                if (i == flexibleIndex) {
+                    int textWidth = [bitmap bitmapWidthForText:text];
+                    if (textWidth > r3.w) {
+                        text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
+                    }
+                }
+                [bitmap drawBitmapText:text x:r3.x y:r3.y+2*_pixelScaling];
             } else {
+                id palette = [obj valueForKey:@"palette"];
+                if (palette) {
+                    id pixels = [obj valueForKey:@"pixels"];
+                    if (pixels) {
+                        Int4 r3 = r2;
+                        r3.x += leftPadding;
+                        r3.w -= leftPadding+rightPadding;
+//                        [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
+                        pixels = [pixels asXYScaledPixels:_pixelScaling];
+                        [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r3.x y:r3.y];
+                    }
+                }
             }
         }
     }
-    [bitmap drawCString:[Definitions cStringForAmigaTitleBarRaiseButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-3 y:0];
-    [bitmap drawCString:[Definitions cStringForAmigaTitleBarLowerButton] palette:palette x:mouseMonitorX+mouseMonitorWidth-26-24-3 y:0];
+    [bitmap drawCString:[_titleBarRaiseButtonPixels UTF8String] palette:palette x:mouseMonitorX+mouseMonitorWidth-(26+3)*_pixelScaling y:0];
+    [bitmap drawCString:[_titleBarLowerButtonPixels UTF8String] palette:palette x:mouseMonitorX+mouseMonitorWidth-(26+24+3)*_pixelScaling y:0];
 }
 @end
