@@ -27,17 +27,30 @@
 
 #include <sys/time.h>
 
-@implementation Definitions(fjkdlsfjlksdjdskfldsjkfljkf)
+// for compatibility
+// CommandOutputBitmap has been renamed to CommandBitmapMenuItem
+@implementation Definitions(fjkdlsjkfjkdfjlksdjdskfldsjkfjfkdlsmfkldsmkfljkf)
 + (id)CommandOutputBitmap:(id)cmd
 {
     id process = [cmd runCommandAndReturnProcess];
-    id obj = [@"CommandOutputBitmap" asInstance];
+    id obj = [@"CommandBitmapMenuItem" asInstance];
     [obj setValue:process forKey:@"fileDescriptor"];
     return obj;
 }
 @end
 
-@interface CommandOutputBitmap : IvarObject
+@implementation Definitions(fjkdlsfjlksdjdskfldsjkfjfkdlsmfkldsmkfljkf)
++ (id)CommandBitmapMenuItem:(id)cmd
+{
+    id process = [cmd runCommandAndReturnProcess];
+    id obj = [@"CommandBitmapMenuItem" asInstance];
+    [obj setValue:process forKey:@"fileDescriptor"];
+    return obj;
+}
+@end
+
+
+@interface CommandBitmapMenuItem : IvarObject
 {
     id _fileDescriptor;
     id _firstLine;
@@ -46,7 +59,7 @@
     id _highlightedPalette;
 }
 @end
-@implementation CommandOutputBitmap
+@implementation CommandBitmapMenuItem
 - (int)fileDescriptor
 {
     if (_fileDescriptor) {
@@ -86,49 +99,5 @@
         [_fileDescriptor handleFileDescriptor];
         [self handleData:[_fileDescriptor valueForKey:@"data"]];
     }
-}
-- (int)preferredWidth
-{
-    int len = [[[_pixels split:@"\n"] nth:0] length];
-    if (!len) {
-        return 200;
-    }
-    return len;
-}
-- (int)preferredHeight
-{
-    int len = [[_pixels split:@"\n"] count];
-    if (!len) {
-        return 200;
-    }
-    return len;
-}
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
-{
-    [self drawInBitmap:bitmap rect:r context:nil];
-}
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
-{
-    if ([context valueForKey:@"selectedTimestamp"]) {
-        [self drawHighlightedInBitmap:bitmap rect:r];
-        return;
-    }
-    if (!_pixels || !_palette) {
-        return;
-    }
-    [bitmap drawCString:[_pixels UTF8String] palette:[_palette UTF8String] x:r.x y:r.y];
-}
-- (void)drawHighlightedInBitmap:(id)bitmap rect:(Int4)r
-{
-    if (!_pixels) {
-        return;
-    }
-
-    if (!_highlightedPalette) {
-        [self drawInBitmap:bitmap rect:r];
-        return;
-    }
-
-    [bitmap drawCString:[_pixels UTF8String] palette:[_highlightedPalette UTF8String] x:r.x y:r.y];
 }
 @end

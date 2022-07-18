@@ -37,38 +37,69 @@
 }
 @end
 
-
-@implementation Definitions(fjkdlsfjlksdjkf)
+// for compatibility
+// CommandOutputText has been renamed to CommandTextMenuItem
+@implementation Definitions(fjkdlsfjjfdksjfklksdejwklfmksldmfklsdmfklsdjkf)
 + (id)CommandOutputText:(id)cmd
 {
     id process = [cmd runCommandAndReturnProcess];
-    id obj = [@"CommandOutputText" asInstance];
+    id obj = [@"CommandTextMenuItem" asInstance];
     [obj setValue:cmd forKey:@"command"];
     [obj setValue:process forKey:@"fileDescriptor"];
     return obj;
 }
 + (id)CommandOutputText:(id)cmd lineMessage:(id)lineMessage
 {
-    id obj = [Definitions CommandOutputText:cmd];
+    id obj = [Definitions CommandTextMenuItem:cmd];
     [obj setValue:lineMessage forKey:@"lineMessage"];
     return obj;
 }
 + (id)CommandOutputText:(id)cmd stringFormat:(id)stringFormat
 {
-    id obj = [Definitions CommandOutputText:cmd];
+    id obj = [Definitions CommandTextMenuItem:cmd];
     [obj setValue:stringFormat forKey:@"stringFormat"];
     return obj;
 }
 + (id)CommandOutputText:(id)cmd lineMessage:(id)lineMessage stringFormat:(id)stringFormat
 {
-    id obj = [Definitions CommandOutputText:cmd];
+    id obj = [Definitions CommandTextMenuItem:cmd];
     [obj setValue:lineMessage forKey:@"lineMessage"];
     [obj setValue:stringFormat forKey:@"stringFormat"];
     return obj;
 }
 @end
 
-@interface CommandOutputText : IvarObject
+@implementation Definitions(fjkdlsfjlksdejwklfmksldmfklsdmfklsdjkf)
++ (id)CommandTextMenuItem:(id)cmd
+{
+    id process = [cmd runCommandAndReturnProcess];
+    id obj = [@"CommandTextMenuItem" asInstance];
+    [obj setValue:cmd forKey:@"command"];
+    [obj setValue:process forKey:@"fileDescriptor"];
+    return obj;
+}
++ (id)CommandTextMenuItem:(id)cmd lineMessage:(id)lineMessage
+{
+    id obj = [Definitions CommandTextMenuItem:cmd];
+    [obj setValue:lineMessage forKey:@"lineMessage"];
+    return obj;
+}
++ (id)CommandTextMenuItem:(id)cmd stringFormat:(id)stringFormat
+{
+    id obj = [Definitions CommandTextMenuItem:cmd];
+    [obj setValue:stringFormat forKey:@"stringFormat"];
+    return obj;
+}
++ (id)CommandTextMenuItem:(id)cmd lineMessage:(id)lineMessage stringFormat:(id)stringFormat
+{
+    id obj = [Definitions CommandTextMenuItem:cmd];
+    [obj setValue:lineMessage forKey:@"lineMessage"];
+    [obj setValue:stringFormat forKey:@"stringFormat"];
+    return obj;
+}
+@end
+
+@interface CommandTextMenuItem : IvarObject
 {
     id _command;
     id _fileDescriptor;
@@ -78,7 +109,8 @@
     id _stringFormat;
 }
 @end
-@implementation CommandOutputText
+@implementation CommandTextMenuItem
+    
 - (int)fileDescriptor
 {
     if (_fileDescriptor) {
@@ -103,7 +135,7 @@ NSLog(@"CommandOutputText command '%@' readLine '%@'", _command, line);
         }
     }
 }
-- (int)preferredWidth
+- (id)text
 {
     id str = @"No output";
     if (_stringFormat) {
@@ -115,76 +147,7 @@ NSLog(@"CommandOutputText command '%@' readLine '%@'", _command, line);
     } else if (_lastLine) {
         str = _lastLine;
     }
-    int len = [str length];
-    if (!len) {
-        str = @"No output";
-    }
-
-    int w = [Definitions bitmapWidthForText:str];
-    if (w > _maxWidth) {
-        _maxWidth = w;
-    }
-    return _maxWidth;
-}
-- (int)preferredWidthForBitmap:(id)bitmap
-{
-    id str = @"No output";
-    if (_stringFormat) {
-        if (_lastLine) {
-            str = [_lastLine str:_stringFormat];
-        } else {
-            str = [@"" str:_stringFormat];
-        }
-    } else if (_lastLine) {
-        str = _lastLine;
-    }
-    int len = [str length];
-    if (!len) {
-        str = @"No output";
-    }
-
-    int w = [bitmap bitmapWidthForText:str];
-    if (w > _maxWidth) {
-        _maxWidth = w;
-    }
-    return _maxWidth;
-}
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
-{
-    id str = @"No output";
-    if (_stringFormat) {
-        if (_lastLine) {
-            str = [_lastLine str:_stringFormat];
-        } else {
-            str = [@"" str:_stringFormat];
-        }
-    } else if (_lastLine) {
-        str = _lastLine;
-    }
-    int len = [str length];
-    if (!len) {
-        str = @"No output";
-    }
-    [bitmap drawBitmapText:str x:r.x y:r.y+3];
-}
-- (void)drawHighlightedInBitmap:(id)bitmap rect:(Int4)r
-{
-    id str = @"No output";
-    if (_stringFormat) {
-        if (_lastLine) {
-            str = [_lastLine str:_stringFormat];
-        } else {
-            str = [@"" str:_stringFormat];
-        }
-    } else if (_lastLine) {
-        str = _lastLine;
-    }
-    int len = [str length];
-    if (!len) {
-        str = @"No output";
-    }
-    [bitmap setColorIntR:255 g:255 b:255 a:255];
-    [bitmap drawBitmapText:str x:r.x y:r.y+3];
+    return str;
 }
 
 @end
