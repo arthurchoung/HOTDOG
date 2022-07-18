@@ -25,6 +25,112 @@
 
 #import "HOTDOG.h"
 
+static char *macComputerMenuIconPalette =
+"b #000000\n"
+". #222222\n"
+"X #444444\n"
+"o #606060\n"
+"O #777777\n"
+"+ #DD0000\n"
+"@ #00BB00\n"
+"# #868A8E\n"
+"$ #A0A0A0\n"
+"% #C3C7CB\n"
+"& #cccccc\n"
+"* #CCCCFF\n"
+"= #ffffff\n"
+;
+
+static char *macComputerMenuIconPixels =
+"            \n"
+"            \n"
+" bbbbbbbbbb \n"
+"b&&&&&&&&&&b\n"
+"b&XXXXXXXX&b\n"
+"b&X******=&b\n"
+"b&X******=&b\n"
+"b&X******=&b\n"
+"b&X******=&b\n"
+"b&X******=&b\n"
+"b&O=======&b\n"
+"b&&&&&&&&&&b\n"
+"b&@&&&&&&&&b\n"
+"b&+&&&bbbb&b\n"
+"b&&&&&&&&&&b\n"
+" ......bbbb \n"
+" bbbbbbbbbb \n"
+"            \n"
+"            \n"
+"            \n"
+;
+@implementation Definitions(fnmjkdfsjkfsdjkeklwfmklsdmfksdkfm)
++ (id)MacComputerMenuItem
+{
+    id pixels = nscstr(macComputerMenuIconPixels);
+    id palette = nscstr(macComputerMenuIconPalette);
+    id highlightedPalette = nscstr(macComputerMenuIconPalette);
+
+    id obj = [@"BitmapMenuItem" asInstance];
+    [obj setValue:pixels forKey:@"pixels"];
+    [obj setValue:palette forKey:@"palette"];
+    [obj setValue:highlightedPalette forKey:@"highlightedPalette"];
+    return obj;
+}
+@end
+
+static char *macHelpMenuIconPalette =
+"b #000000\n"
+". #111111\n"
+"X #222222\n"
+"o #333333\n"
+"O #444444\n"
+"+ #555555\n"
+"@ #606060\n"
+"# #777777\n"
+"$ #ffff00\n"
+"% #888888\n"
+"& #A0A0A0\n"
+"* #AAAAAA\n"
+"= #BBBBBB\n"
+"- #C3C7CB\n"
+"; #cccccc\n"
+": #DDDDDD\n"
+"> #EEEEEE\n"
+"c #ffffff\n"
+;
+static char *macHelpMenuIconPixels =
+"               \n"
+"  ***********  \n"
+" =;>=+obo+=>;* \n"
+"*;>=b*$=bbb=>;+\n"
+"*:$.bXcc.bbb$:+\n"
+"*:$#b%c$obbb$:+\n"
+"*:$c:cc:bbb=$:+\n"
+"*:$$cc=%bX;$$:+\n"
+"*:>$$c%b#=$$>:+\n"
+"**:>$$%O=$$>:=+\n"
+"**=:>$;%:$>:=*+\n"
+"%**=:+ObO+:=*%+\n"
+"%%**=;:>:;=*%%+\n"
+"%#%%*+ObO+*%%#+\n"
+" ##%%*XbX*%%#+ \n"
+"  +++++++++++  \n"
+;
+@implementation Definitions(fnmeklwfmklsdmfksdkfm)
++ (id)MacHelpMenuItem
+{
+    id pixels = nscstr(macHelpMenuIconPixels);
+    id palette = nscstr(macHelpMenuIconPalette);
+    id highlightedPalette = nscstr(macHelpMenuIconPalette);
+
+    id obj = [@"BitmapMenuItem" asInstance];
+    [obj setValue:pixels forKey:@"pixels"];
+    [obj setValue:palette forKey:@"palette"];
+    [obj setValue:highlightedPalette forKey:@"highlightedPalette"];
+    return obj;
+}
+@end
+
 static char *hotdogPalette =
 "b #000000\n"
 ". #EECC99\n"
@@ -44,6 +150,7 @@ static char *hotdogHighlightedPalette =
 */
 
 static char *hotdogPixels =
+"                   \n"
 "    bb             \n"
 "   b..b            \n"
 " rrrr..b           \n"
@@ -120,25 +227,6 @@ static char *bananaPixels =
 }
 @end
 
-@implementation Definitions(jfkldsjlkfsjfd)
-+ (id)BitmapMenuItem:(id)name
-{
-    id basePath = [Definitions configDir:@"Graphics"];
-    id pixelsFile = nsfmt(@"%@/%@.pixels", basePath, name);
-    id paletteFile = nsfmt(@"%@/%@.palette", basePath, name);
-    id highlightedPaletteFile = nsfmt(@"%@/%@.highlightedPalette", basePath, name);
-    id pixels = [pixelsFile stringFromFile];
-    id palette = [paletteFile stringFromFile];
-    id highlightedPalette = [highlightedPaletteFile stringFromFile];
-
-    id obj = [@"BitmapMenuItem" asInstance];
-    [obj setValue:pixels forKey:@"pixels"];
-    [obj setValue:palette forKey:@"palette"];
-    [obj setValue:highlightedPalette forKey:@"highlightedPalette"];
-    return obj;
-}
-@end
-
 @interface BitmapMenuItem : IvarObject
 {
     id _pixels;
@@ -148,36 +236,5 @@ static char *bananaPixels =
 @end
 
 @implementation BitmapMenuItem
-- (int)preferredWidth
-{
-    if (_pixels) {
-        int w = [Definitions widthForCString:[_pixels UTF8String]];
-        if (w) {
-            return w;
-        }
-    }
-    return 1;
-}
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
-{
-    if (!_pixels || !_palette) {
-        return;
-    }
-    char *pixels = [_pixels UTF8String];
-    char *palette = [_palette UTF8String];
-    int w = [Definitions widthForCString:pixels];
-    int h = [Definitions heightForCString:pixels];
-    [bitmap drawCString:pixels palette:palette x:r.x y:r.y];
-}
-- (void)drawHighlightedInBitmap:(id)bitmap rect:(Int4)r
-{
-    if (!_pixels || !_highlightedPalette) {
-        return;
-    }
-    char *pixels = [_pixels UTF8String];
-    char *palette = [_highlightedPalette UTF8String];
-    int w = [Definitions widthForCString:pixels];
-    int h = [Definitions heightForCString:pixels];
-    [bitmap drawCString:pixels palette:palette x:r.x y:r.y];
-}
 @end
+
