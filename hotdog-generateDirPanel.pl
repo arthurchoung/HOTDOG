@@ -8,7 +8,7 @@ panelHorizontalStripes
 EOF
 
 print <<EOF;
-panelButton:'Shuffle with MPV' message:[['mpv' '--shuffle' '.']|runCommandInBackground]
+panelButton:'Shuffle with MPV' message:[['mpv' '--hwdec=auto' '--shuffle' '.']|runCommandInBackground]
 panelText:''
 panelLine
 panelText:''
