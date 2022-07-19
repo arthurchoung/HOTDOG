@@ -895,26 +895,6 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
             XDrawPoint(_display, shape_pixmap, shape_gc, i, h-1);
             XDrawPoint(_display, shape_pixmap, shape_gc, w-1, i);
         }
-    } else if (hasShadow == -1) {
-        //FIXME
-        // Lower left corner for Atari ST
-        XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 1, h-1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-2);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 1, h-2);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-3);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 1, h-3);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 0, h-4);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 1, h-4);
-        // Upper right corner for Atari ST
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-4, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-4, 1);
     } else if (hasShadow == -2) {
         //FIXME
         // Upper left corner
@@ -974,19 +954,7 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     XSetForeground(_display, shape_gc, 1);
     XFillRectangle(_display, shape_pixmap, shape_gc, 0, 0, w, h);
     XSetForeground(_display, shape_gc, 0);
-    if ([x11HasChildMask isEqual:@"amiga"]) {
-        //FIXME Amiga
-        XFillRectangle(_display, shape_pixmap, shape_gc, w-14, h-16, 14, 16);
-    } else if ([x11HasChildMask isEqual:@"macclassic"]) {
-        //FIXME Mac Classic
-        XFillRectangle(_display, shape_pixmap, shape_gc, w-15, h-15, 15, 15);
-    } else if ([x11HasChildMask isEqual:@"maccolor"]) {
-        //FIXME Mac Color
-        XFillRectangle(_display, shape_pixmap, shape_gc, w-15, h-15, 15, 15);
-    } else if ([x11HasChildMask isEqual:@"macplatinum"]) {
-        //FIXME Mac Platinum
-        XFillRectangle(_display, shape_pixmap, shape_gc, w-15, h-15, 15, 15);
-    } else if ([x11HasChildMask hasPrefix:@"bottomRightCorner"]) {
+    if ([x11HasChildMask hasPrefix:@"bottomRightCorner"]) {
         int maskWidth = [x11HasChildMask intValueForKey:@"w"];
         int maskHeight = [x11HasChildMask intValueForKey:@"h"];
         if ((maskWidth > 0) && (maskHeight > 0)) {
