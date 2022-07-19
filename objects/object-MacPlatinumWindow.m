@@ -1024,7 +1024,7 @@ static char *resizeSelectionVerticalPixels =
     _topBorder = 22*_pixelScaling;
     _bottomBorder = (6+1)*_pixelScaling;
     _hasShadow = 2;
-    [self setValue:@"macplatinum" forKey:@"x11HasChildMask"];
+    [self setValue:nsfmt(@"bottomRightCorner w:%d h:%d", 15*scaling, 15*scaling) forKey:@"x11HasChildMask"];
 
     id obj;
     obj = [Definitions scaleFont:scaling
@@ -1189,7 +1189,7 @@ static char *resizeSelectionVerticalPixels =
             text = @"(no title)";
         }
 
-        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling];
+        text = [[[bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling] split:@"\n"] nth:0];
         if (text) {
             int textWidth = [bitmap bitmapWidthForText:text];
             int backWidth = textWidth + 14*_pixelScaling;
