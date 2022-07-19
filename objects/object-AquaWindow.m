@@ -514,7 +514,7 @@ static unsigned char yellow_down_rgb[] = {
             text = @"(no title)";
         }
 
-        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling];
+        text = [[[bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling] split:@"\n"] nth:0];
         if (text) {
             int textWidth = [bitmap bitmapWidthForText:text];
             int backWidth = textWidth + 14*_pixelScaling;
