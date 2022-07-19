@@ -410,7 +410,7 @@ static char *closeButtonDownPixels =
     _topBorder = 19*scaling;
     _bottomBorder = 1*scaling+1;
     _hasShadow = 1;
-    [self setValue:@"macclassic" forKey:@"x11HasChildMask"];
+    [self setValue:nsfmt(@"bottomRightCorner w:%d h:%d", 15*scaling, 15*scaling) forKey:@"x11HasChildMask"];
 
     id obj;
     obj = [Definitions scaleFont:scaling
@@ -552,7 +552,7 @@ static char *closeButtonDownPixels =
             text = @"(no title)";
         }
 
-        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling];
+        text = [[[bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling] split:@"\n"] nth:0];
         if (text) {
             int textWidth = [bitmap bitmapWidthForText:text];
             int backWidth = textWidth + 14*_pixelScaling;
