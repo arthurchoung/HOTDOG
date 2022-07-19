@@ -365,7 +365,7 @@ NSLog(@"AtariSTMenuBar handleMouseUp event %@", event);
                 monitorIndex++;
             }
             [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
-            [bitmap drawBitmapText:[text join:@""] x:monitorX+5*2 y:0];
+            [bitmap drawBitmapText:[text join:@""] x:monitorX+5*2 y:1];
         }
     }
 
