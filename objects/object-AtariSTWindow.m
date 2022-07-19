@@ -48,7 +48,7 @@
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
     [windowManager reparentAllWindows:@"AtariSTWindow"];
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
-    int h = 20*scaling;
+    int h = 19*scaling;
     [windowManager setValue:nsfmt(@"%d", h) forKey:@"menuBarHeight"];
     id menuBar = [windowManager openWindowForObject:[@"AtariSTMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
     [windowManager setValue:menuBar forKey:@"menuBar"];
@@ -58,398 +58,368 @@
 @end
 
 static char *inactiveTitleBarLeftPixels =
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
 ;
 static char *inactiveTitleBarMiddlePixels =
-"..\n"
-"..\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"XX\n"
-"..\n"
-"..\n"
+"b\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+"b\n"
 ;
 static char *inactiveTitleBarRightPixels =
-"..    \n"
-"..    \n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
-"......\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
+"bbb\n"
 ;
 static char *inactiveBottomBorderLeftPixels =
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"..\n"
-"  \n"
-"  \n"
-"  \n"
-"  \n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
 ;
 static char *inactiveBottomBorderMiddlePixels =
-".\n"
-".\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
+"b\n"
 ".\n"
 ".\n"
 ".\n"
 ".\n"
 ".\n"
 ".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+"b\n"
+"b\n"
+"b\n"
 ;
 static char *inactiveBottomBorderRightPixels =
-"............................\n"
-"............................\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"............................\n"
-"............................\n"
-"............................\n"
-"............................\n"
-"............................\n"
-"............................\n"
+"bbbbbbbbbbbbbbbbbbbbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"bbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbb\n"
 ;
 
 static char *activeTitleBarLeftPixels =
-"..........................\n"
-"..........................\n"
-"..XXXXXXXXXXXXXXXXXXXX....\n"
-"..XXXXXXXXXXXXXXXXXXXX....\n"
-"..XXXXXX........XXXXXX....\n"
-"..XXXXXX........XXXXXX....\n"
-"..XX..XXXX....XXXX..XX....\n"
-"..XX..XXXX....XXXX..XX....\n"
-"..XX....XXXXXXXX....XX....\n"
-"..XX....XXXXXXXX....XX....\n"
-"..XX......XXXX......XX....\n"
-"..XX......XXXX......XX....\n"
-"..XX....XXXXXXXX....XX....\n"
-"..XX....XXXXXXXX....XX....\n"
-"..XX..XXXX....XXXX..XX....\n"
-"..XX..XXXX....XXXX..XX....\n"
-"..XXXXXX........XXXXXX....\n"
-"..XXXXXX........XXXXXX....\n"
-"..XXXXXXXXXXXXXXXXXXXX....\n"
-"..XXXXXXXXXXXXXXXXXXXX....\n"
-"..........................\n"
-"..........................\n"
+"bbbbbbbbbbbbbbbbbbbb\n"
+"b.................bb\n"
+"b.................bb\n"
+"b.................bb\n"
+"b......bbbbb......bb\n"
+"b.......bbb.......bb\n"
+"b.....b.bbb.b.....bb\n"
+"b.....b..b..b.....bb\n"
+"b.....bb.b.bb.....bb\n"
+"b.....bb...bb.....bb\n"
+"b.....bb.b.bb.....bb\n"
+"b.....b..b..b.....bb\n"
+"b.....b.bbb.b.....bb\n"
+"b.......bbb.......bb\n"
+"b......bbbbb......bb\n"
+"b.................bb\n"
+"b.................bb\n"
+"b.................bb\n"
+"bbbbbbbbbbbbbbbbbbbb\n"
 ;
 static char *activeTitleBarMiddlePixels =
-"....\n"
-"....\n"
-"..XX\n"
-"..XX\n"
-"XXXX\n"
-"XXXX\n"
-"..XX\n"
-"..XX\n"
-"XXXX\n"
-"XXXX\n"
-"..XX\n"
-"..XX\n"
-"XXXX\n"
-"XXXX\n"
-"..XX\n"
-"..XX\n"
-"XXXX\n"
-"XXXX\n"
-"..XX\n"
-"..XX\n"
-"....\n"
-"....\n"
+"bb\n"
+".b\n"
+"..\n"
+".b\n"
+"..\n"
+".b\n"
+"..\n"
+".b\n"
+"..\n"
+".b\n"
+"..\n"
+".b\n"
+"..\n"
+".b\n"
+"..\n"
+".b\n"
+"..\n"
+".b\n"
+"bb\n"
 ;
 static char *activeTitleBarRightPixels =
-"..........................    \n"
-"..........................    \n"
-"....XXXXXXXXXXXXXXXXXXXX......\n"
-"....XXXXXXXXXXXXXXXXXXXX......\n"
-"....XX......XXXX......XX......\n"
-"....XX......XXXX......XX......\n"
-"....XX....XXXXXXXX....XX......\n"
-"....XX....XXXXXXXX....XX......\n"
-"....XX..XXXX....XXXX..XX......\n"
-"....XX..XXXX....XXXX..XX......\n"
-"....XXXXXX........XXXXXX......\n"
-"....XXXXXX........XXXXXX......\n"
-"....XX..XXXX....XXXX..XX......\n"
-"....XX..XXXX....XXXX..XX......\n"
-"....XX....XXXXXXXX....XX......\n"
-"....XX....XXXXXXXX....XX......\n"
-"....XX......XXXX......XX......\n"
-"....XX......XXXX......XX......\n"
-"....XXXXXXXXXXXXXXXXXXXX......\n"
-"....XXXXXXXXXXXXXXXXXXXX......\n"
-"..............................\n"
-"..............................\n"
+"bbbbbbbbbbbbbbbbbbbbb \n"
+"bb.................bbb\n"
+"bb.................bbb\n"
+"bb.................bbb\n"
+"bb.....bbb.bbb.....bbb\n"
+"bb.....bb...bb.....bbb\n"
+"bb.....bb.b.bb.....bbb\n"
+"bb.....b..b..b.....bbb\n"
+"bb.....b.bbb.b.....bbb\n"
+"bb.......bbb.......bbb\n"
+"bb.....b.bbb.b.....bbb\n"
+"bb.....b..b..b.....bbb\n"
+"bb.....bb.b.bb.....bbb\n"
+"bb.....bb...bb.....bbb\n"
+"bb.....bbb.bbb.....bbb\n"
+"bb.................bbb\n"
+"bb.................bbb\n"
+"bb.................bbb\n"
+"bbbbbbbbbbbbbbbbbbbbbb\n"
 ;
 static char *leftBorderMiddlePixels =
-"..\n"
+"b\n"
 ;
 
 static char *bottomBorderLeftPixels =
-"........................\n"
-"........................\n"
-"..XXXXXXXXXXXXXXXXXXXX..\n"
-"..XXXXXXXXXXXXXXXXXXXX..\n"
-"..XXXXXXXX....XXXXXXXX..\n"
-"..XXXXXXXX....XXXXXXXX..\n"
-"..XXXXXX......XXXXXXXX..\n"
-"..XXXXXX......XXXXXXXX..\n"
-"..XXXX....XX........XX..\n"
-"..XXXX....XX........XX..\n"
-"..XX....XXXXXXXXXX..XX..\n"
-"..XX....XXXXXXXXXX..XX..\n"
-"..XX....XXXXXXXXXX..XX..\n"
-"..XX....XXXXXXXXXX..XX..\n"
-"..XXXX....XX........XX..\n"
-"..XXXX....XX........XX..\n"
-"..XXXXXX......XXXXXXXX..\n"
-"..XXXXXX......XXXXXXXX..\n"
-"..XXXXXXXX....XXXXXXXX..\n"
-"..XXXXXXXX....XXXXXXXX..\n"
-"........................\n"
-"........................\n"
-"  ......................\n"
-"  ......................\n"
-"  ......................\n"
-"  ......................\n"
+"bbbbbbbbbbbbbbbbbbb\n"
+"b.................b\n"
+"b.................b\n"
+"b.................b\n"
+"b.........bb......b\n"
+"b........bbb......b\n"
+"b.......bb.b......b\n"
+"b......bb..bbb....b\n"
+"b.....bb.....b....b\n"
+"b.....bb.....b....b\n"
+"b......bb..bbb....b\n"
+"b.......bb.b......b\n"
+"b........bbb......b\n"
+"b.........bb......b\n"
+"b.................b\n"
+"b.................b\n"
+"b.................b\n"
+"b.................b\n"
+"bbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbb\n"
+" bbbbbbbbbbbbbbbbbb\n"
 ;
 static char *bottomBorderMiddlePixels =
-".\n"
-".\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
+"b\n"
 ".\n"
 ".\n"
 ".\n"
 ".\n"
 ".\n"
 ".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+"b\n"
+"b\n"
+"b\n"
 ;
 static char *bottomBorderRightPixels =
-"..................................................\n"
-"..................................................\n"
-"..XXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXX....XXXXXXXX..XX................XX......\n"
-"..XXXXXXXX....XXXXXXXX..XX................XX......\n"
-"..XXXXXXXX......XXXXXX..XX................XX......\n"
-"..XXXXXXXX......XXXXXX..XX................XX......\n"
-"..XX........XX....XXXX..XX..............XXXX......\n"
-"..XX........XX....XXXX..XX..............XXXX......\n"
-"..XX..XXXXXXXXXX....XX..XX............XXXXXX......\n"
-"..XX..XXXXXXXXXX....XX..XX............XXXXXX......\n"
-"..XX..XXXXXXXXXX....XX..XX..........XXXX..XX......\n"
-"..XX..XXXXXXXXXX....XX..XX..........XXXX..XX......\n"
-"..XX........XX....XXXX..XX........XXXX....XX......\n"
-"..XX........XX....XXXX..XX........XXXX....XX......\n"
-"..XXXXXXXX......XXXXXX..XX......XXXX......XX......\n"
-"..XXXXXXXX......XXXXXX..XX......XXXX......XX......\n"
-"..XXXXXXXX....XXXXXXXX..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXX....XXXXXXXX..XXXXXXXXXXXXXXXXXXXX......\n"
-"..................................................\n"
-"..................................................\n"
-"..................................................\n"
-"..................................................\n"
-"..................................................\n"
-"..................................................\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"b.................b.................bbb\n"
+"b.................b.................bbb\n"
+"b.................b.................bbb\n"
+"b.......bb........b.....bbbbbbb.....bbb\n"
+"b.......bbb.......b.....bbbbbbb.....bbb\n"
+"b.......b.bb......b.....bbbbbbb.....bbb\n"
+"b.....bbb..bb.....b.....bbbbbb......bbb\n"
+"b.....b.....bb....b.....bbbbbb......bbb\n"
+"b.....b.....bb....b.....bbbbb.......bbb\n"
+"b.....bbb..bb.....b.....bbbbb.b.....bbb\n"
+"b.......b.bb......b.....bbbb..b.....bbb\n"
+"b.......bbb.......b.....bbbb.bb.....bbb\n"
+"b.......bb........b.....bbb..bb.....bbb\n"
+"b.................b.....bbb.bbb.....bbb\n"
+"b.................b.................bbb\n"
+"b.................b.................bbb\n"
+"b.................b.................bbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 ;
 
 
 static char *rightBorderTopPixels =
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXX....XXXXXXXX......\n"
-"..XXXXXXXX....XXXXXXXX......\n"
-"..XXXXXX........XXXXXX......\n"
-"..XXXXXX........XXXXXX......\n"
-"..XXXX....XXXX....XXXX......\n"
-"..XXXX....XXXX....XXXX......\n"
-"..XX....XXXXXXXX....XX......\n"
-"..XX....XXXXXXXX....XX......\n"
-"..XX......XXXX......XX......\n"
-"..XX......XXXX......XX......\n"
-"..XXXXXX..XXXX..XXXXXX......\n"
-"..XXXXXX..XXXX..XXXXXX......\n"
-"..XXXXXX..XXXX..XXXXXX......\n"
-"..XXXXXX..XXXX..XXXXXX......\n"
-"..XXXXXX........XXXXXX......\n"
-"..XXXXXX........XXXXXX......\n"
-"............................\n"
-"............................\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b........bb.......bbb\n"
+"b.......bbbb......bbb\n"
+"b......bb..bb.....bbb\n"
+"b.....bb....bb....bbb\n"
+"b.....b......b....bbb\n"
+"b.....bbb..bbb....bbb\n"
+"b.......b..b......bbb\n"
+"b.......b..b......bbb\n"
+"b.......b..b......bbb\n"
+"b.......bbbb......bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"bbbbbbbbbbbbbbbbbbbbb\n"
 ;
 static char *rightBorderMiddlePixels =
-"..XXXXXXXXXXXXXXXXXXXX......\n"
+"b.................bbb\n"
 ;
 static char *rightBorderBottomPixels =
-"............................\n"
-"............................\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXXXXXXXXXXXXXXXX......\n"
-"..XXXXXX........XXXXXX......\n"
-"..XXXXXX........XXXXXX......\n"
-"..XXXXXX..XXXX..XXXXXX......\n"
-"..XXXXXX..XXXX..XXXXXX......\n"
-"..XXXXXX..XXXX..XXXXXX......\n"
-"..XXXXXX..XXXX..XXXXXX......\n"
-"..XX......XXXX......XX......\n"
-"..XX......XXXX......XX......\n"
-"..XX....XXXXXXXX....XX......\n"
-"..XX....XXXXXXXX....XX......\n"
-"..XXXX....XXXX....XXXX......\n"
-"..XXXX....XXXX....XXXX......\n"
-"..XXXXXX........XXXXXX......\n"
-"..XXXXXX........XXXXXX......\n"
-"..XXXXXXXX....XXXXXXXX......\n"
-"..XXXXXXXX....XXXXXXXX......\n"
+"bbbbbbbbbbbbbbbbbbbbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.......bbbb......bbb\n"
+"b.......b..b......bbb\n"
+"b.......b..b......bbb\n"
+"b.......b..b......bbb\n"
+"b.....bbb..bbb....bbb\n"
+"b.....b......b....bbb\n"
+"b.....bb....bb....bbb\n"
+"b......bb..bb.....bbb\n"
+"b.......bbbb......bbb\n"
+"b........bb.......bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
+"b.................bbb\n"
 ;
 
 static char *inactiveRightBorderMiddlePixels =
-"..XXXXXXXXXXXXXXXXXXXX......\n"
+"b.................bbb\n"
 ;
 
 
 
 static char *closeButtonPixels =
-"XXXXXXXXXXXXXXXXXXXX\n"
-"XXXXXXXXXXXXXXXXXXXX\n"
-"XXXXXX........XXXXXX\n"
-"XXXXXX........XXXXXX\n"
-"XX..XXXX....XXXX..XX\n"
-"XX..XXXX....XXXX..XX\n"
-"XX....XXXXXXXX....XX\n"
-"XX....XXXXXXXX....XX\n"
-"XX......XXXX......XX\n"
-"XX......XXXX......XX\n"
-"XX....XXXXXXXX....XX\n"
-"XX....XXXXXXXX....XX\n"
-"XX..XXXX....XXXX..XX\n"
-"XX..XXXX....XXXX..XX\n"
-"XXXXXX........XXXXXX\n"
-"XXXXXX........XXXXXX\n"
-"XXXXXXXXXXXXXXXXXXXX\n"
-"XXXXXXXXXXXXXXXXXXXX\n"
+".................\n"
+".................\n"
+".................\n"
+"......bbbbb......\n"
+".......bbb.......\n"
+".....b.bbb.b.....\n"
+".....b..b..b.....\n"
+".....bb.b.bb.....\n"
+".....bb...bb.....\n"
+".....bb.b.bb.....\n"
+".....b..b..b.....\n"
+".....b.bbb.b.....\n"
+".......bbb.......\n"
+"......bbbbb......\n"
+".................\n"
+".................\n"
+".................\n"
 ;
+
+
+
+
+static char *maximizeButtonPixels =
+".................\n"
+".................\n"
+".................\n"
+".....bbb.bbb.....\n"
+".....bb...bb.....\n"
+".....bb.b.bb.....\n"
+".....b..b..b.....\n"
+".....b.bbb.b.....\n"
+".......bbb.......\n"
+".....b.bbb.b.....\n"
+".....b..b..b.....\n"
+".....bb.b.bb.....\n"
+".....bb...bb.....\n"
+".....bbb.bbb.....\n"
+".................\n"
+".................\n"
+".................\n"
+;
+
 
 
 @interface AtariSTWindow : IvarObject
@@ -489,6 +459,7 @@ static char *closeButtonPixels =
     id _scaledActiveTitleBarMiddlePixels;
     int _scaledTitleBarHeight;
     id _scaledActiveTitleBarRightPixels;
+    int _scaledTitleBarRightWidth;
     id _scaledLeftBorderMiddlePixels;
     id _scaledBottomBorderLeftPixels;
     id _scaledBottomBorderMiddlePixels;
@@ -498,6 +469,7 @@ static char *closeButtonPixels =
     id _scaledRightBorderBottomPixels;
     id _scaledInactiveRightBorderMiddlePixels;
     id _scaledCloseButtonPixels;
+    id _scaledMaximizeButtonPixels;
 }
 @end
 @implementation AtariSTWindow
@@ -519,11 +491,11 @@ static char *closeButtonPixels =
 {
     _pixelScaling = scaling;
 
-    _leftBorder = 2*_pixelScaling;
-    _rightBorder = 28*_pixelScaling;
-    _topBorder = 22*_pixelScaling;
-    _bottomBorder = 26*_pixelScaling;
-    _hasShadow = -1;
+    _leftBorder = 1*_pixelScaling;
+    _rightBorder = 21*_pixelScaling;
+    _topBorder = 19*_pixelScaling;
+    _bottomBorder = 21*_pixelScaling;
+    _hasShadow = 1;
 
     id obj;
     obj = [Definitions scaleFont:scaling
@@ -561,6 +533,7 @@ static char *closeButtonPixels =
 
     obj = [nsfmt(@"%s", activeTitleBarRightPixels) asXYScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledActiveTitleBarRightPixels"];
+    _scaledTitleBarRightWidth = [Definitions widthForCString:[obj UTF8String]];
 
     obj = [nsfmt(@"%s", leftBorderMiddlePixels) asXScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledLeftBorderMiddlePixels"];
@@ -588,6 +561,9 @@ static char *closeButtonPixels =
 
     obj = [nsfmt(@"%s", closeButtonPixels) asXYScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledCloseButtonPixels"];
+
+    obj = [nsfmt(@"%s", maximizeButtonPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledMaximizeButtonPixels"];
 }
 
 - (void)calculateRects:(Int4)r
@@ -595,7 +571,7 @@ static char *closeButtonPixels =
     _titleBarRect = [Definitions rectWithX:r.x y:r.y w:r.w h:_scaledTitleBarHeight];
     _titleBarTextRect = _titleBarRect;
     _titleBarTextRect.x = _scaledTitleBarLeftWidth+4*_pixelScaling;
-    _titleBarTextRect.w -= _scaledTitleBarLeftWidth+4*_pixelScaling;
+    _titleBarTextRect.w -= _scaledTitleBarLeftWidth+_scaledTitleBarRightWidth+4*_pixelScaling*2;
 
     _leftBorderRect = r;
     _leftBorderRect.y += _scaledTitleBarHeight;
@@ -615,16 +591,16 @@ static char *closeButtonPixels =
     _bottomBorderRect.h = _bottomBorder;
 
     _closeButtonRect = _titleBarRect;
-    _closeButtonRect.x += 2*_pixelScaling;
-    _closeButtonRect.y += 2*_pixelScaling;
-    _closeButtonRect.w = 20*_pixelScaling;
-    _closeButtonRect.h = 18*_pixelScaling;
+    _closeButtonRect.x += 1*_pixelScaling;
+    _closeButtonRect.y += 1*_pixelScaling;
+    _closeButtonRect.w = 17*_pixelScaling;
+    _closeButtonRect.h = 17*_pixelScaling;
 
     _maximizeButtonRect = _titleBarRect;
-    _maximizeButtonRect.x = _maximizeButtonRect.x+_maximizeButtonRect.w-(6+20)*_pixelScaling;
-    _maximizeButtonRect.y += 2*_pixelScaling;
-    _maximizeButtonRect.w = 20*_pixelScaling;
-    _maximizeButtonRect.h = 18*_pixelScaling;
+    _maximizeButtonRect.x = _maximizeButtonRect.x+_maximizeButtonRect.w-(3+17)*_pixelScaling;
+    _maximizeButtonRect.y += 1*_pixelScaling;
+    _maximizeButtonRect.w = 17*_pixelScaling;
+    _maximizeButtonRect.h = 17*_pixelScaling;
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
@@ -639,7 +615,7 @@ static char *closeButtonPixels =
                     :[[_scaledFont nth:3] bytes]];
     }
 
-    char *palette = ". #000000\nX #eeeeee\n";
+    char *palette = "b #000000\n. #eeeeee\n";
     int hasFocus = [context intValueForKey:@"hasFocus"];
 
     [self calculateRects:r];
@@ -665,20 +641,20 @@ static char *closeButtonPixels =
             text = @"(no title)";
         }
 
-        text = [bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling];
+        text = [[[bitmap fitBitmapString:text width:_titleBarTextRect.w-14*_pixelScaling] split:@"\n"] nth:0];
         if (text) {
             int textWidth = [bitmap bitmapWidthForText:text];
             int backWidth = textWidth + 14*_pixelScaling;
             int backX = _titleBarTextRect.x + ((_titleBarTextRect.w - backWidth) / 2);
             int textX = backX + 7*_pixelScaling;
             if (hasFocus) {
-                [bitmap setColor:@"white"];
-                [bitmap fillRect:[Definitions rectWithX:backX y:_titleBarTextRect.y+4*_pixelScaling w:backWidth h:16*_pixelScaling]];
+                [bitmap setColor:@"#eeeeee"];
+                [bitmap fillRect:[Definitions rectWithX:backX y:_titleBarTextRect.y+2*_pixelScaling w:backWidth h:16*_pixelScaling]];
                 [bitmap setColorIntR:0 g:0 b:0 a:255];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4*_pixelScaling];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+2*_pixelScaling];
             } else {
                 [bitmap setColorIntR:0 g:0 b:0 a:255];
-                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4*_pixelScaling];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+2*_pixelScaling];
             }
         }
     }
@@ -715,13 +691,13 @@ static char *closeButtonPixels =
 
     if (hasFocus) {
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
-            char *reversePalette = "X #000000\n. #ffffff\n";
+            char *reversePalette = ". #000000\nb #ffffff\n";
             char *closeButton = [_scaledCloseButtonPixels UTF8String];
             [bitmap drawCString:closeButton palette:reversePalette x:_closeButtonRect.x y:_closeButtonRect.y];
         }
         if ((_buttonDown == 'm') && (_buttonHover == 'm')) {
-            char *reversePalette = "X #000000\n. #ffffff\n";
-            char *maximizeButton = [_scaledCloseButtonPixels UTF8String];
+            char *reversePalette = ". #000000\nb #ffffff\n";
+            char *maximizeButton = [_scaledMaximizeButtonPixels UTF8String];
             [bitmap drawCString:maximizeButton palette:reversePalette x:_maximizeButtonRect.x y:_maximizeButtonRect.y];
         }
         if ((_buttonDown == 't') || (_buttonDown == 'r')) {
