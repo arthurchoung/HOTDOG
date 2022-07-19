@@ -555,6 +555,9 @@ static char *resizeButtonPixels =
     if (!text) {
         text = @"(no title)";
     }
+
+    text = [[[bitmap fitBitmapString:text width:_titleTextRect.w-14*_pixelScaling] split:@"\n"] nth:0];
+
     int textWidth = [bitmap bitmapWidthForText:text];
     [Definitions drawInBitmap:bitmap left:[_scaledTextBackgroundPixels UTF8String] middle:[_scaledTextBackgroundPixels UTF8String] right:[_scaledTextBackgroundPixels UTF8String] x:_titleTextRect.x y:_titleBarRect.y w:textWidth+3*_pixelScaling palette:palette];
     [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
