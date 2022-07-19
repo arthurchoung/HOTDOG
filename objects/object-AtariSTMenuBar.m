@@ -342,7 +342,7 @@ NSLog(@"AtariSTMenuBar handleMouseUp event %@", event);
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
     [bitmap setColor:@"black"];
-    for (int i=0; i<_pixelScaling*2; i++) {
+    for (int i=0; i<_pixelScaling; i++) {
         [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:menuBarHeight-1-i];
     }
 
@@ -486,6 +486,8 @@ NSLog(@"AtariSTMenuBar handleMouseUp event %@", event);
         r1.w = [elt intValueForKey:@"width"];
 
         Int4 r2 = r1;
+        r2.y += 1*_pixelScaling;
+        r2.h -= 1*_pixelScaling;
         id obj = [elt valueForKey:@"object"];
         int leftPadding = [elt intValueForKey:@"leftPadding"];
         leftPadding *= _pixelScaling;
