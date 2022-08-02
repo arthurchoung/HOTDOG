@@ -767,6 +767,20 @@ NSLog(@"context %@", _context);
         [obj handleScrollWheel:event];
     }
 }
+- (void)handleRightMouseDown:(id)event
+{
+    id obj = [_context valueForKey:@"object"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+    int navigationBarHeight = [Definitions navigationBarHeight];
+    if (mouseY < navigationBarHeight) {
+    } else {
+        [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - navigationBarHeight) forKey:@"viewHeight"];
+        if ([obj respondsToSelector:@selector(handleRightMouseDown:)]) {
+            [Definitions fixupEvent:event forBitmapObject:obj];
+            [obj handleRightMouseDown:event];
+        }
+    }
+}
 - (void)handleMouseDown:(id)event
 {
     id obj = [_context valueForKey:@"object"];
