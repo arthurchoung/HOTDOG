@@ -158,6 +158,11 @@
     [cmd addObject:self];
     return [cmd runCommandAndReturnOutput];
 }
+- (int)writeToStandardInputAndRunCommandInBackground:(id)cmd
+{
+    id str = self;
+    return [cmd runCommandInBackgroundAndWriteStringToStandardInput:str];
+}
 @end
 
 @implementation NSArray(jfklsdjkf)
