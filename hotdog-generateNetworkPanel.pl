@@ -69,7 +69,7 @@ EOF
 panelText:'Address:$address'
 EOF
     }
-    $dhcpcd = `pgrep -f 'dhcpcd.*$interface'`;
+    $dhcpcd = `pgrep -f 'dhcpcd.*$interface' | head -n 1`;
     chomp $dhcpcd;
     print <<EOF;
 panelText:'dhcpcd:$dhcpcd'
@@ -92,7 +92,7 @@ EOF
     if ($interface eq 'lo') {
     } elsif ($dhcpcd) {
         print <<EOF;
-panelButton:'Kill dhcpcd for $interface' message:[NSArray|addObject:'kill'|addObject:'$dhcpcd'|runCommandWithSudoAndReturnOutput;updateArray]
+panelButton:'Kill $dhcpcd (dhcpcd for $interface)' message:[NSArray|addObject:'kill'|addObject:'$dhcpcd'|runCommandWithSudoAndReturnOutput;updateArray]
 EOF
     } else {
         print <<EOF;
