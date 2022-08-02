@@ -376,6 +376,14 @@ NSLog(@"Bad signature");
                             func(target, sel, [args nth:0], [[args nth:1] unsignedCharValue], [args nth:2], [args nth:3]);
                             return target;
                         }
+                    } else if (signature[7] == '@') {
+                        if (signature[8] == 0) {
+                            if (signature[0] == 'v') {
+                                void (*func)(id, SEL, id, unsigned char, id, id, id) = imp;
+                                func(target, sel, [args nth:0], [[args nth:1] unsignedCharValue], [args nth:2], [args nth:3], [args nth:4]);
+                                return target;
+                            }
+                        }
                     }
                 }
             }
@@ -407,6 +415,10 @@ NSLog(@"Bad signature");
                     void (*func)(id, SEL, int, int) = imp;
                     func(target, sel, [[args nth:0] intValue], [[args nth:1] intValue]);
                     return target;
+                } else if (signature[0] == 'C') {
+                    unsigned char (*func)(id, SEL, int, int) = imp;
+                    unsigned char val = func(target, sel, [[args nth:0] intValue], [[args nth:1] intValue]);
+                    return nsfmt(@"%d", val);
                 }
             } else if (signature[5] == 'i') {
                 if (signature[6] == 0) {
