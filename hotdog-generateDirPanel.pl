@@ -4,6 +4,7 @@
 chomp @arr;
 
 print <<EOF;
+setValue:[ configDir:'Config/fileMenu.csv'|parseCSVFile|asMenu ] forKey:'buttonRightClickMessage'
 panelHorizontalStripes
 EOF
 
