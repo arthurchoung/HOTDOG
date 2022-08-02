@@ -292,6 +292,16 @@ static unsigned char *button_bottom_right_squared =
     [obj updateArray];
     return obj;
 }
++ (id)TransmissionPanel
+{
+    id generatecmd = nsarr();
+    [generatecmd addObject:@"hotdog-generateTransmissionPanel.pl"];
+
+    id obj = [@"Panel" asInstance];
+    [obj setValue:generatecmd forKey:@"generateCommand"];
+    [obj updateArray];
+    return obj;
+}
 + (id)AdventurePanel
 {
     id generatecmd = nsarr();
@@ -496,6 +506,7 @@ exit(1);
     id _array;
     Int4 _rect[MAX_RECT];
     id _buttons;
+    id _buttonDicts;
     char _buttonType[MAX_RECT];
     int _buttonDown;
     int _buttonHover;
@@ -512,10 +523,17 @@ exit(1);
     Int4 _r;
     int _cursorY;
 
-    id _menuDict;
+    id _buttonRightClickMessage;
 }
 @end
 @implementation Panel
+- (id)hoverObject
+{
+    if (_buttonHover) {
+        return [_buttonDicts nth:_buttonHover-1];
+    }
+    return nil;
+}
 - (void)handleBackgroundUpdate:(id)event
 {
     if (!_currentDirectory) {
@@ -588,6 +606,7 @@ NSLog(@"Panel updateArrayAndTimestamp path %@", _currentDirectory);
 //    [Definitions drawStripedBackgroundInBitmap:bitmap rect:r];
 
     [self setValue:nsarr() forKey:@"buttons"];
+    [self setValue:nsarr() forKey:@"buttonDicts"];
 
     _cursorY = -_scrollY + r.y + 5;
     _r = r;
@@ -698,27 +717,27 @@ NSLog(@"waiting for input");
 {
     [self panelTopButton:text rightText:nil message:message];
 }
-- (void)panelTopButton:(id)text checkmark:(id)checkmark message:(id)message
+- (void)panelTopButton:(id)origText checkmark:(id)checkmark message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-60];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-60];
 
-    [self panelButton:text rightText:nil toggle:nil slider:nil checkmark:checkmark message:message leftMargin:18 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
+    [self panelButton:text origText:origText rightText:nil toggle:nil slider:nil checkmark:checkmark message:message leftMargin:18 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
 }
-- (void)panelTopButton:(id)text rightText:(id)rightText message:(id)message
+- (void)panelTopButton:(id)origText rightText:(id)rightText message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-40];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-40];
 
-    [self panelButton:text rightText:rightText toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
+    [self panelButton:text origText:origText rightText:rightText toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
 }
-- (void)panelTopButton:(id)text toggle:(id)toggle message:(id)message
+- (void)panelTopButton:(id)origText toggle:(id)toggle message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-40];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-40];
 
-    [self panelButton:text rightText:nil toggle:toggle slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
+    [self panelButton:text origText:origText rightText:nil toggle:toggle slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
 }
 - (void)panelTopSlider:(id)slider message:(id)message
 {
-    [self panelButton:nil rightText:nil toggle:nil slider:slider checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
+    [self panelButton:nil origText:nil rightText:nil toggle:nil slider:slider checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
 }
 - (void)panelMiddleButton:(id)text
 {
@@ -728,17 +747,17 @@ NSLog(@"waiting for input");
 {
     [self panelMiddleButton:text rightText:nil message:message];
 }
-- (void)panelMiddleButton:(id)text checkmark:(id)checkmark message:(id)message
+- (void)panelMiddleButton:(id)origText checkmark:(id)checkmark message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-60];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-60];
     _cursorY -= 1;
-    [self panelButton:text rightText:nil toggle:nil slider:nil checkmark:checkmark message:message leftMargin:18 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
+    [self panelButton:text origText:origText rightText:nil toggle:nil slider:nil checkmark:checkmark message:message leftMargin:18 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
 }
-- (void)panelMiddleButton:(id)text rightText:(id)rightText message:(id)message
+- (void)panelMiddleButton:(id)origText rightText:(id)rightText message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-40];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-40];
     _cursorY -= 1;
-    [self panelButton:text rightText:rightText toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
+    [self panelButton:text origText:origText rightText:rightText toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left_squared :button_bottom_middle :button_bottom_right_squared];
 }
 - (void)panelBottomButton:(id)text
 {
@@ -748,23 +767,23 @@ NSLog(@"waiting for input");
 {
     [self panelBottomButton:text rightText:nil message:message];
 }
-- (void)panelBottomButton:(id)text checkmark:(id)checkmark message:(id)message
+- (void)panelBottomButton:(id)origText checkmark:(id)checkmark message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-60];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-60];
     _cursorY -= 1;
-    [self panelButton:text rightText:nil toggle:nil slider:nil checkmark:checkmark message:message leftMargin:18 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left :button_bottom_middle :button_bottom_right];
+    [self panelButton:text origText:origText rightText:nil toggle:nil slider:nil checkmark:checkmark message:message leftMargin:18 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left :button_bottom_middle :button_bottom_right];
 }
-- (void)panelBottomButton:(id)text rightText:(id)rightText message:(id)message
+- (void)panelBottomButton:(id)origText rightText:(id)rightText message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-40];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-40];
     _cursorY -= 1;
-    [self panelButton:text rightText:rightText toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left :button_bottom_middle :button_bottom_right];
+    [self panelButton:text origText:origText rightText:rightText toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left :button_bottom_middle :button_bottom_right];
 }
-- (void)panelBottomButton:(id)text toggle:(id)toggle message:(id)message
+- (void)panelBottomButton:(id)origText toggle:(id)toggle message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-40];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-40];
     _cursorY -= 1;
-    [self panelButton:text rightText:nil toggle:toggle slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left :button_bottom_middle :button_bottom_right];
+    [self panelButton:text origText:origText rightText:nil toggle:toggle slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left_squared :button_top_middle :button_top_right_squared :button_bottom_left :button_bottom_middle :button_bottom_right];
 }
 - (void)panelSingleButton:(id)text
 {
@@ -774,40 +793,43 @@ NSLog(@"waiting for input");
 {
     [self panelSingleButton:text rightText:nil message:message];
 }
-- (void)panelSingleButton:(id)text checkmark:(id)checkmark message:(id)message
+- (void)panelSingleButton:(id)origText checkmark:(id)checkmark message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-60];
-    [self panelButton:text rightText:nil toggle:nil slider:nil checkmark:checkmark message:message leftMargin:18 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-60];
+    [self panelButton:text origText:origText rightText:nil toggle:nil slider:nil checkmark:checkmark message:message leftMargin:18 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
 }
 - (void)panelSingleSlider:(id)slider message:(id)message
 {
-    [self panelButton:nil rightText:nil toggle:nil slider:slider checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
+    [self panelButton:nil origText:nil rightText:nil toggle:nil slider:slider checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
 }
-- (void)panelSingleButton:(id)text rightText:(id)rightText message:(id)message
+- (void)panelSingleButton:(id)origText rightText:(id)rightText message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-40];
-    [self panelButton:text rightText:rightText toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-40];
+    [self panelButton:text origText:origText rightText:rightText toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
 }
-- (void)panelSingleButton:(id)text toggle:(id)toggle message:(id)message
+- (void)panelSingleButton:(id)origText toggle:(id)toggle message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-40];
-    [self panelButton:text rightText:nil toggle:toggle slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-40];
+    [self panelButton:text origText:origText rightText:nil toggle:toggle slider:nil checkmark:nil message:message leftMargin:0 width:_r.w-20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
 }
 - (void)panelButton:(id)text
 {
     [self panelButton:text message:nil];
 }
-- (void)panelButton:(id)text message:(id)message
+- (void)panelButton:(id)origText message:(id)message
 {
-    text = [_bitmap fitBitmapString:text width:_r.w-40];
+    id text = [_bitmap fitBitmapString:origText width:_r.w-40];
     int textWidth = [_bitmap bitmapWidthForText:text];
     
-    [self panelButton:text rightText:nil toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:textWidth+20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
+    [self panelButton:text origText:origText rightText:nil toggle:nil slider:nil checkmark:nil message:message leftMargin:0 width:textWidth+20 :button_top_left :button_top_middle :button_top_right :button_bottom_left :button_bottom_middle :button_bottom_right];
 }
-- (void)panelButton:(id)text rightText:(id)rightText toggle:(id)toggle slider:(id)slider checkmark:(id)checkmark message:(id)message leftMargin:(int)leftMargin width:(int)width :(unsigned char *)top_left :(unsigned char *)top_middle :(unsigned char *)top_right :(unsigned char *)bottom_left :(unsigned char *)bottom_middle :(unsigned char *)bottom_right
+- (void)panelButton:(id)text origText:(id)origText rightText:(id)rightText toggle:(id)toggle slider:(id)slider checkmark:(id)checkmark message:(id)message leftMargin:(int)leftMargin width:(int)width :(unsigned char *)top_left :(unsigned char *)top_middle :(unsigned char *)top_right :(unsigned char *)bottom_left :(unsigned char *)bottom_middle :(unsigned char *)bottom_right
 {
     int buttonIndex = [_buttons count];
     [_buttons addObject:(message) ? message : @""];
+    id buttonDict = nsdict();
+    [buttonDict setValue:origText forKey:@"text"];
+    [_buttonDicts addObject:buttonDict];
     _buttonType[buttonIndex] = 'b';
     if (toggle) {
         _buttonType[buttonIndex] = 't';
@@ -927,9 +949,13 @@ NSLog(@"waiting for input");
 }
 - (void)panelCalendarRow:(id)elts
 {
-    [self panelCalendarRow:elts square:YES bgcolor:@"white" fgcolor:@"black"];
+    [self panelCalendarRow:elts square:YES bgcolor:@"white" fgcolor:@"black" message:@""];
 }
-- (void)panelCalendarRow:(id)elts square:(BOOL)square bgcolor:(id)bgcolor fgcolor:(id)fgcolor
+- (void)panelCalendarRow:(id)elts message:(id)message
+{
+    [self panelCalendarRow:elts square:YES bgcolor:@"white" fgcolor:@"black" message:message];
+}
+- (void)panelCalendarRow:(id)elts square:(BOOL)square bgcolor:(id)bgcolor fgcolor:(id)fgcolor message:(id)message
 {
     int count = 7;
     int cellW = _r.w/count;
@@ -954,6 +980,21 @@ NSLog(@"waiting for input");
         id elt = [elts nth:i];
         int x = _r.x+offsetX+i*cellW;
         int y = _cursorY;
+
+        int buttonIndex = [_buttons count];
+        if ([elt length]) {
+            if (_buttonHover == buttonIndex+1) {
+                if (_buttonDown == _buttonHover) {
+                    [_bitmap setColor:@"blue"];
+                    [_bitmap fillRectangleAtX:x+1 y:y w:cellW-1 h:cellH];
+                } else if (!_buttonDown) {
+                    [_bitmap setColor:@"orange"];
+                    [_bitmap fillRectangleAtX:x+1 y:y w:cellW-1 h:cellH];
+                }
+            }
+        }
+
+
         if ((i == 0) || (i == count)) {
             [_bitmap setColor:@"black"];
         } else {
@@ -962,8 +1003,29 @@ NSLog(@"waiting for input");
         [_bitmap drawVerticalLineAtX:x y:y y:_cursorY+cellH-1];
         if ([elt length]) {
             [_bitmap setColor:fgcolor];
-            [_bitmap drawBitmapText:elt x:x+5 y:y+5];
+            int day = [elt intValueForKey:@"day"];
+            if (day) {
+                [_bitmap drawBitmapText:nsfmt(@"%d", day) x:x+5 y:y+5];
+            } else {
+                id header = [elt valueForKey:@"header"];
+                if ([header length]) {
+                    [_bitmap drawBitmapText:header x:x+5 y:y+5];
+                }
+            }
         }
+
+        if ([elt length]) {
+            if (buttonIndex < MAX_RECT) {
+                [_buttons addObject:message];
+                [_buttonDicts addObject:elt];
+                _buttonType[buttonIndex] = 'b';
+                _rect[buttonIndex].x = x;
+                _rect[buttonIndex].y = y;
+                _rect[buttonIndex].w = cellW;
+                _rect[buttonIndex].h = cellH;
+            }
+        }
+
     }
     _cursorY += cellH;
 }
@@ -1020,24 +1082,6 @@ NSLog(@"waiting for input");
 }
 - (void)handleMouseMoved:(id)event
 {
-    if (_menuDict) {
-        id object = [_menuDict valueForKey:@"object"];
-        if ([object respondsToSelector:@selector(handleMouseMoved:)]) {
-            id windowManager = [event valueForKey:@"windowManager"];
-            int mouseRootX = [windowManager intValueForKey:@"mouseX"];
-            int mouseRootY = [windowManager intValueForKey:@"mouseY"];
-NSLog(@"handleMouseMoved windowManager %@", windowManager);
-            int x = [_menuDict intValueForKey:@"x"];
-            int y = [_menuDict intValueForKey:@"y"];
-            int w = [_menuDict intValueForKey:@"w"];
-            int h = [_menuDict intValueForKey:@"h"];
-            id newEvent = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX-x y:mouseRootY-y w:w h:h x11dict:_menuDict];
-            [object handleMouseMoved:newEvent];
-            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
-        }
-        return;
-    }
-
     int x = [event intValueForKey:@"mouseX"];
     int y = [event intValueForKey:@"mouseY"];
     if (_buttonDown && (_buttonType[_buttonDown-1] == 's')) {
@@ -1072,31 +1116,6 @@ NSLog(@"handleMouseMoved windowManager %@", windowManager);
 
 - (void)handleMouseUp:(id)event
 {
-    if (_menuDict) {
-        id windowManager = [event valueForKey:@"windowManager"];
-        id object = [_menuDict valueForKey:@"object"];
-        if ([object respondsToSelector:@selector(handleMouseUp:)]) {
-            int mouseRootX = [event intValueForKey:@"mouseRootX"];
-            int mouseRootY = [event intValueForKey:@"mouseRootY"];
-            int x = [_menuDict intValueForKey:@"x"];
-            int y = [_menuDict intValueForKey:@"y"];
-            int w = [_menuDict intValueForKey:@"w"];
-            int h = [_menuDict intValueForKey:@"h"];
-            id newEvent = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX-x y:mouseRootY-y w:w h:h x11dict:_menuDict];
-            [object handleMouseUp:newEvent];
-            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
-/*
-            int closingIteration = [object intValueForKey:@"closingIteration"];
-            if (closingIteration) {
-                _closingIteration = closingIteration;
-                return;
-            }
-*/
-        }
-        [self setValue:nil forKey:@"menuDict"];
-        return;
-    }
-
     if (_buttonDown == 0) {
         return;
     }
@@ -1115,62 +1134,23 @@ NSLog(@"handleMouseMoved windowManager %@", windowManager);
 }
 - (void)handleScrollWheel:(id)event
 {
-    if (_menuDict) {
-        id windowManager = [event valueForKey:@"windowManager"];
-        id object = [_menuDict valueForKey:@"object"];
-        if ([object respondsToSelector:@selector(handleScrollWheel:)]) {
-            int mouseRootX = [event intValueForKey:@"mouseRootX"];
-            int mouseRootY = [event intValueForKey:@"mouseRootY"];
-            int x = [_menuDict intValueForKey:@"x"];
-            int y = [_menuDict intValueForKey:@"y"];
-            int w = [_menuDict intValueForKey:@"w"];
-            int h = [_menuDict intValueForKey:@"h"];
-            id newEvent = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX-x y:mouseRootY-y w:w h:h x11dict:_menuDict];
-            [newEvent setValue:[event valueForKey:@"deltaX"] forKey:@"deltaX"];
-            [newEvent setValue:[event valueForKey:@"deltaY"] forKey:@"deltaY"];
-            [newEvent setValue:[event valueForKey:@"scrollingDeltaX"] forKey:@"scrollingDeltaX"];
-            [newEvent setValue:[event valueForKey:@"scrollingDeltaY"] forKey:@"scrollingDeltaY"];
-            [object handleScrollWheel:newEvent];
-            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
-        }
-        return;
-    }
-
     _scrollY -= [event intValueForKey:@"deltaY"];
 }
-/*
 - (void)handleRightMouseDown:(id)event
 {
-    id windowManager = [event valueForKey:@"windowManager"];
-    int mouseRootX = [event intValueForKey:@"mouseRootX"];
-    int mouseRootY = [event intValueForKey:@"mouseRootY"];
-    id buttonDownWhich = [event valueForKey:@"buttonDownWhich"];
-
-    id obj = [[[Definitions configDir:@"Config/rootWindowMenu.csv"] parseCSVFile] asMenu];
-    int w = [obj preferredWidth];
-    int h = [obj preferredHeight];
-    id dict = [windowManager openWindowForObject:obj x:mouseRootX y:mouseRootY w:w+3 h:h+3 overrideRedirect:YES];
-//    [windowManager setValue:dict forKey:@"buttonDownDict"];
-//    [windowManager setValue:buttonDownWhich forKey:@"buttonDownWhich"];
-    [self setValue:dict forKey:@"menuDict"];
-}
-*/
-- (void)handleRightMouseUp:(id)event
-{
-NSLog(@"handleRightMouseUp");
-    if (_menuDict) {
-        [_menuDict setValue:@"1" forKey:@"shouldCloseWindow"];
-        [self setValue:nil forKey:@"menuDict"];
-    }
-}
-- (void)handleKeyDown:(id)event
-{
-    if (_menuDict) {
+    if (_buttonHover) {
         id windowManager = [event valueForKey:@"windowManager"];
-        id object = [_menuDict valueForKey:@"object"];
-        if ([object respondsToSelector:@selector(handleKeyDown:)]) {
-            [object handleKeyDown:event];
-            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+        id obj = nil;
+        if (_buttonRightClickMessage) {
+            obj = [self evaluateMessage:_buttonRightClickMessage];
+            [obj setValue:self forKey:@"contextualObject"];
+        }
+
+        if (obj) {
+            [windowManager openButtonDownMenuForObject:obj x:mouseRootX y:mouseRootY w:0 h:0];
         }
     }
 }
@@ -1243,6 +1223,7 @@ NSLog(@"PanelGrid updateArrayAndTimestamp path %@", _currentDirectory);
     [Definitions drawHorizontalStripesInBitmap:bitmap rect:r];
 
     [self setValue:nsarr() forKey:@"buttons"];
+    [self setValue:nsarr() forKey:@"buttonDicts"];
 
     if (_waitForObserver && !_lastLine) {
 NSLog(@"waiting for input");
