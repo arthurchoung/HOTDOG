@@ -981,15 +981,28 @@ NSLog(@"waiting for input");
         int x = _r.x+offsetX+i*cellW;
         int y = _cursorY;
 
+        id datecolor = fgcolor;
+        id eltbgcolor = [elt valueForKey:@"bgcolor"];
+        id eltfgcolor = [elt valueForKey:@"fgcolor"];
+
         int buttonIndex = [_buttons count];
         if ([elt length]) {
+            if ([eltbgcolor length]) {
+                [_bitmap setColor:eltbgcolor];
+                [_bitmap fillRectangleAtX:x+1 y:y w:cellW-1 h:cellH];
+            }
+            if ([eltfgcolor length]) {
+                datecolor = eltfgcolor;
+            }
             if (_buttonHover == buttonIndex+1) {
                 if (_buttonDown == _buttonHover) {
-                    [_bitmap setColor:@"blue"];
+                    [_bitmap setColor:@"#0055aa"];
                     [_bitmap fillRectangleAtX:x+1 y:y w:cellW-1 h:cellH];
+                    datecolor = @"white";
                 } else if (!_buttonDown) {
                     [_bitmap setColor:@"orange"];
                     [_bitmap fillRectangleAtX:x+1 y:y w:cellW-1 h:cellH];
+                    datecolor = @"white";
                 }
             }
         }
@@ -1002,11 +1015,22 @@ NSLog(@"waiting for input");
         }
         [_bitmap drawVerticalLineAtX:x y:y y:_cursorY+cellH-1];
         if ([elt length]) {
-            [_bitmap setColor:fgcolor];
             int day = [elt intValueForKey:@"day"];
             if (day) {
+                [_bitmap setColor:datecolor];
                 [_bitmap drawBitmapText:nsfmt(@"%d", day) x:x+5 y:y+5];
+                id text = [elt valueForKey:@"text"];
+                if ([text length]) {
+                    text = [_bitmap fitBitmapString:text width:cellW-10];
+                    int charHeight = [_bitmap bitmapHeightForText:@"X"];
+                    int maxLines = (cellH - 5 - charHeight - 5 - 5) / charHeight;
+                    if (maxLines > 0) {
+                        text = [[[text split:@"\n"] subarrayToIndex:maxLines] join:@"\n"];
+                        [_bitmap drawBitmapText:text x:x+5 y:y+5+charHeight+5];
+                    }
+                }
             } else {
+                [_bitmap setColor:fgcolor];
                 id header = [elt valueForKey:@"header"];
                 if ([header length]) {
                     [_bitmap drawBitmapText:header x:x+5 y:y+5];

@@ -65,7 +65,7 @@ EOF
             if ($_ eq '') {
                 '';
             } else {
-                "year:$year month:$month day:$_"
+                "year:$year month:$month day:$_ text: bgcolor: fgcolor:"
             }
         } @days;
         $str = join q{' '}, @days;
