@@ -69,8 +69,11 @@ EOF
 panelText:'Address:$address'
 EOF
     }
-    $dhcpcd = `pgrep -f 'dhcpcd.*$interface' | head -n 1`;
+    $dhcpcd = `pgrep -f 'dhcpcd.*$interface'`;
     chomp $dhcpcd;
+    if ($dhcpcd =~ m/^(\d+)/) {
+        $dhcpcd = $1;
+    }
     print <<EOF;
 panelText:'dhcpcd:$dhcpcd'
 EOF
