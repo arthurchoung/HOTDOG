@@ -1,5 +1,6 @@
 hotKey,displayName,messageForClick
 ,"Main Menu","['hotdog']|runCommandInBackground"
+,"Home","['hotdog' 'nav' '.']|runCommandInBackground"
 "F1",XTerm,"[ 'hotdog-xterm.sh' ] | runCommandInBackground"
 ,Chromium,"[ 'chromium' ] | runCommandInBackground"
 ,,
