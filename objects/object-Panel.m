@@ -274,7 +274,7 @@ static unsigned char *button_bottom_right_squared =
 + (id)ContactsPanel
 {
     id generatecmd = nsarr();
-    [generatecmd addObject:@"hotdog-generateContactsPanel.pl"];
+    [generatecmd addObject:@"hotdog-generateContactsPanel.py"];
 
     id obj = [@"Panel" asInstance];
     [obj setValue:generatecmd forKey:@"generateCommand"];
