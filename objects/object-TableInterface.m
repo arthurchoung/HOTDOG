@@ -424,12 +424,21 @@ highestValue = nil; // disable highlight of highest value
 - (void)handleKeyDown:(id)event
 {
     id keyString = [event valueForKey:@"keyString"];
+NSLog(@"handleKeyDown keyString %@", keyString);
     if ([keyString isEqual:@"left"]) {
         if (_offsetX > 0) {
             _offsetX--;
         }
     } else if ([keyString isEqual:@"right"]) {
         _offsetX++;
+    } else if ([keyString isEqual:@"up"]) {
+        _offsetY += 20;
+    } else if ([keyString isEqual:@"down"]) {
+        _offsetY += 20;
+    } else if ([keyString isEqual:@"space"]) {
+        _offsetY += [event intValueForKey:@"viewHeight"] - 20;
+    } else if ([keyString isEqual:@"b"]) {
+        _offsetY -= [event intValueForKey:@"viewHeight"] - 20;;
     }
 }
 - (void)endIteration:(id)event
