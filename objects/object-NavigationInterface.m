@@ -758,6 +758,15 @@ NSLog(@"context %@", _context);
     }
 }
 
+- (void)handleKeyDown:(id)event
+{
+    id obj = [_context valueForKey:@"object"];
+    if ([obj respondsToSelector:@selector(handleKeyDown:)]) {
+        int navigationBarHeight = [Definitions navigationBarHeight];
+        [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - navigationBarHeight) forKey:@"viewHeight"];
+        [obj handleKeyDown:event];
+    }
+}
 - (void)handleScrollWheel:(id)event
 {
     id obj = [_context valueForKey:@"object"];
