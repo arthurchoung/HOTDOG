@@ -6,6 +6,10 @@ chomp @lines;
 print <<EOF;
 panelHorizontalStripes
 panelText:''
+panelButton:'Sync Time with NTP' message:[['ntpdate' 'pool.ntp.org']|runCommandWithSudoAndReturnOutput|asString|showAlert]
+panelText:''
+panelLine
+panelText:''
 panelText:'Choose a network interface to set up:'
 panelText:''
 panelLine
