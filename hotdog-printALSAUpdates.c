@@ -228,7 +228,7 @@ void main(int argc, char **argv)
         print_all();
         int result = read_alsa_event();
         if (!result) {
-            break;
+fprintf(stderr, "Unable to read alsa event\n");
         }
     }
 
