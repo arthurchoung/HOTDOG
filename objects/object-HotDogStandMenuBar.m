@@ -356,6 +356,18 @@ NSLog(@"HotDogStandMenuBar handleMouseUp event %@", event);
         h = [obj preferredHeight];
     }
     id windowManager = [@"windowManager" valueForKey];
+if (x+w+3 > monitorX+monitorWidth) {
+    int dictWidth = [dict intValueForKey:@"width"];
+    x = x+dictWidth-w-2;
+    if (x < monitorX) {
+        if (w > monitorWidth-3) {
+            x = monitorX;
+            w = monitorWidth-3;
+        } else {
+            x = monitorX+monitorWidth-w-3;
+        }
+    }
+}
     id menuDict = [windowManager openWindowForObject:obj x:x y:18*_pixelScaling w:w+3 h:h+3];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
