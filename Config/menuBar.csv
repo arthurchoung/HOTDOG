@@ -1,9 +1,14 @@
 flexible,leftPadding,rightPadding,objectMessage,messageForClick
 ,4,4,"HotDog","configDir:'Config/rootWindowMenu.csv'|parseCSVFile|asMenu"
 1,4,4,"TextMenuItem:'#{currentWindow|name|split|nth:0}'","configDir:'Config/windowMenu.csv'|parseCSVFile|asMenu"
+,4,4,"TextMenuItem:'xset'","['hotdog-commandOutputMenu.pl' 'xset' 'q']|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu|useFixedWidthFont"
+,4,4,"TextMenuItem:'ps'","['hotdog-commandOutputMenu.pl' 'ps' 'auxk' '-pcpu']|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu|useFixedWidthFont"
+,4,4,"TextMenuItem:'lsblk'","['hotdog-commandOutputMenu.pl' 'lsblk' '-i' '-o' 'NAME,FSTYPE,FSVER,LABEL,FSAVAIL,FSUSE%,MOUNTPOINTS']|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu|useFixedWidthFont"
 ,4,4,"CommandTextMenuItem:['hotdog-monitorMonitors'] lineMessage:[setupMonitors] stringFormat:'Mon #{currentMonitorIndexName}'","NSArray|addObject:'hotdog-generateMenuForMonitor:path:.pl'|addObject:(currentMonitorName)|addObject:(configDir:'Temp/listMonitors.txt')|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu"
 ,4,4,"CommandTextMenuItem:('hotdog-printALSAStatus hw:0'|split) stringFormat:'Volume: #{ifTrue:[playbackSwitch] then:[PercentString:(volume|times:100|intValue)] else:[MuteString]}'","VolumeMenu:'hw:0' :'Master'"
 ,4,4,"CommandTextMenuItem:['hotdog-printBatteryStatus.pl' ]",
 ,4,4,"CommandBitmapMenuItem:['hotdog-printCPUStats.pl' ]",
-,4,4,"CommandTextMenuItem:['hotdog-printNetworkInfo.pl' ]","configDir:'Config/networkMenu.csv'|parseCSVFile|asMenu"
+,4,4,"CommandTextMenuItem:['hotdog-printNetworkInfo.pl' ]","['hotdog-commandOutputMenu.pl' 'ifconfig' '-a']|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu|useFixedWidthFont"
 ,4,4,"CommandTextMenuItem:['hotdog-printDateEverySecondForTimezone:text:.pl' 'Pacific/Auckland' 'AKL']","configDir:'Config/dateTimeMenu.csv'|parseCSVFile|asMenu"
+,4,4,"MacHelpMenuItem","configDir:'Config/helpMenu.csv'|parseCSVFile|asMenu"
+,4,4,"MacComputerMenuItem","configDir:'Config/computerMenu.csv'|parseCSVFile|asMenu"
