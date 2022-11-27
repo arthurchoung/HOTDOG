@@ -319,6 +319,18 @@ NSLog(@"AtariSTMenuBar handleMouseUp event %@", event);
         h = [obj preferredHeight];
     }
     id windowManager = [@"windowManager" valueForKey];
+if (x+w+4 > monitorX+monitorWidth) {
+    int dictWidth = [dict intValueForKey:@"width"];
+    x = x+dictWidth-w+4;
+    if (x < monitorX+4) {
+        if (w > monitorWidth-4) {
+            x = monitorX+4;
+            w = monitorWidth-4;
+        } else {
+            x = monitorX+monitorWidth-w-4;
+        }
+    }
+}
     id menuDict = [windowManager openWindowForObject:obj x:x-4*_pixelScaling y:18*_pixelScaling w:w+4 h:h+4];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
