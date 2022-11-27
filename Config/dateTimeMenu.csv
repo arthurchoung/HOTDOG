@@ -1,4 +1,4 @@
 displayName,messageForClick
 "Open Calendar Panel...","['hotdog' 'show' 'CalendarPanel']|runCommandInBackground"
 "Open Calendar Year Panel...","['hotdog' 'show' 'CalendarYearPanel']|runCommandInBackground"
-"Open Date/Time Panel...","['hotdog' 'show' 'DateTimePanel']|runCommandInBackground"
+"Open Calendar Year Panel (1 column)...","['hotdog' 'show' 'CalendarYearPanelSingleColumn']|runCommandInBackground"
