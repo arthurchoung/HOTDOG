@@ -94,6 +94,12 @@
     struct tm *t = localtime(&timestamp);
     return t->tm_year+1900;
 }
++ (int)currentMonth
+{
+    time_t timestamp = time(0);
+    struct tm *t = localtime(&timestamp);
+    return t->tm_mon+1;
+}
 + (id)currentDateTime
 {
     time_t timestamp = time(0);
