@@ -1,0 +1,2 @@
+hotKey,displayName,messageForClick
+,"Tip about X11 tearing","[ 'hotdog-tipAboutX11Tearing.pl' ] | runCommandInBackground"
