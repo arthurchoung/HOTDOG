@@ -64,6 +64,9 @@
     }
     return self;
 }
+- (void)useFixedWidthFont
+{
+}
 - (int)preferredWidth
 {
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
