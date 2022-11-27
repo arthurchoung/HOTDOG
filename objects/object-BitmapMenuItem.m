@@ -100,6 +100,7 @@ static char *macHelpMenuIconPalette =
 ;
 static char *macHelpMenuIconPixels =
 "               \n"
+"               \n"
 "  ***********  \n"
 " =;>=+obo+=>;* \n"
 "*;>=b*$=bbb=>;+\n"
