@@ -38,19 +38,19 @@
 + (char **)arrayOfCStringsForAtariSTFont
 {
     static char *default_bitmap = 
-"bbbbbb\n"
-"b    b\n"
-"b    b\n"
-"b    b\n"
-"b    b\n"
-"b    b\n"
-"b    b\n"
-"b    b\n"
-"b    b\n"
-"b    b\n"
-"b    b\n"
-"b    b\n"
-"bbbbbb\n"
+"bbbbbbbb\n"
+"b      b\n"
+"b      b\n"
+"b      b\n"
+"b      b\n"
+"b      b\n"
+"b      b\n"
+"b      b\n"
+"b      b\n"
+"b      b\n"
+"b      b\n"
+"b      b\n"
+"bbbbbbbb\n"
 ;
 
     static char *bitmaps[256];
@@ -1120,7 +1120,24 @@
 "        \n"
 "        \n"
 ;
-//[    bitmaps[91] = 
+    bitmaps[91] = 
+"        \n"
+"        \n"
+"   bbbb \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bbbb \n"
+"        \n"
+"        \n"
+;
     bitmaps[92] = 
 "        \n"
 "        \n"
@@ -1139,7 +1156,24 @@
 "        \n"
 "        \n"
 ;
-//]    bitmaps[93] = 
+    bitmaps[93] = 
+"        \n"
+"        \n"
+" bbbb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+"   bb   \n"
+" bbbb   \n"
+"        \n"
+"        \n"
+;
     bitmaps[94] = 
 "        \n"
 "   b    \n"
@@ -1158,9 +1192,42 @@
 "        \n"
 "        \n"
 ;
-//_    bitmaps[95] = 
+    bitmaps[95] = 
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+" bbbbbb \n"
+"        \n"
 ;
-//`    bitmaps[96] = 
+    bitmaps[96] = 
+"  bb    \n"
+"  bb    \n"
+"  bb    \n"
+"  bb    \n"
+"   bb   \n"
+"    b   \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+"        \n"
+;
     bitmaps[97] = 
 "        \n"
 "        \n"
