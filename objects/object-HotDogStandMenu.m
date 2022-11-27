@@ -64,6 +64,15 @@
     }
     return self;
 }
+- (void)useFixedWidthFont
+{
+    id obj = [Definitions scaleFont:_pixelScaling
+                    :[Definitions arrayOfCStringsForAtariSTFont]
+                    :[Definitions arrayOfWidthsForAtariSTFont]
+                    :[Definitions arrayOfHeightsForAtariSTFont]
+                    :[Definitions arrayOfXSpacingsForAtariSTFont]];
+    [self setValue:obj forKey:@"scaledFont"];
+}
 - (int)preferredWidth
 {
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
