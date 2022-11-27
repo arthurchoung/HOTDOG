@@ -1181,6 +1181,37 @@ NSLog(@"waiting for input");
 @end
 
 @implementation Definitions(fmeklwmfklsdmkflmklsdmfkl)
++ (id)CalendarYearPanelSingleColumn
+{
+    int year = [Definitions currentYear];
+    int month = [Definitions currentMonth];
+
+    id obj = [@"PanelGrid" asInstance];
+    [obj setValue:@"1" forKey:@"numberOfColumns"];
+
+    id arr = nsarr();
+    for (int i=1; i<=12; i++) {
+        id cmd;
+        if (month == i) {
+            cmd = nsarr();
+            [cmd addObject:@"echo"];
+            [cmd addObject:@"panelSetInitialScrollY"];
+            [arr addObject:cmd];
+            [obj setValue:@"1" forKey:@"setInitialScrollY"];
+        }
+        cmd = nsarr();
+        [cmd addObject:@"hotdog-generateCalendarPanel.pl"];
+        [cmd addObject:nsfmt(@"%d", i)];
+        [cmd addObject:nsfmt(@"%d", year)];
+        [arr addObject:cmd];
+
+    }
+    [obj setValue:arr forKey:@"gridCommands"];
+    [obj updateArray];
+    return obj;
+
+
+}
 + (id)CalendarYearPanel
 {
     int year = [Definitions currentYear];
@@ -1188,7 +1219,12 @@ NSLog(@"waiting for input");
 }
 + (id)CalendarYearPanel:(int)year
 {
+    return [Definitions CalendarYearPanel:year columns:3];
+}
++ (id)CalendarYearPanel:(int)year columns:(int)numberOfColumns
+{
     id obj = [@"PanelGrid" asInstance];
+    [obj setValue:nsfmt(@"%d", numberOfColumns) forKey:@"numberOfColumns"];
 
     id arr = nsarr();
     for (int i=1; i<=12; i++) {
@@ -1206,8 +1242,10 @@ NSLog(@"waiting for input");
 
 @interface PanelGrid:Panel
 {
+    int _numberOfColumns;
     id _gridCommands;
     id _gridArray;
+    BOOL _setInitialScrollY;
 }
 @end
 @implementation PanelGrid
@@ -1259,14 +1297,18 @@ NSLog(@"waiting for input");
     int rowCursorY = -_scrollY + r.y + 5;
     int nextCursorY = rowCursorY;
 
-    int gridWidth = r.w / 3;
+    int numberOfColumns = _numberOfColumns;
+    if (numberOfColumns < 1) {
+        numberOfColumns = 3;
+    }
+    int gridWidth = r.w / numberOfColumns;
     for (int i=0; i<[_gridArray count]; i++) {
         id arr = [_gridArray nth:i];
 
         _cursorY = rowCursorY;
 
         Int4 gridRect;
-        int gridX = i%3;
+        int gridX = i%numberOfColumns;
         gridRect.x = r.x + gridWidth*gridX + 3;
         gridRect.y = _cursorY; 
         gridRect.w = gridWidth - 6;
@@ -1276,7 +1318,10 @@ NSLog(@"waiting for input");
 
         for (int j=0; j<[arr count]; j++) {
             if (_cursorY >= r.y + r.h) {
-                break;
+                if (_setInitialScrollY) {
+                } else {
+                    break;
+                }
             }
             if ([_buttons count] >= MAX_RECT) {
                 [self panelText:@"MAX_RECT reached"];
@@ -1289,7 +1334,7 @@ NSLog(@"waiting for input");
         if (_cursorY > nextCursorY) {
             nextCursorY = _cursorY;
         }
-        if (gridX == 2) {
+        if (gridX == numberOfColumns-1) {
             rowCursorY = nextCursorY;
         }
     }
@@ -1297,9 +1342,20 @@ NSLog(@"waiting for input");
 
 end:
     [self setValue:nil forKey:@"bitmap"];
+
+    if (_setInitialScrollY) {
+        _setInitialScrollY = NO;
+        [self drawInBitmap:bitmap rect:r];
+    }
 }
 - (void)panelHorizontalStripes
 {
+}
+- (void)panelSetInitialScrollY
+{
+    if (_setInitialScrollY) {
+        _scrollY = _cursorY;
+    }
 }
 @end
 
