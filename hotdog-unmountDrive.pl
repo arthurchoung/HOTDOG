@@ -15,6 +15,7 @@ if ($? != 0) {
     system('hotdog', 'alert', "Unable to unmount $path");
     exit 1;
 }
+system('sync');
 system('hotdog', 'alert', "$path has been unmounted");
 exit 0;
 
