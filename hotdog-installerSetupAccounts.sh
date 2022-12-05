@@ -39,8 +39,8 @@ if hotdog-installerAddUser.sh 2>&1 1> $TMP/temppasswd ; then
   unset UPASS
 
   # Configure sudoers:
-  chmod 640 ${T_PX}/etc/sudoers
-  sed -i ${T_PX}/etc/sudoers -e 's/# *\(%wheel\sALL=(ALL)\sALL\)/\1/'
-  chmod 440 ${T_PX}/etc/sudoers
+#  chmod 640 ${T_PX}/etc/sudoers
+#  sed -i ${T_PX}/etc/sudoers -e 's/# *\(%wheel\sALL=(ALL)\sALL\)/\1/'
+#  chmod 440 ${T_PX}/etc/sudoers
 fi # End user creation
 
