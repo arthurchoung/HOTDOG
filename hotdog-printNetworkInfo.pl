@@ -32,7 +32,7 @@ for(;;) {
     if ($addr) {
         print "$addr\n";
     } else {
-        print "No network\n";
+        print "ifconfig\n";
     }
 
     sleep 10;
