@@ -75,10 +75,10 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
         }
 
         if (argc == 1) {
-            id object = [Definitions navigationStack];
-            [[Definitions configDir:@"MainMenu"] changeDirectory];
-            [object pushObject:[Definitions ObjectInterface]];
-            [Definitions runWindowManagerForObject:object];
+            id obj = [Definitions ObjectInterface];
+            id nav = [Definitions navigationStack];
+            [nav pushObject:obj];
+            [Definitions runWindowManagerForObject:nav];
             [[Definitions navigationStack] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "open")) {
             if (argc > 2) {
