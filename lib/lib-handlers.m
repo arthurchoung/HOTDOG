@@ -26,6 +26,7 @@
 #import "HOTDOG.h"
 
 @implementation NSString(fjkdlsjfklsdjf)
+#ifdef BUILD_FOR_IOS
 - (id)runFileHandler
 {
     id handlers = [[Definitions configDir:@"Config/fileHandlers.csv"] parseCSVFile];
@@ -41,64 +42,16 @@ NSLog(@"message '%@'", message);
     [nsfmt(@"Unknown file type for '%@'", self) showAlert];
     return nil;
 }
-- (id)handleFileWithMAME
+#else
+- (id)runFileHandler
 {
     id cmd = nsarr();
-    [cmd addObject:@"mame"];
-    [cmd addObject:[[self lastPathComponent] stringByDeletingPathExtension]];
+    [cmd addObject:@"hotdog-open:.pl"];
+    [cmd addObject:self];
     [cmd runCommandInBackground];
-    return nil;
+    return nil;   
 }
-@end
+#endif
 
-@implementation NSArray(fjdklsfjlkdsjfklskdljfsd)
-- (void)shuffleFilesWithMPV
-{
-    id cmd = nsarr();
-    [cmd addObject:@"mpv"];
-    [cmd addObject:@"--hwdec=auto"];
-    [cmd addObject:@"--force-window=yes"];
-    [cmd addObject:@"--shuffle"];
-    for (int i=0; i<[self count]; i++) {
-        id elt = [self nth:i];
-        id filePath = [elt valueForKey:@"filePath"];
-        if (filePath) {
-            [cmd addObject:filePath];
-        }
-    }
-    [cmd runCommandInBackground];
-}
-- (void)handleFileWithMPVForIndex:(int)index makePlaylistWithSuffixes:(id)suffixes
-{
-    id filePath = [[self nth:index] valueForKey:@"filePath"];
-    if (!filePath) {
-        return;
-    }
-
-    id playlistArray = nsarr();
-    for (int i=0; i<[self count]; i++) {
-        id elt = [self nth:i];
-        id eltFilePath = [elt valueForKey:@"filePath"];
-        if ([[eltFilePath lowercaseString] hasAnySuffix:suffixes] || (i == index)) {
-            [playlistArray addObject:eltFilePath];
-        }
-    }
-    int playlistIndex = 0;
-    for (int i=0; i<[playlistArray count]; i++) {
-        id elt = [playlistArray nth:i];
-        if ([elt isEqual:filePath]) {
-            playlistIndex = i;
-            break;
-        }
-    }
-    id cmd = nsarr();
-    [cmd addObject:@"mpv"];
-    [cmd addObject:@"--hwdec=auto"];
-    [cmd addObject:@"--force-window=yes"];
-    [cmd addObject:@"--playlist-start"];
-    [cmd addObject:nsfmt(@"%d", playlistIndex)];
-    [cmd addObjectsFromArray:playlistArray];
-    [cmd runCommandInBackground];
-}
 @end
 
