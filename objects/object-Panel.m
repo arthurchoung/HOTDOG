@@ -523,7 +523,8 @@ exit(1);
     Int4 _r;
     int _cursorY;
 
-    id _buttonRightClickMessage;
+    id _buttonRightMouseDownMessage;
+    id _navigationRightMouseDownMessage;
 }
 @end
 @implementation Panel
@@ -1168,8 +1169,8 @@ NSLog(@"waiting for input");
         int mouseRootY = [event intValueForKey:@"mouseRootY"];
 
         id obj = nil;
-        if (_buttonRightClickMessage) {
-            obj = [self evaluateMessage:_buttonRightClickMessage];
+        if (_buttonRightMouseDownMessage) {
+            obj = [self evaluateMessage:_buttonRightMouseDownMessage];
             [obj setValue:self forKey:@"contextualObject"];
         }
 
