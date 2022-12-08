@@ -8,7 +8,7 @@ chomp @output;
 @daysofweek = ();
 
 print <<EOF;
-setValue:[ configDir:'Config/calendarMenu.csv'|parseCSVFile|asMenu ] forKey:'buttonRightClickMessage'
+setValue:[ configDir:'Config/calendarMenu.csv'|parseCSVFile|asMenu ] forKey:'buttonRightMouseDownMessage'
 panelHorizontalStripes
 panelText:''
 EOF
