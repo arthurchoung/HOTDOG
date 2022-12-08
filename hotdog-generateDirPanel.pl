@@ -4,15 +4,9 @@
 chomp @arr;
 
 print <<EOF;
-setValue:[ configDir:'Config/fileMenu.csv'|parseCSVFile|asMenu ] forKey:'buttonRightClickMessage'
+setValue:[ configDir:'Config/filePanelMenu.csv'|parseCSVFile|asMenu ] forKey:'navigationRightMouseDownMessage'
+setValue:[ configDir:'Config/fileMenu.csv'|parseCSVFile|asMenu ] forKey:'buttonRightMouseDownMessage'
 panelHorizontalStripes
-EOF
-
-print <<EOF;
-panelButton:'Shuffle with MPV' message:[['mpv' '--hwdec=auto' '--shuffle' '.']|runCommandInBackground]
-panelText:''
-panelLine
-panelText:''
 EOF
 
 $numElts = scalar @arr;
