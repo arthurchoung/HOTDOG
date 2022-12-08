@@ -782,6 +782,17 @@ NSLog(@"context %@", _context);
     int mouseY = [event intValueForKey:@"mouseY"];
     int navigationBarHeight = [Definitions navigationBarHeight];
     if (mouseY < navigationBarHeight) {
+        id message = [obj valueForKey:@"navigationRightMouseDownMessage"];
+        if ([message length]) {
+            id windowManager = [event valueForKey:@"windowManager"];
+            int mouseRootX = [event intValueForKey:@"mouseRootX"];
+            int mouseRootY = [event intValueForKey:@"mouseRootY"];
+            id result = [self evaluateMessage:message];
+            if (result) {
+                [result setValue:self forKey:@"contextualObject"];
+                [windowManager openButtonDownMenuForObject:result x:mouseRootX y:mouseRootY w:0 h:0];
+            }
+        }
     } else {
         [event setValue:nsfmt(@"%d", [event intValueForKey:@"viewHeight"] - navigationBarHeight) forKey:@"viewHeight"];
         if ([obj respondsToSelector:@selector(handleRightMouseDown:)]) {
