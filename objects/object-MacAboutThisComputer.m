@@ -84,16 +84,19 @@ static unsigned char *button_right =
     dict = nsdict();
     [dict setValue:@"Monitors" forKey:@"text"];
     [dict setValue:@"['hotdog-aboutMonitors.pl'] | runCommandAndReturnOutput | asString" forKey:@"message"];
+    [dict setValue:@"1" forKey:@"fixedWidth"];
     [arr addObject:dict];
 
     dict = nsdict();
     [dict setValue:@"Memory" forKey:@"text"];
     [dict setValue:@"['hotdog-aboutMemory.pl'] | runCommandWithSudoAndReturnOutput | asString" forKey:@"message"];
+    [dict setValue:@"1" forKey:@"fixedWidth"];
     [arr addObject:dict];
 
     dict = nsdict();
     [dict setValue:@"Drives" forKey:@"text"];
     [dict setValue:@"['hotdog-aboutDrives.pl'] | runCommandAndReturnOutput | asString" forKey:@"message"];
+    [dict setValue:@"1" forKey:@"fixedWidth"];
     [arr addObject:dict];
 
     [self setValue:arr forKey:@"array"];
@@ -110,6 +113,7 @@ static unsigned char *button_right =
     Int4 _rect[MAX_BUTTONS];
     id _array;
     id _result;
+    int _fixedWidth;
     int _selected;
     char _buttonDown;
     char _buttonHover;
@@ -120,11 +124,13 @@ static unsigned char *button_right =
 {
     if (!_result) {
         id message = [[_array nth:_selected] valueForKey:@"message"];
+        int fixedWidth = [[_array nth:_selected] valueForKey:@"fixedWidth"];
         id result = [nsdict() evaluateMessage:message];
         if (!result) {
             result = nsfmt(@"Unable to evaluate message: %@", message);
         }
         [self setValue:result forKey:@"result"];
+        _fixedWidth = [[_array nth:_selected] intValueForKey:@"fixedWidth"];
     }
 }
 
@@ -188,6 +194,9 @@ static unsigned char *button_right =
     [bitmap setColor:@"black"];
     Int4 r1 = [Definitions rectWithX:r.x+20 y:r.y+44 w:r.w-40 h:r.h-64];
     if (_result) {
+if (_fixedWidth) {
+    [bitmap useAtariSTFont];
+}
         id str = [bitmap fitBitmapString:_result width:r1.w];
         [bitmap drawBitmapText:str x:r1.x y:r1.y];
     }
