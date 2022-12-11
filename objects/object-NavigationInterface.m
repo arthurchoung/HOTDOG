@@ -897,7 +897,7 @@ NSLog(@"context %@", _context);
             } else if (_defaultTitle) {
                 title = _defaultTitle;
             } else {
-                title = nsfmt(@"%@", [obj class]);
+                title = [@"." asRealPath];//nsfmt(@"%@", [obj class]);
             }
 
 
