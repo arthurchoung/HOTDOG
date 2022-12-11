@@ -36,5 +36,5 @@ EndSection
 If you have an NVidia GPU, I can't remember what to do, sorry.
 EOF
 
-system('hotdog', 'alert', $text);
+system('hotdog', 'oldman', $text);
 
