@@ -528,6 +528,18 @@ NSLog(@"lines %@", lines);
                 exit(0);
             }
             exit(1);
+        } else if ((argc > 1) && !strcmp(argv[1], "oldman")) {
+            id text = nil;
+            if (argc > 2) {
+                text = nsfmt(@"%s", argv[2]);
+            } else {
+                id data = [Definitions dataFromStandardInput];
+                text = [data asString];
+            }
+            id obj = [Definitions OldMan];
+            [obj setValue:text forKey:@"text"];
+            [Definitions runWindowManagerForObject:obj];
+            exit(0);
         } else {
             id args = nsarr();
             for (int i=1; i<argc; i++) {
