@@ -88,7 +88,9 @@
     [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
     int h = 20*scaling;
     [windowManager setValue:nsfmt(@"%d", h) forKey:@"menuBarHeight"];
-    id menuBar = [windowManager openWindowForObject:[@"HotDogStandMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
+    id menuBarObject = [@"HotDogStandMenuBar" asInstance];
+    [menuBarObject setValue:@"1" forKey:@"hideWin31Buttons"];
+    id menuBar = [windowManager openWindowForObject:menuBarObject x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
     [windowManager setValue:menuBar forKey:@"menuBar"];
     [windowManager setFocusDict:nil];
     [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
