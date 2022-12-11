@@ -1,0 +1,3 @@
+displayName,messageForClick
+"rightButtonMenuBar.csv","menuBar|object|setValue:'rightButtonMenuBar.csv' forKey:'rightButtonFile'"
+"rightButtonMenuBar2.csv","menuBar|object|setValue:'rightButtonMenuBar2.csv' forKey:'rightButtonFile'"
