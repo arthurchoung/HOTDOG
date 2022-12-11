@@ -70,6 +70,12 @@ static char *menuBarButtonsPixels =
     int _pixelScaling;
     id _scaledFont;
     id _scaledMenuBarButtonsPixels;
+
+    BOOL _rightButtonDown;
+    id _rightButtonArray;
+    id _rightButtonFile;
+
+    BOOL _hideWin31Buttons;
 }
 @end
 
@@ -102,6 +108,8 @@ static char *menuBarButtonsPixels =
         [self setPixelScaling:scaling];
         id configPath = [Definitions configDir:@"Config/menuBar.csv"];
         [self setValue:configPath forKey:@"configPath"];
+        id rightButtonFile = @"rightButtonMenuBar.csv";
+        [self setValue:rightButtonFile forKey:@"rightButtonFile"];
     }
     return self;
 }
@@ -119,13 +127,12 @@ static char *menuBarButtonsPixels =
     [self setValue:obj forKey:@"scaledMenuBarButtonsPixels"];
 }
 
-- (void)updateMenuBar
+- (id)readMenuBarFromFile:(id)path
 {
-    id arr = [_configPath parseCSVFile];
+    id arr = [path parseCSVFile];
     if (!arr) {
-        return;
+        return nil;
     }
-    [self setValue:arr forKey:@"array"];
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
         id objectMessage = [elt valueForKey:@"objectMessage"];
@@ -134,7 +141,16 @@ static char *menuBarButtonsPixels =
             [elt setValue:obj forKey:@"object"];
         }
     }
+    return arr;
 }
+- (void)updateMenuBar
+{
+    id arr = [self readMenuBarFromFile:_configPath];
+    if (arr) {
+        [self setValue:arr forKey:@"array"];
+    }
+}
+
 - (void)dealloc
 {
 NSLog(@"DEALLOC HotDogStandMenuBar");
@@ -155,6 +171,7 @@ NSLog(@"DEALLOC HotDogStandMenuBar");
         id x11dict = [event valueForKey:@"x11dict"];
         if (_closingIteration == 0) {
             _buttonDown = NO;
+            _rightButtonDown = NO;
             [self setValue:nil forKey:@"menuDict"];
             [self setValue:nil forKey:@"selectedDict"];
         }
@@ -185,14 +202,18 @@ NSLog(@"DEALLOC HotDogStandMenuBar");
 }
 - (id)dictForX:(int)x
 {
+    return [self dictForX:x array:_array];
+}
+- (id)dictForX:(int)x array:(id)array
+{
     id monitor = [Definitions monitorForX:x y:0];
     int monitorX = [monitor intValueForKey:@"x"];
     int monitorWidth = [monitor intValueForKey:@"width"];
     if ((x < monitorX) || (x >= monitorX+monitorWidth)) {
         return nil;
     }
-    for (int i=0; i<[_array count]; i++) {
-        id elt = [_array nth:i];
+    for (int i=0; i<[array count]; i++) {
+        id elt = [array nth:i];
         int eltX = [elt intValueForKey:@"x"];
         int x1 = (eltX < 0) ? eltX+monitorX+monitorWidth : eltX+monitorX;
         int w1 = [elt intValueForKey:@"width"];
@@ -204,7 +225,7 @@ NSLog(@"DEALLOC HotDogStandMenuBar");
 }
 - (void)handleScrollWheel:(id)event
 {
-    if (!_buttonDown) {
+    if (!_buttonDown && !_rightButtonDown) {
         return;
     }
 
@@ -230,7 +251,7 @@ NSLog(@"DEALLOC HotDogStandMenuBar");
 }
 - (void)handleKeyDown:(id)event
 {
-    if (!_buttonDown) {
+    if (!_buttonDown && !_rightButtonDown) {
         return;
     }
 
@@ -246,7 +267,7 @@ NSLog(@"DEALLOC HotDogStandMenuBar");
 
 - (void)handleMouseDown:(id)event
 {
-    if (_buttonDown) {
+    if (_buttonDown || _rightButtonDown) {
         return;
     }
     int mouseRootX = [event intValueForKey:@"mouseRootX"];
@@ -259,6 +280,40 @@ NSLog(@"DEALLOC HotDogStandMenuBar");
     _buttonDown = YES;
     id dict = [self dictForX:mouseRootX];
     [self openRootMenu:dict x:mouseRootX];
+}
+- (void)handleRightMouseDown:(id)event
+{
+NSLog(@"handleRightMouseDown");
+    if (_buttonDown || _rightButtonDown) {
+        return;
+    }
+    int mouseRootX = [event intValueForKey:@"mouseRootX"];
+    id windowManager = [event valueForKey:@"windowManager"];
+    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+    if (mouseRootY >= menuBarHeight) {
+        return;
+    }
+    _rightButtonDown = YES;
+    if (_rightButtonFile) {
+        id path = [Definitions configDir:nsfmt(@"Config/%@", _rightButtonFile)];
+        id arr = [self readMenuBarFromFile:path];
+        [self setValue:arr forKey:@"rightButtonArray"];
+
+        id bitmap = [Definitions bitmapWithWidth:1 height:1];
+        if (_scaledFont) {
+            [bitmap useFont:[[_scaledFont nth:0] bytes]
+                        :[[_scaledFont nth:1] bytes]
+                        :[[_scaledFont nth:2] bytes]
+                        :[[_scaledFont nth:3] bytes]];
+        }
+        id mouseMonitor = [Definitions monitorForX:mouseRootX y:0];
+        int mouseMonitorWidth = [mouseMonitor intValueForKey:@"width"];
+        [self layoutMenuBarArray:arr mouseMonitorWidth:mouseMonitorWidth bitmap:bitmap];
+        id dict = [self dictForX:mouseRootX array:arr];
+        [self openRootMenu:dict x:mouseRootX];
+    }
+
 }
 - (void)handleMouseUp:(id)event
 {
@@ -291,19 +346,51 @@ NSLog(@"HotDogStandMenuBar handleMouseUp event %@", event);
     _buttonDown = NO;
     [self setValue:nil forKey:@"selectedDict"];
 }
+- (void)handleRightMouseUp:(id)event
+{
+NSLog(@"HotDogStandMenuBar handleRightMouseUp event %@", event);
+    if (!_rightButtonDown) {
+        return;
+    }
+
+    if (_menuDict) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        id object = [_menuDict valueForKey:@"object"];
+        if ([object respondsToSelector:@selector(handleMouseUp:)]) {
+            int mouseRootX = [event intValueForKey:@"mouseRootX"];
+            int mouseRootY = [event intValueForKey:@"mouseRootY"];
+            int x = [_menuDict intValueForKey:@"x"];
+            int y = [_menuDict intValueForKey:@"y"];
+            int w = [_menuDict intValueForKey:@"w"];
+            int h = [_menuDict intValueForKey:@"h"];
+            id newEvent = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX-x y:mouseRootY-y w:w h:h x11dict:_menuDict];
+            [object handleMouseUp:newEvent];
+            [_menuDict setValue:@"1" forKey:@"needsRedraw"];
+            int closingIteration = [object intValueForKey:@"closingIteration"];
+            if (closingIteration) {
+                _closingIteration = closingIteration;
+                return;
+            }
+        }
+        [self setValue:nil forKey:@"menuDict"];
+    }
+    _rightButtonDown = NO;
+    [self setValue:nil forKey:@"selectedDict"];
+    [self setValue:nil forKey:@"rightButtonArray"];
+}
 
 - (void)handleMouseMoved:(id)event
 {
     id windowManager = [event valueForKey:@"windowManager"];
     [windowManager setX11Cursor:'5'];
     int mouseRootX = [event intValueForKey:@"mouseRootX"];
-    if (!_buttonDown) {
+    if (!_buttonDown && !_rightButtonDown) {
         return;
     }
     int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
     if (mouseRootY < menuBarHeight) {
-        id dict = [self dictForX:mouseRootX];
+        id dict = [self dictForX:mouseRootX array:(_buttonDown) ? _array : _rightButtonArray];
         if (dict && (dict != _selectedDict)) {
             [_menuDict setValue:@"1" forKey:@"shouldCloseWindow"];
             [self setValue:nil forKey:@"menuDict"];
@@ -373,56 +460,14 @@ if (x+w+3 > monitorX+monitorWidth) {
     [self setValue:dict forKey:@"selectedDict"];
 [windowManager XSetInputFocus:[menuDict unsignedLongValueForKey:@"window"]];
 }
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+
+- (void)layoutMenuBarArray:(id)array mouseMonitorWidth:(int)mouseMonitorWidth bitmap:(id)bitmap
 {
-    if (_scaledFont) {
-        [bitmap useFont:[[_scaledFont nth:0] bytes]
-                    :[[_scaledFont nth:1] bytes]
-                    :[[_scaledFont nth:2] bytes]
-                    :[[_scaledFont nth:3] bytes]];
-    }
-
-    [bitmap setColor:@"white"];
-    [bitmap fillRect:r];
-    [bitmap setColor:@"black"];
-    for (int i=0; i<_pixelScaling; i++) {
-        [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:19*_pixelScaling+i];
-    }
-    id windowManager = [@"windowManager" valueForKey];
-    int mouseRootX = [windowManager intValueForKey:@"mouseX"];
-    id mouseMonitor = [Definitions monitorForX:mouseRootX y:0];
-
-    id monitors = [Definitions monitorConfig];
-    for (int monitorI=0; monitorI<[monitors count]; monitorI++) {
-        id monitor = [monitors nth:monitorI];
-        int monitorX = [monitor intValueForKey:@"x"];
-        int monitorWidth = [monitor intValueForKey:@"width"];
-//        [bitmap drawCString:leftCornerStr x:monitorX y:0 c:'b' r:0 g:0 b:0 a:255];
-//        [bitmap drawCString:rightCornerStr x:monitorX+monitorWidth-rightCornerWidth y:0 c:'b' r:0 g:0 b:0 a:255];
-        if ([monitor intValueForKey:@"x"] != [mouseMonitor intValueForKey:@"x"]) {
-            int monitorIndex = 0;
-            id text = nsarr();
-            int textHeight = [bitmap bitmapHeightForText:@"X"];
-            for (int i=0; i<[monitors count]; i++) {
-                id elt = [monitors nth:i];
-                if ([elt intValueForKey:@"x"] == [mouseMonitor intValueForKey:@"x"]) {
-                    [text addObject:nsfmt(@"This is monitor %d (%@). Pointer is on monitor %d (%@) x:%d y:%d", monitorI+1, [monitor valueForKey:@"output"], monitorIndex+1, [elt valueForKey:@"output"], mouseRootX, [windowManager intValueForKey:@"mouseY"])];
-                }
-                monitorIndex++;
-            }
-            [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
-            [bitmap drawBitmapText:[text join:@""] x:monitorX+5*2*_pixelScaling y:4*_pixelScaling];
-        }
-    }
-
-    int mouseMonitorX = [mouseMonitor intValueForKey:@"x"];
-    int mouseMonitorWidth = [mouseMonitor intValueForKey:@"width"];
-
     int flexibleIndex = -1;
     {
         int x = 5*_pixelScaling;
-        for (int i=0; i<[_array count]; i++) {
-            id elt = [_array nth:i];
+        for (int i=0; i<[array count]; i++) {
+            id elt = [array nth:i];
             id obj = [elt valueForKey:@"object"];
             if (!obj) {
                 continue;
@@ -472,12 +517,15 @@ if (x+w+3 > monitorX+monitorWidth) {
             [elt setValue:nsfmt(@"%d", w) forKey:@"width"];
             x += w;
         }
-        int maxX = mouseMonitorWidth - (5 + 39)*_pixelScaling;
+        int maxX = mouseMonitorWidth - 5*_pixelScaling;
+        if (!_hideWin31Buttons) {
+            maxX -= 39*_pixelScaling;
+        }
         int remainingX = maxX - x;
         if (remainingX > 0) {
             if (flexibleIndex != -1) {
                 {
-                    id elt = [_array nth:flexibleIndex];
+                    id elt = [array nth:flexibleIndex];
                     int leftPadding = [elt intValueForKey:@"leftPadding"];
                     leftPadding *= _pixelScaling;
                     int rightPadding = [elt intValueForKey:@"rightPadding"];
@@ -515,17 +563,72 @@ if (x+w+3 > monitorX+monitorWidth) {
                         [elt setValue:nsfmt(@"%d", newW) forKey:@"width"];
                     }
                 }
-                for (int i=flexibleIndex+1; i<[_array count]; i++) {
-                    id elt = [_array nth:i];
+                for (int i=flexibleIndex+1; i<[array count]; i++) {
+                    id elt = [array nth:i];
                     int oldX = [elt intValueForKey:@"x"];
                     [elt setValue:nsfmt(@"%d", oldX+remainingX) forKey:@"x"];
                 }
             }
         }
     }
+}
 
-    for (int i=0; i<[_array count]; i++) {
-        id elt = [_array nth:i];
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+{
+    if (_scaledFont) {
+        [bitmap useFont:[[_scaledFont nth:0] bytes]
+                    :[[_scaledFont nth:1] bytes]
+                    :[[_scaledFont nth:2] bytes]
+                    :[[_scaledFont nth:3] bytes]];
+    }
+
+    [bitmap setColor:@"white"];
+    [bitmap fillRect:r];
+    [bitmap setColor:@"black"];
+    for (int i=0; i<_pixelScaling; i++) {
+        [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:19*_pixelScaling+i];
+    }
+    id windowManager = [@"windowManager" valueForKey];
+    int mouseRootX = [windowManager intValueForKey:@"mouseX"];
+    id mouseMonitor = [Definitions monitorForX:mouseRootX y:0];
+
+    id monitors = [Definitions monitorConfig];
+    for (int monitorI=0; monitorI<[monitors count]; monitorI++) {
+        id monitor = [monitors nth:monitorI];
+        int monitorX = [monitor intValueForKey:@"x"];
+        int monitorWidth = [monitor intValueForKey:@"width"];
+//        [bitmap drawCString:leftCornerStr x:monitorX y:0 c:'b' r:0 g:0 b:0 a:255];
+//        [bitmap drawCString:rightCornerStr x:monitorX+monitorWidth-rightCornerWidth y:0 c:'b' r:0 g:0 b:0 a:255];
+        if ([monitor intValueForKey:@"x"] != [mouseMonitor intValueForKey:@"x"]) {
+            int monitorIndex = 0;
+            id text = nsarr();
+            int textHeight = [bitmap bitmapHeightForText:@"X"];
+            for (int i=0; i<[monitors count]; i++) {
+                id elt = [monitors nth:i];
+                if ([elt intValueForKey:@"x"] == [mouseMonitor intValueForKey:@"x"]) {
+                    [text addObject:nsfmt(@"This is monitor %d (%@). Pointer is on monitor %d (%@) x:%d y:%d", monitorI+1, [monitor valueForKey:@"output"], monitorIndex+1, [elt valueForKey:@"output"], mouseRootX, [windowManager intValueForKey:@"mouseY"])];
+                }
+                monitorIndex++;
+            }
+            [bitmap setColorIntR:0x00 g:0x00 b:0x00 a:0xff];
+            [bitmap drawBitmapText:[text join:@""] x:monitorX+5*2*_pixelScaling y:4*_pixelScaling];
+        }
+    }
+
+    int mouseMonitorX = [mouseMonitor intValueForKey:@"x"];
+    int mouseMonitorWidth = [mouseMonitor intValueForKey:@"width"];
+
+    id array = _array;
+    if (_rightButtonDown) {
+        if (_rightButtonArray) {
+            array = _rightButtonArray;
+        }
+    }
+
+    [self layoutMenuBarArray:array mouseMonitorWidth:mouseMonitorWidth bitmap:bitmap];
+
+    for (int i=0; i<[array count]; i++) {
+        id elt = [array nth:i];
         Int4 r1 = r;
         int eltX = [elt intValueForKey:@"x"];
         r1.x = r.x+mouseMonitorX+eltX;
@@ -537,7 +640,10 @@ if (x+w+3 > monitorX+monitorWidth) {
         leftPadding *= _pixelScaling;
         int rightPadding = [elt intValueForKey:@"rightPadding"];
         rightPadding *= _pixelScaling;
-        if ((_buttonDown || (_closingIteration > 0)) && (_selectedDict == elt)) {
+
+        int flexible = [elt intValueForKey:@"flexible"];
+
+        if ((_buttonDown || _rightButtonDown || (_closingIteration > 0)) && (_selectedDict == elt)) {
             id text = nil;
             if ([obj respondsToSelector:@selector(text)]) {
                 text = [obj text];
@@ -552,7 +658,7 @@ if (x+w+3 > monitorX+monitorWidth) {
                 [bitmap setColor:@"black"];
                 [bitmap fillRect:r2];
                 [bitmap setColor:@"white"];
-                if (i == flexibleIndex) {
+                if (flexible) {
                     int textWidth = [bitmap bitmapWidthForText:text];
                     if (textWidth > r3.w) {
                         text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
@@ -600,7 +706,7 @@ if (x+w+3 > monitorX+monitorWidth) {
                 r3.x += leftPadding;
                 r3.w -= leftPadding+rightPadding;
                 [bitmap setColor:@"black"];
-                if (i == flexibleIndex) {
+                if (flexible) {
                     int textWidth = [bitmap bitmapWidthForText:text];
                     if (textWidth > r3.w) {
                         text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
@@ -632,7 +738,9 @@ if (x+w+3 > monitorX+monitorWidth) {
         }
     }
     
-    char *palette = hasFocusPalette;
-    [bitmap drawCString:[_scaledMenuBarButtonsPixels UTF8String] palette:palette x:mouseMonitorX+mouseMonitorWidth-39*_pixelScaling y:0];
+    if (!_hideWin31Buttons) {
+        char *palette = hasFocusPalette;
+        [bitmap drawCString:[_scaledMenuBarButtonsPixels UTF8String] palette:palette x:mouseMonitorX+mouseMonitorWidth-39*_pixelScaling y:0];
+    }
 }
 @end
