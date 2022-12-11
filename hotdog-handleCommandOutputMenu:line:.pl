@@ -22,6 +22,11 @@ if ($cmd =~ m/^ifconfig\b/) {
         system('hotdog-handleNetworkMenuForInterface:.pl', $1);
         exit 0;
     }
+    $text = <<EOF;
+Select a line that starts with the network interface name.
+EOF
+    system('hotdog', 'alert', $text);
+    exit 0;
 }
 
 if ($cmd =~ m/^ps\b/) {
