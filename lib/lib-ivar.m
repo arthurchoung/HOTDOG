@@ -323,6 +323,8 @@ NSLog(@"key name '%@' too long", key);
         return nsfmt(@"%p", ivarPtr);
     } else if (ivarType[0] == 'L') {
         return nsfmt(@"%lu", *((unsigned long *)ivarPtr));
+    } else if (ivarType[0] == 'Q') {
+        return nsfmt(@"%llu", *((unsigned long long *)ivarPtr));
     } else {
 NSLog(@"valueForIvar:'%@' unhandled ivar type '%s'", key, ivarType);
         exit(0);
