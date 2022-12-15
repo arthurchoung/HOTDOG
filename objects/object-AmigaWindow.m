@@ -297,6 +297,45 @@ static char *resizeButtonPixels =
 "oooooooooooooooo\n"
 "oooooooooooooooo\n"
 ;
+@implementation Definitions(fdsjfklsdklfjklsdjfklsjdklfj)
++ (char *)cStringForAmigaResizeButtonPixels
+{
+    return resizeButtonPixels;
+}
++ (char *)cStringForAmigaCloseButtonPixels
+{
+    return titleBarCloseButtonPixels;
+}
++ (char *)cStringForAmigaLowerButtonPixels
+{
+    return titleBarLowerButtonPixels;
+}
++ (char *)cStringForAmigaRaiseButtonPixels
+{
+    return titleBarRaiseButtonPixels;
+}
++ (char *)cStringForAmigaTextBackgroundPixels
+{
+    return titleBarTextBackgroundPixels;
+}
++ (char *)cStringForAmigaInactiveTitleBarPixels
+{
+    return inactiveAmigaTitleBarPixels;
+}
++ (char *)cStringForAmigaTitleBarRightPixels
+{
+    return titleBarRightPixels;
+}
++ (char *)cStringForAmigaTitleBarMiddlePixels
+{
+    return titleBarMiddlePixels;
+}
++ (char *)cStringForAmigaTitleBarLeftPixels
+{
+    return titleBarLeftPixels;
+}
+@end
+
 /*
 + (void)drawAmigaBottomBorderInBitmap:(id)bitmap rect:(Int4)r
 {
