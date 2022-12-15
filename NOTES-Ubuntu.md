@@ -34,7 +34,6 @@ sudo apt install git
 sudo apt install gobjc
 sudo apt install libx11-dev
 sudo apt install libxext-dev
-sudo apt install libxfixes-dev
 sudo apt install libgl-dev
 sudo apt install libasound-dev
 sudo apt install g++
