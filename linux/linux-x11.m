@@ -25,7 +25,7 @@
 
 #import "HOTDOG.h"
 
-// linker flags -lX11 -lXext -lXfixes
+// linker flags -lX11 -lXext
 
 #include <fcntl.h>
 
@@ -38,9 +38,6 @@
 #include <X11/keysym.h>
 #include <X11/cursorfont.h>
 #include <X11/extensions/shape.h>
-#ifndef BUILD_WITHOUT_XFIXES
-#include <X11/extensions/Xfixes.h>
-#endif
 
 static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned char *image, int width, int height, int depth)
 {
@@ -516,6 +513,36 @@ exit(0);
     id windowManager = [Definitions setupWindowManagerForObject:object x:x y:y w:w h:h];
     [windowManager runLoop];
 }
++ (void)runWindowManagerForObjectWithNoFrame:(id)object
+{
+    int w = 640-3;
+    int h = 0;
+    if ([object respondsToSelector:@selector(preferredWidth)]) {
+        int preferredWidth = [object preferredWidth];
+        if (preferredWidth) {
+            w = preferredWidth;
+        }
+    }
+    if ([object respondsToSelector:@selector(preferredHeight)]) {
+        int preferredHeight = [object preferredHeight];
+        if (preferredHeight) {
+            h = preferredHeight;
+        }
+    }
+
+    [Definitions runWindowManagerForObjectWithNoFrame:object x:0 y:0 w:w h:h];
+}
++ (void)runWindowManagerForObjectWithNoFrame:(id)object x:(int)x y:(int)y w:(int)w h:(int)h
+{
+    id windowManager = [@"WindowManager" asInstance];
+    [windowManager setAsValueForKey:@"windowManager"];
+    if (![windowManager setupX11]) {
+NSLog(@"unable to setup window manager");
+exit(0);
+    }
+    id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+    [windowManager runLoop];
+}
 @end
 @implementation NSObject(fjdklsfjkldsjfklsdjkljf)
 - (void)runWindowManagerForObject
@@ -547,8 +574,6 @@ exit(0);
     Cursor _bottomRightCornerCursor;
     char _currentCursor;
     
-    int _xFixesEventBase;
-    int _xFixesErrorBase;
     Colormap _colormap;
     id _objectWindows;
 
@@ -572,6 +597,8 @@ exit(0);
     id _menuDict;
 
     time_t _desktopPathTimestamp;
+
+    Window _focusInEventWindow;
 }
 @end
 @implementation WindowManager
@@ -678,12 +705,6 @@ NSLog(@"Another window manager is running");
     _bottomLeftCornerCursor = XCreateFontCursor(_display, XC_bottom_left_corner);
     _bottomRightCornerCursor = XCreateFontCursor(_display, XC_bottom_right_corner);
     [self setX11Cursor:'5'];
-
-#ifndef BUILD_WITHOUT_XFIXES
-    if (XFixesQueryExtension(_display, &_xFixesEventBase, &_xFixesErrorBase)) {
-        XFixesSelectSelectionInput(_display, DefaultRootWindow(_display), XA_PRIMARY, XFixesSetSelectionOwnerNotifyMask);
-    }
-#endif
 
     return YES;
 }
@@ -810,6 +831,7 @@ NSLog(@"reparentWindow:%lu", win);
         }
     }
 NSLog(@"reparentWindow:%lu name %@", win, name);
+
 
     id obj = [_reparentClassName asInstance];
     int leftBorder = [obj intValueForKey:@"leftBorder"];
@@ -1160,6 +1182,10 @@ NSLog(@"unparent object %@", dict);
 }
 - (unsigned long)openWindowWithName:(id)name x:(int)x y:(int)y w:(int)w h:(int)h overrideRedirect:(BOOL)overrideRedirect
 {
+    return [self openWindowWithName:name x:x y:y w:w h:h overrideRedirect:overrideRedirect propertyName:NULL];
+}
+- (unsigned long)openWindowWithName:(id)name x:(int)x y:(int)y w:(int)w h:(int)h overrideRedirect:(BOOL)overrideRedirect propertyName:(char *)propertyName
+{
     XSetWindowAttributes setAttrs;
     setAttrs.colormap = _colormap;
     if (_isWindowManager) {
@@ -1188,6 +1214,10 @@ NSLog(@"unparent object %@", dict);
         Atom wm_delete_window = XInternAtom(_display, "WM_DELETE_WINDOW", 0);
         XSetWMProtocols(_display, win, &wm_delete_window, 1);
 
+        if (propertyName) {
+            [self XChangeProperty:win name:propertyName value:NULL];
+        }
+
         if (!_openGLTexture) {
             if ([Definitions respondsToSelector:@selector(setupOpenGLForDisplay:window:visualInfo:)]) {
                 if ([Definitions setupOpenGLForDisplay:_display window:win visualInfo:&_visualInfo]) {
@@ -1213,6 +1243,10 @@ NSLog(@"unparent object %@", dict);
 }
 - (id)openWindowForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h overrideRedirect:(BOOL)overrideRedirect
 {
+    return [self openWindowForObject:object x:x y:y w:w h:h overrideRedirect:overrideRedirect propertyName:NULL];
+}
+- (id)openWindowForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h overrideRedirect:(BOOL)overrideRedirect propertyName:(char *)propertyName
+{
     if (!object) {
         return nil;
     }
@@ -1228,7 +1262,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
 #endif
     }
 
-    Window win = [self openWindowWithName:[@"." asRealPath] x:x y:y w:w h:h overrideRedirect:overrideRedirect];
+    Window win = [self openWindowWithName:[@"." asRealPath] x:x y:y w:w h:h overrideRedirect:overrideRedirect propertyName:propertyName];
 
     id dict = nsdict();
     [dict setValue:nsfmt(@"%lu", win) forKey:@"window"];
@@ -1352,7 +1386,9 @@ if ([monitor intValueForKey:@"height"] == 768) {
     } else {
 //NSLog(@"drawObject:%@ drawInRect", object);
         id bitmap = [Definitions bitmapWithWidth:w height:h];
-        if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
+        if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+            [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:w h:h] context:context];
+        } else if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
             [bitmap setColorIntR:0 g:0 b:0 a:255];
 //            [bitmap fillRectangleAtX:0 y:0 w:w h:h];
             [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:w h:h]];
@@ -1697,12 +1733,6 @@ NSLog(@"MapNotify event");
                     [self handleX11ConfigureRequest:&event];
                 } else if (event.type == PropertyNotify) {
                     [self handleX11PropertyNotify:&event];
-                } else if (event.type == SelectionClear) {
-                    [self handleX11SelectionClear:&event];
-                } else if (event.type == SelectionRequest) {
-                    [self handleX11SelectionRequest:&event];
-                } else if (event.type == SelectionNotify) {
-                    [self handleX11SelectionNotify:&event source:nil];
                 } else if (event.type == ClientMessage) {
                     if (event.xclient.message_type == XInternAtom(_display, "WM_PROTOCOLS", 1)
                         && event.xclient.data.l[0] == XInternAtom(_display, "WM_DELETE_WINDOW", 1))
@@ -1713,12 +1743,6 @@ NSLog(@"MapNotify event");
 NSLog(@"ClientMessage event %lu %@", e->window, dict);
                         [dict setValue:@"1" forKey:@"shouldCloseWindow"];
                     }
-#ifndef BUILD_WITHOUT_XFIXES
-                } else if (event.type == _xFixesEventBase + XFixesSelectionNotify) {
-                    if (((XFixesSelectionNotifyEvent *)&event)->selection == XA_PRIMARY) {
-                        [self convertX11Selection];
-                    }
-#endif
                 } else {
 NSLog(@"received X event type %d", event.type);
                 }
@@ -2040,6 +2064,11 @@ NSLog(@"handleX11LeaveNotify:%x", e->window);
     XFocusInEvent *e = eptr;
     Window win = e->window;
 NSLog(@"FocusIn event win %lu", win);
+    if (!_isWindowManager) {
+        _focusInEventWindow = win;
+        id dict = [self dictForObjectWindow:win];
+        [dict setValue:@"1" forKey:@"needsRedraw"];
+    }
 }
 
 - (void)handleX11FocusOut:(void *)eptr
@@ -2047,6 +2076,13 @@ NSLog(@"FocusIn event win %lu", win);
     XFocusOutEvent *e = eptr;
     Window win = e->window;
 NSLog(@"FocusOut event win %lu", win);
+    if (!_isWindowManager) {
+        if (_focusInEventWindow == win) {
+            _focusInEventWindow = 0;
+            id dict = [self dictForObjectWindow:win];
+            [dict setValue:@"1" forKey:@"needsRedraw"];
+        }
+    }
 
 // FIXME this is for linux-dialog --infobox
     id dict = [self dictForObjectWindow:e->window];
@@ -2090,6 +2126,7 @@ NSLog(@"WM_HINTS initial_state %d", hints->initial_state);
             int status = XGetWindowProperty(_display, e->window, e->atom, 0L, sizeof(Atom), False, XA_ATOM, &da, &di, &dl, &dl, &prop_ret);
 
             if ((status == Success) && prop_ret) {
+//FIXME: Am I supposed to XFree(prop_ret)?
                 Atom prop = ((Atom *)prop_ret)[0];
 
                 char *str = XGetAtomName(_display, prop);
@@ -2156,7 +2193,10 @@ NSLog(@"handleX11ConfigureRequest: parent %x window %x x %d y %d w %d h %d", e->
     if (dict) {
 NSLog(@"handleX11ConfigureRequest dict: %@", dict);
 NSLog(@"changes x %d y %d width %d height %d", e->x, e->y, e->width, e->height);
-        return;
+        if ([self window:e->window hasProperty:"HOTDOGNOFRAME"]) {
+        } else {
+            return;
+        }
     }
 
     XWindowChanges changes;
@@ -2174,19 +2214,27 @@ NSLog(@"changes x %d y %d width %d height %d", e->x, e->y, e->width, e->height);
     XMapRequestEvent *e = eptr;
 NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
 
+    BOOL noframe = [self window:e->window hasProperty:"HOTDOGNOFRAME"];
 
-
-    if ([self dictForObjectChildWindow:e->window]) {
-        return;
+    if (noframe) {
+    } else {
+        if ([self dictForObjectChildWindow:e->window]) {
+            return;
+        }
     }
 
     XWindowAttributes attrs;
     if (!XGetWindowAttributes(_display, e->window, &attrs)) {
         return;
     }
+
+
     if (attrs.override_redirect) {
         return;
     }
+
+    BOOL moveWindowIfNoFrame = NO;
+
     if (attrs.x == 0) {
         if (attrs.y == 0) {
             id monitor = [Definitions monitorForX:_mouseX y:_mouseY];
@@ -2219,6 +2267,7 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
             attrs.x = [firstLine intValueForKey:@"x"];
             attrs.y = [firstLine intValueForKey:@"y"];
             
+            moveWindowIfNoFrame = YES;
 /*
             id monitor = [Definitions monitorForX:_mouseX y:_mouseY];
             attrs.x = [monitor intValueForKey:@"x"];
@@ -2227,7 +2276,31 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
     }
     if (attrs.y < _menuBarHeight) {
         attrs.y = _menuBarHeight;
+        moveWindowIfNoFrame = YES;
     }
+
+    if (noframe) {
+        id dict = nsdict();
+//        [dict setValue:nsfmt(@"%lu", win) forKey:@"window"];
+//        [dict setValue:object forKey:@"object"];
+        [dict setValue:nsfmt(@"%d", attrs.x) forKey:@"x"];
+        [dict setValue:nsfmt(@"%d", attrs.y) forKey:@"y"];
+        [dict setValue:nsfmt(@"%d", attrs.width) forKey:@"w"];
+        [dict setValue:nsfmt(@"%d", attrs.height) forKey:@"h"];
+//        [dict setValue:@"1" forKey:@"needsRedraw"];
+        [_objectWindows addObject:dict];
+        [dict setValue:nsfmt(@"%lu", e->window) forKey:@"childWindow"];
+//        [dict setValue:name forKey:@"name"];
+
+        if (moveWindowIfNoFrame) {
+            XMoveWindow(_display, e->window, attrs.x, attrs.y);
+        }
+        XMapWindow(_display, e->window);
+//        [self setFocusDict:dict];
+        return;
+    }
+
+
 
     id dict = [self reparentWindow:e->window x:attrs.x y:attrs.y w:attrs.width h:attrs.height];
     XMapWindow(_display, e->window);
@@ -2544,188 +2617,6 @@ NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e-
     }
 }
 
- 
-- (void)handleX11SelectionNotify:(void *)ptr source:(id)source
-{
-    XSelectionEvent *e = ptr;
-    if (e->property == None) {
-NSLog(@"handleX11SelectionNotify failed");
-        return;
-    }
-NSLog(@"handleX11SelectionNotify success");
-
-    Window target = [[_menuBar valueForKey:@"window"] unsignedLongValue];
-    if (!target) {
-        return;
-    }
-    Atom prop = XInternAtom(_display, "STUPID", False);
-
-    Atom da, incr, type;
-    int di;
-    unsigned long size, dul;
-    unsigned char *prop_ret = NULL;
-
-    /* Dummy call to get type and size. */
-    XGetWindowProperty(_display, target, prop, 0, 0, False, AnyPropertyType,
-                       &type, &di, &dul, &size, &prop_ret);
-    XFree(prop_ret);
-
-    incr = XInternAtom(_display, "INCR", False);
-    if (type == incr)
-    {
-NSLog(@"Too much data and INCR not found\n");
-        return;
-    }
-
-    /* Read the data in one go. */
-    printf("Property size: %lu\n", size);
-
-    XGetWindowProperty(_display, target, prop, 0, size, False, AnyPropertyType,
-                       &da, &di, &dul, &dul, &prop_ret);
-NSLog(@"prop_ret '%s'", (prop_ret) ? prop_ret : "(null)");
-    id str = nscstr(prop_ret);
-    fflush(stdout);
-    XFree(prop_ret);
-
-    /* Signal the selection owner that we have successfully read the
-     * data. */
-    XDeleteProperty(_display, target, prop);
-
-    [str setAsValueForKey:@"clipboardSelection"];
-
-}
-
-- (void)handleX11SelectionClear:(void *)eventptr
-{
-NSLog(@"handleX11SelectionClear");
-}
-
-- (void)handleX11SelectionRequest:(void *)eventptr
-{
-NSLog(@"handleX11SelectionRequest");
-    XSelectionRequestEvent *sev = eventptr;
-    Atom utf8 = XInternAtom(_display, "UTF8_STRING", False);
-    if (sev->target != utf8 || sev->property == None) {
-        [self sendX11SelectionNone:eventptr];
-    } else {
-        [self sendX11Selection:eventptr string:@"HELLO YOU SUCK"];
-    }
-}
-- (void)convertX11Selection
-{
-    [self convertX11Selection:nil];
-}
-- (void)convertX11Selection:(id)source
-{
-    Atom selection = XA_PRIMARY;
-    if (source) {
-        selection = XInternAtom(_display, [source UTF8String], False);
-    }
-    Window owner = XGetSelectionOwner(_display, selection);
-    if (owner == None) {
-        return;
-    }
-    Window target = [[_menuBar valueForKey:@"window"] unsignedLongValue];
-    if (!target) {
-        return;
-    }
-    Atom prop = XInternAtom(_display, "STUPID", False);
-    XConvertSelection(_display, selection, XA_STRING, prop, target, CurrentTime);
-}
-- (void)convertX11SelectionTargets:(id)source
-{
-    Atom selection = XA_PRIMARY;
-    if (source) {
-        selection = XInternAtom(_display, [source UTF8String], False);
-    }
-    Atom targets = XInternAtom(_display, "TARGETS", False);
-    Atom prop = XInternAtom(_display, "STUPIDTARGETS", False);
-    Window win = [[_menuBar valueForKey:@"window"] unsignedLongValue];
-    if (!win) {
-        return;
-    }
-    XConvertSelection(_display, selection, targets, prop, win, CurrentTime);
-}
-- (void)sendX11SelectionNone:(void *)eventptr
-{
-    XSelectionRequestEvent *sev = eventptr;
-    XSelectionEvent ssev;
-
-    char *name = XGetAtomName(_display, sev->target);
-NSLog(@"Send none for request target'%s'", (name) ? name : "(null)");
-    if (name) {
-        XFree(name);
-    }
-    name = XGetAtomName(_display, sev->property);
-NSLog(@"Send none for request property '%s'", (name) ? name : "(null)");
-    if (name) {
-        XFree(name);
-    }
-
-    ssev.type = SelectionNotify;
-    ssev.requestor = sev->requestor;
-    ssev.selection = sev->selection;
-    ssev.target = sev->target;
-    ssev.property = None;
-    ssev.time = sev->time;
-
-    XSendEvent(_display, sev->requestor, True, NoEventMask, (XEvent *)&ssev);
-}
-
-- (void)sendX11Selection:(void *)eventptr string:(id)str
-{
-    XSelectionRequestEvent *sev = eventptr;
-    XSelectionEvent ssev;
-
-    char *cstr = [str UTF8String];
-
-    char *name = XGetAtomName(_display, sev->property);
-NSLog(@"Sending data to window 0x%lx property '%s'", sev->requestor, (name) ? name : "(null)");
-    if (name)
-        XFree(name);
-
-    XChangeProperty(_display, sev->requestor, sev->property, XA_STRING, 8, PropModeReplace, (unsigned char *)cstr, strlen(cstr));
-
-    ssev.type = SelectionNotify;
-    ssev.requestor = sev->requestor;
-    ssev.selection = sev->selection;
-    ssev.target = sev->target;
-    ssev.property = sev->property;
-    ssev.time = sev->time;
-
-    XSendEvent(_display, sev->requestor, True, NoEventMask, (XEvent *)&ssev);
-}
-- (void)showX11SelectionTargets
-{
-    Window win= [[_menuBar valueForKey:@"window"] unsignedLongValue];
-    if (!win) {
-        return;
-    }
-    Atom prop = XInternAtom(_display, "STUPIDTARGETS", False);
-
-    Atom type, *targets;
-    int di;
-    unsigned long i, nitems, dul;
-    unsigned char *prop_ret = NULL;
-    char *an = NULL;
-
-    XGetWindowProperty(_display, win, prop, 0, 1024 * sizeof (Atom), False, XA_ATOM,
-                       &type, &di, &nitems, &dul, &prop_ret);
-
-NSLog(@"Targets:");
-    targets = (Atom *)prop_ret;
-    for (i = 0; i < nitems; i++)
-    {
-        an = XGetAtomName(_display, targets[i]);
-NSLog(@"    '%s'\n", (an) ? an : "(null)");
-        if (an)
-            XFree(an);
-    }
-    XFree(prop_ret);
-
-    XDeleteProperty(_display, win, prop);
-}
-
 - (void)handleDesktopPath
 {
     id contents = [[Definitions configDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
@@ -2994,7 +2885,51 @@ NSLog(@"    '%s'\n", (an) ? an : "(null)");
 - (void)XSetInputFocus:(unsigned long)window
 {
 //FIXME use RevertToNone or RevertToPointerRoot?
+NSLog(@"XSetInputFocus:%lu", window);
     XSetInputFocus(_display, window, RevertToPointerRoot, CurrentTime);
+}
+- (Int2)XQueryPointer
+{
+    Window root_window = 0;
+    Window child_window = 0;
+    int root_x = 0;
+    int root_y = 0;
+    int win_x = 0;
+    int win_y = 0;
+    unsigned int mask = 0;
+    XQueryPointer(_display, _rootWindow, &root_window, &child_window, &root_x, &root_y, &win_x, &win_y, &mask);
+    Int2 result;
+    result.x = root_x;
+    result.y = root_y;
+    return result;
+}
+- (void)XChangeProperty:(unsigned long)window name:(char *)name value:(char *)value
+{
+    Atom atom = XInternAtom(_display, name, False);
+    XChangeProperty(_display, window, atom, atom, 8, PropModeReplace, "", 0);
+}
+- (BOOL)window:(unsigned long)win hasProperty:(char *)propertyName
+{
+    BOOL result = NO;
+
+    Atom actual_type_return = None;
+    int actual_format_return = 0;
+    unsigned long nitems_return = 0;
+    unsigned long bytes_after_return = 0;
+    unsigned char *prop_return = NULL;
+    int status = XGetWindowProperty(_display, win, XInternAtom(_display, propertyName, False), 0, 0, False, AnyPropertyType, &actual_type_return, &actual_format_return, &nitems_return, &bytes_after_return, &prop_return);
+    if ((status == Success) && prop_return) {
+NSLog(@"property %s actual_format_return %d", propertyName, actual_format_return);
+NSLog(@"property %s nitems_return %d", propertyName, nitems_return);
+NSLog(@"property %s bytes_after_return %d", propertyName, bytes_after_return);
+if (actual_format_return == 8) {
+result = YES;
+NSLog(@"property %s prop_return '%s'", propertyName, prop_return);
+}
+        XFree(prop_return);
+    }
+
+    return result;
 }
 @end
 
