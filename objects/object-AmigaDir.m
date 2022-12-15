@@ -663,22 +663,24 @@ static char *openTrashCanPixels =
 + (char *)cStringForAmigaHorizontalScrollBarLeft
 {
     return
-"ooooooooooooooo\n"
-"ooooooooooooooo\n"
-"ooooXXXooooooXX\n"
-"ooooXXXooooooXX\n"
-"ooXXXooooooooXX\n"
-"ooXXXooooooooXX\n"
-"XXXooooooooooXX\n"
-"XXXooooooooooXX\n"
-"XXXXXXXXXXXooXX\n"
-"XXXXXXXXXXXooXX\n"
-"XXXooooooooooXX\n"
-"XXXooooooooooXX\n"
-"ooXXXooooooooXX\n"
-"ooXXXooooooooXX\n"
-"ooooXXXooooooXX\n"
-"ooooXXXooooooXX\n"
+"ooooooooooooooooo\n"
+"ooooooooooooooooo\n"
+"ooooooXXXooooooXX\n"
+"ooooooXXXooooooXX\n"
+"ooooXXXooooooooXX\n"
+"ooooXXXooooooooXX\n"
+"ooXXXooooooooooXX\n"
+"ooXXXooooooooooXX\n"
+"ooXXXXXXXXXXXooXX\n"
+"ooXXXXXXXXXXXooXX\n"
+"ooXXXooooooooooXX\n"
+"ooXXXooooooooooXX\n"
+"ooooXXXooooooooXX\n"
+"ooooXXXooooooooXX\n"
+"ooooooXXXooooooXX\n"
+"ooooooXXXooooooXX\n"
+"ooooooooooooooooo\n"
+"ooooooooooooooooo\n"
 ;
 }
 + (char *)cStringForAmigaHorizontalScrollBarMiddle
@@ -700,27 +702,31 @@ static char *openTrashCanPixels =
 "o\n"
 "X\n"
 "X\n"
+"o\n"
+"o\n"
 ;
 }
 + (char *)cStringForAmigaHorizontalScrollBarRight
 {
     return
-"ooooooooooooooo\n"
-"ooooooooooooooo\n"
-"XXoooooooXXXooo\n"
-"XXoooooooXXXooo\n"
-"XXoooooooooXXXo\n"
-"XXoooooooooXXXo\n"
-"XXoooooooooooXX\n"
-"XXoooooooooooXX\n"
-"XXooXXXXXXXXXXX\n"
-"XXooXXXXXXXXXXX\n"
-"XXoooooooooooXX\n"
-"XXoooooooooooXX\n"
-"XXoooooooooXXXo\n"
-"XXoooooooooXXXo\n"
-"XXoooooooXXXooo\n"
-"XXoooooooXXXooo\n"
+"ooooooooooooooooo\n"
+"ooooooooooooooooo\n"
+"XXoooooooXXXooooo\n"
+"XXoooooooXXXooooo\n"
+"XXoooooooooXXXooo\n"
+"XXoooooooooXXXooo\n"
+"XXoooooooooooXXoo\n"
+"XXoooooooooooXXoo\n"
+"XXooXXXXXXXXXXXoo\n"
+"XXooXXXXXXXXXXXoo\n"
+"XXoooooooooooXXoo\n"
+"XXoooooooooooXXoo\n"
+"XXoooooooooXXXooo\n"
+"XXoooooooooXXXooo\n"
+"XXoooooooXXXooooo\n"
+"XXoooooooXXXooooo\n"
+"ooooooooooooooooo\n"
+"ooooooooooooooooo\n"
 ;
 }
 + (void)drawAmigaHorizontalScrollBarInBitmap:(id)bitmap x:(int)x0 y:(int)y0 w:(int)w
@@ -747,46 +753,46 @@ static char *openTrashCanPixels =
 + (char *)cStringForAmigaFuelGaugeTop
 {
     return
-"............oo\n"
-"............oo\n"
-"...oooooo...oo\n"
-"...oooooo...oo\n"
-"...oo.......oo\n"
-"...oo.......oo\n"
-"...oooo.....oo\n"
-"...oooo.....oo\n"
-"...oo.......oo\n"
-"...oo.......oo\n"
-"...oo.......oo\n"
-"...oo.......oo\n"
-"............oo\n"
-"............oo\n"
+"oo............oo\n"
+"oo............oo\n"
+"oo...oooooo...oo\n"
+"oo...oooooo...oo\n"
+"oo...oo.......oo\n"
+"oo...oo.......oo\n"
+"oo...oooo.....oo\n"
+"oo...oooo.....oo\n"
+"oo...oo.......oo\n"
+"oo...oo.......oo\n"
+"oo...oo.......oo\n"
+"oo...oo.......oo\n"
+"oo............oo\n"
+"oo............oo\n"
 ;
 }
 + (char *)cStringForAmigaFuelGaugeMiddle
 {
     return
-"************oo\n"
-"************oo\n"
+"oo************oo\n"
+"oo************oo\n"
 ;
 }
 + (char *)cStringForAmigaFuelGaugeBottom
 {
     return
-"............oo\n"
-"............oo\n"
-"...oooooo...oo\n"
-"...oooooo...oo\n"
-"...oo.......oo\n"
-"...oo.......oo\n"
-"...oooo.....oo\n"
-"...oooo.....oo\n"
-"...oo.......oo\n"
-"...oo.......oo\n"
-"...oooooo...oo\n"
-"...oooooo...oo\n"
-"............oo\n"
-"............oo\n"
+"oo............oo\n"
+"oo............oo\n"
+"oo...oooooo...oo\n"
+"oo...oooooo...oo\n"
+"oo...oo.......oo\n"
+"oo...oo.......oo\n"
+"oo...oooo.....oo\n"
+"oo...oooo.....oo\n"
+"oo...oo.......oo\n"
+"oo...oo.......oo\n"
+"oo...oooooo...oo\n"
+"oo...oooooo...oo\n"
+"oo............oo\n"
+"oo............oo\n"
 ;
 }
 + (void)drawAmigaFuelGaugeInBitmap:(id)bitmap x:(int)x0 y:(int)y0 h:(int)h
@@ -809,107 +815,108 @@ static char *openTrashCanPixels =
     }
     [bitmap drawCString:bottom palette:palette x:x0 y:y0+h-heightForBottom];
 }
-/*
-FIXME this is the correct one. the one being used has one pixel cut off on the right side
+//FIXME this is the correct one. the other one has one pixel cut off on the right side
 + (char *)cStringForAmigaVerticalScrollBarTop
 {
     return
-"oooooXXXXXXoooo\n"
-"oooooXXXXXXoooo\n"
-"oooXXooXXooXXoo\n"
-"oooXXooXXooXXoo\n"
-"oXXooooXXooooXX\n"
-"oXXooooXXooooXX\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"ooooooooooooooo\n"
-"ooooooooooooooo\n"
-"ooXXXXXXXXXXXXo\n"
-"ooXXXXXXXXXXXXo\n"
+"oooooXXXXXXooooo\n"
+"oooooXXXXXXooooo\n"
+"oooXXooXXooXXooo\n"
+"oooXXooXXooXXooo\n"
+"oXXooooXXooooXXo\n"
+"oXXooooXXooooXXo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooooooooooo\n"
+"oooooooooooooooo\n"
+"ooXXXXXXXXXXXXoo\n"
+"ooXXXXXXXXXXXXoo\n"
 ;
 }
 + (char *)cStringForAmigaVerticalScrollBarMiddle
 {
     return
-"ooXXooooooooXXo\n"
-"ooXXooooooooXXo\n"
+"ooXXooooooooXXoo\n"
+"ooXXooooooooXXoo\n"
 ;
 }
 + (char *)cStringForAmigaVerticalScrollBarBottom
 {
     return
-"ooXXXXXXXXXXXXo\n"
-"ooXXXXXXXXXXXXo\n"
-"ooooooooooooooo\n"
-"ooooooooooooooo\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"oooooooXXoooooo\n"
-"oXXooooXXooooXX\n"
-"oXXooooXXooooXX\n"
-"oooXXooXXooXXoo\n"
-"oooXXooXXooXXoo\n"
-"oooooXXXXXXoooo\n"
-"oooooXXXXXXoooo\n"
+"ooXXXXXXXXXXXXoo\n"
+"ooXXXXXXXXXXXXoo\n"
+"oooooooooooooooo\n"
+"oooooooooooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oooooooXXooooooo\n"
+"oXXooooXXooooXXo\n"
+"oXXooooXXooooXXo\n"
+"oooXXooXXooXXooo\n"
+"oooXXooXXooXXooo\n"
+"oooooXXXXXXooooo\n"
+"oooooXXXXXXooooo\n"
+;
+}
+/*
+this one has one pixel cut off on the right
++ (char *)cStringForAmigaVerticalScrollBarTop
+{
+    return
+"oooooXXXXXXooo\n"
+"oooooXXXXXXooo\n"
+"oooXXooXXooXXo\n"
+"oooXXooXXooXXo\n"
+"oXXooooXXooooX\n"
+"oXXooooXXooooX\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oooooooooooooo\n"
+"oooooooooooooo\n"
+"ooXXXXXXXXXXXX\n"
+"ooXXXXXXXXXXXX\n"
+;
+}
++ (char *)cStringForAmigaVerticalScrollBarMiddle
+{
+    return
+"ooXXooooooooXX\n"
+"ooXXooooooooXX\n"
+;
+}
++ (char *)cStringForAmigaVerticalScrollBarBottom
+{
+    return
+"ooXXXXXXXXXXXX\n"
+"ooXXXXXXXXXXXX\n"
+"oooooooooooooo\n"
+"oooooooooooooo\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oooooooXXooooo\n"
+"oXXooooXXooooX\n"
+"oXXooooXXooooX\n"
+"oooXXooXXooXXo\n"
+"oooXXooXXooXXo\n"
+"oooooXXXXXXooo\n"
+"oooooXXXXXXooo\n"
 ;
 }
 */
-+ (char *)cStringForAmigaVerticalScrollBarTop
-{
-    return
-"oooooXXXXXXooo\n"
-"oooooXXXXXXooo\n"
-"oooXXooXXooXXo\n"
-"oooXXooXXooXXo\n"
-"oXXooooXXooooX\n"
-"oXXooooXXooooX\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooooooooo\n"
-"oooooooooooooo\n"
-"ooXXXXXXXXXXXX\n"
-"ooXXXXXXXXXXXX\n"
-;
-}
-+ (char *)cStringForAmigaVerticalScrollBarMiddle
-{
-    return
-"ooXXooooooooXX\n"
-"ooXXooooooooXX\n"
-;
-}
-+ (char *)cStringForAmigaVerticalScrollBarBottom
-{
-    return
-"ooXXXXXXXXXXXX\n"
-"ooXXXXXXXXXXXX\n"
-"oooooooooooooo\n"
-"oooooooooooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oXXooooXXooooX\n"
-"oXXooooXXooooX\n"
-"oooXXooXXooXXo\n"
-"oooXXooXXooXXo\n"
-"oooooXXXXXXooo\n"
-"oooooXXXXXXooo\n"
-;
-}
 + (void)drawAmigaVerticalScrollBarInBitmap:(id)bitmap x:(int)x0 y:(int)y0 h:(int)h
 {
     char *palette = amigaPalette;
@@ -958,6 +965,16 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
     Int4 _downScrollArrowRect;
     int _originX;
     int _originY;
+
+    Int4 _titleBarRect;
+    Int4 _closeButtonRect;
+    Int4 _lowerButtonRect;
+    Int4 _raiseButtonRect;
+    Int4 _titleTextRect;
+    int _buttonDownX;
+    int _buttonDownY;
+    int _buttonDownW;
+    int _buttonDownH;
 }
 @end
 @implementation AmigaDir
@@ -976,7 +993,7 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
     id arr = [@"." contentsOfDirectory];
     arr = [arr asFileArray];
     int x = 20;
-    int y = 5;
+    int y = 20 + 5;
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
         id palette = nil;
@@ -1077,22 +1094,49 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
             _originY -= 10;
         }
     }
-    _leftScrollArrowRect.x = r.x;
-    _leftScrollArrowRect.y = r.y+r.h-14;
+
+    int titleBarHeight = 20;
+    int closeButtonWidth = 24;
+    int lowerButtonWidth = 26;
+    int raiseButtonWidth = 26;
+    _titleBarRect.x = 0;//r.x;
+    _titleBarRect.y = 0;//r.y;
+    _titleBarRect.w = r.w;
+    _titleBarRect.h = titleBarHeight;
+    _closeButtonRect.x = 4;//r.x+4
+    _closeButtonRect.y = 0;//r.y
+    _closeButtonRect.w = closeButtonWidth;
+    _closeButtonRect.h = titleBarHeight;
+    _lowerButtonRect.x = /*r.x+*/r.w-3-lowerButtonWidth-raiseButtonWidth+2;
+    _lowerButtonRect.y = 0;//r.y
+    _lowerButtonRect.w = lowerButtonWidth;
+    _lowerButtonRect.h = titleBarHeight;
+    _raiseButtonRect.x = /*r.x+*/r.w-3-raiseButtonWidth;
+    _raiseButtonRect.y = 0;//r.y
+    _raiseButtonRect.w = raiseButtonWidth;
+    _raiseButtonRect.h = titleBarHeight;
+    _titleTextRect.x = /*r.x+*/4+closeButtonWidth+2;
+    _titleTextRect.y = /*r.y+*/2;
+    _titleTextRect.w = _lowerButtonRect.x - _titleTextRect.x - 2;
+    _titleTextRect.h = titleBarHeight;
+
+    _leftScrollArrowRect.x = r.x+2;
+    _leftScrollArrowRect.y = r.y+r.h-16;
     _leftScrollArrowRect.w = 11;
     _leftScrollArrowRect.h = 14;
-    _rightScrollArrowRect.x = r.x+r.w-14-11;
-    _rightScrollArrowRect.y = r.y+r.h-14;
+    _rightScrollArrowRect.x = r.x+r.w-16-2-11;
+    _rightScrollArrowRect.y = r.y+r.h-16;
     _rightScrollArrowRect.w = 11;
     _rightScrollArrowRect.h = 14;
-    _upScrollArrowRect.x = r.x+r.w-14+1;
-    _upScrollArrowRect.y = r.y;
+    _upScrollArrowRect.x = r.x+r.w-16+1;
+    _upScrollArrowRect.y = r.y+titleBarHeight;
     _upScrollArrowRect.w = 14;
     _upScrollArrowRect.h = 12;
-    _downScrollArrowRect.x = r.x+r.w-14+1;
-    _downScrollArrowRect.y = r.y+r.h-14-14;
+    _downScrollArrowRect.x = r.x+r.w-16+1;
+    _downScrollArrowRect.y = r.y+r.h-18-12;
     _downScrollArrowRect.w = 14;
     _downScrollArrowRect.h = 12;
+
     if (_doNotUpdate) {
         return;
     }
@@ -1101,8 +1145,11 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
         [self updateFromCurrentDirectory:r];
     }
 }
+- (void)calculateRects:(Int4)r
+{
+}
 
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
     [bitmap useTopazFont];
     [bitmap setColor:@"#0055aa"];
@@ -1135,9 +1182,9 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
         }
         [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-8];
     }
-    [Definitions drawAmigaFuelGaugeInBitmap:bitmap x:r.x y:r.y h:r.h-16];
-    [Definitions drawAmigaVerticalScrollBarInBitmap:bitmap x:r.x+r.w-14 y:r.y h:r.h-16];
-    [Definitions drawAmigaHorizontalScrollBarInBitmap:bitmap x:r.x y:r.y+r.h-16 w:r.w-14];
+    [Definitions drawAmigaFuelGaugeInBitmap:bitmap x:r.x y:r.y+20 h:r.h-20-18];
+    [Definitions drawAmigaVerticalScrollBarInBitmap:bitmap x:r.x+r.w-16 y:r.y+20 h:r.h-20-18];
+    [Definitions drawAmigaHorizontalScrollBarInBitmap:bitmap x:r.x y:r.y+r.h-18 w:r.w-16];
     if ([_buttonDown isEqual:@"leftScrollArrow"] && [_buttonHover isEqual:@"leftScrollArrow"]) {
         [bitmap drawCString:[leftScrollArrowPixels UTF8String] palette:[selectedLeftScrollArrowPalette UTF8String] x:_leftScrollArrowRect.x y:_leftScrollArrowRect.y];
     }
@@ -1150,6 +1197,52 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
     if ([_buttonDown isEqual:@"downScrollArrow"] && [_buttonHover isEqual:@"downScrollArrow"]) {
         [bitmap drawCString:[downScrollArrowPixels UTF8String] palette:[selectedLeftScrollArrowPalette UTF8String] x:_downScrollArrowRect.x y:_downScrollArrowRect.y];
     }
+
+    [bitmap drawCString:[Definitions cStringForAmigaResizeButtonPixels] palette:(([_buttonDown isEqual:@"resizeButton"]) ? [selectedLeftScrollArrowPalette UTF8String] : [leftScrollArrowPalette UTF8String]) x:r.x+r.w-16 y:r.y+r.h-18];
+
+
+    // title bar
+    char *palette = [leftScrollArrowPalette UTF8String];
+    char *highlightedPalette = [selectedLeftScrollArrowPalette UTF8String];
+    [Definitions drawInBitmap:bitmap left:[Definitions cStringForAmigaTitleBarLeftPixels] middle:[Definitions cStringForAmigaTitleBarMiddlePixels] right:[Definitions cStringForAmigaTitleBarRightPixels] x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w palette:palette];
+
+    [bitmap drawCString:[Definitions cStringForAmigaCloseButtonPixels] palette:(([_buttonDown isEqual:@"closeButton"] && [_buttonHover isEqual:@"closeButton"]) ? highlightedPalette : palette) x:_closeButtonRect.x y:_closeButtonRect.y];
+    [bitmap drawCString:[Definitions cStringForAmigaLowerButtonPixels] palette:palette x:_lowerButtonRect.x y:_lowerButtonRect.y];
+    [bitmap drawCString:[Definitions cStringForAmigaRaiseButtonPixels] palette:palette x:_raiseButtonRect.x y:_raiseButtonRect.y];
+    if ([_buttonDown isEqual:_buttonHover]) {
+        if ([_buttonDown isEqual:@"lowerButton"]) {
+            [bitmap drawCString:[Definitions cStringForAmigaLowerButtonPixels] palette:highlightedPalette x:_lowerButtonRect.x y:_lowerButtonRect.y];
+        } else if ([_buttonDown isEqual:@"raiseButton"]) {
+            [bitmap drawCString:[Definitions cStringForAmigaRaiseButtonPixels] palette:highlightedPalette x:_raiseButtonRect.x y:_raiseButtonRect.y];
+        }
+    }
+
+    id text = [context valueForKey:@"name"];
+    if (!text) {
+        text = @"(no title)";
+    }
+
+    text = [[[bitmap fitBitmapString:text width:_titleTextRect.w-14] split:@"\n"] nth:0];
+
+    int textWidth = [bitmap bitmapWidthForText:text];
+    [Definitions drawInBitmap:bitmap left:[Definitions cStringForAmigaTextBackgroundPixels] middle:[Definitions cStringForAmigaTextBackgroundPixels] right:[Definitions cStringForAmigaTextBackgroundPixels] x:_titleTextRect.x y:_titleBarRect.y w:textWidth+3 palette:palette];
+    [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
+    [bitmap drawBitmapText:text x:_titleTextRect.x y:_titleTextRect.y];
+
+    BOOL hasFocus = NO;
+    {
+        id windowManager = [@"windowManager" valueForKey];
+        unsigned long focusInEventWindow = [[windowManager valueForKey:@"focusInEventWindow"] unsignedLongValue];
+        unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+        if (focusInEventWindow && (focusInEventWindow == win)) {
+            hasFocus = YES;
+        }
+    }
+
+    if (!hasFocus /*![context intValueForKey:@"hasFocus"]*/) {
+        Int4 rr = _titleBarRect;
+        [Definitions drawInBitmap:bitmap left:[Definitions cStringForAmigaInactiveTitleBarPixels] middle:[Definitions cStringForAmigaInactiveTitleBarPixels] right:[Definitions cStringForAmigaInactiveTitleBarPixels] x:_titleTextRect.x y:_titleBarRect.y w:_titleTextRect.w palette:palette];
+    }
 }
 
 - (void)handleMouseDown:(id)event
@@ -1160,6 +1253,8 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
     [self setValue:nil forKey:@"selected"];
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
+    int viewWidth = [event intValueForKey:@"viewWidth"];
+    int viewHeight = [event intValueForKey:@"viewHeight"];
     
     if ([Definitions isX:mouseX y:mouseY insideRect:_leftScrollArrowRect]) {
         [self setValue:@"leftScrollArrow" forKey:@"buttonDown"];
@@ -1183,6 +1278,53 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
         [self setValue:@"downScrollArrow" forKey:@"buttonDown"];
         [self setValue:@"downScrollArrow" forKey:@"buttonHover"];
         _originY -= 10;
+        return;
+    }
+    if (mouseX >= viewWidth-16) {
+        if (mouseY >= viewHeight-16) {
+            [self setValue:@"resizeButton" forKey:@"buttonDown"];
+            [self setValue:nil forKey:@"buttonHover"];
+            _buttonDownX = mouseX;
+            _buttonDownY = mouseY;
+            _buttonDownW = viewWidth;
+            _buttonDownH = viewHeight;
+            return;
+        }
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_closeButtonRect]) {
+        [self setValue:@"closeButton" forKey:@"buttonDown"];
+        [self setValue:@"closeButton" forKey:@"buttonHover"];
+        _buttonDownX = mouseX;
+        _buttonDownY = mouseY;
+        _buttonDownW = viewWidth;
+        _buttonDownH = viewHeight;
+        return;
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_raiseButtonRect]) {
+        [self setValue:@"raiseButton" forKey:@"buttonDown"];
+        [self setValue:@"raiseButton" forKey:@"buttonHover"];
+        _buttonDownX = mouseX;
+        _buttonDownY = mouseY;
+        _buttonDownW = viewWidth;
+        _buttonDownH = viewHeight;
+        return;
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_lowerButtonRect]) {
+        [self setValue:@"lowerButton" forKey:@"buttonDown"];
+        [self setValue:@"lowerButton" forKey:@"buttonHover"];
+        _buttonDownX = mouseX;
+        _buttonDownY = mouseY;
+        _buttonDownW = viewWidth;
+        _buttonDownH = viewHeight;
+        return;
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_titleBarRect]) {
+        [self setValue:@"titleBar" forKey:@"buttonDown"];
+        [self setValue:nil forKey:@"buttonHover"];
+        _buttonDownX = mouseX;
+        _buttonDownY = mouseY;
+        _buttonDownW = viewWidth;
+        _buttonDownH = viewHeight;
         return;
     }
 
@@ -1262,6 +1404,58 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
         } else {
             [self setValue:nil forKey:@"buttonHover"];
         }
+    } else if ([_buttonDown isEqual:@"closeButton"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_closeButtonRect]) {
+            [self setValue:_buttonDown forKey:@"buttonHover"];
+        } else {
+            [self setValue:nil forKey:@"buttonHover"];
+        }
+        return;
+    } else if ([_buttonDown isEqual:@"raiseButton"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_raiseButtonRect]) {
+            [self setValue:_buttonDown forKey:@"buttonHover"];
+        } else {
+            [self setValue:nil forKey:@"buttonHover"];
+        }
+        return;
+    } else if ([_buttonDown isEqual:@"lowerButton"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_lowerButtonRect]) {
+            [self setValue:_buttonDown forKey:@"buttonHover"];
+        } else {
+            [self setValue:nil forKey:@"buttonHover"];
+        }
+        return;
+    } else if ([_buttonDown isEqual:@"titleBar"]) {
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+        int viewHeight = [event intValueForKey:@"viewHeight"];
+
+        id dict = [event valueForKey:@"x11dict"];
+
+        int newX = mouseRootX - _buttonDownX;
+        int newY = mouseRootY - _buttonDownY;
+
+        [dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+        [dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+        [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        return;
+    } else if ([_buttonDown isEqual:@"resizeButton"]) {
+        int viewWidth = [event intValueForKey:@"viewWidth"];
+        int viewHeight = [event intValueForKey:@"viewHeight"];
+
+        id dict = [event valueForKey:@"x11dict"];
+
+        int newWidth = mouseX + (_buttonDownW - _buttonDownX);
+        if (newWidth < 100) {
+            newWidth = 100;
+        }
+        int newHeight = mouseY + (_buttonDownH - _buttonDownY);
+        if (newHeight < 100) {
+            newHeight = 100;
+        }
+        [dict setValue:nsfmt(@"%d %d", newWidth, newHeight) forKey:@"resizeWindow"];
+        return;
     } else {
         [_buttonDown setValue:nsfmt(@"%d", mouseX - _buttonDownOffsetX) forKey:@"x"];
         [_buttonDown setValue:nsfmt(@"%d", mouseY - _buttonDownOffsetY) forKey:@"y"];
@@ -1271,6 +1465,19 @@ FIXME this is the correct one. the one being used has one pixel cut off on the r
 
 - (void)handleMouseUp:(id)event
 {
+    if ([_buttonDown isEqual:@"closeButton"] && [_buttonDown isEqual:_buttonHover]) {
+        exit(0);
+    }
+    if ([_buttonDown isEqual:@"raiseButton"] && [_buttonDown isEqual:_buttonHover]) {
+        id x11dict = [event valueForKey:@"x11dict"];
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager raiseObjectWindow:x11dict];
+    }
+    if ([_buttonDown isEqual:@"lowerButton"] && [_buttonDown isEqual:_buttonHover]) {
+        id x11dict = [event valueForKey:@"x11dict"];
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager lowerObjectWindow:x11dict];
+    }
     [self setValue:nil forKey:@"buttonDown"];
     [self setValue:nil forKey:@"buttonHover"];
 }
