@@ -67,7 +67,7 @@ sub ldflagsForFile
 {
     my ($path) = @_;
     if ($path eq "$execPath/linux/linux-x11.m") {
-        return '-lX11 -lXext -lXfixes';
+        return '-lX11 -lXext';
     }
     if ($path eq "$execPath/linux/linux-opengl.m") {
         return '-lGL';
