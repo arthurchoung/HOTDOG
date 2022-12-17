@@ -3,7 +3,7 @@ hotKey,displayName,messageForClick
 ,Chromium,"[ 'chromium' ] | runCommandInBackground"
 ,,
 ,Breakout,"['hotdog' 'show' 'Breakout']|runCommandInBackground"
-,Calculator,"['hotdog' 'show' 'Calculator']|runCommandInBackground"
+,Calculator,"['hotdog' 'noframe' 'Calculator']|runCommandInBackground"
 ,Camera,"['hotdog' 'show' 'VideoCamerasPanel']|runCommandInBackground"
 ,CentipedeClone,"['hotdog' 'show' 'CentipedeClone']|runCommandInBackground"
 ,ConnectFour,"['hotdog' 'show' 'ConnectFour']|runCommandInBackground"
