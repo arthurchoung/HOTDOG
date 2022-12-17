@@ -497,7 +497,7 @@ NSLog(@"windowManager setNilValueForKey");
     }
     [Definitions runWindowManagerForObject:object x:0 y:0 w:w h:h];
 }
-+ (id)setupWindowManagerForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h
++ (void)runWindowManagerForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h
 {
     id windowManager = [@"WindowManager" asInstance];
     [windowManager setAsValueForKey:@"windowManager"];
@@ -506,11 +506,6 @@ NSLog(@"unable to setup window manager");
 exit(0);
     }
     id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h];
-    return windowManager;
-}
-+ (void)runWindowManagerForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h
-{
-    id windowManager = [Definitions setupWindowManagerForObject:object x:x y:y w:w h:h];
     [windowManager runLoop];
 }
 + (void)runWindowManagerForObjectWithNoFrame:(id)object
@@ -541,6 +536,17 @@ NSLog(@"unable to setup window manager");
 exit(0);
     }
     id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+    if (dict) {
+        if ([object respondsToSelector:@selector(x11WindowMaskCString)]) {
+            if ([object respondsToSelector:@selector(x11WindowMaskChar)]) {
+                char *cstr = [object x11WindowMaskCString];
+                char c = [object x11WindowMaskChar];
+                Window win = [[dict valueForKey:@"window"] unsignedLongValue];
+                [windowManager addMaskToWindow:win cString:cstr c:c];
+            }
+        }
+    }
+        
     [windowManager runLoop];
 }
 @end
@@ -983,6 +989,47 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
             XFillRectangle(_display, shape_pixmap, shape_gc, w-maskWidth, h-maskHeight, maskWidth, maskHeight);
         }
     }
+    XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
+    XFreeGC(_display, shape_gc);
+    XFreePixmap(_display, shape_pixmap);
+}
+- (void)addMaskToWindow:(unsigned long)win cString:(char *)pixels c:(char)c
+{
+    if (!win || !pixels || !c) {
+        return;
+    }
+    int w = [Definitions widthForCString:pixels];
+    int h = [Definitions heightForCString:pixels];
+    XGCValues xgcv;
+    xgcv.foreground = WhitePixel(_display, DefaultScreen(_display));
+    xgcv.line_width = 1;
+    xgcv.line_style = LineSolid;
+    Pixmap shape_pixmap = XCreatePixmap(_display, win, w, h, 1);
+    GC shape_gc = XCreateGC(_display, shape_pixmap, 0, &xgcv);
+    XSetForeground(_display, shape_gc, 1);
+    XFillRectangle(_display, shape_pixmap, shape_gc, 0, 0, w, h);
+    XSetForeground(_display, shape_gc, 0);
+
+    char *p = pixels;
+    int x = 0;
+    int y = 0;
+    for(;;) {
+        if (!*p) {
+            break;
+        }
+        if (*p == '\n') {
+            x = 0;
+            y++;
+            p++;
+            continue;
+        }
+        if (*p == c) {
+            XDrawPoint(_display, shape_pixmap, shape_gc, x, y);
+        }
+        x++;
+        p++;
+    }
+
     XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
     XFreeGC(_display, shape_gc);
     XFreePixmap(_display, shape_pixmap);
