@@ -10,6 +10,7 @@ hotKey,displayName,messageForClick
 ,"Sync Time with NTP","['hotdog-syncTimeWithNTP.sh']|runCommandInBackground"
 ,"Audio Panel","['hotdog-openAudioPanel.sh']|runCommandInBackground"
 ,,
+,AmigaDir,"['hotdog' 'amigadir']|runCommandInBackground"
 ,AmigaDrives,"['hotdog' 'show' 'homeDir|changeDirectory;AmigaDrives']|runCommandInBackground"
 ,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
 ,AmigaNetworkInterfaces,"['hotdog' 'show' 'AmigaNetworkInterfaces']|runCommandInBackground"
