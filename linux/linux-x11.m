@@ -2343,7 +2343,7 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
             XMoveWindow(_display, e->window, attrs.x, attrs.y);
         }
         XMapWindow(_display, e->window);
-//        [self setFocusDict:dict];
+        [self setFocusDict:dict];
         return;
     }
 
