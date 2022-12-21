@@ -329,7 +329,7 @@ exit(1);
                 if ([mountpoint length]) {
                     id cmd = nsarr();
                     [cmd addObject:@"hotdog"];
-                    [cmd addObject:@"dir"];
+                    [cmd addObject:@"amigadir"];
                     [cmd addObject:mountpoint];
                     [cmd runCommandInBackground];
                 } else {
