@@ -477,6 +477,17 @@ NSLog(@"lines %@", lines);
                 obj = [Definitions MacColorDrives];
             }
             [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "amigadir")) {
+            if (argc > 2) {
+                id filePath = nscstr(argv[2]);
+                if ([filePath isDirectory]) {
+                    chdir(argv[2]);
+                }
+            }
+            id object = [Definitions AmigaDir];
+            if (object) {
+                [Definitions runWindowManagerForObjectWithNoFrame:object];
+            }
         } else if ((argc > 1) && !strcmp(argv[1], "dir")) {
             if (argc > 2) {
                 id filePath = nscstr(argv[2]);
@@ -515,10 +526,10 @@ NSLog(@"lines %@", lines);
             if (argc > 2) {
                 id name = nscstr(argv[2]);
                 id obj = [Definitions AmigaBuiltInDir:name];
-                [Definitions runWindowManagerForObject:obj];
+                [Definitions runWindowManagerForObjectWithNoFrame:obj];
             } else {
                 id obj = [Definitions AmigaBuiltInDir:nil];
-                [Definitions runWindowManagerForObject:obj];
+                [Definitions runWindowManagerForObjectWithNoFrame:obj];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "dialog")) {
             if (argc > 3) {
