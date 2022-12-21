@@ -660,9 +660,7 @@ static char *openTrashCanPixels =
 
 
 @implementation Definitions(fjeiwofmkdsomvklcxjvlksjdfkjds)
-+ (char *)cStringForAmigaHorizontalScrollBarLeft
-{
-    return
+static char *horizontalScrollBarLeft =
 "ooooooooooooooooo\n"
 "ooooooooooooooooo\n"
 "ooooooXXXooooooXX\n"
@@ -682,10 +680,27 @@ static char *openTrashCanPixels =
 "ooooooooooooooooo\n"
 "ooooooooooooooooo\n"
 ;
-}
-+ (char *)cStringForAmigaHorizontalScrollBarMiddle
-{
-    return
+static char *horizontalScrollBarMiddleOrange =
+"o\n"
+"o\n"
+"X\n"
+"X\n"
+"*\n"
+"*\n"
+"*\n"
+"*\n"
+"*\n"
+"*\n"
+"*\n"
+"*\n"
+"*\n"
+"*\n"
+"X\n"
+"X\n"
+"o\n"
+"o\n"
+;
+static char *horizontalScrollBarMiddleWhite =
 "o\n"
 "o\n"
 "X\n"
@@ -705,10 +720,27 @@ static char *openTrashCanPixels =
 "o\n"
 "o\n"
 ;
-}
-+ (char *)cStringForAmigaHorizontalScrollBarRight
-{
-    return
+static char *horizontalScrollBarMiddleBlue =
+"o\n"
+"o\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"o\n"
+"o\n"
+;
+static char *horizontalScrollBarRight =
 "ooooooooooooooooo\n"
 "ooooooooooooooooo\n"
 "XXoooooooXXXooooo\n"
@@ -728,28 +760,6 @@ static char *openTrashCanPixels =
 "ooooooooooooooooo\n"
 "ooooooooooooooooo\n"
 ;
-}
-+ (void)drawAmigaHorizontalScrollBarInBitmap:(id)bitmap x:(int)x0 y:(int)y0 w:(int)w
-{
-    char *palette = amigaPalette;
-
-    char *left = [Definitions cStringForAmigaHorizontalScrollBarLeft];
-    char *middle = [Definitions cStringForAmigaHorizontalScrollBarMiddle];
-    char *right = [Definitions cStringForAmigaHorizontalScrollBarRight];
-
-    int widthForLeft = [Definitions widthForCString:left];
-    int widthForMiddle = [Definitions widthForCString:middle];
-    int widthForRight = [Definitions widthForCString:right];
-
-    int heightForMiddle = [Definitions heightForCString:middle];
-
-    [bitmap drawCString:left palette:palette x:x0 y:y0];
-    int x;
-    for (x=x0+widthForLeft; x<x0+w-widthForRight; x+=widthForMiddle) {
-        [bitmap drawCString:middle palette:palette x:x y:y0];
-    }
-    [bitmap drawCString:right palette:palette x:x0+w-widthForRight y:y0];
-}
 + (char *)cStringForAmigaFuelGaugeTop
 {
     return
@@ -769,11 +779,16 @@ static char *openTrashCanPixels =
 "oo............oo\n"
 ;
 }
-+ (char *)cStringForAmigaFuelGaugeMiddle
++ (char *)cStringForAmigaFuelGaugeMiddleWithFuel
 {
     return
 "oo************oo\n"
-"oo************oo\n"
+;
+}
++ (char *)cStringForAmigaFuelGaugeMiddleWithoutFuel
+{
+    return
+"oo............oo\n"
 ;
 }
 + (char *)cStringForAmigaFuelGaugeBottom
@@ -795,30 +810,35 @@ static char *openTrashCanPixels =
 "oo............oo\n"
 ;
 }
-+ (void)drawAmigaFuelGaugeInBitmap:(id)bitmap x:(int)x0 y:(int)y0 h:(int)h
++ (void)drawAmigaFuelGaugeInBitmap:(id)bitmap x:(int)x0 y:(int)y0 h:(int)h pct:(double)freepct
 {
     char *palette = amigaPalette;
 
     char *top = [Definitions cStringForAmigaFuelGaugeTop];
-    char *middle = [Definitions cStringForAmigaFuelGaugeMiddle];
+    char *middleWithFuel = [Definitions cStringForAmigaFuelGaugeMiddleWithFuel];
+    char *middleWithoutFuel = [Definitions cStringForAmigaFuelGaugeMiddleWithoutFuel];
     char *bottom = [Definitions cStringForAmigaFuelGaugeBottom];
 
     int heightForTop = [Definitions heightForCString:top];
-    int heightForMiddle = [Definitions heightForCString:middle];
+    int heightForMiddle = [Definitions heightForCString:middleWithFuel];
     int heightForBottom = [Definitions heightForCString:bottom];
 
-    int widthForMiddle = [Definitions widthForCString:middle];
+    int widthForMiddle = [Definitions widthForCString:middleWithFuel];
 
     [bitmap drawCString:top palette:palette x:x0 y:y0];
-    for (int y=y0+heightForTop; y<y0+h-heightForBottom; y+=heightForMiddle) {
-        [bitmap drawCString:middle palette:palette x:x0 y:y];
+    int ystart = y0+heightForTop;
+    int yend = y0+h-heightForBottom;
+    for (int y=ystart; y<yend; y+=heightForMiddle) {
+        double pct = ((double)(y - ystart) / (double)(yend - ystart));
+        if (pct < freepct) {
+            [bitmap drawCString:middleWithoutFuel palette:palette x:x0 y:y];
+        } else {
+            [bitmap drawCString:middleWithFuel palette:palette x:x0 y:y];
+        }
     }
     [bitmap drawCString:bottom palette:palette x:x0 y:y0+h-heightForBottom];
 }
-//FIXME this is the correct one. the other one has one pixel cut off on the right side
-+ (char *)cStringForAmigaVerticalScrollBarTop
-{
-    return
+static char *verticalScrollBarTop =
 "oooooXXXXXXooooo\n"
 "oooooXXXXXXooooo\n"
 "oooXXooXXooXXooo\n"
@@ -836,17 +856,16 @@ static char *openTrashCanPixels =
 "ooXXXXXXXXXXXXoo\n"
 "ooXXXXXXXXXXXXoo\n"
 ;
-}
-+ (char *)cStringForAmigaVerticalScrollBarMiddle
-{
-    return
-"ooXXooooooooXXoo\n"
+static char *verticalScrollBarMiddleOrange = 
+"ooXX********XXoo\n"
+;
+static char *verticalScrollBarMiddleWhite = 
 "ooXXooooooooXXoo\n"
 ;
-}
-+ (char *)cStringForAmigaVerticalScrollBarBottom
-{
-    return
+static char *verticalScrollBarMiddleBlue = 
+"ooXXXXXXXXXXXXoo\n"
+;
+static char *verticalScrollBarBottom =
 "ooXXXXXXXXXXXXoo\n"
 "ooXXXXXXXXXXXXoo\n"
 "oooooooooooooooo\n"
@@ -864,79 +883,7 @@ static char *openTrashCanPixels =
 "oooooXXXXXXooooo\n"
 "oooooXXXXXXooooo\n"
 ;
-}
-/*
-this one has one pixel cut off on the right
-+ (char *)cStringForAmigaVerticalScrollBarTop
-{
-    return
-"oooooXXXXXXooo\n"
-"oooooXXXXXXooo\n"
-"oooXXooXXooXXo\n"
-"oooXXooXXooXXo\n"
-"oXXooooXXooooX\n"
-"oXXooooXXooooX\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooooooooo\n"
-"oooooooooooooo\n"
-"ooXXXXXXXXXXXX\n"
-"ooXXXXXXXXXXXX\n"
-;
-}
-+ (char *)cStringForAmigaVerticalScrollBarMiddle
-{
-    return
-"ooXXooooooooXX\n"
-"ooXXooooooooXX\n"
-;
-}
-+ (char *)cStringForAmigaVerticalScrollBarBottom
-{
-    return
-"ooXXXXXXXXXXXX\n"
-"ooXXXXXXXXXXXX\n"
-"oooooooooooooo\n"
-"oooooooooooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oooooooXXooooo\n"
-"oXXooooXXooooX\n"
-"oXXooooXXooooX\n"
-"oooXXooXXooXXo\n"
-"oooXXooXXooXXo\n"
-"oooooXXXXXXooo\n"
-"oooooXXXXXXooo\n"
-;
-}
-*/
-+ (void)drawAmigaVerticalScrollBarInBitmap:(id)bitmap x:(int)x0 y:(int)y0 h:(int)h
-{
-    char *palette = amigaPalette;
 
-    char *top = [Definitions cStringForAmigaVerticalScrollBarTop];
-    char *middle = [Definitions cStringForAmigaVerticalScrollBarMiddle];
-    char *bottom = [Definitions cStringForAmigaVerticalScrollBarBottom];
-
-    int heightForTop = [Definitions heightForCString:top];
-    int heightForMiddle = [Definitions heightForCString:middle];
-    int heightForBottom = [Definitions heightForCString:bottom];
-
-    int widthForMiddle = [Definitions widthForCString:middle];
-
-    [bitmap drawCString:top palette:palette x:x0 y:y0];
-    for (int y=y0+heightForTop; y<y0+h-heightForBottom; y+=heightForMiddle) {
-        [bitmap drawCString:middle palette:palette x:x0 y:y];
-    }
-    [bitmap drawCString:bottom palette:palette x:x0 y:y0+h-heightForBottom];
-}
 @end
 
 
@@ -944,6 +891,8 @@ this one has one pixel cut off on the right
 + (id)AmigaDir
 {
     id obj = [@"AmigaDir" asInstance];
+    [obj setValue:[@"." asRealPath] forKey:@"title"];
+    [obj updateDiskFreePct];
     return obj;
 }
 @end
@@ -963,8 +912,6 @@ this one has one pixel cut off on the right
     Int4 _rightScrollArrowRect;
     Int4 _upScrollArrowRect;
     Int4 _downScrollArrowRect;
-    int _originX;
-    int _originY;
 
     Int4 _titleBarRect;
     Int4 _closeButtonRect;
@@ -975,9 +922,38 @@ this one has one pixel cut off on the right
     int _buttonDownY;
     int _buttonDownW;
     int _buttonDownH;
+
+    double _diskFreePct;
+    int _horizontalKnobX;
+    int _horizontalKnobW;
+    int _horizontalKnobVal;
+    int _horizontalKnobMaxVal;
+    int _verticalKnobY;
+    int _verticalKnobH;
+    int _verticalKnobVal;
+    int _verticalKnobMaxVal;
+
+    int _contentXMin;
+    int _contentXMax;
+    int _contentYMin;
+    int _contentYMax;
+    int _visibleX;
+    int _visibleY;
+    int _visibleW;
+    int _visibleH;
+
+    id _title;
 }
 @end
 @implementation AmigaDir
+- (void)updateDiskFreePct
+{
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog-getDiskUsage.pl"];
+    id output = [[cmd runCommandAndReturnOutput] asString];
+    double pct = [output doubleValueForKey:@"pct"];
+    _diskFreePct = 1.0-pct;
+}
 - (int)preferredWidth
 {
     return 600;
@@ -992,8 +968,8 @@ this one has one pixel cut off on the right
     [bitmap useTopazFont];
     id arr = [@"." contentsOfDirectory];
     arr = [arr asFileArray];
-    int x = 20;
-    int y = 20 + 5;
+    int x = 14 + 20;
+    int y = 20 + 10;
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
         id palette = nil;
@@ -1085,13 +1061,13 @@ this one has one pixel cut off on the right
 {
     if ([_buttonDown isEqual:_buttonHover]) {
         if ([_buttonDown isEqual:@"leftScrollArrow"]) {
-            _originX += 10;
+            _visibleX += 10;
         } else if ([_buttonDown isEqual:@"rightScrollArrow"]) {
-            _originX -= 10;
+            _visibleX -= 10;
         } else if ([_buttonDown isEqual:@"upScrollArrow"]) {
-            _originY += 10;
+            _visibleY += 10;
         } else if ([_buttonDown isEqual:@"downScrollArrow"]) {
-            _originY -= 10;
+            _visibleY -= 10;
         }
     }
 
@@ -1120,23 +1096,92 @@ this one has one pixel cut off on the right
     _titleTextRect.w = _lowerButtonRect.x - _titleTextRect.x - 2;
     _titleTextRect.h = titleBarHeight;
 
-    _leftScrollArrowRect.x = r.x+2;
-    _leftScrollArrowRect.y = r.y+r.h-16;
+    _leftScrollArrowRect.x = /*r.x+*/2;
+    _leftScrollArrowRect.y = /*r.y+*/r.h-16;
     _leftScrollArrowRect.w = 11;
     _leftScrollArrowRect.h = 14;
-    _rightScrollArrowRect.x = r.x+r.w-16-2-11;
-    _rightScrollArrowRect.y = r.y+r.h-16;
+    _rightScrollArrowRect.x = /*r.x+*/r.w-16-2-11;
+    _rightScrollArrowRect.y = /*r.y+*/r.h-16;
     _rightScrollArrowRect.w = 11;
     _rightScrollArrowRect.h = 14;
-    _upScrollArrowRect.x = r.x+r.w-16+1;
-    _upScrollArrowRect.y = r.y+titleBarHeight;
+    _upScrollArrowRect.x = /*r.x+*/r.w-16+1;
+    _upScrollArrowRect.y = /*r.y+*/titleBarHeight;
     _upScrollArrowRect.w = 14;
     _upScrollArrowRect.h = 12;
-    _downScrollArrowRect.x = r.x+r.w-16+1;
-    _downScrollArrowRect.y = r.y+r.h-18-12;
+    _downScrollArrowRect.x = /*r.x+*/r.w-16+1;
+    _downScrollArrowRect.y = /*r.y+*/r.h-18-12;
     _downScrollArrowRect.w = 14;
     _downScrollArrowRect.h = 12;
 
+    _contentXMin = 0;
+    _contentXMax = 0;
+    _contentYMin = 0;
+    _contentYMax = 0;
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
+        int x = [elt intValueForKey:@"x"];
+        int y = [elt intValueForKey:@"y"];
+        int w = [elt intValueForKey:@"w"];
+        int h = [elt intValueForKey:@"h"];
+        if (x < _contentXMin) {
+            _contentXMin = x;
+        }
+        if (x+w > _contentXMax) {
+            _contentXMax = x+w;
+        }
+        if (y < _contentYMin) {
+            _contentYMin = y;
+        }
+        if (y+h > _contentYMax) {
+            _contentYMax = y+h+16;
+        }
+    }
+    _contentXMax += 14 + 20;
+    _contentYMax += 20 + 10;
+    _visibleW = r.w;
+    _visibleH = r.h;
+    if (_contentXMin > _visibleX) {
+        _contentXMin = _visibleX;
+    }
+    if (_contentXMax < _visibleX+_visibleW-1) {
+        _contentXMax = _visibleX+_visibleW-1;
+    }
+    if (_contentYMin > _visibleY) {
+        _contentYMin = _visibleY;
+    }
+    if (_contentYMax < _visibleY+_visibleH-1) {
+        _contentYMax = _visibleY+_visibleH-1;
+    }
+    int contentWidth = _contentXMax - _contentXMin;
+    int contentHeight = _contentYMax - _contentYMin;
+    double wpct = (double)_visibleW / (double)contentWidth;
+    _horizontalKnobX = _leftScrollArrowRect.x+_leftScrollArrowRect.w+4;
+    _horizontalKnobMaxVal = (_rightScrollArrowRect.x-5)-_horizontalKnobX;
+    _horizontalKnobW = (double)_horizontalKnobMaxVal*wpct;
+    _horizontalKnobMaxVal -= _horizontalKnobW;
+    double xpct = (double)(_visibleX-_contentXMin)/(double)(contentWidth-_visibleW);
+    if (xpct < 0.0) {
+        xpct = 0.0;
+    } else if (xpct > 1.0) {
+        xpct = 1.0;
+    }
+    _horizontalKnobVal = (double)_horizontalKnobMaxVal*xpct;
+
+    double hpct = (double)_visibleH / (double)contentHeight;
+    _verticalKnobY = _upScrollArrowRect.y+_upScrollArrowRect.h+4;
+    _verticalKnobMaxVal = (_downScrollArrowRect.y-5)-_verticalKnobY;
+    _verticalKnobH = (double)_verticalKnobMaxVal*hpct;
+    _verticalKnobMaxVal -= _verticalKnobH;
+    double ypct = (double)(_visibleY-_contentYMin)/(double)(contentHeight-_visibleH);
+    if (ypct < 0.0) {
+        ypct = 0.0;
+    } else if (ypct > 1.0) {
+        ypct = 1.0;
+    }
+    _verticalKnobVal = (double)_verticalKnobMaxVal*ypct;
+
+
+    
     if (_doNotUpdate) {
         return;
     }
@@ -1144,9 +1189,6 @@ this one has one pixel cut off on the right
         _timestamp = [@"." fileModificationTimestamp];
         [self updateFromCurrentDirectory:r];
     }
-}
-- (void)calculateRects:(Int4)r
-{
 }
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
@@ -1157,8 +1199,8 @@ this one has one pixel cut off on the right
     [bitmap setColor:@"white"];
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
-        int x = _originX + 14 + [elt intValueForKey:@"x"];
-        int y = _originY + [elt intValueForKey:@"y"];
+        int x = -_visibleX + [elt intValueForKey:@"x"];
+        int y = -_visibleY + [elt intValueForKey:@"y"];
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
         if (_selected == elt) {
@@ -1182,9 +1224,9 @@ this one has one pixel cut off on the right
         }
         [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-8];
     }
-    [Definitions drawAmigaFuelGaugeInBitmap:bitmap x:r.x y:r.y+20 h:r.h-20-18];
-    [Definitions drawAmigaVerticalScrollBarInBitmap:bitmap x:r.x+r.w-16 y:r.y+20 h:r.h-20-18];
-    [Definitions drawAmigaHorizontalScrollBarInBitmap:bitmap x:r.x y:r.y+r.h-18 w:r.w-16];
+    [Definitions drawAmigaFuelGaugeInBitmap:bitmap x:r.x y:r.y+20 h:r.h-20-18 pct:_diskFreePct];
+    [self drawVerticalScrollBarInBitmap:bitmap x:r.x+r.w-16 y:r.y+20 h:r.h-20-18];
+    [self drawHorizontalScrollBarInBitmap:bitmap x:r.x y:r.y+r.h-18 w:r.w-16];
     if ([_buttonDown isEqual:@"leftScrollArrow"] && [_buttonHover isEqual:@"leftScrollArrow"]) {
         [bitmap drawCString:[leftScrollArrowPixels UTF8String] palette:[selectedLeftScrollArrowPalette UTF8String] x:_leftScrollArrowRect.x y:_leftScrollArrowRect.y];
     }
@@ -1217,7 +1259,7 @@ this one has one pixel cut off on the right
         }
     }
 
-    id text = [context valueForKey:@"name"];
+    id text = _title;
     if (!text) {
         text = @"(no title)";
     }
@@ -1247,6 +1289,14 @@ this one has one pixel cut off on the right
 
 - (void)handleMouseDown:(id)event
 {
+    {
+        id x11dict = [event valueForKey:@"x11dict"];
+        unsigned long win = [[x11dict valueForKey:@"window"] unsignedLongValue];
+        id windowManager = [@"windowManager" valueForKey];
+        [windowManager XRaiseWindow:win];
+    }
+
+
     [self setValue:nil forKey:@"buttonDown"];
     [self setValue:nil forKey:@"buttonHover"];
 
@@ -1259,25 +1309,25 @@ this one has one pixel cut off on the right
     if ([Definitions isX:mouseX y:mouseY insideRect:_leftScrollArrowRect]) {
         [self setValue:@"leftScrollArrow" forKey:@"buttonDown"];
         [self setValue:@"leftScrollArrow" forKey:@"buttonHover"];
-        _originX += 10;
+        _visibleX += 10;
         return;
     }
     if ([Definitions isX:mouseX y:mouseY insideRect:_rightScrollArrowRect]) {
         [self setValue:@"rightScrollArrow" forKey:@"buttonDown"];
         [self setValue:@"rightScrollArrow" forKey:@"buttonHover"];
-        _originX -= 10;
+        _visibleX -= 10;
         return;
     }
     if ([Definitions isX:mouseX y:mouseY insideRect:_upScrollArrowRect]) {
         [self setValue:@"upScrollArrow" forKey:@"buttonDown"];
         [self setValue:@"upScrollArrow" forKey:@"buttonHover"];
-        _originY += 10;
+        _visibleY += 10;
         return;
     }
     if ([Definitions isX:mouseX y:mouseY insideRect:_downScrollArrowRect]) {
         [self setValue:@"downScrollArrow" forKey:@"buttonDown"];
         [self setValue:@"downScrollArrow" forKey:@"buttonHover"];
-        _originY -= 10;
+        _visibleY -= 10;
         return;
     }
     if (mouseX >= viewWidth-16) {
@@ -1328,11 +1378,57 @@ this one has one pixel cut off on the right
         return;
     }
 
+    if (mouseY > _leftScrollArrowRect.y) {
+        if (mouseY < _leftScrollArrowRect.y+_leftScrollArrowRect.h-1) {
+            if (mouseX < _horizontalKnobX) {
+            } else if (mouseX < _horizontalKnobX+_horizontalKnobVal) {
+                _visibleX -= _visibleW;
+                if (_visibleX < _contentXMin) {
+                    _visibleX = _contentXMin;
+                }
+                return;
+            } else if (mouseX < _horizontalKnobX+_horizontalKnobVal+_horizontalKnobW) {
+                [self setValue:@"horizontalScrollBar" forKey:@"buttonDown"];
+                _buttonDownX = mouseX - (_horizontalKnobX+_horizontalKnobVal);
+                return;
+            } else if (mouseX < _horizontalKnobX+_horizontalKnobMaxVal+_horizontalKnobW) {
+                _visibleX += _visibleW;
+                if (_visibleX > _contentXMax+1 - _visibleW) {
+                    _visibleX = _contentXMax+1 - _visibleW;
+                }
+                return;
+            }
+        }
+    }
+
+    if (mouseX > _upScrollArrowRect.x) {
+        if (mouseX < _upScrollArrowRect.x+_upScrollArrowRect.w-1) {
+            if (mouseY < _verticalKnobY) {
+            } else if (mouseY < _verticalKnobY+_verticalKnobVal) {
+                _visibleY -= _visibleH;
+                if (_visibleY < _contentYMin) {
+                    _visibleY = _contentYMin;
+                }
+                return;
+            } else if (mouseY < _verticalKnobY+_verticalKnobVal+_verticalKnobH) {
+                [self setValue:@"verticalScrollBar" forKey:@"buttonDown"];
+                _buttonDownY = mouseY - (_verticalKnobY+_verticalKnobVal);
+                return;
+            } else if (mouseY < _verticalKnobY+_verticalKnobMaxVal+_verticalKnobH) {
+                _visibleY += _visibleH;
+                if (_visibleY > _contentYMax+1 - _visibleH) {
+                    _visibleY = _contentYMax+1 - _visibleH;
+                }
+                return;
+            }
+        }
+    }
+
 
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
-        int x = _originX + 14 + [elt intValueForKey:@"x"];
-        int y = _originY + [elt intValueForKey:@"y"];
+        int x = _visibleX + [elt intValueForKey:@"x"];
+        int y = _visibleY + [elt intValueForKey:@"y"];
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
         if ((mouseX >= x) && (mouseX < x+w) && (mouseY >= y) && (mouseY < y+h)) {
@@ -1353,12 +1449,12 @@ this one has one pixel cut off on the right
                         if ([filePath isDirectory]) {
                             id cmd = nsarr();
                             [cmd addObject:@"hotdog"];
-                            [cmd addObject:@"dir"];
+                            [cmd addObject:@"amigadir"];
                             [cmd addObject:filePath];
                             [cmd runCommandInBackground];
                         } else {
                             id cmd = nsarr();   
-                            [cmd addObject:@"hotdog-handleFile:.pl"];
+                            [cmd addObject:@"hotdog-open:.pl"];
                             [cmd addObject:filePath];
                             [cmd runCommandInBackground];
                         }
@@ -1456,6 +1552,34 @@ this one has one pixel cut off on the right
         }
         [dict setValue:nsfmt(@"%d %d", newWidth, newHeight) forKey:@"resizeWindow"];
         return;
+    } else if ([_buttonDown isEqual:@"horizontalScrollBar"]) {
+        _horizontalKnobVal = mouseX - _horizontalKnobX - _buttonDownX;
+        if (_horizontalKnobVal < 0) {
+            _horizontalKnobVal = 0;
+        } else if (_horizontalKnobVal > _horizontalKnobMaxVal) {
+            _horizontalKnobVal = _horizontalKnobMaxVal;
+        }
+
+        int contentWidth = _contentXMax - _contentXMin - _visibleW;
+        double pct = 0.0;
+        if (_horizontalKnobMaxVal) {
+            pct = (double)_horizontalKnobVal / (double)_horizontalKnobMaxVal;
+        }
+        _visibleX = _contentXMin + contentWidth*pct;
+    } else if ([_buttonDown isEqual:@"verticalScrollBar"]) {
+        _verticalKnobVal = mouseY - _verticalKnobY - _buttonDownY;
+        if (_verticalKnobVal < 0) {
+            _verticalKnobVal = 0;
+        } else if (_verticalKnobVal > _verticalKnobMaxVal) {
+            _verticalKnobVal = _verticalKnobMaxVal;
+        }
+
+        int contentHeight = _contentYMax - _contentYMin - _visibleH;
+        double pct = 0.0;
+        if (_verticalKnobMaxVal) {
+            pct = (double)_verticalKnobVal / (double)_verticalKnobMaxVal;
+        }
+        _visibleY = _contentYMin + contentHeight*pct;
     } else {
         [_buttonDown setValue:nsfmt(@"%d", mouseX - _buttonDownOffsetX) forKey:@"x"];
         [_buttonDown setValue:nsfmt(@"%d", mouseY - _buttonDownOffsetY) forKey:@"y"];
@@ -1482,580 +1606,78 @@ this one has one pixel cut off on the right
     [self setValue:nil forKey:@"buttonHover"];
 }
 
+- (void)drawHorizontalScrollBarInBitmap:(id)bitmap x:(int)x0 y:(int)y0 w:(int)w
+{
+    BOOL buttonDown = ([_buttonDown isEqual:@"horizontalScrollBar"]) ? YES : NO;
+
+    char *palette = amigaPalette;
+
+    char *left = horizontalScrollBarLeft;
+    char *middleOrange = horizontalScrollBarMiddleOrange;
+    char *middleWhite = horizontalScrollBarMiddleWhite;
+    char *middleBlue = horizontalScrollBarMiddleBlue;
+    char *right = horizontalScrollBarRight;
+
+    int widthForLeft = [Definitions widthForCString:left];
+    int widthForMiddle = [Definitions widthForCString:middleWhite];
+    int widthForRight = [Definitions widthForCString:right];
+
+    int heightForMiddle = [Definitions heightForCString:middleWhite];
+
+    [bitmap drawCString:left palette:palette x:x0 y:y0];
+    int xstart = x0+widthForLeft;
+    int xend = x0+w-widthForRight;
+    for (int x=xstart; x<xend; x+=widthForMiddle) {
+        if (x < _horizontalKnobX+_horizontalKnobVal) {
+            [bitmap drawCString:middleBlue palette:palette x:x y:y0];
+        } else if (x > _horizontalKnobX+_horizontalKnobVal+_horizontalKnobW) {
+            [bitmap drawCString:middleBlue palette:palette x:x y:y0];
+        } else {
+            if (buttonDown) {
+                [bitmap drawCString:middleOrange palette:palette x:x y:y0];
+            } else {
+                [bitmap drawCString:middleWhite palette:palette x:x y:y0];
+            }
+        }
+    }
+    [bitmap drawCString:right palette:palette x:x0+w-widthForRight y:y0];
+}
+- (void)drawVerticalScrollBarInBitmap:(id)bitmap x:(int)x0 y:(int)y0 h:(int)h
+{
+    BOOL buttonDown = ([_buttonDown isEqual:@"verticalScrollBar"]) ? YES : NO;
+
+    char *palette = amigaPalette;
+
+    char *top = verticalScrollBarTop;
+    char *middleOrange = verticalScrollBarMiddleOrange;
+    char *middleWhite = verticalScrollBarMiddleWhite;
+    char *middleBlue = verticalScrollBarMiddleBlue;
+    char *bottom = verticalScrollBarBottom;
+
+    int heightForTop = [Definitions heightForCString:top];
+    int heightForMiddle = [Definitions heightForCString:middleWhite];
+    int heightForBottom = [Definitions heightForCString:bottom];
+
+    int widthForMiddle = [Definitions widthForCString:middleWhite];
+
+    [bitmap drawCString:top palette:palette x:x0 y:y0];
+    int ystart = y0+heightForTop;
+    int yend = y0+h-heightForBottom;
+    for (int y=ystart; y<yend; y+=heightForMiddle) {
+        if (y < _verticalKnobY+_verticalKnobVal) {
+            [bitmap drawCString:middleBlue palette:palette x:x0 y:y];
+        } else if (y > _verticalKnobY+_verticalKnobVal+_verticalKnobH) {
+            [bitmap drawCString:middleBlue palette:palette x:x0 y:y];
+        } else {
+            if (buttonDown) {
+                [bitmap drawCString:middleOrange palette:palette x:x0 y:y];
+            } else {
+                [bitmap drawCString:middleWhite palette:palette x:x0 y:y];
+            }
+        }
+    }
+    [bitmap drawCString:bottom palette:palette x:x0 y:y0+h-heightForBottom];
+}
 @end
 
-/*
-
-static id leftScrollArrowPixels =
-@"ooooXXXoooo\n"
-@"bbbbbbbbbbb\n"
-@"ooXXXoooooo\n"
-@"bbbbbbbbbbb\n"
-@"XXXoooooooo\n"
-@"bbbbbbbbbbb\n"
-@"XXXXXXXXXXX\n"
-@"bbbbbbbbbbb\n"
-@"XXXoooooooo\n"
-@"bbbbbbbbbbb\n"
-@"ooXXXoooooo\n"
-@"bbbbbbbbbbb\n"
-@"ooooXXXoooo\n"
-@"bbbbbbbbbbb\n"
-;
-static id rightScrollArrowPixels =
-@"oooooXXXooo\n"
-@"bbbbbbbbbbb\n"
-@"oooooooXXXo\n"
-@"bbbbbbbbbbb\n"
-@"oooooooooXX\n"
-@"bbbbbbbbbbb\n"
-@"XXXXXXXXXXX\n"
-@"bbbbbbbbbbb\n"
-@"oooooooooXX\n"
-@"bbbbbbbbbbb\n"
-@"oooooooXXXo\n"
-@"bbbbbbbbbbb\n"
-@"oooooXXXooo\n"
-@"bbbbbbbbbbb\n"
-;
-static id upScrollArrowPixels =
-@"ooooXXXXXXoooo\n"
-@"bbbbbbbbbbbbbb\n"
-@"ooXXooXXooXXoo\n"
-@"bbbbbbbbbbbbbb\n"
-@"XXooooXXooooXX\n"
-@"bbbbbbbbbbbbbb\n"
-@"ooooooXXoooooo\n"
-@"bbbbbbbbbbbbbb\n"
-@"ooooooXXoooooo\n"
-@"bbbbbbbbbbbbbb\n"
-@"ooooooXXoooooo\n"
-@"bbbbbbbbbbbbbb\n"
-;
-static id downScrollArrowPixels =
-@"ooooooXXoooooo\n"
-@"bbbbbbbbbbbbbb\n"
-@"ooooooXXoooooo\n"
-@"bbbbbbbbbbbbbb\n"
-@"ooooooXXoooooo\n"
-@"bbbbbbbbbbbbbb\n"
-@"XXooooXXooooXX\n"
-@"bbbbbbbbbbbbbb\n"
-@"ooXXooXXooXXoo\n"
-@"bbbbbbbbbbbbbb\n"
-@"ooooXXXXXXoooo\n"
-@"bbbbbbbbbbbbbb\n"
-;
-static id drawerPixels =
-@"              ...........................................................\n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"          ....oooooooooooooooooooooooooooooooooooooooooooooooooooooo...o.\n"
-@"          bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"      ....oooooooooooooooooooooooooooooooooooooooooooooooooooooooo...oo..\n"
-@"      bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ................................................................ooo.o.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo..oooo..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..ooo......................................................ooo..ooo.o.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..oo.o..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..ooo.o.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..ooo..ooooooooooooooooo...oooooooooo...ooooooooooooooooo..ooo..oo.o..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..ooo..oooooooooooooooo................oooooooooooooooooo..ooo..o.o.. \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..oo..  \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..o..   \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"   ..ooo......................................................ooo....    \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"   ..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo...     \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"   ................................................................      \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-;
-static id openDrawerPixels =
-@"              ...........................................................\n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"          ....oooooooooooooooooooooooooooooooooooooooooooooooooooooo...o.\n"
-@"          bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"      ....oooooooooooooooooooooooooooooooooooooooooooooooooooooooo...oo..\n"
-@"      bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ................................................................ooo.o.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo..oooo..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..ooo......................................................ooo..ooo.o.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..o...  .. . . . . . . . . . . . . . . . . . . . . . . ....ooo..oo.o..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"  .... . . ..  . . . . . . . . . . . . . . . . . . . . . ..o..ooo..ooo.o.\n"
-@"  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..........................................................oo..ooo..oo.o..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo..oo..ooo..o.o.. \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo..oo..ooo..oo..  \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo..oo..ooo..o..   \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"..ooooooooooooooooooo...oooooooooo...ooooooooooooooooooo..oo..ooo....    \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"..oooooooooooooooooo................oooooooooooooooooooo..o..oooo...     \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo...........      \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo...              \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb              \n"
-@"..........................................................               \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb               \n"
-;
-static id textFilePixels =
-@"..............................          \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb          \n"
-@"..oooooooooooooooooooooooo..oo..        \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb        \n"
-@"..oooooooooooooooooooooooo..oooo..      \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"..oooooooooooooooooooooooo..oooooo..    \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"..ooo.........oooooooooooo..oooooooo..  \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"..oooooooooooooooooooooooo..............\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..ooo.........oooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..ooooooo....o..........oo.......ooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..ooo..o........o................ooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..ooo....................o.......ooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..ooooooooooooooooooooo..........ooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"........................................\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-;
-
-static id shellPixels =
-@".....................................................\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".ooooooooooooooooooooooooooooooooooooXoooooXoooooXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXoooooXoooooXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".ooooooooooooooooooooooooooooooooooooXoooooXoooooXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXooXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXoooXXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXooXXXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXooXXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXooooXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXoXXXo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".oooooooooooooooooooooooooooooooooooooooooooooooooo..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@".....................................................\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-;
-
-static id prefsPixels =
-@"              ...........................................................\n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"          ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...O.\n"
-@"          bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"      ....OOOOOOOOOOOOOOOOOOO..........OOOOOOOOOOOOOOOOOOOOOOOOOOO...OO..\n"
-@"      bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ...........................XXXXXXXX.............................OOO.O.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..OOOOOOOOOOOOOOOOOOOOO..XXXXXXXXXXXX..OOOOOOOOOOOOOOOOOOOOOOO..OOOO..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..OOO...................XXXXX....XXXXX.....................OOO..OOO.O.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..OOO..OOOOOOOOOOOOOOO........O..XXXXX..OOOOOOOOOOOOOOOOO..OOO..OO.O..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..OOO..OOOOOOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOO..OOO..OOO.O.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..OOO..OOOOOOOOOOOOOOOOO...O..XXXXX..OO...OOOOOOOOOOOOOOO..OOO..OO.O..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..OOO..OOOOOOOOOOOOOOOO......XXXXX.......OOOOOOOOOOOOOOOO..OOO..O.O.. \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"   ..OOO..OOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOOOOOO..OOO..OO..  \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"   ..OOO..OOOOOOOOOOOOOOOOOOOO.......OOOOOOOOOOOOOOOOOOOOOOO..OOO..O..   \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"   ..OOO.......................XXXXX..........................OOO....    \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"   ..OOOOOOOOOOOOOOOOOOOOOOOOO.......OOOOOOOOOOOOOOOOOOOOOOOOOOOO...     \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"   ................................................................      \n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-;
-static id openPrefsPixels =
-@"              ...........................................................\n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"          ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...O.\n"
-@"          bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"      ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...OO..\n"
-@"      bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ................................................................OOO.O.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..OOOO..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..OOO......................................................OOO..OOO.O.\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"   ..O...oo..o.o.o.o.o.o.........o.o.o.o.o.o.o.o.o.o.o.o.o....OOO..OO.O..\n"
-@"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"  ....o.o.o..oo.o.o.o...XXXXXXXX....o.o.o.o.o.o.o.o.o.o.o..O..OOO..OOO.O.\n"
-@"  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"......................XXXXXXXXXXXX........................OO..OOO..OO.O..\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"..OOOOOOOOOOOOOOOOO..XXXXX....XXXXX..OOOOOOOOOOOOOOOOOOO..OO..OOO..O.O.. \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"..OOOOOOOOOOOOOOOOO........O..XXXXX..OOOOOOOOOOOOOOOOOOO..OO..OOO..OO..  \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"..OOOOOOOOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOOOO..OO..OOO..O..   \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"..OOOOOOOOOOOOOOOOOOO...O..XXXXX..OO...OOOOOOOOOOOOOOOOO..OO..OOO....    \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"..OOOOOOOOOOOOOOOOOO......XXXXX.......OOOOOOOOOOOOOOOOOO..O..OOOO...     \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"..OOOOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOOOOOOOO...........      \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"..OOOOOOOOOOOOOOOOOOOOOO.......OOOOOOOOOOOOOOOOOOOOOOOOO...              \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb              \n"
-@".........................XXXXX............................               \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb               \n"
-@"                        .......                                          \n"
-@"                        bbbbbbb                                          \n"
-;
-static char *trashCanPixels =
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                            ................              \n"
-@"                            bbbbbbbbbbbbbbbb              \n"
-@"                           ...            ...             \n"
-@"                           bbb            bbb             \n"
-@"                ......................................    \n"
-@"                bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"              ..X.X.X.X.X.X.XXXXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"             ..X.X.X.X.X.X.X.X.X.X.X.XXXXXXXXXXXXXXXXXX.. \n"
-@"             bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"             ............................................ \n"
-@"             bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"              ..X.X.X.X.X.X.X.XXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"              ...X.X.X.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"               ...X......XXXXXXX.......XXXXXX.....XXX..   \n"
-@"               bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"               ..X...X.X...XXX...X.X.X..XXX..X.X...XX..   \n"
-@"               bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"               ...X...XXX..XXX..X.XXXX..XXX...XXX..XX..   \n"
-@"               bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"               ..X...X.XX..XXX...X.XXX..XXX..X.XX..XX..   \n"
-@"               bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"                ..X...XXX..XXX..X.XXXX..XXX...XXX..X..    \n"
-@"                bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"                ...X...XXX..XX...X.XXX..XX...XXX..XX..    \n"
-@"                bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"                ..X...X.XX..XX..X.XXXX..XX..X.XX..XX..    \n"
-@"                bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"                ...X...XXX..XXX..X.XX..XXX...XXX..XX..    \n"
-@"                bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"                 ...X...XX..XXX...XXX..XXX..XXX..XX..     \n"
-@"                 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"                 ..X...X.X..XXX..X.XX..XXX...XX..XX..     \n"
-@"                 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"                 ...X...XXX..XX...XXX..XX...XXX..XX..     \n"
-@"                 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"                 ..X.X...XX..XX..X.XX..XX..X.X..XXX..     \n"
-@"                 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"             .......X...X.X..XXX..XX..XXX...XX..XX..      \n"
-@"             bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"    .................X...X...XXX...X..XXX..X...XXX..      \n"
-@"    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"....................X.X.....X.X.X....XXXXX....XXXX..      \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"  .....................X.X.X.X.X.XXXXXXXXXXXXXXX...       \n"
-@"  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb       \n"
-@"       ..........................................         \n"
-@"       bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb         \n"
-@"                 ....................                     \n"
-@"                 bbbbbbbbbbbbbbbbbbbb                     \n"
-;
-static char *openTrashCanPixels =
-@"                          ..................              \n"
-@"                          bbbbbbbbbbbbbbbbbb              \n"
-@"                   .......XXXXXXXXXXXXXXXXXX.......       \n"
-@"                   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb       \n"
-@"              .....XXXXXXXX.................XXXXXXX.....  \n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"             ..XXXX........X.X.X.XXXXX.X.X.X......XXXXX.. \n"
-@"             bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"            ..XX....X.X.X.X.X.XXXX.X.XXXX.X.X.X.X.....XX..\n"
-@"            bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"             ..X..XX.X.X.X.X.X.X.XXXXX.X.X.X.X.X.XXX..X.. \n"
-@"             bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"              ......XXXXXXX.X.X.X.X.X.X.X.X.XXXXXX......  \n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"                  .........XXXXXXXXXXXXXXXXX........      \n"
-@"                  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"                          ...................             \n"
-@"                          bbbbbbbbbbbbbbbbbbb             \n"
-@"              ..........................................  \n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"              ..X.X.X.X.X.X.X.XXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"              ...X.X.X.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
-@"               ...X......XXXXXXX.......XXXXXX.....XXX..   \n"
-@"               bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"               ..X...X.X...XXX...X.X.X..XXX..X.X...XX..   \n"
-@"               bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"               ...X...XXX..XXX..X.XXXX..XXX...XXX..XX..   \n"
-@"               bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"               ..X...X.XX..XXX...X.XXX..XXX..X.XX..XX..   \n"
-@"               bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
-@"                ..X...XXX..XXX..X.XXXX..XXX...XXX..X..    \n"
-@"                bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"                ...X...XXX..XX...X.XXX..XX...XXX..XX..    \n"
-@"                bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"                ..X...X.XX..XX..X.XXXX..XX..X.XX..XX..    \n"
-@"                bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"                ...X...XXX..XXX..X.XX..XXX...XXX..XX..    \n"
-@"                bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-@"                 ...X...XX..XXX...XXX..XXX..XXX..XX..     \n"
-@"                 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"                 ..X...X.X..XXX..X.XX..XXX...XX..XX..     \n"
-@"                 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"                 ...X...XXX..XX...XXX..XX...XXX..XX..     \n"
-@"                 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"                 ..X.X...XX..XX..X.XX..XX..X.X..XXX..     \n"
-@"                 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
-@"             .......X...X.X..XXX..XX..XXX...XX..XX..      \n"
-@"             bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"    .................X...X...XXX...X..XXX..X...XXX..      \n"
-@"    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"....................X.X.....X.X.X....XXXXX....XXXX..      \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb      \n"
-@"  .....................X.X.X.X.X.XXXXXXXXXXXXXXX...       \n"
-@"  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb       \n"
-@"       ..........................................         \n"
-@"       bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb         \n"
-@"                 ....................                     \n"
-@"                 bbbbbbbbbbbbbbbbbbbb                     \n"
-;
-+ (char *)cStringForAmigaHorizontalScrollBarLeft
-{
-    return
-"ooooooooooooooo\n"
-"bbbbbbbbbbbbbbb\n"
-"ooooXXXooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"ooXXXooooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"XXXooooooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"XXXXXXXXXXXooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"XXXooooooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"ooXXXooooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"ooooXXXooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaHorizontalScrollBarMiddle
-{
-    return
-"o\n"
-"b\n"
-"X\n"
-"b\n"
-"o\n"
-"b\n"
-"o\n"
-"b\n"
-"o\n"
-"b\n"
-"o\n"
-"b\n"
-"o\n"
-"b\n"
-"X\n"
-"b\n"
-;
-}
-+ (char *)cStringForAmigaHorizontalScrollBarRight
-{
-    return
-"ooooooooooooooo\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooXXXooo\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooooXXXo\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"XXooXXXXXXXXXXX\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooooooXX\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooooXXXo\n"
-"bbbbbbbbbbbbbbb\n"
-"XXoooooooXXXooo\n"
-"bbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaFuelGaugeTop
-{
-    return
-"............oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oooooo...oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oo.......oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oooo.....oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oo.......oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oo.......oo\n"
-"bbbbbbbbbbbbbb\n"
-"............oo\n"
-"bbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaFuelGaugeMiddle
-{
-    return
-"************oo\n"
-"bbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaFuelGaugeBottom
-{
-    return
-"............oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oooooo...oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oo.......oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oooo.....oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oo.......oo\n"
-"bbbbbbbbbbbbbb\n"
-"...oooooo...oo\n"
-"bbbbbbbbbbbbbb\n"
-"............oo\n"
-"bbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaVerticalScrollBarTop
-{
-    return
-"oooooXXXXXXooo\n"
-"bbbbbbbbbbbbbb\n"
-"oooXXooXXooXXo\n"
-"bbbbbbbbbbbbbb\n"
-"oXXooooXXooooX\n"
-"bbbbbbbbbbbbbb\n"
-"oooooooXXooooo\n"
-"bbbbbbbbbbbbbb\n"
-"oooooooXXooooo\n"
-"bbbbbbbbbbbbbb\n"
-"oooooooXXooooo\n"
-"bbbbbbbbbbbbbb\n"
-"oooooooooooooo\n"
-"bbbbbbbbbbbbbb\n"
-"ooXXXXXXXXXXXX\n"
-"bbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaVerticalScrollBarMiddle
-{
-    return
-"ooXXooooooooXX\n"
-"bbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForAmigaVerticalScrollBarBottom
-{
-    return
-"ooXXXXXXXXXXXX\n"
-"bbbbbbbbbbbbbb\n"
-"oooooooooooooo\n"
-"bbbbbbbbbbbbbb\n"
-"oooooooXXooooo\n"
-"bbbbbbbbbbbbbb\n"
-"oooooooXXooooo\n"
-"bbbbbbbbbbbbbb\n"
-"oooooooXXooooo\n"
-"bbbbbbbbbbbbbb\n"
-"oXXooooXXooooX\n"
-"bbbbbbbbbbbbbb\n"
-"oooXXooXXooXXo\n"
-"bbbbbbbbbbbbbb\n"
-"oooooXXXXXXooo\n"
-"bbbbbbbbbbbbbb\n"
-;
-}
-*/
 
