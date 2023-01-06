@@ -896,72 +896,13 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
 - (void)addShadowMaskToObjectWindow:(id)dict
 {
     id object = [dict valueForKey:@"object"];
-    int hasShadow = [object intValueForKey:@"hasShadow"];
-    if (!hasShadow) {
-        if ([object respondsToSelector:@selector(x11WindowMaskPointsForWidth:height:)]) {
-            Window win = [[dict valueForKey:@"window"] unsignedLongValue];
-            int w = [dict intValueForKey:@"w"];
-            int h = [dict intValueForKey:@"h"];
-            int *points = [object x11WindowMaskPointsForWidth:w height:h];
-            [self addMaskToWindow:win arrayOfPoints:points width:w height:h];
-        }
-        return;
+    if ([object respondsToSelector:@selector(x11WindowMaskPointsForWidth:height:)]) {
+        Window win = [[dict valueForKey:@"window"] unsignedLongValue];
+        int w = [dict intValueForKey:@"w"];
+        int h = [dict intValueForKey:@"h"];
+        int *points = [object x11WindowMaskPointsForWidth:w height:h];
+        [self addMaskToWindow:win arrayOfPoints:points width:w height:h];
     }
-
-    id window = [dict valueForKey:@"window"];
-    if (!window) {
-        return;
-    }
-    unsigned long win = [window unsignedLongValue];
-    int w = [dict intValueForKey:@"w"];
-    int h = [dict intValueForKey:@"h"];
-
-    XGCValues xgcv;
-    xgcv.foreground = WhitePixel(_display, DefaultScreen(_display));
-    xgcv.line_width = 1;
-    xgcv.line_style = LineSolid;
-    Pixmap shape_pixmap = XCreatePixmap(_display, win, w, h, 1);
-    GC shape_gc = XCreateGC(_display, shape_pixmap, 0, &xgcv);
-    XSetForeground(_display, shape_gc, 1);
-    XFillRectangle(_display, shape_pixmap, shape_gc, 0, 0, w, h);
-    XSetForeground(_display, shape_gc, 0);
-    if (hasShadow > 0) {
-        for (int i=0; i<hasShadow; i++) {
-            XDrawPoint(_display, shape_pixmap, shape_gc, i, h-1);
-            XDrawPoint(_display, shape_pixmap, shape_gc, w-1, i);
-        }
-    } else if (hasShadow == -2) {
-        //FIXME
-        // Upper left corner
-        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 1, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 2, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 3, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 4, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 1, 1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 2, 1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 2);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 1, 2);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 3);
-        XDrawPoint(_display, shape_pixmap, shape_gc, 0, 4);
-        // Upper right corner
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-4, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-5, 0);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-3, 1);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 2);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-2, 2);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 3);
-        XDrawPoint(_display, shape_pixmap, shape_gc, w-1, 4);
-    }
-    XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
-    XFreeGC(_display, shape_gc);
-    XFreePixmap(_display, shape_pixmap);
 }
 - (void)addMaskToChildWindow:(id)dict
 {
