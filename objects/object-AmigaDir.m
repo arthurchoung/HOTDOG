@@ -37,78 +37,78 @@ static char *amigaPalette =
 "o #ffffff\n"
 ;
 
-static id leftScrollArrowPalette =
-@". #000022\n"
-@"* #ff8800\n"
-@"X #0055aa\n"
-@"o #ffffff\n"
+static char *leftArrowPalette =
+". #000022\n"
+"* #ff8800\n"
+"X #0055aa\n"
+"o #ffffff\n"
 ;
-static id selectedLeftScrollArrowPalette =
-@"o #000022\n"
-@"X #ff8800\n"
-@"* #0055aa\n"
-@". #ffffff\n"
+static char *selectedLeftArrowPalette =
+"o #000022\n"
+"X #ff8800\n"
+"* #0055aa\n"
+". #ffffff\n"
 ;
 
-static id leftScrollArrowPixels =
-@"ooooXXXoooo\n"
-@"ooooXXXoooo\n"
-@"ooXXXoooooo\n"
-@"ooXXXoooooo\n"
-@"XXXoooooooo\n"
-@"XXXoooooooo\n"
-@"XXXXXXXXXXX\n"
-@"XXXXXXXXXXX\n"
-@"XXXoooooooo\n"
-@"XXXoooooooo\n"
-@"ooXXXoooooo\n"
-@"ooXXXoooooo\n"
-@"ooooXXXoooo\n"
-@"ooooXXXoooo\n"
+static char *leftArrowPixels =
+"ooooXXXoooo\n"
+"ooooXXXoooo\n"
+"ooXXXoooooo\n"
+"ooXXXoooooo\n"
+"XXXoooooooo\n"
+"XXXoooooooo\n"
+"XXXXXXXXXXX\n"
+"XXXXXXXXXXX\n"
+"XXXoooooooo\n"
+"XXXoooooooo\n"
+"ooXXXoooooo\n"
+"ooXXXoooooo\n"
+"ooooXXXoooo\n"
+"ooooXXXoooo\n"
 ;
-static id rightScrollArrowPixels =
-@"oooooXXXooo\n"
-@"oooooXXXooo\n"
-@"oooooooXXXo\n"
-@"oooooooXXXo\n"
-@"oooooooooXX\n"
-@"oooooooooXX\n"
-@"XXXXXXXXXXX\n"
-@"XXXXXXXXXXX\n"
-@"oooooooooXX\n"
-@"oooooooooXX\n"
-@"oooooooXXXo\n"
-@"oooooooXXXo\n"
-@"oooooXXXooo\n"
-@"oooooXXXooo\n"
+static char *rightArrowPixels =
+"oooooXXXooo\n"
+"oooooXXXooo\n"
+"oooooooXXXo\n"
+"oooooooXXXo\n"
+"oooooooooXX\n"
+"oooooooooXX\n"
+"XXXXXXXXXXX\n"
+"XXXXXXXXXXX\n"
+"oooooooooXX\n"
+"oooooooooXX\n"
+"oooooooXXXo\n"
+"oooooooXXXo\n"
+"oooooXXXooo\n"
+"oooooXXXooo\n"
 ;
-static id upScrollArrowPixels =
-@"ooooXXXXXXoooo\n"
-@"ooooXXXXXXoooo\n"
-@"ooXXooXXooXXoo\n"
-@"ooXXooXXooXXoo\n"
-@"XXooooXXooooXX\n"
-@"XXooooXXooooXX\n"
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
+static char *upArrowPixels =
+"ooooXXXXXXoooo\n"
+"ooooXXXXXXoooo\n"
+"ooXXooXXooXXoo\n"
+"ooXXooXXooXXoo\n"
+"XXooooXXooooXX\n"
+"XXooooXXooooXX\n"
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
 ;
-static id downScrollArrowPixels =
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
-@"ooooooXXoooooo\n"
-@"XXooooXXooooXX\n"
-@"XXooooXXooooXX\n"
-@"ooXXooXXooXXoo\n"
-@"ooXXooXXooXXoo\n"
-@"ooooXXXXXXoooo\n"
-@"ooooXXXXXXoooo\n"
+static char *downArrowPixels =
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
+"ooooooXXoooooo\n"
+"XXooooXXooooXX\n"
+"XXooooXXooooXX\n"
+"ooXXooXXooXXoo\n"
+"ooXXooXXooXXoo\n"
+"ooooXXXXXXoooo\n"
+"ooooXXXXXXoooo\n"
 ;
 static id drawerPalette =
 @"b #000000\n"
@@ -760,9 +760,7 @@ static char *horizontalScrollBarRight =
 "ooooooooooooooooo\n"
 "ooooooooooooooooo\n"
 ;
-+ (char *)cStringForAmigaFuelGaugeTop
-{
-    return
+static char *fuelGaugeTop =
 "oo............oo\n"
 "oo............oo\n"
 "oo...oooooo...oo\n"
@@ -778,22 +776,13 @@ static char *horizontalScrollBarRight =
 "oo............oo\n"
 "oo............oo\n"
 ;
-}
-+ (char *)cStringForAmigaFuelGaugeMiddleWithFuel
-{
-    return
+static char *fuelGaugeMiddleWithFuel =
 "oo************oo\n"
 ;
-}
-+ (char *)cStringForAmigaFuelGaugeMiddleWithoutFuel
-{
-    return
+static char *fuelGaugeMiddleWithoutFuel =
 "oo............oo\n"
 ;
-}
-+ (char *)cStringForAmigaFuelGaugeBottom
-{
-    return
+static char *fuelGaugeBottom =
 "oo............oo\n"
 "oo............oo\n"
 "oo...oooooo...oo\n"
@@ -809,15 +798,14 @@ static char *horizontalScrollBarRight =
 "oo............oo\n"
 "oo............oo\n"
 ;
-}
 + (void)drawAmigaFuelGaugeInBitmap:(id)bitmap x:(int)x0 y:(int)y0 h:(int)h pct:(double)freepct
 {
     char *palette = amigaPalette;
 
-    char *top = [Definitions cStringForAmigaFuelGaugeTop];
-    char *middleWithFuel = [Definitions cStringForAmigaFuelGaugeMiddleWithFuel];
-    char *middleWithoutFuel = [Definitions cStringForAmigaFuelGaugeMiddleWithoutFuel];
-    char *bottom = [Definitions cStringForAmigaFuelGaugeBottom];
+    char *top = fuelGaugeTop;
+    char *middleWithFuel = fuelGaugeMiddleWithFuel;
+    char *middleWithoutFuel = fuelGaugeMiddleWithoutFuel;
+    char *bottom = fuelGaugeBottom;
 
     int heightForTop = [Definitions heightForCString:top];
     int heightForMiddle = [Definitions heightForCString:middleWithFuel];
@@ -908,10 +896,10 @@ static char *verticalScrollBarBottom =
     int _buttonDownOffsetY;
     id _buttonDownTimestamp;
     id _selected;
-    Int4 _leftScrollArrowRect;
-    Int4 _rightScrollArrowRect;
-    Int4 _upScrollArrowRect;
-    Int4 _downScrollArrowRect;
+    Int4 _leftArrowRect;
+    Int4 _rightArrowRect;
+    Int4 _upArrowRect;
+    Int4 _downArrowRect;
 
     Int4 _titleBarRect;
     Int4 _closeButtonRect;
@@ -968,8 +956,8 @@ static char *verticalScrollBarBottom =
     [bitmap useTopazFont];
     id arr = [@"." contentsOfDirectory];
     arr = [arr asFileArray];
-    int x = 14 + 20;
-    int y = 20 + 10;
+    int x = 20;
+    int y = 10;
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
         id palette = nil;
@@ -1045,10 +1033,10 @@ static char *verticalScrollBarBottom =
 
 - (BOOL)shouldAnimate
 {
-    if ([_buttonDown isEqual:@"leftScrollArrow"]) {
-    } else if ([_buttonDown isEqual:@"rightScrollArrow"]) {
-    } else if ([_buttonDown isEqual:@"upScrollArrow"]) {
-    } else if ([_buttonDown isEqual:@"downScrollArrow"]) {
+    if ([_buttonDown isEqual:@"leftArrow"]) {
+    } else if ([_buttonDown isEqual:@"rightArrow"]) {
+    } else if ([_buttonDown isEqual:@"upArrow"]) {
+    } else if ([_buttonDown isEqual:@"downArrow"]) {
     } else {
         return NO;
     }
@@ -1060,13 +1048,13 @@ static char *verticalScrollBarBottom =
 - (void)beginIteration:(id)event rect:(Int4)r
 {
     if ([_buttonDown isEqual:_buttonHover]) {
-        if ([_buttonDown isEqual:@"leftScrollArrow"]) {
+        if ([_buttonDown isEqual:@"leftArrow"]) {
             _visibleX += 10;
-        } else if ([_buttonDown isEqual:@"rightScrollArrow"]) {
+        } else if ([_buttonDown isEqual:@"rightArrow"]) {
             _visibleX -= 10;
-        } else if ([_buttonDown isEqual:@"upScrollArrow"]) {
+        } else if ([_buttonDown isEqual:@"upArrow"]) {
             _visibleY += 10;
-        } else if ([_buttonDown isEqual:@"downScrollArrow"]) {
+        } else if ([_buttonDown isEqual:@"downArrow"]) {
             _visibleY -= 10;
         }
     }
@@ -1096,22 +1084,22 @@ static char *verticalScrollBarBottom =
     _titleTextRect.w = _lowerButtonRect.x - _titleTextRect.x - 2;
     _titleTextRect.h = titleBarHeight;
 
-    _leftScrollArrowRect.x = /*r.x+*/2;
-    _leftScrollArrowRect.y = /*r.y+*/r.h-16;
-    _leftScrollArrowRect.w = 11;
-    _leftScrollArrowRect.h = 14;
-    _rightScrollArrowRect.x = /*r.x+*/r.w-16-2-11;
-    _rightScrollArrowRect.y = /*r.y+*/r.h-16;
-    _rightScrollArrowRect.w = 11;
-    _rightScrollArrowRect.h = 14;
-    _upScrollArrowRect.x = /*r.x+*/r.w-16+1;
-    _upScrollArrowRect.y = /*r.y+*/titleBarHeight;
-    _upScrollArrowRect.w = 14;
-    _upScrollArrowRect.h = 12;
-    _downScrollArrowRect.x = /*r.x+*/r.w-16+1;
-    _downScrollArrowRect.y = /*r.y+*/r.h-18-12;
-    _downScrollArrowRect.w = 14;
-    _downScrollArrowRect.h = 12;
+    _leftArrowRect.x = /*r.x+*/2;
+    _leftArrowRect.y = /*r.y+*/r.h-16;
+    _leftArrowRect.w = 11;
+    _leftArrowRect.h = 14;
+    _rightArrowRect.x = /*r.x+*/r.w-16-2-11;
+    _rightArrowRect.y = /*r.y+*/r.h-16;
+    _rightArrowRect.w = 11;
+    _rightArrowRect.h = 14;
+    _upArrowRect.x = /*r.x+*/r.w-16+1;
+    _upArrowRect.y = /*r.y+*/titleBarHeight;
+    _upArrowRect.w = 14;
+    _upArrowRect.h = 12;
+    _downArrowRect.x = /*r.x+*/r.w-16+1;
+    _downArrowRect.y = /*r.y+*/r.h-18-12;
+    _downArrowRect.w = 14;
+    _downArrowRect.h = 12;
 
     _contentXMin = 0;
     _contentXMax = 0;
@@ -1155,8 +1143,8 @@ static char *verticalScrollBarBottom =
     int contentWidth = _contentXMax - _contentXMin;
     int contentHeight = _contentYMax - _contentYMin;
     double wpct = (double)_visibleW / (double)contentWidth;
-    _horizontalKnobX = _leftScrollArrowRect.x+_leftScrollArrowRect.w+4;
-    _horizontalKnobMaxVal = (_rightScrollArrowRect.x-5)-_horizontalKnobX;
+    _horizontalKnobX = _leftArrowRect.x+_leftArrowRect.w+4;
+    _horizontalKnobMaxVal = (_rightArrowRect.x-5)-_horizontalKnobX;
     _horizontalKnobW = (double)_horizontalKnobMaxVal*wpct;
     _horizontalKnobMaxVal -= _horizontalKnobW;
     double xpct = (double)(_visibleX-_contentXMin)/(double)(contentWidth-_visibleW);
@@ -1168,8 +1156,8 @@ static char *verticalScrollBarBottom =
     _horizontalKnobVal = (double)_horizontalKnobMaxVal*xpct;
 
     double hpct = (double)_visibleH / (double)contentHeight;
-    _verticalKnobY = _upScrollArrowRect.y+_upScrollArrowRect.h+4;
-    _verticalKnobMaxVal = (_downScrollArrowRect.y-5)-_verticalKnobY;
+    _verticalKnobY = _upArrowRect.y+_upArrowRect.h+4;
+    _verticalKnobMaxVal = (_downArrowRect.y-5)-_verticalKnobY;
     _verticalKnobH = (double)_verticalKnobMaxVal*hpct;
     _verticalKnobMaxVal -= _verticalKnobH;
     double ypct = (double)(_visibleY-_contentYMin)/(double)(contentHeight-_visibleH);
@@ -1199,8 +1187,8 @@ static char *verticalScrollBarBottom =
     [bitmap setColor:@"white"];
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
-        int x = -_visibleX + [elt intValueForKey:@"x"];
-        int y = -_visibleY + [elt intValueForKey:@"y"];
+        int x = -_visibleX + [elt intValueForKey:@"x"] + 16;
+        int y = -_visibleY + [elt intValueForKey:@"y"] + 20;
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
         if (_selected == elt) {
@@ -1227,25 +1215,25 @@ static char *verticalScrollBarBottom =
     [Definitions drawAmigaFuelGaugeInBitmap:bitmap x:r.x y:r.y+20 h:r.h-20-18 pct:_diskFreePct];
     [self drawVerticalScrollBarInBitmap:bitmap x:r.x+r.w-16 y:r.y+20 h:r.h-20-18];
     [self drawHorizontalScrollBarInBitmap:bitmap x:r.x y:r.y+r.h-18 w:r.w-16];
-    if ([_buttonDown isEqual:@"leftScrollArrow"] && [_buttonHover isEqual:@"leftScrollArrow"]) {
-        [bitmap drawCString:[leftScrollArrowPixels UTF8String] palette:[selectedLeftScrollArrowPalette UTF8String] x:_leftScrollArrowRect.x y:_leftScrollArrowRect.y];
+    if ([_buttonDown isEqual:@"leftArrow"] && [_buttonHover isEqual:@"leftArrow"]) {
+        [bitmap drawCString:leftArrowPixels palette:selectedLeftArrowPalette x:_leftArrowRect.x y:_leftArrowRect.y];
     }
-    if ([_buttonDown isEqual:@"rightScrollArrow"] && [_buttonHover isEqual:@"rightScrollArrow"]) {
-        [bitmap drawCString:[rightScrollArrowPixels UTF8String] palette:[selectedLeftScrollArrowPalette UTF8String] x:_rightScrollArrowRect.x y:_rightScrollArrowRect.y];
+    if ([_buttonDown isEqual:@"rightArrow"] && [_buttonHover isEqual:@"rightArrow"]) {
+        [bitmap drawCString:rightArrowPixels palette:selectedLeftArrowPalette x:_rightArrowRect.x y:_rightArrowRect.y];
     }
-    if ([_buttonDown isEqual:@"upScrollArrow"] && [_buttonHover isEqual:@"upScrollArrow"]) {
-        [bitmap drawCString:[upScrollArrowPixels UTF8String] palette:[selectedLeftScrollArrowPalette UTF8String] x:_upScrollArrowRect.x y:_upScrollArrowRect.y];
+    if ([_buttonDown isEqual:@"upArrow"] && [_buttonHover isEqual:@"upArrow"]) {
+        [bitmap drawCString:upArrowPixels palette:selectedLeftArrowPalette x:_upArrowRect.x y:_upArrowRect.y];
     }
-    if ([_buttonDown isEqual:@"downScrollArrow"] && [_buttonHover isEqual:@"downScrollArrow"]) {
-        [bitmap drawCString:[downScrollArrowPixels UTF8String] palette:[selectedLeftScrollArrowPalette UTF8String] x:_downScrollArrowRect.x y:_downScrollArrowRect.y];
+    if ([_buttonDown isEqual:@"downArrow"] && [_buttonHover isEqual:@"downArrow"]) {
+        [bitmap drawCString:downArrowPixels palette:selectedLeftArrowPalette x:_downArrowRect.x y:_downArrowRect.y];
     }
 
-    [bitmap drawCString:[Definitions cStringForAmigaResizeButtonPixels] palette:(([_buttonDown isEqual:@"resizeButton"]) ? [selectedLeftScrollArrowPalette UTF8String] : [leftScrollArrowPalette UTF8String]) x:r.x+r.w-16 y:r.y+r.h-18];
+    [bitmap drawCString:[Definitions cStringForAmigaResizeButtonPixels] palette:(([_buttonDown isEqual:@"resizeButton"]) ? selectedLeftArrowPalette : leftArrowPalette) x:r.x+r.w-16 y:r.y+r.h-18];
 
 
     // title bar
-    char *palette = [leftScrollArrowPalette UTF8String];
-    char *highlightedPalette = [selectedLeftScrollArrowPalette UTF8String];
+    char *palette = leftArrowPalette;
+    char *highlightedPalette = selectedLeftArrowPalette;
     [Definitions drawInBitmap:bitmap left:[Definitions cStringForAmigaTitleBarLeftPixels] middle:[Definitions cStringForAmigaTitleBarMiddlePixels] right:[Definitions cStringForAmigaTitleBarRightPixels] x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w palette:palette];
 
     [bitmap drawCString:[Definitions cStringForAmigaCloseButtonPixels] palette:(([_buttonDown isEqual:@"closeButton"] && [_buttonHover isEqual:@"closeButton"]) ? highlightedPalette : palette) x:_closeButtonRect.x y:_closeButtonRect.y];
@@ -1306,27 +1294,27 @@ static char *verticalScrollBarBottom =
     int viewWidth = [event intValueForKey:@"viewWidth"];
     int viewHeight = [event intValueForKey:@"viewHeight"];
     
-    if ([Definitions isX:mouseX y:mouseY insideRect:_leftScrollArrowRect]) {
-        [self setValue:@"leftScrollArrow" forKey:@"buttonDown"];
-        [self setValue:@"leftScrollArrow" forKey:@"buttonHover"];
+    if ([Definitions isX:mouseX y:mouseY insideRect:_leftArrowRect]) {
+        [self setValue:@"leftArrow" forKey:@"buttonDown"];
+        [self setValue:@"leftArrow" forKey:@"buttonHover"];
         _visibleX += 10;
         return;
     }
-    if ([Definitions isX:mouseX y:mouseY insideRect:_rightScrollArrowRect]) {
-        [self setValue:@"rightScrollArrow" forKey:@"buttonDown"];
-        [self setValue:@"rightScrollArrow" forKey:@"buttonHover"];
+    if ([Definitions isX:mouseX y:mouseY insideRect:_rightArrowRect]) {
+        [self setValue:@"rightArrow" forKey:@"buttonDown"];
+        [self setValue:@"rightArrow" forKey:@"buttonHover"];
         _visibleX -= 10;
         return;
     }
-    if ([Definitions isX:mouseX y:mouseY insideRect:_upScrollArrowRect]) {
-        [self setValue:@"upScrollArrow" forKey:@"buttonDown"];
-        [self setValue:@"upScrollArrow" forKey:@"buttonHover"];
+    if ([Definitions isX:mouseX y:mouseY insideRect:_upArrowRect]) {
+        [self setValue:@"upArrow" forKey:@"buttonDown"];
+        [self setValue:@"upArrow" forKey:@"buttonHover"];
         _visibleY += 10;
         return;
     }
-    if ([Definitions isX:mouseX y:mouseY insideRect:_downScrollArrowRect]) {
-        [self setValue:@"downScrollArrow" forKey:@"buttonDown"];
-        [self setValue:@"downScrollArrow" forKey:@"buttonHover"];
+    if ([Definitions isX:mouseX y:mouseY insideRect:_downArrowRect]) {
+        [self setValue:@"downArrow" forKey:@"buttonDown"];
+        [self setValue:@"downArrow" forKey:@"buttonHover"];
         _visibleY -= 10;
         return;
     }
@@ -1378,8 +1366,8 @@ static char *verticalScrollBarBottom =
         return;
     }
 
-    if (mouseY > _leftScrollArrowRect.y) {
-        if (mouseY < _leftScrollArrowRect.y+_leftScrollArrowRect.h-1) {
+    if (mouseY > _leftArrowRect.y) {
+        if (mouseY < _leftArrowRect.y+_leftArrowRect.h-1) {
             if (mouseX < _horizontalKnobX) {
             } else if (mouseX < _horizontalKnobX+_horizontalKnobVal) {
                 _visibleX -= _visibleW;
@@ -1401,8 +1389,8 @@ static char *verticalScrollBarBottom =
         }
     }
 
-    if (mouseX > _upScrollArrowRect.x) {
-        if (mouseX < _upScrollArrowRect.x+_upScrollArrowRect.w-1) {
+    if (mouseX > _upArrowRect.x) {
+        if (mouseX < _upArrowRect.x+_upArrowRect.w-1) {
             if (mouseY < _verticalKnobY) {
             } else if (mouseY < _verticalKnobY+_verticalKnobVal) {
                 _visibleY -= _visibleH;
@@ -1427,8 +1415,8 @@ static char *verticalScrollBarBottom =
 
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
-        int x = _visibleX + [elt intValueForKey:@"x"];
-        int y = _visibleY + [elt intValueForKey:@"y"];
+        int x = -_visibleX + [elt intValueForKey:@"x"] + 16;
+        int y = -_visibleY + [elt intValueForKey:@"y"] + 20;
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
         if ((mouseX >= x) && (mouseX < x+w) && (mouseY >= y) && (mouseY < y+h)) {
@@ -1476,26 +1464,26 @@ static char *verticalScrollBarBottom =
     }
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
-    if ([_buttonDown isEqual:@"leftScrollArrow"]) {
-        if ([Definitions isX:mouseX y:mouseY insideRect:_leftScrollArrowRect]) {
+    if ([_buttonDown isEqual:@"leftArrow"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_leftArrowRect]) {
             [self setValue:_buttonDown forKey:@"buttonHover"];
         } else {
             [self setValue:nil forKey:@"buttonHover"];
         }
-    } else if ([_buttonDown isEqual:@"rightScrollArrow"]) {
-        if ([Definitions isX:mouseX y:mouseY insideRect:_rightScrollArrowRect]) {
+    } else if ([_buttonDown isEqual:@"rightArrow"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_rightArrowRect]) {
             [self setValue:_buttonDown forKey:@"buttonHover"];
         } else {
             [self setValue:nil forKey:@"buttonHover"];
         }
-    } else if ([_buttonDown isEqual:@"upScrollArrow"]) {
-        if ([Definitions isX:mouseX y:mouseY insideRect:_upScrollArrowRect]) {
+    } else if ([_buttonDown isEqual:@"upArrow"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_upArrowRect]) {
             [self setValue:_buttonDown forKey:@"buttonHover"];
         } else {
             [self setValue:nil forKey:@"buttonHover"];
         }
-    } else if ([_buttonDown isEqual:@"downScrollArrow"]) {
-        if ([Definitions isX:mouseX y:mouseY insideRect:_downScrollArrowRect]) {
+    } else if ([_buttonDown isEqual:@"downArrow"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_downArrowRect]) {
             [self setValue:_buttonDown forKey:@"buttonHover"];
         } else {
             [self setValue:nil forKey:@"buttonHover"];
@@ -1581,8 +1569,8 @@ static char *verticalScrollBarBottom =
         }
         _visibleY = _contentYMin + contentHeight*pct;
     } else {
-        [_buttonDown setValue:nsfmt(@"%d", mouseX - _buttonDownOffsetX) forKey:@"x"];
-        [_buttonDown setValue:nsfmt(@"%d", mouseY - _buttonDownOffsetY) forKey:@"y"];
+        [_buttonDown setValue:nsfmt(@"%d", mouseX - _buttonDownOffsetX + _visibleX - 16) forKey:@"x"];
+        [_buttonDown setValue:nsfmt(@"%d", mouseY - _buttonDownOffsetY + _visibleY - 20) forKey:@"y"];
         [self setValue:nil forKey:@"buttonDownTimestamp"];
     }
 }
