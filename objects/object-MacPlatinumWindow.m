@@ -772,7 +772,6 @@ static char *resizeSelectionVerticalPixels =
     int _rightBorder;
     int _topBorder;
     int _bottomBorder;
-    int _hasShadow;
     id _x11HasChildMask;
 
     char _buttonDown;
@@ -837,6 +836,22 @@ static char *resizeSelectionVerticalPixels =
     }
     return self;
 }
+- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
+{
+    static int points[9];
+    points[0] = 9; // length of array including this number
+
+    points[1] = 0; // lower left corner
+    points[2] = h-1;
+    points[3] = 1;
+    points[4] = h-1;
+
+    points[5] = w-1; // upper right corner
+    points[6] = 0;
+    points[7] = w-1;
+    points[8] = 1;
+    return points;
+}
 - (void)setPixelScaling:(int)scaling
 {
     _pixelScaling = scaling;
@@ -845,7 +860,6 @@ static char *resizeSelectionVerticalPixels =
     _rightBorder = (6+1)*_pixelScaling;
     _topBorder = 22*_pixelScaling;
     _bottomBorder = (6+1)*_pixelScaling;
-    _hasShadow = 2;
     [self setValue:nsfmt(@"bottomRightCorner w:%d h:%d", 15*scaling, 15*scaling) forKey:@"x11HasChildMask"];
 
     id obj;
