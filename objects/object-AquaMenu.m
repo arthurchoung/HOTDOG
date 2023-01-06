@@ -34,7 +34,6 @@
 
 @interface AquaMenu : IvarObject
 {
-    int _hasShadow;
     int _closingIteration;
     int _mouseX;
     int _mouseY;
