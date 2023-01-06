@@ -384,7 +384,6 @@ static char *closeButtonDownPixels =
     int _rightBorder;
     int _topBorder;
     int _bottomBorder;
-    int _hasShadow;
     id _x11HasChildMask;
 
     char _buttonDown;
@@ -441,6 +440,18 @@ static char *closeButtonDownPixels =
     }
     return self;
 }
+- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
+{
+    static int points[5];
+    points[0] = 5; // length of array including this number
+
+    points[1] = 0; // lower left corner
+    points[2] = h-1;
+
+    points[3] = w-1; // upper right corner
+    points[4] = 0;
+    return points;
+}
 - (void)setPixelScaling:(int)scaling
 {
     _pixelScaling = scaling;
@@ -449,7 +460,6 @@ static char *closeButtonDownPixels =
     _rightBorder = 1*scaling+1;
     _topBorder = 19*scaling;
     _bottomBorder = 1*scaling+1;
-    _hasShadow = 1;
     [self setValue:nsfmt(@"bottomRightCorner w:%d h:%d", 15*scaling, 15*scaling) forKey:@"x11HasChildMask"];
 
     id obj;
