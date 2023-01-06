@@ -344,7 +344,6 @@ static char *resizeButtonPixels =
     int _rightBorder;
     int _topBorder;
     int _bottomBorder;
-    int _hasShadow;
     id _x11HasChildMask;
     char _buttonDown;
     char _buttonHover;
