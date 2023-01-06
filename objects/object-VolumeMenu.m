@@ -130,7 +130,6 @@
 {
     id _alsaCardName;
     id _alsaMixerName;
-    int _hasShadow;
     id _alsaStatus;
     id _alsaVolume;
     double _volume;
@@ -144,10 +143,21 @@
 }
 @end
 @implementation VolumeMenu
+- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
+{
+    static int points[5];
+    points[0] = 5; // length of array including this number
+
+    points[1] = 0; // lower left corner
+    points[2] = h-1;
+
+    points[3] = w-1; // upper right corner
+    points[4] = 0;
+    return points;
+}
 
 - (void)setup
 {
-    _hasShadow = 1;
     id cmd = nsarr();
     [cmd addObject:@"hotdog-printALSAStatus"];
     if (_alsaCardName) {
