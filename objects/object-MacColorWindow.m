@@ -274,6 +274,23 @@ static char *activeTitleBarRightPixels =
 "@b\n"
 "bb\n"
 ;
+static char *resizeButtonPalette =
+"b #000000\n"
+". #333366\n"
+"X #555555\n"
+"o #606060\n"
+"O #777777\n"
+"+ #666699\n"
+"@ #a0a0a0\n"
+"# #a4a4a4\n"
+"$ #aaaaaa\n"
+"% #bbbbbb\n"
+"& #a3a3d7\n"
+"* #dddddd\n"
+"= #ccccff\n"
+"- #eeeeee\n"
+"; #ffffff\n"
+;
 static char *resizeButtonPixels =
 "bbbbbbbbbbbbbbbb\n"
 "b--------------b\n"
@@ -358,7 +375,6 @@ static char *resizeButtonPixels =
     int _rightBorder;
     int _topBorder;
     int _bottomBorder;
-    int _hasShadow;
     id _x11HasChildMask;
 
     char _buttonDown;
@@ -404,6 +420,18 @@ static char *resizeButtonPixels =
     }
     return self;
 }
+- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
+{
+    static int points[5];
+    points[0] = 5; // length of array including this number
+
+    points[1] = 0; // lower left corner
+    points[2] = h-1;
+
+    points[3] = w-1; // upper right corner
+    points[4] = 0;
+    return points;
+}
 
 - (void)setPixelScaling:(int)scaling
 {
@@ -413,7 +441,6 @@ static char *resizeButtonPixels =
     _rightBorder = 1*_pixelScaling+1;//16+1;
     _topBorder = 19*_pixelScaling;
     _bottomBorder = 1*_pixelScaling+1;//16+1;
-    _hasShadow = 1;
     [self setValue:nsfmt(@"bottomRightCorner w:%d h:%d", 15*scaling, 15*scaling) forKey:@"x11HasChildMask"];
 
     id obj;
@@ -492,7 +519,7 @@ static char *resizeButtonPixels =
     [bitmap fillRect:r];
 
     if (hasFocus) {
-        [bitmap drawCString:[_scaledResizeButtonPixels UTF8String] palette:[Definitions cStringForActiveScrollBarPalette] x:r.x+r.w-16*_pixelScaling y:r.y+r.h-16*_pixelScaling];
+        [bitmap drawCString:[_scaledResizeButtonPixels UTF8String] palette:resizeButtonPalette x:r.x+r.w-16*_pixelScaling y:r.y+r.h-16*_pixelScaling];
     } else {
         [bitmap drawCString:[_scaledResizeButtonPixels UTF8String] palette:"b #000000\n" x:r.x+r.w-16*_pixelScaling y:r.y+r.h-16*_pixelScaling];
     }
