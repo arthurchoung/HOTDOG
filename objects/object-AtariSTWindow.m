@@ -420,6 +420,89 @@ static char *maximizeButtonPixels =
 ".................\n"
 ;
 
+@implementation Definitions(jfkelwmfklsmdklfmklsdfmksd)
++ (char *)cStringForAtariSTActiveTitleBarLeftPixels
+{
+    return activeTitleBarLeftPixels;
+}
++ (char *)cStringForAtariSTActiveTitleBarMiddlePixels
+{
+    return activeTitleBarMiddlePixels;
+}
++ (char *)cStringForAtariSTActiveTitleBarRightPixels
+{
+    return activeTitleBarRightPixels;
+}
++ (char *)cStringForAtariSTCloseButtonDownPixels
+{
+    return closeButtonPixels;
+}
++ (char *)cStringForAtariSTMaximizeButtonDownPixels
+{
+    return maximizeButtonPixels;
+}
++ (char *)cStringForAtariSTInactiveTitleBarLeftPixels
+{
+    return inactiveTitleBarLeftPixels;
+}
++ (char *)cStringForAtariSTInactiveTitleBarMiddlePixels
+{
+    return inactiveTitleBarMiddlePixels;
+}
++ (char *)cStringForAtariSTInactiveTitleBarRightPixels
+{
+    return inactiveTitleBarRightPixels;
+}
++ (char *)cStringForAtariSTBottomBorderLeftPixels
+{
+    return bottomBorderLeftPixels;
+}
++ (char *)cStringForAtariSTBottomBorderMiddlePixels
+{
+    return bottomBorderMiddlePixels;
+}
++ (char *)cStringForAtariSTBottomBorderRightPixels
+{
+    return bottomBorderRightPixels;
+}
++ (char *)cStringForAtariSTInactiveBottomBorderLeftPixels
+{
+    return inactiveBottomBorderLeftPixels;
+}
++ (char *)cStringForAtariSTInactiveBottomBorderMiddlePixels
+{
+    return inactiveBottomBorderMiddlePixels;
+}
++ (char *)cStringForAtariSTInactiveBottomBorderRightPixels
+{
+    return inactiveBottomBorderRightPixels;
+}
++ (char *)cStringForAtariSTRightBorderTopPixels
+{
+    return rightBorderTopPixels;
+}
++ (char *)cStringForAtariSTRightBorderMiddlePixels
+{
+    return rightBorderMiddlePixels;
+}
++ (char *)cStringForAtariSTRightBorderBottomPixels
+{
+    return rightBorderBottomPixels;
+}
++ (char *)cStringForAtariSTInactiveRightBorderTopPixels
+{
+    return inactiveRightBorderMiddlePixels;
+}
++ (char *)cStringForAtariSTInactiveRightBorderMiddlePixels
+{
+    return inactiveRightBorderMiddlePixels;
+}
++ (char *)cStringForAtariSTInactiveRightBorderBottomPixels
+{
+    return inactiveRightBorderMiddlePixels;
+}
+@end
+
 
 
 @interface AtariSTWindow : IvarObject
