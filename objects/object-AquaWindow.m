@@ -360,7 +360,6 @@ static unsigned char yellow_down_rgb[] = {
     int _rightBorder;
     int _topBorder;
     int _bottomBorder;
-    int _hasShadow;
     id _x11HasChildMask;
     char _buttonDown;
     char _buttonHover;
@@ -398,6 +397,41 @@ static unsigned char yellow_down_rgb[] = {
     }
     return self;
 }
+- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
+{
+    static int points[49];
+    points[0] = 49; // length of array including this number
+
+    // Upper left corner
+    points[ 1] = 0; points[ 2] = 0;
+    points[ 3] = 1; points[ 4] = 0;
+    points[ 5] = 2; points[ 6] = 0;
+    points[ 7] = 3; points[ 8] = 0;
+    points[ 9] = 4; points[10] = 0;
+    points[11] = 0; points[12] = 1;
+    points[13] = 1; points[14] = 1;
+    points[15] = 2; points[16] = 1;
+    points[17] = 0; points[18] = 2;
+    points[19] = 1; points[20] = 2;
+    points[21] = 0; points[22] = 3;
+    points[23] = 0; points[24] = 4;
+    // Upper right corner
+    points[25] = w-1; points[26] = 0;
+    points[27] = w-2; points[28] = 0;
+    points[29] = w-3; points[30] = 0;
+    points[31] = w-4; points[32] = 0;
+    points[33] = w-5; points[34] = 0;
+    points[35] = w-1; points[36] = 1;
+    points[37] = w-2; points[38] = 1;
+    points[39] = w-3; points[40] = 1;
+    points[41] = w-1; points[42] = 2;
+    points[43] = w-2; points[44] = 2;
+    points[45] = w-1; points[46] = 3;
+    points[47] = w-1; points[48] = 4;
+
+    return points;
+}
+
 - (void)setPixelScaling:(int)scaling
 {
     _pixelScaling = scaling;
@@ -406,7 +440,6 @@ static unsigned char yellow_down_rgb[] = {
     _leftBorder = 2*_pixelScaling;
     _rightBorder = 2*_pixelScaling;
     _bottomBorder = 2*_pixelScaling;
-    _hasShadow = -2;
 
     id obj;
     obj = [Definitions scaleFont:scaling
