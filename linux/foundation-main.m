@@ -488,6 +488,50 @@ NSLog(@"lines %@", lines);
             if (object) {
                 [Definitions runWindowManagerForObjectWithNoFrame:object];
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "macclassicdir")) {
+            if (argc > 2) {
+                id filePath = nscstr(argv[2]);
+                if ([filePath isDirectory]) {
+                    chdir(argv[2]);
+                }
+            }
+            id object = [Definitions MacClassicDir];
+            if (object) {
+                [Definitions runWindowManagerForObjectWithNoFrame:object];
+            }
+        } else if ((argc > 1) && !strcmp(argv[1], "maccolordir")) {
+            if (argc > 2) {
+                id filePath = nscstr(argv[2]);
+                if ([filePath isDirectory]) {
+                    chdir(argv[2]);
+                }
+            }
+            id object = [Definitions MacColorDir];
+            if (object) {
+                [Definitions runWindowManagerForObjectWithNoFrame:object];
+            }
+        } else if ((argc > 1) && !strcmp(argv[1], "macplatinumdir")) {
+            if (argc > 2) {
+                id filePath = nscstr(argv[2]);
+                if ([filePath isDirectory]) {
+                    chdir(argv[2]);
+                }
+            }
+            id object = [Definitions MacPlatinumDir];
+            if (object) {
+                [Definitions runWindowManagerForObjectWithNoFrame:object];
+            }
+        } else if ((argc > 1) && !strcmp(argv[1], "ataristdir")) {
+            if (argc > 2) {
+                id filePath = nscstr(argv[2]);
+                if ([filePath isDirectory]) {
+                    chdir(argv[2]);
+                }
+            }
+            id object = [Definitions AtariSTDir];
+            if (object) {
+                [Definitions runWindowManagerForObjectWithNoFrame:object];
+            }
         } else if ((argc > 1) && !strcmp(argv[1], "dir")) {
             if (argc > 2) {
                 id filePath = nscstr(argv[2]);
