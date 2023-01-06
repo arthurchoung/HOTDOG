@@ -21,7 +21,6 @@ hotKey,displayName,messageForClick
 ,MacClassicDir,"['hotdog' 'macclassicdir']|runCommandInBackground"
 ,MacClassicDrives,"['hotdog' 'show' 'MacClassicDrives']|runCommandInBackground"
 ,MacClassicTrash,"['hotdog' 'show' 'MacClassicTrash']|runCommandInBackground"
-,MacColorAudioDevices,"['hotdog' 'show' 'MacColorAudioDevices']|runCommandInBackground"
 ,MacColorDir,"['hotdog' 'maccolordir']|runCommandInBackground"
 ,MacColorDrives,"['hotdog' 'show' 'MacColorDrives']|runCommandInBackground"
 ,MacColorTrash,"['hotdog' 'show' 'MacColorTrash']|runCommandInBackground"
