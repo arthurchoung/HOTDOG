@@ -394,7 +394,6 @@ static char *revertButtonDownPixels =
     int _rightBorder;
     int _topBorder;
     int _bottomBorder;
-    int _hasShadow;
 
     char _buttonDown;
     char _buttonHover;
@@ -469,7 +468,6 @@ static char *revertButtonDownPixels =
     _rightBorder = 4*scaling;
     _topBorder = 23*scaling;
     _bottomBorder = 4*scaling;
-    _hasShadow = 0;
 
     id obj;
     obj = [Definitions scaleFont:scaling
