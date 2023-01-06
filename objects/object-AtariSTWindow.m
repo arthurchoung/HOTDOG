@@ -511,7 +511,6 @@ static char *maximizeButtonPixels =
     int _rightBorder;
     int _topBorder;
     int _bottomBorder;
-    int _hasShadow;
 
     char _buttonDown;
     char _buttonHover;
@@ -569,6 +568,18 @@ static char *maximizeButtonPixels =
     }
     return self;
 }
+- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
+{
+    static int points[5];
+    points[0] = 5; // length of array including this number
+
+    points[1] = 0; // lower left corner
+    points[2] = h-1;
+
+    points[3] = w-1; // upper right corner
+    points[4] = 0;
+    return points;
+}
 
 - (void)setPixelScaling:(int)scaling
 {
@@ -578,7 +589,6 @@ static char *maximizeButtonPixels =
     _rightBorder = 21*_pixelScaling;
     _topBorder = 19*_pixelScaling;
     _bottomBorder = 21*_pixelScaling;
-    _hasShadow = 1;
 
     id obj;
     obj = [Definitions scaleFont:scaling
@@ -785,68 +795,24 @@ static char *maximizeButtonPixels =
         }
         if ((_buttonDown == 't') || (_buttonDown == 'r')) {
 //FIXME pixelScaling
-            char *black = "b #000000\n";
-            char *white = "b #ffffff\n";
-            for (int i=4; i<r.w; i+=2) {
-                int j = 0;
-                int x = r.x+i;
-                int y = r.y+j;
-                if ((i/2+j/2) % 2 == 0) {
-                    [bitmap drawCString:"bb\nbb\n" palette:white x:x y:y];
-                }
-            }
-            for (int i=0; i<r.w-6; i+=2) {
-                int j = r.h-6;
-                int x = r.x+i;
-                int y = r.y+j;
-                if ((i/2+j/2) % 2 == 0) {
-                    [bitmap drawCString:"bb\nbb\n" palette:white x:x y:y];
-                }
-            }
-            for (int j=4; j<r.h; j+=2) {
-                int i = 0;
-                int x = r.x+i;
-                int y = r.y+j;
-                if ((i/2+j/2) % 2 == 0) {
-                    [bitmap drawCString:"bb\nbb\n" palette:white x:x y:y];
-                }
-            }
-            for (int j=0; j<r.h-6; j+=2) {
-                int i = r.w-6;
-                int x = r.x+i;
-                int y = r.y+j;
-                if ((i/2+j/2) % 2 == 0) {
-                    [bitmap drawCString:"bb\nbb\n" palette:white x:x y:y];
-                }
-            }
-        }
-        if (_buttonDown == 'r') {
+            char *palette = "b #000000\nw #ffffff\n";
+            char *h = [Definitions cStringForMacWindowSelectionHorizontal];
+            char *v = [Definitions cStringForMacWindowSelectionVertical];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y w:r.w-2 palette:palette];
+            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x y:r.y+1 h:r.h-2-2];
+            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-1-2 y:r.y+1 h:r.h-2-2];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+r.h-2-1 w:r.w-2 palette:palette];
+            if (_buttonDown == 'r') {
 //FIXME pixelScaling
-            char *black = "b #000000\n";
-            char *white = "b #ffffff\n";
-            for (int i=4; i<r.w-28; i+=2) {
-                int j = 0;
-                int x = r.x+i;
-                int y = r.y+j;
-                if ((i/2+j/2) % 2 == 0) {
-                    [bitmap drawCString:"bb\nbb\n" palette:white x:x y:y+20];
-                }
-            }
-            for (int i=0; i<r.w-28; i+=2) {
-                int j = r.h-6;
-                int x = r.x+i;
-                int y = r.y+j;
-                if ((i/2+j/2) % 2 == 0) {
-                    [bitmap drawCString:"bb\nbb\n" palette:white x:x y:y-20];
-                }
-            }
-            for (int j=22; j<r.h-28; j+=2) {
-                int i = r.w-6;
-                int x = r.x+i;
-                int y = r.y+j;
-                if ((i/2+j/2) % 2 == 0) {
-                    [bitmap drawCString:"bb\nbb\n" palette:white x:x-22 y:y];
-                }
+// this doesn't show up because the child window is in the way
+                char *palette = "b #000000\nw #ffffff\n";
+                char *h = [Definitions cStringForMacWindowSelectionHorizontal];
+                char *v = [Definitions cStringForMacWindowSelectionVertical];
+
+                [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x+1 y:r.y+19+18 w:r.w-1-21 palette:palette];
+                [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+1 y:r.y+19+18+1 h:r.h-19-18-21-2];
+                [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-21-1 y:r.y+19+18+1 h:r.h-19-18-21-2];
+                [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x+1 y:r.y+r.h-21-1 w:r.w-1-21 palette:palette];
             }
         }
     }
