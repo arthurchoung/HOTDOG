@@ -103,6 +103,11 @@ if ($path =~ m/\.(nes|smc|sfc|md|smd|sms|gb|bin|a26)$/i) {
     exit 0;
 }
 
+if ($path =~ m/\.webp$/i) {
+    system('chromium', $path);
+    exit 0;
+}
+
 if (open FH, '| hotdog alert') {
     print FH "Unknown file type for '$path'\n";
     close FH;
