@@ -7,7 +7,7 @@
     BOOL first = YES;
     if (first) {
         for (int i=0; i<256; i++) {
-            xspacings[i] = 2;
+            xspacings[i] = 1;
         }
         first = NO;
     }
