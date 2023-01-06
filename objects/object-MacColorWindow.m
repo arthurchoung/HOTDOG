@@ -78,6 +78,12 @@ static char *titleBarPalette =
 "% #ffffff\n"
 "- #9292b6\n"
 "g #555555\n"
+"& #dddddd\n"
+"* #aaaaaa\n"
+"z #666699\n"
+"y #bbbbbb\n"
+"x #e7e7e7\n"
+"w #969696\n"
 ;
 static char *titleBarButtonDownPixels =
 "bbbbbbbbbbbbb\n"
@@ -288,97 +294,6 @@ static char *resizeButtonPixels =
 ;
 
 
-static char *scrollBarLeftArrowBlackAndWhitePixels =
-"bbbbbbbbbbbbbbbb\n"
-"b......b.......b\n"
-"b.....bb.......b\n"
-"b....b.b.......b\n"
-"b...b..bbbbb...b\n"
-"b..b.......b...b\n"
-"b.b........b...b\n"
-"bb.........b...b\n"
-"b.b........b...b\n"
-"b..b.......b...b\n"
-"b...b..bbbbb...b\n"
-"b....b.b.......b\n"
-"b.....bb.......b\n"
-"b......b.......b\n"
-"b..............b\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-static char *scrollBarRightArrowBlackAndWhitePixels =
-"bbbbbbbbbbbbbbbb\n"
-"b.......b......b\n"
-"b.......bb.....b\n"
-"b.......b.b....b\n"
-"b...bbbbb..b...b\n"
-"b...b.......b..b\n"
-"b...b........b.b\n"
-"b...b.........bb\n"
-"b...b........b.b\n"
-"b...b.......b..b\n"
-"b...bbbbb..b...b\n"
-"b.......b.b....b\n"
-"b.......bb.....b\n"
-"b.......b......b\n"
-"b..............b\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-static char *scrollBarMiddleBlackAndWhitePixels =
-"bbbb\n"
-"...b\n"
-".b..\n"
-"...b\n"
-".b..\n"
-"...b\n"
-".b..\n"
-"...b\n"
-".b..\n"
-"...b\n"
-".b..\n"
-"...b\n"
-".b..\n"
-"...b\n"
-".b..\n"
-"bbbb\n"
-;
-static char *scrollBarKnobBlackAndWhitePixels =
-"                \n"
-"bbbbbbbbbbbbbbbb\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"b..............b\n"
-"bbbbbbbbbbbbbbbb\n"
-"                \n"
-;
-
-static char *resizePixels =
-"bbbbbbbbbbbbbbbb\n"
-"b..............b\n"
-"b..............b\n"
-"b..bbbbbbb.....b\n"
-"b..b.....b.....b\n"
-"b..b.....bbbbb.b\n"
-"b..b.....b...b.b\n"
-"b..b.....b...b.b\n"
-"b..b.....b...b.b\n"
-"b..bbbbbbb...b.b\n"
-"b....b.......b.b\n"
-"b....b.......b.b\n"
-"b....b.......b.b\n"
-"b....bbbbbbbbb.b\n"
-"b..............b\n"
-"bbbbbbbbbbbbbbbb\n"
-;
 
 @implementation Definitions(fjkdeifjdclsjfiowejfklsdjfklsdkljf)
 + (char *)cStringForMacWindowSelectionHorizontal
@@ -393,6 +308,46 @@ static char *resizePixels =
 "b\n"
 "w\n"
 ;
+}
++ (char *)cStringForMacColorPalette
+{
+    return titleBarPalette;
+}
++ (char *)cStringForMacColorActiveTitleBarLeftPixels
+{
+    return activeTitleBarLeftPixels;
+}
++ (char *)cStringForMacColorActiveTitleBarMiddlePixels
+{
+    return activeTitleBarMiddlePixels;
+}
++ (char *)cStringForMacColorActiveTitleBarRightPixels
+{
+    return activeTitleBarRightPixels;
+}
++ (char *)cStringForMacColorInactiveTitleBarLeftPixels
+{
+    return inactiveTitleBarLeftPixels;
+}
++ (char *)cStringForMacColorInactiveTitleBarMiddlePixels
+{
+    return inactiveTitleBarMiddlePixels;
+}
++ (char *)cStringForMacColorInactiveTitleBarRightPixels
+{
+    return inactiveTitleBarRightPixels;
+}
++ (char *)cStringForMacColorCloseButtonPixels
+{
+    return titleBarCloseButtonPixels;
+}
++ (char *)cStringForMacColorMaximizeButtonPixels
+{
+    return titleBarMaximizeButtonPixels;
+}
++ (char *)cStringForMacColorButtonDownPixels
+{
+    return titleBarButtonDownPixels;
 }
 @end
 
