@@ -51,7 +51,6 @@
 
 @interface Menu : IvarObject
 {
-    int _hasShadow;
     int _closingIteration;
     int _mouseX;
     int _mouseY;
@@ -90,10 +89,20 @@ NSLog(@"dealloc Menu %@", self);
                         :[Definitions arrayOfHeightsForChicagoFont]
                         :[Definitions arrayOfXSpacingsForChicagoFont]];
         [self setValue:obj forKey:@"scaledFont"];
-
-        _hasShadow = 1;
     }
     return self;
+}
+- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
+{
+    static int points[5];
+    points[0] = 5; // length of array including this number
+
+    points[1] = 0; // lower left corner
+    points[2] = h-1;
+
+    points[3] = w-1; // upper right corner
+    points[4] = 0;
+    return points;
 }
 - (void)useFixedWidthFont
 {
