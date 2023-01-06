@@ -13,7 +13,6 @@ hotKey,displayName,messageForClick
 ,AmigaDir,"['hotdog' 'amigadir']|runCommandInBackground"
 ,AmigaDrives,"['hotdog' 'show' 'homeDir|changeDirectory;AmigaDrives']|runCommandInBackground"
 ,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
-,AmigaNetworkInterfaces,"['hotdog' 'show' 'AmigaNetworkInterfaces']|runCommandInBackground"
 ,AmigaSay,"['hotdog' 'show' 'AmigaSay']|runCommandInBackground"
 ,AtariSTDir,"['hotdog' 'ataristdir']|runCommandInBackground"
 ,AtariSTDrives,"['hotdog' 'show' 'homeDir|changeDirectory;AtariSTDrives']|runCommandInBackground"
