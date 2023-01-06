@@ -27,7 +27,6 @@
 
 @interface AmigaMenu : IvarObject
 {
-    int _hasShadow;
     int _mouseX;
     int _mouseY;
     id _array;
@@ -46,8 +45,6 @@
 {
     self = [super init];
     if (self) {
-        _hasShadow = 0;
-
         int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
         if (scaling < 1) {
             scaling = 1;
