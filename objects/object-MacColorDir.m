@@ -27,6 +27,539 @@
 
 #include <sys/time.h>
 
+static char *inactiveTitleBarRightPixels =
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+;
+static char *activeTitleBarRightPixels =
+"bbb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"@bb\n"
+"bbb\n"
+;
+
+static char *inactiveInfoBarLeftPixels = 
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+;
+static char *inactiveInfoBarRightPixels = 
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+"gb\n"
+;
+static char *infoBarLeftPixels = 
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+"b\n"
+;
+static char *infoBarMiddlePixels = 
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"b\n"
+"%\n"
+"b\n"
+;
+static char *infoBarRightPixels = 
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+"bb\n"
+;
+
+static char *inactiveResizeButtonPixels =
+"bbbbbbbbbbbbbbbgb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"b%%%%%%%%%%%%%%gb\n"
+"ggggggggggggggggb\n"
+"bbbbbbbbbbbbbbbbb\n"
+;
+static char *resizeButtonPixels =
+"bbbbbbbbbbbbbbbbb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"b$$......$$$$$$bb\n"
+"b$$.#####....$$bb\n"
+"b$$.#yyy.####$$bb\n"
+"b$$.#yyy.+++.$$bb\n"
+"b$$.#yyy.+++.$$bb\n"
+"b$$.#....+++.$$bb\n"
+"b$$$.#++++++.$$bb\n"
+"b$$$.#++++++.$$bb\n"
+"b$$$.#++++++.$$bb\n"
+"b$$$.#.......$$bb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"bbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbb\n"
+;
+
+static char *verticalKnobPixels =
+"gggggggggggggg\n"
+"#############.\n"
+"#************.\n"
+"#***@@@@@@***.\n"
+"#***######***.\n"
+"#***zzzzzz***.\n"
+"#***######***.\n"
+"#***zzzzzz***.\n"
+"#***######***.\n"
+"#***zzzzzz***.\n"
+"#***######***.\n"
+"#***zzzzzz***.\n"
+"#***######***.\n"
+"#************.\n"
+"#************.\n"
+"..............\n"
+;
+
+static char *horizontalKnobPixels =
+"g##############.\n"
+"g#*************.\n"
+"g#*************.\n"
+"g#*************.\n"
+"g#*@#z#z#z#z#**.\n"
+"g#*@#z#z#z#z#**.\n"
+"g#*@#z#z#z#z#**.\n"
+"g#*@#z#z#z#z#**.\n"
+"g#*@#z#z#z#z#**.\n"
+"g#*@#z#z#z#z#**.\n"
+"g#*************.\n"
+"g#*************.\n"
+"g#*************.\n"
+"g...............\n"
+;
+
+static char *inactiveBottomLeftPixels =
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+"g\n"
+".\n"
+;
+static char *inactiveBottomMiddlePixels =
+"b\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"%\n"
+"g\n"
+"b\n"
+;
+static char *leftArrowPixels =
+"bbbbbbbbbbbbbbbb\n"
+"b%%%%%%%%%%%%%ob\n"
+"b%&&&&&&.&&&&&ob\n"
+"b%&&&&&..&&&&&ob\n"
+"b%&&&&.@.&&&&&ob\n"
+"b%&&&.@@.....&ob\n"
+"b%&&.@@@@@@@.&ob\n"
+"b%&.@@@@@@@@.&ob\n"
+"b%&&.@@@@@@@.&ob\n"
+"b%&&&.@@.....&ob\n"
+"b%&&&&.@.&&&&&ob\n"
+"b%&&&&&..&&&&&ob\n"
+"b%&&&&&&.&&&&&ob\n"
+"b%&&&&&&&&&&&&ob\n"
+"boooooooooooooob\n"
+"bbbbbbbbbbbbbbbb\n"
+".bbbbbbbbbbbbbbb\n"
+;
+static char *leftArrowDownPixels =
+"bbbbbbbbbbbbbbbb\n"
+"b%%%%%%%%%%%%%wb\n"
+"b%xxxxxxbxxxxxwb\n"
+"b%xxxxxbbxxxxxwb\n"
+"b%xxxxbbbxxxxxwb\n"
+"b%xxxbbbbbbbbxwb\n"
+"b%xxbbbbbbbbbxwb\n"
+"b%xbbbbbbbbbbxwb\n"
+"b%xxbbbbbbbbbxwb\n"
+"b%xxxbbbbbbbbxwb\n"
+"b%xxxxbbbxxxxxwb\n"
+"b%xxxxxbbxxxxxwb\n"
+"b%xxxxxxbxxxxxwb\n"
+"b%xxxxxxxxxxxxwb\n"
+"bwwwwwwwwwwwwwwb\n"
+"bbbbbbbbbbbbbbbb\n"
+".bbbbbbbbbbbbbbb\n"
+;
+static char *rightArrowPixels =
+"bbbbbbbbbbbbbbb\n"
+"b%%%%%%%%%%%%%o\n"
+"b%&&&&&.&&&&&&o\n"
+"b%&&&&&..&&&&&o\n"
+"b%&&&&&.@.&&&&o\n"
+"b%&.....@@.&&&o\n"
+"b%&.@@@@@@@.&&o\n"
+"b%&.@@@@@@@@.&o\n"
+"b%&.@@@@@@@.&&o\n"
+"b%&.....@@.&&&o\n"
+"b%&&&&&.@.&&&&o\n"
+"b%&&&&&..&&&&&o\n"
+"b%&&&&&.&&&&&&o\n"
+"b%&&&&&&&&&&&&o\n"
+"boooooooooooooo\n"
+"bbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbb\n"
+;
+static char *rightArrowDownPixels =
+"bbbbbbbbbbbbbbb\n"
+"b%%%%%%%%%%%%%w\n"
+"b%xxxxxbxxxxxxw\n"
+"b%xxxxxbbxxxxxw\n"
+"b%xxxxxbbbxxxxw\n"
+"b%xbbbbbbbbxxxw\n"
+"b%xbbbbbbbbbxxw\n"
+"b%xbbbbbbbbbbxw\n"
+"b%xbbbbbbbbbxxw\n"
+"b%xbbbbbbbbxxxw\n"
+"b%xxxxxbbbxxxxw\n"
+"b%xxxxxbbxxxxxw\n"
+"b%xxxxxbxxxxxxw\n"
+"b%xxxxxxxxxxxxw\n"
+"bwwwwwwwwwwwwww\n"
+"bbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbb\n"
+;
+static char *upArrowPixels =
+"b%%%%%%%%%%%%%obb\n"
+"b%&&&&&&&&&&&&obb\n"
+"b%&&&&&.&&&&&&obb\n"
+"b%&&&&.@.&&&&&obb\n"
+"b%&&&.@@@.&&&&obb\n"
+"b%&&.@@@@@.&&&obb\n"
+"b%&.@@@@@@@.&&obb\n"
+"b%....@@@....&obb\n"
+"b%&&&.@@@.&&&&obb\n"
+"b%&&&.@@@.&&&&obb\n"
+"b%&&&.@@@.&&&&obb\n"
+"b%&&&.....&&&&obb\n"
+"b%&&&&&&&&&&&&obb\n"
+"boooooooooooooobb\n"
+"bbbbbbbbbbbbbbbbb\n"
+;
+static char *upArrowDownPixels =
+"b%%%%%%%%%%%%%wbb\n"
+"b%xxxxxxxxxxxxwbb\n"
+"b%xxxxxbxxxxxxwbb\n"
+"b%xxxxbbbxxxxxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%xxbbbbbbbxxxwbb\n"
+"b%xbbbbbbbbbxxwbb\n"
+"b%bbbbbbbbbbbxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%xxxxxxxxxxxxwbb\n"
+"bwwwwwwwwwwwwwwbb\n"
+"bbbbbbbbbbbbbbbbb\n"
+;
+
+static char *downArrowPixels =
+"bbbbbbbbbbbbbbbbb\n"
+"b%%%%%%%%%%%%%obb\n"
+"b%&&&&&&&&&&&&obb\n"
+"b%&&&.....&&&&obb\n"
+"b%&&&.@@@.&&&&obb\n"
+"b%&&&.@@@.&&&&obb\n"
+"b%&&&.@@@.&&&&obb\n"
+"b%....@@@....&obb\n"
+"b%&.@@@@@@@.&&obb\n"
+"b%&&.@@@@@.&&&obb\n"
+"b%&&&.@@@.&&&&obb\n"
+"b%&&&&.@.&&&&&obb\n"
+"b%&&&&&.&&&&&&obb\n"
+"b%&&&&&&&&&&&&obb\n"
+"boooooooooooooobb\n"
+;
+static char *downArrowDownPixels =
+"bbbbbbbbbbbbbbbbb\n"
+"b%%%%%%%%%%%%%wbb\n"
+"b%xxxxxxxxxxxxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%bbbbbbbbbbbxwbb\n"
+"b%xbbbbbbbbbxxwbb\n"
+"b%xxbbbbbbbxxxwbb\n"
+"b%xxxbbbbbxxxxwbb\n"
+"b%xxxxbbbxxxxxwbb\n"
+"b%xxxxxbxxxxxxwbb\n"
+"b%xxxxxxxxxxxxwbb\n"
+"bwwwwwwwwwwwwwwbb\n"
+;
+static char *disabledBottomScrollBarLeftPixels =
+"bbbbbbbbbbbbbbbb\n"
+"b$$$$$$$$$$$$$$o\n"
+"b$$$$$$o$$$$$$$o\n"
+"b$$$$$oo$$$$$$$o\n"
+"b$$$$o$o$$$$$$$o\n"
+"b$$$o$$ooooo$$$o\n"
+"b$$o$$$$$$$o$$$o\n"
+"b$o$$$$$$$$o$$$o\n"
+"b$o$$$$$$$$o$$$o\n"
+"b$$o$$$$$$$o$$$o\n"
+"b$$$o$$ooooo$$$o\n"
+"b$$$$o$o$$$$$$$o\n"
+"b$$$$$oo$$$$$$$o\n"
+"b$$$$$$o$$$$$$$o\n"
+"b$$$$$$$$$$$$$$o\n"
+"bbbbbbbbbbbbbbbb\n"
+"%bbbbbbbbbbbbbbb\n"
+;
+static char *disabledBottomScrollBarRightPixels =
+"bbbbbbbbbbbbbbb\n"
+"o$$$$$$$$$$$$$$\n"
+"o$$$$$$$o$$$$$$\n"
+"o$$$$$$$oo$$$$$\n"
+"o$$$$$$$o$o$$$$\n"
+"o$$$ooooo$$o$$$\n"
+"o$$$o$$$$$$$o$$\n"
+"o$$$o$$$$$$$$o$\n"
+"o$$$o$$$$$$$$o$\n"
+"o$$$o$$$$$$$o$$\n"
+"o$$$ooooo$$o$$$\n"
+"o$$$$$$$o$o$$$$\n"
+"o$$$$$$$oo$$$$$\n"
+"o$$$$$$$o$$$$$$\n"
+"o$$$$$$$$$$$$$$\n"
+"bbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbb\n"
+;
+static char *disabledBottomScrollBarMiddlePixels =
+"b\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"b\n"
+"b\n"
+;
+static char *activeBottomScrollBarPixels =
+"bbbb\n"
+"&o&&\n"
+"&&&o\n"
+"&o&&\n"
+"&&&o\n"
+"&o&&\n"
+"&&&o\n"
+"&o&&\n"
+"&&&o\n"
+"&o&&\n"
+"&&&o\n"
+"&o&&\n"
+"&&&o\n"
+"&o&&\n"
+"&&&o\n"
+"bbbb\n"
+"bbbb\n"
+;
+static char *activeRightScrollBarPixels =
+"bo&&&o&&&o&&&o&bb\n"
+"b&&o&&&o&&&o&&&bb\n"
+;
+static char *disabledRightScrollBarMiddlePixels =
+"b$$$$$$$$$$$$$$bb\n"
+;
+static char *inactiveRightMiddlePixels =
+"b%%%%%%%%%%%%%%gb\n"
+;
+static char *disabledRightScrollBarTopPixels =
+"b$$$$$$$$$$$$$$bb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"b$$$$$$oo$$$$$$bb\n"
+"b$$$$$o$$o$$$$$bb\n"
+"b$$$$o$$$$o$$$$bb\n"
+"b$$$o$$$$$$o$$$bb\n"
+"b$$o$$$$$$$$o$$bb\n"
+"b$oooo$$$$oooo$bb\n"
+"b$$$$o$$$$o$$$$bb\n"
+"b$$$$o$$$$o$$$$bb\n"
+"b$$$$o$$$$o$$$$bb\n"
+"b$$$$oooooo$$$$bb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"boooooooooooooobb\n"
+;
+static char *disabledRightScrollBarBottomPixels =
+"boooooooooooooobb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"b$$$$oooooo$$$$bb\n"
+"b$$$$o$$$$o$$$$bb\n"
+"b$$$$o$$$$o$$$$bb\n"
+"b$$$$o$$$$o$$$$bb\n"
+"b$oooo$$$$oooo$bb\n"
+"b$$o$$$$$$$$o$$bb\n"
+"b$$$o$$$$$$o$$$bb\n"
+"b$$$$o$$$$o$$$$bb\n"
+"b$$$$$o$$o$$$$$bb\n"
+"b$$$$$$oo$$$$$$bb\n"
+"b$$$$$$$$$$$$$$bb\n"
+"b$$$$$$$$$$$$$$bb\n"
+;
+
 static id folderPalette =
 @"b #000000\n"
 @". #9999ff\n"
@@ -163,6 +696,9 @@ static id readmePixels =
 + (id)MacColorDir
 {
     id obj = [@"MacColorDir" asInstance];
+    [obj setValue:[@"." asRealPath] forKey:@"title"];
+    [obj updateDiskFreeText];
+    [obj calculateDiskUsed];
     return obj;
 }
 @end
@@ -172,13 +708,135 @@ static id readmePixels =
     time_t _timestamp;
     id _array;
     id _buttonDown;
+    id _buttonHover;
     int _buttonDownOffsetX;
     int _buttonDownOffsetY;
     id _buttonDownTimestamp;
     id _selected;
+
+    Int4 _leftArrowRect;
+    Int4 _rightArrowRect;
+    Int4 _upArrowRect;
+    Int4 _downArrowRect;
+
+    Int4 _titleBarRect;
+    Int4 _closeButtonRect;
+    Int4 _maximizeButtonRect;
+    Int4 _titleBarTextRect;
+    int _buttonDownX;
+    int _buttonDownY;
+    int _buttonDownW;
+    int _buttonDownH;
+
+    int _horizontalKnobX;
+    int _horizontalKnobW;
+    int _horizontalKnobVal;
+    int _horizontalKnobMaxVal;
+    int _verticalKnobY;
+    int _verticalKnobH;
+    int _verticalKnobVal;
+    int _verticalKnobMaxVal;
+
+    int _contentXMin;
+    int _contentXMax;
+    int _contentYMin;
+    int _contentYMax;
+    int _visibleX;
+    int _visibleY;
+    int _visibleW;
+    int _visibleH;
+
+    id _title;
+    id _numberOfItemsText;
+    id _diskUsedText;
+    id _diskFreeText;
+    id _diskUsedProcess;
+
+    int _disableHorizontalScrollBar;
+    int _disableVerticalScrollBar;
 }
 @end
 @implementation MacColorDir
+- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
+{
+    static int points[5];
+    points[0] = 5; // length of array including this number
+
+    points[1] = 0; // lower left corner
+    points[2] = h-1;
+
+    points[3] = w-1; // upper right corner
+    points[4] = 0;
+    return points;
+}
+- (void)updateNumberOfItemsText
+{
+    id str = nsfmt(@"%d items", [_array count]);
+    [self setValue:str forKey:@"numberOfItemsText"];
+}
+- (void)updateDiskFreeText
+{
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog-getDiskUsage.pl"];
+    id output = [[cmd runCommandAndReturnOutput] asString];
+    int available = [output intValueForKey:@"available"];
+    id arr = nsarr();
+    for(;;) {
+        int val = available % 1000;
+        available /= 1000;
+        if (available > 0) {
+            [arr addObject:nsfmt(@"%.3d", val)];
+            continue;
+        } else {
+            [arr addObject:nsfmt(@"%d", val)];
+            break;
+        }
+    }
+    arr = [arr asReverseArray];
+            
+    id str = nsfmt(@"%@K available", [arr join:@","]);
+    [self setValue:str forKey:@"diskFreeText"];
+}
+- (void)calculateDiskUsed
+{
+    [self setValue:@"Calculating..." forKey:@"diskUsedText"];
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog-getFileUsage.pl"];
+    id process = [cmd runCommandAndReturnProcess];
+    [self setValue:process forKey:@"diskUsedProcess"];
+}
+- (int)fileDescriptor
+{
+    if (_diskUsedProcess) {
+        return [_diskUsedProcess fileDescriptor];
+    }
+    return -1;
+}
+- (void)handleFileDescriptor
+{
+    if (_diskUsedProcess) {
+        [_diskUsedProcess handleFileDescriptor];
+        id str = [[_diskUsedProcess valueForKey:@"data"] asString];
+        int total = [str intValueForKey:@"total"];
+        
+        id arr = nsarr();
+        for(;;) {
+            int val = total % 1000;
+            total /= 1000;
+            if (total > 0) {
+                [arr addObject:nsfmt(@"%.3d", val)];
+                continue;
+            } else {
+                [arr addObject:nsfmt(@"%d", val)];
+                break;
+            }
+        }
+        arr = [arr asReverseArray];
+                
+        str = nsfmt(@"%@K in disk", [arr join:@","]);
+        [self setValue:str forKey:@"diskUsedText"];
+    }
+}
 - (int)preferredWidth
 {
     return 600;
@@ -241,6 +899,7 @@ static id readmePixels =
         x += w + 50 + 20;
     }
     [self setValue:arr forKey:@"array"];
+    [self updateNumberOfItemsText];
 }
 
 - (void)handleBackgroundUpdate:(id)event
@@ -251,15 +910,168 @@ static id readmePixels =
     }
 }
 
+- (BOOL)shouldAnimate
+{
+    if ([_buttonDown isEqual:@"leftArrow"]) {
+    } else if ([_buttonDown isEqual:@"rightArrow"]) {
+    } else if ([_buttonDown isEqual:@"upArrow"]) {
+    } else if ([_buttonDown isEqual:@"downArrow"]) {
+    } else {
+        return NO;
+    }
+    if ([_buttonDown isEqual:_buttonHover]) {
+        return YES;
+    }
+    return NO;
+}
+
 - (void)beginIteration:(id)event rect:(Int4)r
 {
     if (!_timestamp) {
         _timestamp = [@"." fileModificationTimestamp];
         [self updateFromCurrentDirectory:r];
     }
+
+    if ([_buttonDown isEqual:_buttonHover]) {
+        if ([_buttonDown isEqual:@"leftArrow"]) {
+            _visibleX -= 10;
+            if (_visibleX < _contentXMin) {
+                _visibleX = _contentXMin;
+            }
+        } else if ([_buttonDown isEqual:@"rightArrow"]) {
+            _visibleX += 10;
+            if (_visibleX > _contentXMax+1 - _visibleW) {
+                _visibleX = _contentXMax+1 - _visibleW;
+            }
+        } else if ([_buttonDown isEqual:@"upArrow"]) {
+            _visibleY -= 10;
+            if (_visibleY < _contentYMin) {
+                _visibleY = _contentYMin;
+            }
+        } else if ([_buttonDown isEqual:@"downArrow"]) {
+            _visibleY += 10;
+            if (_visibleY > _contentYMax+1 - _visibleH) {
+                _visibleY = _contentYMax+1 - _visibleH;
+            }
+        }
+    }
+
+    _titleBarRect = [Definitions rectWithX:0/*r.x*/ y:0/*r.y*/ w:r.w h:19];
+    _titleBarTextRect = _titleBarRect;
+    _titleBarTextRect.x = 21 + 4;
+    _titleBarTextRect.w -= (21+4)*2;
+
+    _closeButtonRect.x = 8;
+    _closeButtonRect.y = 0;
+    _closeButtonRect.w = 13;
+    _closeButtonRect.h = 19;
+
+    _maximizeButtonRect.x = r.w-8-13;
+    _maximizeButtonRect.y = 0;
+    _maximizeButtonRect.w = 13;
+    _maximizeButtonRect.h = 19;
+
+    _leftArrowRect.x = 0;
+    _leftArrowRect.y = r.h-17;
+    _leftArrowRect.w = 16;
+    _leftArrowRect.h = 17;
+    _rightArrowRect.x = r.w-17-15;
+    _rightArrowRect.y = r.h-17;
+    _rightArrowRect.w = 16;
+    _rightArrowRect.h = 17;
+    _upArrowRect.x = r.w-17;
+    _upArrowRect.y = 19+20;
+    _upArrowRect.w = 16;
+    _upArrowRect.h = 15;
+    _downArrowRect.x = r.w-17;
+    _downArrowRect.y = r.h-17-15;
+    _downArrowRect.w = 16;
+    _downArrowRect.h = 15;
+
+    _contentXMin = 0;
+    _contentXMax = 0;
+    _contentYMin = 0;
+    _contentYMax = 0;
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
+        int x = [elt intValueForKey:@"x"];
+        int y = [elt intValueForKey:@"y"];
+        int w = [elt intValueForKey:@"w"];
+        int h = [elt intValueForKey:@"h"];
+        if (x < _contentXMin) {
+            _contentXMin = x;
+        }
+        if (x+w > _contentXMax) {
+            _contentXMax = x+w;
+        }
+        if (y < _contentYMin) {
+            _contentYMin = y;
+        }
+        if (y+h > _contentYMax) {
+            _contentYMax = y+h+16;
+        }
+    }
+    _contentXMax += 17 + 1 + 20;
+    _contentYMax += 19 + 20 + 17 + 20;
+    _visibleW = r.w;
+    _visibleH = r.h;
+    if (_contentXMin > _visibleX) {
+        _contentXMin = _visibleX;
+    }
+    if (_contentXMax < _visibleX+_visibleW-1) {
+        _contentXMax = _visibleX+_visibleW-1;
+    }
+    if (_contentYMin > _visibleY) {
+        _contentYMin = _visibleY;
+    }
+    if (_contentYMax < _visibleY+_visibleH-1) {
+        _contentYMax = _visibleY+_visibleH-1;
+    }
+    int contentWidth = _contentXMax - _contentXMin;
+    int contentHeight = _contentYMax - _contentYMin;
+    double wpct = (double)_visibleW / (double)contentWidth;
+    _horizontalKnobX = _leftArrowRect.x+_leftArrowRect.w;
+    _horizontalKnobW = 16;
+    _horizontalKnobMaxVal = _rightArrowRect.x-_horizontalKnobX-_horizontalKnobW;
+    double xpct = (double)(_visibleX-_contentXMin)/(double)(contentWidth-_visibleW);
+    if (xpct < 0.0) {
+        xpct = 0.0;
+    } else if (xpct > 1.0) {
+        xpct = 1.0;
+    }
+    if (![_buttonDown isEqual:@"horizontalKnob"]) {
+        _horizontalKnobVal = (double)_horizontalKnobMaxVal*xpct;
+    }
+
+    double hpct = (double)_visibleH / (double)contentHeight;
+    _verticalKnobY = _upArrowRect.y+_upArrowRect.h;
+    _verticalKnobH = 16;
+    _verticalKnobMaxVal = _downArrowRect.y-_verticalKnobY-_verticalKnobH;
+    double ypct = (double)(_visibleY-_contentYMin)/(double)(contentHeight-_visibleH);
+    if (ypct < 0.0) {
+        ypct = 0.0;
+    } else if (ypct > 1.0) {
+        ypct = 1.0;
+    }
+    if (![_buttonDown isEqual:@"verticalKnob"]) {
+        _verticalKnobVal = (double)_verticalKnobMaxVal*ypct;
+    }
+
+    _disableHorizontalScrollBar = 0;
+    if (_visibleX == _contentXMin) {
+        if (_visibleX + _visibleW - 1 == _contentXMax) {
+            _disableHorizontalScrollBar = 1;
+        }
+    }
+    _disableVerticalScrollBar = 0;
+    if (_visibleY == _contentYMin) {
+        if (_visibleY + _visibleH - 1 == _contentYMax) {
+            _disableVerticalScrollBar = 1;
+        }
+    }
 }
 
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
     [bitmap useMonacoFont];
     [bitmap setColor:@"white"];
@@ -267,8 +1079,8 @@ static id readmePixels =
     [bitmap setColor:@"black"];
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
-        int x = [elt intValueForKey:@"x"];
-        int y = [elt intValueForKey:@"y"];
+        int x = -_visibleX + [elt intValueForKey:@"x"];
+        int y = -_visibleY + [elt intValueForKey:@"y"] + 19 + 20;
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
         if (_selected == elt) {
@@ -287,19 +1099,385 @@ static id readmePixels =
         id filePath = [elt valueForKey:@"filePath"];
         [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-2];
     }
-    [Definitions drawInactiveHorizontalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x y:r.y+r.h-15 w:r.w-15 h:15]];
-    [Definitions drawInactiveVerticalScrollBarInBitmap:bitmap rect:[Definitions rectWithX:r.x+r.w-15 y:r.y w:15 h:r.h-15]];
+
+    BOOL hasFocus = NO;
+    {
+        id windowManager = [@"windowManager" valueForKey];
+        unsigned long focusInEventWindow = [[windowManager valueForKey:@"focusInEventWindow"] unsignedLongValue];
+        unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+        if (focusInEventWindow && (focusInEventWindow == win)) {
+            hasFocus = YES;
+        }
+    }
+
+    if (hasFocus) {
+        char *palette = [Definitions cStringForMacColorPalette];
+        char *left = [Definitions cStringForMacColorActiveTitleBarLeftPixels];
+        char *middle = [Definitions cStringForMacColorActiveTitleBarMiddlePixels];
+        char *right = activeTitleBarRightPixels;
+        [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+
+        if ([_buttonDown isEqual:@"closeButton"] && [_buttonHover isEqual:@"closeButton"]) {
+            char *pixels = [Definitions cStringForMacColorButtonDownPixels];
+            [bitmap drawCString:pixels palette:palette x:_closeButtonRect.x y:_closeButtonRect.y];
+        } else {
+            char *pixels = [Definitions cStringForMacColorCloseButtonPixels];
+            [bitmap drawCString:pixels palette:palette x:_closeButtonRect.x y:_closeButtonRect.y];
+        }
+        if ([_buttonDown isEqual:@"maximizeButton"] && [_buttonHover isEqual:@"maximizeButton"]) {
+            char *pixels = [Definitions cStringForMacColorButtonDownPixels];
+            [bitmap drawCString:pixels palette:palette x:_maximizeButtonRect.x y:_maximizeButtonRect.y];
+        } else {
+            char *pixels = [Definitions cStringForMacColorMaximizeButtonPixels];
+            [bitmap drawCString:pixels palette:palette x:_maximizeButtonRect.x y:_maximizeButtonRect.y];
+        }
+    } else {
+        char *palette = [Definitions cStringForMacColorPalette];
+        char *left = [Definitions cStringForMacColorInactiveTitleBarLeftPixels];
+        char *middle = [Definitions cStringForMacColorInactiveTitleBarMiddlePixels];
+        char *right = inactiveTitleBarRightPixels;
+        [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+    }
+
+    if (_titleBarTextRect.w > 0) {
+        id text = _title;
+        if (!text) {
+            text = @"(no title)";
+        }
+
+        [bitmap useChicagoFont];
+
+        text = [[[bitmap fitBitmapString:text width:_titleBarTextRect.w-14] split:@"\n"] nth:0];
+        if (text) {
+            int textWidth = [bitmap bitmapWidthForText:text];
+            int backWidth = textWidth + 14;
+            int backX = _titleBarTextRect.x + ((_titleBarTextRect.w - backWidth) / 2);
+            int textX = backX + 7;
+            if (hasFocus) {
+                [bitmap setColor:@"white"];
+                [bitmap fillRect:[Definitions rectWithX:backX y:_titleBarTextRect.y+2 w:backWidth h:16]];
+                [bitmap setColorIntR:0 g:0 b:0 a:255];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4];
+            } else {
+                [bitmap setColorIntR:0 g:0 b:0 a:255];
+                [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+4];
+            }
+        }
+
+        [bitmap useMonacoFont];
+    }
+
+    int infoBarHeight = 20;
+    if (infoBarHeight) {
+        char *palette = [Definitions cStringForMacColorPalette];
+        if (hasFocus) {
+            [Definitions drawInBitmap:bitmap left:infoBarLeftPixels middle:infoBarMiddlePixels right:infoBarRightPixels x:r.x y:r.y+19 w:r.w palette:palette];
+        } else {
+            [Definitions drawInBitmap:bitmap left:inactiveInfoBarLeftPixels middle:infoBarMiddlePixels right:inactiveInfoBarRightPixels x:r.x y:r.y+19 w:r.w palette:palette];
+        }
+        [bitmap useGenevaFont];
+        [bitmap setColorIntR:0 g:0 b:0 a:255];
+        if (_numberOfItemsText) {
+            [bitmap drawBitmapText:_numberOfItemsText x:20 y:r.y+19+5];
+        }
+        if (_diskUsedText) {
+            int textWidth = [bitmap bitmapWidthForText:_diskUsedText];
+            [bitmap drawBitmapText:_diskUsedText x:r.x+(r.w-textWidth)/2 y:r.y+19+5];
+        }
+        if (_diskFreeText) {
+            int textWidth = [bitmap bitmapWidthForText:_diskFreeText];
+            [bitmap drawBitmapText:_diskFreeText x:r.x+r.w-20-textWidth y:r.y+19+5];
+        }
+
+    }
+
+    {
+        char *middle = "b\n";
+        if (hasFocus) {
+            char *palette = "b #000000\n";
+            [Definitions drawInBitmap:bitmap top:middle palette:palette middle:middle palette:palette bottom:middle palette:palette x:r.x y:r.y+19+infoBarHeight h:r.h-19-infoBarHeight-17];
+        } else {
+            char *palette = "b #555555\n";
+            [Definitions drawInBitmap:bitmap top:middle palette:palette middle:middle palette:palette bottom:middle palette:palette x:r.x y:r.y+19+infoBarHeight h:r.h-19-infoBarHeight-17];
+        }
+    }
+    {
+        char *top = upArrowPixels;
+        char *middle = activeRightScrollBarPixels;
+        char *bottom = downArrowPixels;
+        char *palette = [Definitions cStringForMacColorPalette];
+        if (hasFocus) {
+            if (_disableVerticalScrollBar) {
+                top = disabledRightScrollBarTopPixels;
+                middle = disabledRightScrollBarMiddlePixels;
+                bottom = disabledRightScrollBarBottomPixels;
+            } else {
+                if ([_buttonDown isEqual:@"upArrow"] && [_buttonHover isEqual:@"upArrow"]) {
+                    top = upArrowDownPixels;
+                } else if ([_buttonDown isEqual:@"downArrow"] && [_buttonHover isEqual:@"downArrow"]) {
+                    bottom = downArrowDownPixels;
+                }
+            }
+        } else {
+            top = inactiveRightMiddlePixels;
+            middle = inactiveRightMiddlePixels;
+            bottom = inactiveRightMiddlePixels;
+        }
+        [Definitions drawInBitmap:bitmap top:top palette:palette middle:middle palette:palette bottom:bottom palette:palette x:r.x+r.w-17 y:r.y+19+infoBarHeight h:r.h-19-infoBarHeight-17];
+
+        if (hasFocus && !_disableVerticalScrollBar) {
+            [bitmap drawCString:verticalKnobPixels palette:palette x:r.x+r.w-16 y:_verticalKnobY+_verticalKnobVal];
+            if ([_buttonDown isEqual:@"verticalKnob"]) {
+                char *h = [Definitions cStringForMacWindowSelectionHorizontal];
+                char *v = [Definitions cStringForMacWindowSelectionVertical];
+                char *palette = "b #000000\nw #ffffff\n";
+                [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x+r.w-16 y:_verticalKnobY+_verticalKnobVal w:14 palette:palette];
+                [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-16 y:_verticalKnobY+_verticalKnobVal+1 h:16-2];
+                [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-16+14-1 y:_verticalKnobY+_verticalKnobVal+1 h:16-2];
+                [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x+r.w-16 y:_verticalKnobY+_verticalKnobVal+16-1 w:14 palette:palette];
+            }
+        }
+    }
+
+    {
+        char *left = leftArrowPixels;
+        char *middle = activeBottomScrollBarPixels;
+        char *right = rightArrowPixels;
+        char *palette = [Definitions cStringForMacColorPalette];
+        if (hasFocus) {
+            if (_disableHorizontalScrollBar) {
+                left = disabledBottomScrollBarLeftPixels;
+                middle = disabledBottomScrollBarMiddlePixels;
+                right = disabledBottomScrollBarRightPixels;
+            } else {
+                if ([_buttonDown isEqual:@"leftArrow"] && [_buttonHover isEqual:@"leftArrow"]) {
+                    left = leftArrowDownPixels;
+                } else if ([_buttonDown isEqual:@"rightArrow"] && [_buttonHover isEqual:@"rightArrow"]) {
+                    right = rightArrowDownPixels;
+                }
+            }
+        } else {
+            left = inactiveBottomLeftPixels;
+            middle = inactiveBottomMiddlePixels;
+            right = inactiveBottomMiddlePixels;
+        }
+        [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y+r.h-17 w:r.w-17 palette:palette];
+
+        if (hasFocus && !_disableHorizontalScrollBar) { 
+            [bitmap drawCString:horizontalKnobPixels palette:palette x:_horizontalKnobX+_horizontalKnobVal y:r.y+r.h-16];
+            if ([_buttonDown isEqual:@"horizontalKnob"]) {
+                char *h = [Definitions cStringForMacWindowSelectionHorizontal];
+                char *v = [Definitions cStringForMacWindowSelectionVertical];
+                char *palette = "b #000000\nw #ffffff\n";
+                [Definitions drawInBitmap:bitmap left:h middle:h right:h x:_horizontalKnobX+_horizontalKnobVal y:r.y+r.h-16 w:16 palette:palette];
+                [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:_horizontalKnobX+_horizontalKnobVal y:r.y+r.h-16+1 h:14-2];
+                [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:_horizontalKnobX+_horizontalKnobVal+16-1 y:r.y+r.h-16+1 h:14-2];
+                [Definitions drawInBitmap:bitmap left:h middle:h right:h x:_horizontalKnobX+_horizontalKnobVal y:r.y+r.h-16+14-1 w:16 palette:palette];
+            }
+        }
+    }
+
+
+
+    {
+        char *pixels = resizeButtonPixels;
+        if (!hasFocus) {
+            pixels = inactiveResizeButtonPixels;
+        }
+        char *palette = [Definitions cStringForMacColorPalette];
+        [bitmap drawCString:pixels palette:palette x:r.w-17 y:r.h-17];
+    }
+
+    if (hasFocus) {
+        char *palette = "b #000000\nw #ffffff\n";
+        if ([_buttonDown isEqual:@"titleBar"]) {
+            char *h = [Definitions cStringForMacWindowSelectionHorizontal];
+            char *v = [Definitions cStringForMacWindowSelectionVertical];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y w:r.w palette:palette];
+            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x y:r.y+1 h:r.h+1-2];
+            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-1 y:r.y+1 h:r.h+1-2];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+r.h-1 w:r.w palette:palette];
+        } else if ([_buttonDown isEqual:@"resizeButton"]) {
+            char *h = [Definitions cStringForMacWindowSelectionHorizontal];
+            char *v = [Definitions cStringForMacWindowSelectionVertical];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y w:r.w palette:palette];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+18 w:r.w palette:palette];
+            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x y:r.y+1 h:r.h-2];
+            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-2 y:r.y+1 h:r.h-2];
+            [Definitions drawInBitmap:bitmap top:v palette:palette middle:v palette:palette bottom:v palette:palette x:r.x+r.w-2-15 y:r.y+1+18 h:r.h-2-18];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+r.h-2 w:r.w palette:palette];
+            [Definitions drawInBitmap:bitmap left:h middle:h right:h x:r.x y:r.y+r.h-2-15 w:r.w palette:palette];
+        }
+    }
+
+
+
 }
 
 - (void)handleMouseDown:(id)event
 {
+    {
+        id x11dict = [event valueForKey:@"x11dict"];
+        unsigned long win = [[x11dict valueForKey:@"window"] unsignedLongValue];
+        id windowManager = [@"windowManager" valueForKey];
+        [windowManager XRaiseWindow:win];
+    }
+
+    [self setValue:nil forKey:@"buttonDown"];
+    [self setValue:nil forKey:@"buttonHover"];
+
     [self setValue:nil forKey:@"selected"];
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
+    int viewWidth = [event intValueForKey:@"viewWidth"];
+    int viewHeight = [event intValueForKey:@"viewHeight"];
+
+    if ([Definitions isX:mouseX y:mouseY insideRect:_leftArrowRect]) {
+        if (_disableHorizontalScrollBar) {
+            return;
+        }
+        [self setValue:@"leftArrow" forKey:@"buttonDown"];
+        [self setValue:@"leftArrow" forKey:@"buttonHover"];
+        _visibleX -= 10;
+        if (_visibleX < _contentXMin) {
+            _visibleX = _contentXMin;
+        }
+        return;
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_rightArrowRect]) {
+        if (_disableHorizontalScrollBar) {
+            return;
+        }
+        [self setValue:@"rightArrow" forKey:@"buttonDown"];
+        [self setValue:@"rightArrow" forKey:@"buttonHover"];
+        _visibleX += 10;
+        if (_visibleX > _contentXMax+1 - _visibleW) {
+            _visibleX = _contentXMax+1 - _visibleW;
+        }
+        return;
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_upArrowRect]) {
+        if (_disableVerticalScrollBar) {
+            return;
+        }
+        [self setValue:@"upArrow" forKey:@"buttonDown"];
+        [self setValue:@"upArrow" forKey:@"buttonHover"];
+        _visibleY -= 10;
+        if (_visibleY < _contentYMin) {
+            _visibleY = _contentYMin;
+        }
+        return;
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_downArrowRect]) {
+        if (_disableVerticalScrollBar) {
+            return;
+        }
+        [self setValue:@"downArrow" forKey:@"buttonDown"];
+        [self setValue:@"downArrow" forKey:@"buttonHover"];
+        _visibleY += 10;
+        if (_visibleY > _contentYMax+1 - _visibleH) {
+            _visibleY = _contentYMax+1 - _visibleH;
+        }
+        return;
+    }
+    if (mouseX >= viewWidth-17) {
+        if (mouseY >= viewHeight-17) {
+            [self setValue:@"resizeButton" forKey:@"buttonDown"];
+            [self setValue:nil forKey:@"buttonHover"];
+            _buttonDownX = mouseX;
+            _buttonDownY = mouseY;
+            _buttonDownW = viewWidth;
+            _buttonDownH = viewHeight;
+            return;
+        }
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_closeButtonRect]) {
+        [self setValue:@"closeButton" forKey:@"buttonDown"];
+        [self setValue:@"closeButton" forKey:@"buttonHover"];
+        _buttonDownX = mouseX;
+        _buttonDownY = mouseY;
+        _buttonDownW = viewWidth;
+        _buttonDownH = viewHeight;
+        return;
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_maximizeButtonRect]) {
+        [self setValue:@"maximizeButton" forKey:@"buttonDown"];
+        [self setValue:@"maximizeButton" forKey:@"buttonHover"];
+        _buttonDownX = mouseX;
+        _buttonDownY = mouseY;
+        _buttonDownW = viewWidth;
+        _buttonDownH = viewHeight;
+        return;
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_titleBarRect]) {
+        [self setValue:@"titleBar" forKey:@"buttonDown"];
+        [self setValue:nil forKey:@"buttonHover"];
+        _buttonDownX = mouseX;
+        _buttonDownY = mouseY;
+        _buttonDownW = viewWidth;
+        _buttonDownH = viewHeight;
+        return;
+    }
+
+    if (mouseY > _leftArrowRect.y) {
+        if (mouseY < _leftArrowRect.y+_leftArrowRect.h-1) {
+            if (_disableHorizontalScrollBar) {
+                return;
+            }
+            if (mouseX < _horizontalKnobX) {
+            } else if (mouseX < _horizontalKnobX+_horizontalKnobVal) {
+                _visibleX -= _visibleW;
+                if (_visibleX < _contentXMin) {
+                    _visibleX = _contentXMin;
+                }
+                return;
+            } else if (mouseX < _horizontalKnobX+_horizontalKnobVal+_horizontalKnobW) {
+                [self setValue:@"horizontalKnob" forKey:@"buttonDown"];
+                _buttonDownX = mouseX - (_horizontalKnobX+_horizontalKnobVal);
+                return;
+            } else if (mouseX < _horizontalKnobX+_horizontalKnobMaxVal+_horizontalKnobW) {
+                _visibleX += _visibleW;
+                if (_visibleX > _contentXMax+1 - _visibleW) {
+                    _visibleX = _contentXMax+1 - _visibleW;
+                }
+                return;
+            }
+        }
+    }
+
+    if (mouseX > _upArrowRect.x) {
+        if (mouseX < _upArrowRect.x+_upArrowRect.w-1) {
+            if (_disableVerticalScrollBar) {
+                return;
+            }
+            if (mouseY < _verticalKnobY) {
+            } else if (mouseY < _verticalKnobY+_verticalKnobVal) {
+                _visibleY -= _visibleH;
+                if (_visibleY < _contentYMin) {
+                    _visibleY = _contentYMin;
+                }
+                return;
+            } else if (mouseY < _verticalKnobY+_verticalKnobVal+_verticalKnobH) {
+                [self setValue:@"verticalKnob" forKey:@"buttonDown"];
+                _buttonDownY = mouseY - (_verticalKnobY+_verticalKnobVal);
+                return;
+            } else if (mouseY < _verticalKnobY+_verticalKnobMaxVal+_verticalKnobH) {
+                _visibleY += _visibleH;
+                if (_visibleY > _contentYMax+1 - _visibleH) {
+                    _visibleY = _contentYMax+1 - _visibleH;
+                }
+                return;
+            }
+        }
+    }
+
+
+
+
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
-        int x = [elt intValueForKey:@"x"];
-        int y = [elt intValueForKey:@"y"];
+        int x = -_visibleX + [elt intValueForKey:@"x"];
+        int y = -_visibleY + [elt intValueForKey:@"y"] + 19 + 20;
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
         if ((mouseX >= x) && (mouseX < x+w) && (mouseY >= y) && (mouseY < y+h)) {
@@ -316,7 +1494,12 @@ static id readmePixels =
                     if ([filePath isDirectory]) {
                         id cmd = nsarr();
                         [cmd addObject:@"hotdog"];
-                        [cmd addObject:@"dir"];
+                        [cmd addObject:@"maccolordir"];
+                        [cmd addObject:filePath];
+                        [cmd runCommandInBackground];
+                    } else {
+                        id cmd = nsarr();
+                        [cmd addObject:@"hotdog-open:.pl"];
                         [cmd addObject:filePath];
                         [cmd runCommandInBackground];
                     }
@@ -332,325 +1515,136 @@ static id readmePixels =
 
 - (void)handleMouseMoved:(id)event
 {
-    if (_buttonDown) {
-        int mouseX = [event intValueForKey:@"mouseX"];
-        int mouseY = [event intValueForKey:@"mouseY"];
-        [_buttonDown setValue:nsfmt(@"%d", mouseX - _buttonDownOffsetX) forKey:@"x"];
-        [_buttonDown setValue:nsfmt(@"%d", mouseY - _buttonDownOffsetY) forKey:@"y"];
+    if (!_buttonDown) {
+        return;
+    }
+    int mouseX = [event intValueForKey:@"mouseX"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+
+
+    if ([_buttonDown isEqual:@"leftArrow"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_leftArrowRect]) {
+            [self setValue:_buttonDown forKey:@"buttonHover"];
+        } else {
+            [self setValue:nil forKey:@"buttonHover"];
+        }
+    } else if ([_buttonDown isEqual:@"rightArrow"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_rightArrowRect]) {
+            [self setValue:_buttonDown forKey:@"buttonHover"];
+        } else {
+            [self setValue:nil forKey:@"buttonHover"];
+        }
+    } else if ([_buttonDown isEqual:@"upArrow"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_upArrowRect]) {
+            [self setValue:_buttonDown forKey:@"buttonHover"];
+        } else {
+            [self setValue:nil forKey:@"buttonHover"];
+        }
+    } else if ([_buttonDown isEqual:@"downArrow"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_downArrowRect]) {
+            [self setValue:_buttonDown forKey:@"buttonHover"];
+        } else {
+            [self setValue:nil forKey:@"buttonHover"];
+        }
+    } else if ([_buttonDown isEqual:@"closeButton"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_closeButtonRect]) {
+            [self setValue:_buttonDown forKey:@"buttonHover"];
+        } else {
+            [self setValue:nil forKey:@"buttonHover"];
+        }
+        return;
+    } else if ([_buttonDown isEqual:@"maximizeButton"]) {
+        if ([Definitions isX:mouseX y:mouseY insideRect:_maximizeButtonRect]) {
+            [self setValue:_buttonDown forKey:@"buttonHover"];
+        } else {
+            [self setValue:nil forKey:@"buttonHover"];
+        }
+        return;
+    } else if ([_buttonDown isEqual:@"titleBar"]) {
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+        int viewHeight = [event intValueForKey:@"viewHeight"];
+
+        id dict = [event valueForKey:@"x11dict"];
+
+        int newX = mouseRootX - _buttonDownX;
+        int newY = mouseRootY - _buttonDownY;
+
+        [dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+        [dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+        [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        return;
+    } else if ([_buttonDown isEqual:@"resizeButton"]) {
+        int viewWidth = [event intValueForKey:@"viewWidth"];
+        int viewHeight = [event intValueForKey:@"viewHeight"];
+
+        id dict = [event valueForKey:@"x11dict"];
+
+        int newWidth = mouseX + (_buttonDownW - _buttonDownX);
+        if (newWidth < 100) {
+            newWidth = 100;
+        }
+        int newHeight = mouseY + (_buttonDownH - _buttonDownY);
+        if (newHeight < 100) {
+            newHeight = 100;
+        }
+        [dict setValue:nsfmt(@"%d %d", newWidth, newHeight) forKey:@"resizeWindow"];
+        return;
+    } else if ([_buttonDown isEqual:@"horizontalKnob"]) {
+        _horizontalKnobVal = mouseX - _horizontalKnobX - _buttonDownX;
+        if (_horizontalKnobVal < 0) {
+            _horizontalKnobVal = 0;
+        } else if (_horizontalKnobVal > _horizontalKnobMaxVal) {
+            _horizontalKnobVal = _horizontalKnobMaxVal;
+        }
+
+    } else if ([_buttonDown isEqual:@"verticalKnob"]) {
+        _verticalKnobVal = mouseY - _verticalKnobY - _buttonDownY;
+        if (_verticalKnobVal < 0) {
+            _verticalKnobVal = 0;
+        } else if (_verticalKnobVal > _verticalKnobMaxVal) {
+            _verticalKnobVal = _verticalKnobMaxVal;
+        }
+
+    } else {
+        [_buttonDown setValue:nsfmt(@"%d", mouseX - _buttonDownOffsetX + _visibleX) forKey:@"x"];
+        [_buttonDown setValue:nsfmt(@"%d", mouseY - _buttonDownOffsetY + _visibleY - 19 - 20) forKey:@"y"];
         [self setValue:nil forKey:@"buttonDownTimestamp"];
     }
 }
 
 - (void)handleMouseUp:(id)event
 {
+    if ([_buttonDown isEqual:@"closeButton"] && [_buttonDown isEqual:_buttonHover]) {
+        exit(0);
+    }
+    if ([_buttonDown isEqual:@"maximizeButton"] && [_buttonDown isEqual:_buttonHover]) {
+/*
+        id x11dict = [event valueForKey:@"x11dict"];
+        id windowManager = [event valueForKey:@"windowManager"];
+        [windowManager raiseObjectWindow:x11dict];
+*/
+    }
+    if ([_buttonDown isEqual:@"horizontalKnob"]) {
+        int contentWidth = _contentXMax - _contentXMin - _visibleW;
+        double pct = 0.0;
+        if (_horizontalKnobMaxVal) {
+            pct = (double)_horizontalKnobVal / (double)_horizontalKnobMaxVal;
+        }
+        _visibleX = _contentXMin + contentWidth*pct;
+    }
+    if ([_buttonDown isEqual:@"verticalKnob"]) {
+        int contentHeight = _contentYMax - _contentYMin - _visibleH;
+        double pct = 0.0;
+        if (_verticalKnobMaxVal) {
+            pct = (double)_verticalKnobVal / (double)_verticalKnobMaxVal;
+        }
+        _visibleY = _contentYMin + contentHeight*pct;
+    }
     [self setValue:nil forKey:@"buttonDown"];
+    [self setValue:nil forKey:@"buttonHover"];
 }
 
 @end
 
-@implementation Definitions(fjeilmwfkldsmklfsdklmfm)
-+ (char *)cStringForInactiveVerticalScrollBarPalette
-{
-    return
-"b #000000\n"
-"X #777777\n"
-". #eeeeee\n"
-;
-}
-+ (char *)cStringForInactiveVerticalScrollBarUpArrow
-{
-    return
-"b..............\n"
-"b..............\n"
-"b......XX......\n"
-"b.....X..X.....\n"
-"b....X....X....\n"
-"b...X......X...\n"
-"b..X........X..\n"
-"b.XXXX....XXXX.\n"
-"b....X....X....\n"
-"b....X....X....\n"
-"b....X....X....\n"
-"b....XXXXXX....\n"
-"b..............\n"
-"b..............\n"
-"bXXXXXXXXXXXXXX\n"
-;
-}
-+ (char *)cStringForInactiveVerticalScrollBarMiddle
-{
-    return
-"b..............\n"
-;
-}
-+ (char *)cStringForInactiveVerticalScrollBarDownArrow
-{
-    return
-"bXXXXXXXXXXXXXX\n"
-"b..............\n"
-"b..............\n"
-"b....XXXXXX....\n"
-"b....X....X....\n"
-"b....X....X....\n"
-"b....X....X....\n"
-"b.XXXX....XXXX.\n"
-"b..X........X..\n"
-"b...X......X...\n"
-"b....X....X....\n"
-"b.....X..X.....\n"
-"b......XX......\n"
-"b..............\n"
-"b..............\n"
-;
-}
-+ (char *)cStringForActiveScrollBarPalette
-{
-    return
-"b #000000\n"
-". #333366\n"
-"X #555555\n"
-"o #606060\n"
-"O #777777\n"
-"+ #666699\n"
-"@ #a0a0a0\n"
-"# #a4a4a4\n"
-"$ #aaaaaa\n"
-"% #bbbbbb\n"
-"& #a3a3d7\n"
-"* #dddddd\n"
-"= #ccccff\n"
-"- #eeeeee\n"
-"; #ffffff\n"
-;
-}
-+ (char *)cStringForActiveScrollBarLeftArrow
-{
-    return
-"bbbbbbbbbbbbbbb\n"
-";;;;;;;;;;;;;Ob\n"
-";******.*****Ob\n"
-";*****..*****Ob\n"
-";****.&.*****Ob\n"
-";***.&&.....*Ob\n"
-";**.&&&&&&&.*Ob\n"
-";*.&&&&&&&&.*Ob\n"
-";**.&&&&&&&.*Ob\n"
-";***.&&.....*Ob\n"
-";****.&.*****Ob\n"
-";*****..*****Ob\n"
-";******.*****Ob\n"
-";************Ob\n"
-"OOOOOOOOOOOOOOb\n"
-;
-}
-+ (char *)cStringForActiveScrollBarMiddle
-{
-    return
-"bbbb\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-"*O**\n"
-"***O\n"
-;
-}
-
-+ (char *)cStringForActiveScrollBarRightArrow
-{
-    return
-"bbbbbbbbbbbbbbb\n"
-"b;;;;;;;;;;;;;O\n"
-"b;*****.******O\n"
-"b;*****..*****O\n"
-"b;*****.&.****O\n"
-"b;*.....&&.***O\n"
-"b;*.&&&&&&&.**O\n"
-"b;*.&&&&&&&&.*O\n"
-"b;*.&&&&&&&.**O\n"
-"b;*.....&&.***O\n"
-"b;*****.&.****O\n"
-"b;*****..*****O\n"
-"b;*****.******O\n"
-"b;************O\n"
-"bOOOOOOOOOOOOOO\n"
-;
-}
-
-+ (char *)cStringForActiveScrollBarKnob
-{
-    return
-"bbbbbbbbbbbbbbbb\n"
-"X==============.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$&=+=+=+=+=$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X=$$$$$$$$$$$$$.\n"
-"X...............\n"
-"bbbbbbbbbbbbbbbb\n"
-;
-}
-
-+ (char *)cStringForInactiveHorizontalScrollBarPalette
-{
-    return
-"b #000000\n"
-"X #777777\n"
-". #eeeeee\n"
-;
-}
-
-+ (char *)cStringForInactiveHorizontalScrollBarLeftArrow
-{
-    return
-"bbbbbbbbbbbbbbb\n"
-"..............X\n"
-"......X.......X\n"
-".....XX.......X\n"
-"....X.X.......X\n"
-"...X..XXXXX...X\n"
-"..X.......X...X\n"
-".X........X...X\n"
-".X........X...X\n"
-"..X.......X...X\n"
-"...X..XXXXX...X\n"
-"....X.X.......X\n"
-".....XX.......X\n"
-"......X.......X\n"
-"..............X\n"
-;
-}
-+ (char *)cStringForInactiveHorizontalScrollBarMiddle
-{
-   return
-"b\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-".\n"
-;
-}
-+ (char *)cStringForInactiveHorizontalScrollBarRightArrow
-{
-    return
-"bbbbbbbbbbbbbbb\n"
-"X..............\n"
-"X.......X......\n"
-"X.......XX.....\n"
-"X.......X.X....\n"
-"X...XXXXX..X...\n"
-"X...X.......X..\n"
-"X...X........X.\n"
-"X...X........X.\n"
-"X...X.......X..\n"
-"X...XXXXX..X...\n"
-"X.......X.X....\n"
-"X.......XX.....\n"
-"X.......X......\n"
-"X..............\n"
-;
-}
-+ (void)drawActiveScrollBarInBitmap:(id)bitmap rect:(Int4)r pct:(double)pct
-{
-    char *palette = [Definitions cStringForActiveScrollBarPalette];
-
-    char *left = [Definitions cStringForActiveScrollBarLeftArrow];
-    char *middle = [Definitions cStringForActiveScrollBarMiddle];
-    char *right = [Definitions cStringForActiveScrollBarRightArrow];
-    char *knob = [Definitions cStringForActiveScrollBarKnob];
-
-    int widthForLeft = [Definitions widthForCString:left];
-    int widthForMiddle = [Definitions widthForCString:middle];
-    int widthForRight = [Definitions widthForCString:right];
-    int widthForKnob = [Definitions widthForCString:knob];
-
-    int heightForMiddle = [Definitions heightForCString:middle];
-    int heightForKnob = [Definitions heightForCString:knob];
-    int middleYOffset = (r.h - heightForMiddle)/2.0;
-    int knobYOffset = (r.h - heightForKnob)/2.0;
-
-    [bitmap drawCString:left palette:palette x:r.x y:r.y+middleYOffset];
-    int x;
-    for (x=widthForLeft; x<r.w-widthForRight; x+=widthForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y+middleYOffset];
-    }
-    [bitmap drawCString:right palette:palette x:r.x+r.w-widthForRight y:r.y+middleYOffset];
-    int knobX = widthForLeft + (int)(r.w-widthForLeft-widthForRight-widthForKnob) * pct;
-    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y+knobYOffset];
-}
-+ (void)drawInactiveHorizontalScrollBarInBitmap:(id)bitmap rect:(Int4)r
-{
-    char *palette = [Definitions cStringForInactiveHorizontalScrollBarPalette];
-
-    char *left = [Definitions cStringForInactiveHorizontalScrollBarLeftArrow];
-    char *middle = [Definitions cStringForInactiveHorizontalScrollBarMiddle];
-    char *right = [Definitions cStringForInactiveHorizontalScrollBarRightArrow];
-
-    int widthForLeft = [Definitions widthForCString:left];
-    int widthForMiddle = [Definitions widthForCString:middle];
-    int widthForRight = [Definitions widthForCString:right];
-
-    int heightForMiddle = [Definitions heightForCString:middle];
-    int middleYOffset = (r.h - heightForMiddle)/2.0;
-
-    [bitmap drawCString:left palette:palette x:r.x y:r.y+middleYOffset];
-    int x;
-    for (x=widthForLeft; x<r.w-widthForRight; x+=widthForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+x y:r.y+middleYOffset];
-    }
-    [bitmap drawCString:right palette:palette x:r.x+r.w-widthForRight y:r.y+middleYOffset];
-}
-+ (void)drawInactiveVerticalScrollBarInBitmap:(id)bitmap rect:(Int4)r
-{
-    char *palette = [Definitions cStringForInactiveVerticalScrollBarPalette];
-
-    char *top = [Definitions cStringForInactiveVerticalScrollBarUpArrow];
-    char *middle = [Definitions cStringForInactiveVerticalScrollBarMiddle];
-    char *bottom = [Definitions cStringForInactiveVerticalScrollBarDownArrow];
-//    char *knob = [Definitions cStringForInactiveVerticalScrollBarKnob];
-
-    int heightForTop = [Definitions heightForCString:top];
-    int heightForMiddle = [Definitions heightForCString:middle];
-    int heightForBottom = [Definitions heightForCString:bottom];
-//    int heightForKnob = [Definitions heightForCString:knob];
-
-    int widthForMiddle = [Definitions widthForCString:middle];
-//    int widthForKnob = [Definitions widthForCString:knob];
-    int middleXOffset = (r.w - widthForMiddle)/2;
-//    int knobXOffset = (r.w - widthForKnob)/2;
-
-    [bitmap drawCString:top palette:palette x:r.x+middleXOffset y:r.y];
-    for (int y=r.y+heightForTop; y<r.y+r.h-heightForBottom; y+=heightForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+middleXOffset y:y];
-    }
-    [bitmap drawCString:bottom palette:palette x:r.x+middleXOffset y:r.y+r.h-heightForBottom];
-//    int knobX = widthForLeft + (int)(r.w-widthForLeft-widthForRight-widthForKnob) * pct;
-//    [bitmap drawCString:knob palette:palette x:r.x+knobX y:r.y+r.h-1-knobYOffset];
-}
-@end
