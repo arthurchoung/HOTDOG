@@ -338,6 +338,46 @@ static char *closeButtonDownPixels =
 "bbbbbbbbbbb\n"
 ;
 
+@implementation Definitions(fjeklwjfklsmdklfmiewmoofmkdsf)
++ (char *)cStringForMacClassicActiveTitleBarLeftPixels
+{
+    return activeTitleBarLeftPixels;
+}
++ (char *)cStringForMacClassicActiveTitleBarMiddlePixels
+{
+    return activeTitleBarMiddlePixels;
+}
++ (char *)cStringForMacClassicActiveTitleBarRightPixels
+{
+    return activeTitleBarRightPixels;
+}
++ (char *)cStringForMacClassicInactiveTitleBarLeftPixels
+{
+    return inactiveTitleBarLeftPixels;
+}
++ (char *)cStringForMacClassicInactiveTitleBarMiddlePixels
+{
+    return inactiveTitleBarMiddlePixels;
+}
++ (char *)cStringForMacClassicInactiveTitleBarRightPixels
+{
+    return inactiveTitleBarRightPixels;
+}
++ (char *)cStringForMacClassicResizeButtonPixels
+{
+    return bottomBorderRightPixels;
+}
++ (char *)cStringForMacClassicInactiveResizeButtonPixels
+{
+    return inactiveBottomBorderRightPixels;
+}
++ (char *)cStringForMacClassicCloseButtonDownPixels
+{
+    return closeButtonDownPixels;
+}
+@end
+
+
 @interface MacClassicWindow : IvarObject
 {
     int _leftBorder;
