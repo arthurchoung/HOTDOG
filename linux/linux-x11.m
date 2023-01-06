@@ -898,6 +898,13 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     id object = [dict valueForKey:@"object"];
     int hasShadow = [object intValueForKey:@"hasShadow"];
     if (!hasShadow) {
+        if ([object respondsToSelector:@selector(x11WindowMaskPointsForWidth:height:)]) {
+            Window win = [[dict valueForKey:@"window"] unsignedLongValue];
+            int w = [dict intValueForKey:@"w"];
+            int h = [dict intValueForKey:@"h"];
+            int *points = [object x11WindowMaskPointsForWidth:w height:h];
+            [self addMaskToWindow:win arrayOfPoints:points width:w height:h];
+        }
         return;
     }
 
@@ -1028,6 +1035,32 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
         }
         x++;
         p++;
+    }
+
+    XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
+    XFreeGC(_display, shape_gc);
+    XFreePixmap(_display, shape_pixmap);
+}
+- (void)addMaskToWindow:(unsigned long)win arrayOfPoints:(int *)points width:(int)w height:(int)h
+{
+    if (!win || !points) {
+        return;
+    }
+
+    XGCValues xgcv;
+    xgcv.foreground = WhitePixel(_display, DefaultScreen(_display));
+    xgcv.line_width = 1;
+    xgcv.line_style = LineSolid;
+    Pixmap shape_pixmap = XCreatePixmap(_display, win, w, h, 1);
+    GC shape_gc = XCreateGC(_display, shape_pixmap, 0, &xgcv);
+    XSetForeground(_display, shape_gc, 1);
+    XFillRectangle(_display, shape_pixmap, shape_gc, 0, 0, w, h);
+    XSetForeground(_display, shape_gc, 0);
+
+    for (int i=1; i<points[0]; i+=2) {
+        int x = points[i];
+        int y = points[i+1];
+        XDrawPoint(_display, shape_pixmap, shape_gc, x, y);
     }
 
     XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
@@ -3371,6 +3404,28 @@ NSLog(@"property %s prop_return '%s'", propertyName, prop_return);
     if ((newW > 0) && (newH > 0)) {
         [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
 //        [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
+        [dict setValue:nil forKey:@"revertMaximize"];
+    }
+}
+- (void)x11MaximizeToMonitor:(int)monitorIndex
+{
+    id dict = self;
+    unsigned long win = [dict unsignedLongValueForKey:@"window"];
+    id windowManager = [@"windowManager" valueForKey];
+    int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
+
+    id monitors = [Definitions monitorConfig];
+    id monitor = [monitors nth:monitorIndex];
+    int monitorX = [monitor intValueForKey:@"x"];
+    int monitorWidth = [monitor intValueForKey:@"width"];
+    int monitorHeight = [monitor intValueForKey:@"height"];
+    int newX = monitorX;
+    int newY = menuBarHeight-1;
+    int newW = monitorWidth;
+    int newH = monitorHeight-(menuBarHeight-1);
+    if ((newW > 0) && (newH > 0)) {
+        [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
         [dict setValue:nil forKey:@"revertMaximize"];
     }
 }
