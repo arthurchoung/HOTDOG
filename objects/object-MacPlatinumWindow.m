@@ -60,283 +60,6 @@
 }
 @end
 
-/*
-+ (char *)cStringForMacPlatinumRightBorderPalette
-{
-    return
-"b #000000\n"
-". #555555\n"
-"X #777777\n"
-"o #63639C\n"
-"O #888888\n"
-"+ #999999\n"
-"@ #AAAAAA\n"
-"# #CCCCCC\n"
-"$ #DDDDDD\n"
-"% #EEEEEE\n"
-"& #FFFFFF\n"
-;
-}
-+ (char *)cStringForMacPlatinumRightBorderTop
-{
-    return
-"b..............b&##+bb\n"
-;
-}
-+ (char *)cStringForMacPlatinumRightBorderMiddle
-{
-    return
-"b%%%%%%%%%%%%%%b&##+bb\n"
-;
-}
-+ (char *)cStringForMacPlatinumRightBorderBottom
-{
-    return
-"b..............b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%OO%%%%%%b&##+bb\n"
-"b%%%%%OOOO%%%%%b&##+bb\n"
-"b%%%%OOOOOO%%%%b&##+bb\n"
-"b%%%OOOOOOOO%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"bOOOOOOOOOOOOOOb&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%OOOOOOOO%%%b&##+bb\n"
-"b%%%%OOOOOO%%%%b&##+bb\n"
-"b%%%%%OOOO%%%%%b&##+bb\n"
-"b%%%%%%OO%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-"b%%%%%%%%%%%%%%b&##+bb\n"
-//"bbbbbbbbbbbbbbbb&##+b\n"
-;
-}
-
-+ (char *)cStringForMacPlatinumInactiveRightBorderPalette
-{
-    return
-"b #555555\n"
-". #63639C\n"
-"X #DDDDDD\n"
-"o #EEEEEE\n"
-"O #FFFFFF\n"
-;
-}
-
-+ (char *)cStringForMacPlatinumInactiveRightBorderTop
-{
-    return
-"bbbbbbbbbbbbbbbbXXXXbb\n"
-;
-}
-+ (char *)cStringForMacPlatinumInactiveRightBorderMiddle
-{
-    return
-"boooooooooooooobXXXXbb\n"
-;
-}
-
-+ (char *)cStringForMacPlatinumInactiveBottomBorderPalette
-{
-    return
-"b #555555\n"
-". #63639C\n"
-"X #DDDDDD\n"
-"o #EEEEEE\n"
-"O #FFFFFF\n"
-;
-}
-+ (char *)cStringForMacPlatinumInactiveBottomBorderLeft
-{
-    return
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXb\n"
-"bXXXXX\n"
-"bXXXXX\n"
-"bXXXXX\n"
-"bXXXXX\n"
-"bbbbbb\n"
-"  bbbb\n"
-;
-}
-+ (char *)cStringForMacPlatinumInactiveBottomBorderMiddle
-{
-    return
-"b\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"o\n"
-"b\n"
-"X\n"
-"X\n"
-"X\n"
-"X\n"
-"b\n"
-"b\n"
-;
-}
-+ (char *)cStringForMacPlatinumInactiveBottomBorderRight
-{
-    return
-"bbbbbbbbbbbbbbbbXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"bXXXXXXXXXXXXXXXXXXXbb\n"
-"XXXXXXXXXXXXXXXXXXXXbb\n"
-"XXXXXXXXXXXXXXXXXXXXbb\n"
-"XXXXXXXXXXXXXXXXXXXXbb\n"
-"XXXXXXXXXXXXXXXXXXXXbb\n"
-"bbbbbbbbbbbbbbbbbbbbbb\n"
-"bbbbbbbbbbbbbbbbbbbbbb\n"
-;
-}
-+ (char *)cStringForMacPlatinumBottomBorderPalette
-{
-    return
-"b #000000\n"
-". #555555\n"
-"X #777777\n"
-"o #63639C\n"
-"O #888888\n"
-"+ #999999\n"
-"@ #AAAAAA\n"
-"# #CCCCCC\n"
-"$ #EEEEEE\n"
-"% #FFFFFF\n"
-;
-}
-+ (char *)cStringForMacPlatinumBottomBorderLeft
-{
-    return
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%##+b\n"
-"b%###%\n"
-"b%####\n"
-"b%####\n"
-"b#++++\n"
-"bbbbbb\n"
-;
-}
-+ (char *)cStringForMacPlatinumBottomBorderMiddle
-{
-    return
-"b\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"$\n"
-"b\n"
-"%\n"
-"#\n"
-"#\n"
-"+\n"
-"b\n"
-;
-}
-+ (char *)cStringForMacPlatinumBottomBorderRight
-{
-    return
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb%##+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%%%%%%%%%%%%%%%%##+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%#################+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%#################+bb\n"
-".$$$$$$$$O$$$$$O$$$$$O$$$$$$$$b%#######%%########+bb\n"
-".$$$$$$$OO$$$$$O$$$$$OO$$$$$$$b%######%#X########+bb\n"
-".$$$$$$OOO$$$$$O$$$$$OOO$$$$$$b%#####%#X#%%######+bb\n"
-".$$$$$OOOO$$$$$O$$$$$OOOO$$$$$b%####%#X#%#X######+bb\n"
-".$$$$$OOOO$$$$$O$$$$$OOOO$$$$$b%###%#X#%#X#%%####+bb\n"
-".$$$$$$OOO$$$$$O$$$$$OOO$$$$$$b%##%#X#%#X#%#X####+bb\n"
-".$$$$$$$OO$$$$$O$$$$$OO$$$$$$$b%##@X#%#X#%#X#####+bb\n"
-".$$$$$$$$O$$$$$O$$$$$O$$$$$$$$b%####%#X#%#X######+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%####@X#%#X#######+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%######%#X########+bb\n"
-".$$$$$$$$$$$$$$O$$$$$$$$$$$$$$b%######@X#########+bb\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb%#################+bb\n"
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#################+bb\n"
-"#################################################+bb\n"
-"#################################################+bb\n"
-"++++++++++++++++++++++++++++++++++++++++++++++++++bb\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-;
-}
-
-*/
 
 static char *inactiveTitleBarPalette =
 "b #555555\n"
@@ -503,7 +226,7 @@ static char *inactiveBottomBorderRightPixels =
 ;
 
 static char *activeTitleBarLeftPalette =
-"  #000000\n"
+"b #000000\n"
 ". #222222\n"
 "X #555555\n"
 "o #777777\n"
@@ -943,6 +666,105 @@ static char *resizeSelectionVerticalPixels =
 "b\n"
 "w\n"
 ;
+@implementation Definitions(fmkdlsmfklsdmklfmksdlmfklsdmf)
++ (char *)cStringForMacPlatinumActiveTitleBarLeftPalette
+{
+    return activeTitleBarLeftPalette;
+}
++ (char *)cStringForMacPlatinumActiveTitleBarLeftPixels
+{
+    return activeTitleBarLeftPixels;
+}
++ (char *)cStringForMacPlatinumActiveTitleBarMiddlePalette
+{
+    return activeTitleBarRightPalette;
+}
++ (char *)cStringForMacPlatinumActiveTitleBarMiddlePixels
+{
+    return activeTitleBarMiddlePixels;
+}
++ (char *)cStringForMacPlatinumActiveTitleBarRightPalette
+{
+    return activeTitleBarRightPalette;
+}
++ (char *)cStringForMacPlatinumActiveTitleBarRightPixels
+{
+    return activeTitleBarRightPixels;
+}
++ (char *)cStringForMacPlatinumCloseButtonDownPalette
+{
+    return closeButtonDownPalette;
+}
++ (char *)cStringForMacPlatinumCloseButtonDownPixels
+{
+    return closeButtonDownPixels;
+}
++ (char *)cStringForMacPlatinumShadeButtonDownPalette
+{
+    return shadeButtonDownPalette;
+}
++ (char *)cStringForMacPlatinumShadeButtonDownPixels
+{
+    return shadeButtonDownPixels;
+}
++ (char *)cStringForMacPlatinumMaximizeButtonDownPalette
+{
+    return maximizeButtonDownPalette;
+}
++ (char *)cStringForMacPlatinumMaximizeButtonDownPixels
+{
+    return maximizeButtonDownPixels;
+}
++ (char *)cStringForMacPlatinumInactiveTitleBarLeftPalette
+{
+    return inactiveTitleBarPalette;
+}
++ (char *)cStringForMacPlatinumInactiveTitleBarLeftPixels
+{
+    return inactiveTitleBarLeftPixels;
+}
++ (char *)cStringForMacPlatinumInactiveTitleBarMiddlePalette
+{
+    return inactiveTitleBarPalette;
+}
++ (char *)cStringForMacPlatinumInactiveTitleBarMiddlePixels
+{
+    return inactiveTitleBarMiddlePixels;
+}
++ (char *)cStringForMacPlatinumInactiveTitleBarRightPalette
+{
+    return inactiveTitleBarPalette;
+}
++ (char *)cStringForMacPlatinumInactiveTitleBarRightPixels
+{
+    return inactiveTitleBarRightPixels;
+}
++ (char *)cStringForMacPlatinumActiveTitleBarTextLeftPixels
+{
+    return activeTitleBarTextLeftPixels;
+}
++ (char *)cStringForMacPlatinumActiveTitleBarTextRightPixels
+{
+    return activeTitleBarTextRightPixels;
+}
++ (char *)cStringForMacPlatinumActiveLeftBorderPalette
+{
+    return leftBorderPalette;
+}
++ (char *)cStringForMacPlatinumActiveLeftBorderPixels
+{
+    return leftBorderMiddlePixels;
+}
++ (char *)cStringForMacPlatinumInactiveLeftBorderPalette
+{
+    return inactiveLeftBorderPalette;
+}
++ (char *)cStringForMacPlatinumInactiveLeftBorderPixels
+{
+    return leftBorderMiddlePixels;
+}
+@end
+
 
 @interface MacPlatinumWindow : IvarObject
 {
