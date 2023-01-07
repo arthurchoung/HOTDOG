@@ -201,6 +201,12 @@
         [context evaluateMessage:drawMessage];
         [self setValue:nil forKey:@"bitmap"];
     }
+
+    id windowManager = [@"windowManager" valueForKey];
+    unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+    if (win) {
+        [windowManager addMaskToWindow:win bitmap:bitmap];
+    }
 }
 - (void)handleMouseDown:(id)event
 {
@@ -305,9 +311,6 @@ NSLog(@"CommandOutputBitmap handleMouseDown");
                 id objectWindows = [windowManager valueForKey:@"objectWindows"];
                 for (int i=0; i<[objectWindows count]; i++) {
                     id elt = [objectWindows nth:i];
-                    if (![elt intValueForKey:@"isIcon"]) {
-                        continue;
-                    }
                     if ([elt valueForKey:@"selectedTimestamp"]) {
                         [elt setValue:nil forKey:@"selectedTimestamp"];
                         [elt setValue:@"1" forKey:@"needsRedraw"];
@@ -327,16 +330,12 @@ NSLog(@"CommandOutputBitmap handleMouseDown");
     int mouseRootX = [event intValueForKey:@"mouseRootX"];
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
 
-    id x11dict = [event valueForKey:@"x11dict"];
-    id obj = [x11dict valueForKey:@"object"];
-    id fileDict = [obj valueForKey:@"fileDict"];
-    id menuCSV = [fileDict valueForKey:@"menuCSV"];
-    id menu = [[menuCSV parseCSVFromString] asMenu];
-    [menu setValue:x11dict forKey:@"contextualObject"];
-    int w = [menu preferredWidth];
-    int h = [menu preferredHeight];
-    id dict = [windowManager openWindowForObject:menu x:mouseRootX y:mouseRootY w:w+3 h:h+3];
-    [windowManager setValue:dict forKey:@"buttonDownDict"];
-    [windowManager setValue:@"3" forKey:@"buttonDownWhich"];
+    id menuCSV = [_fileDict valueForKey:@"menuCSV"];
+    id obj = [[menuCSV parseCSVFromString] asMenu];
+    if (obj) {
+        id x11dict = [event valueForKey:@"x11dict"];
+        [obj setValue:x11dict forKey:@"contextualObject"];
+        [windowManager openButtonDownMenuForObject:obj x:mouseRootX y:mouseRootY w:0 h:0];
+    }
 }
 @end
