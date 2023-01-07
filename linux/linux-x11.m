@@ -602,8 +602,6 @@ exit(0);
 
     id _menuDict;
 
-    time_t _desktopPathTimestamp;
-
     Window _focusInEventWindow;
 }
 @end
@@ -1008,6 +1006,36 @@ NSLog(@"reparentWindow:%lu name %@", win, name);
     XFreeGC(_display, shape_gc);
     XFreePixmap(_display, shape_pixmap);
 }
+- (void)addMaskToWindow:(unsigned long)win bitmap:(id)bitmap
+{
+    int w = [bitmap bitmapWidth];
+    int h = [bitmap bitmapHeight];
+
+    XGCValues xgcv;
+    xgcv.foreground = WhitePixel(_display, DefaultScreen(_display));
+    xgcv.line_width = 1;
+    xgcv.line_style = LineSolid;
+    Pixmap shape_pixmap = XCreatePixmap(_display, win, w, h, 1);
+    GC shape_gc = XCreateGC(_display, shape_pixmap, 0, &xgcv);
+    {
+        XSetForeground(_display, shape_gc, 1);
+        XFillRectangle(_display, shape_pixmap, shape_gc, 0, 0, w, h);
+        XSetForeground(_display, shape_gc, 0);
+        uint8_t *pixelBytes = [bitmap pixelBytes];
+        int bitmapStride = [bitmap bitmapStride];
+        for (int i=0; i<w; i++) {
+            for (int j=0; j<h; j++) {
+                uint8_t *p = pixelBytes + bitmapStride*j + i*4;
+                if (!p[3]) {
+                    XDrawPoint(_display, shape_pixmap, shape_gc, i, j);
+                }
+            }
+        }
+    }
+    XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
+    XFreeGC(_display, shape_gc);
+    XFreePixmap(_display, shape_pixmap);
+}
 - (void)unparentObjectWindow:(id)dict
 {
     id childWindow = [dict valueForKey:@"childWindow"];
@@ -1140,17 +1168,6 @@ NSLog(@"unparent object %@", dict);
             if (![dict intValueForKey:@"shouldCloseWindow"]) {
                 return dict;
             }
-        }
-    }
-    return nil;
-}
-- (id)dictForObjectFilePath:(id)filePath
-{
-    for (int i=0; i<[_objectWindows count]; i++) {
-        id dict = [_objectWindows nth:i];
-        id val = [dict valueForKey:@"filePath"];
-        if ([val isEqual:filePath]) {
-            return dict;
         }
     }
     return nil;
@@ -1336,74 +1353,26 @@ if ([monitor intValueForKey:@"height"] == 768) {
     int w = [context intValueForKey:@"w"];
     int h = [context intValueForKey:@"h"];
     if (_isWindowManager) {
-        if ([context valueForKey:@"transparent"]) {
-            id bitmap = [Definitions bitmapWithWidth:w height:h];
-            Int4 r = [Definitions rectWithX:x y:y w:w h:h];
-            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
-                [object drawInBitmap:bitmap rect:r context:context];
-            } else if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
-                [object drawInBitmap:bitmap rect:r];
-            } else {
-                [bitmap setColor:@"black"];
-                id text = [object description];
-                text = [bitmap fitBitmapString:text width:r.w-10];
-                [bitmap drawBitmapText:text x:r.x+5 y:r.y+5];
-            }
-
-            {
-                XGCValues xgcv;
-                xgcv.foreground = WhitePixel(_display, DefaultScreen(_display));
-                xgcv.line_width = 1;
-                xgcv.line_style = LineSolid;
-                Pixmap shape_pixmap = XCreatePixmap(_display, win, w, h, 1);
-                GC shape_gc = XCreateGC(_display, shape_pixmap, 0, &xgcv);
-                {
-                    XSetForeground(_display, shape_gc, 1);
-                    XFillRectangle(_display, shape_pixmap, shape_gc, 0, 0, w, h);
-                    XSetForeground(_display, shape_gc, 0);
-                    uint8_t *pixelBytes = [bitmap pixelBytes];
-                    int bitmapStride = [bitmap bitmapStride];
-                    for (int i=0; i<w; i++) {
-                        for (int j=0; j<h; j++) {
-                            uint8_t *p = pixelBytes + bitmapStride*j + i*4;
-                            if (!p[3]) {
-                                XDrawPoint(_display, shape_pixmap, shape_gc, i, j);
-                            }
-                        }
-                    }
-                }
-                XShapeCombineMask(_display, win, ShapeBounding, 0, 0, shape_pixmap, ShapeSet);
-                XFreeGC(_display, shape_gc);
-                XFreePixmap(_display, shape_pixmap);
-            }
-
-            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, _visualInfo.depth);
-            GC gc = XCreateGC(_display, win, 0, 0);
-            XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
-            XFreeGC(_display, gc);
-            XDestroyImage(ximage);
+        id bitmap = [Definitions bitmapWithWidth:w height:h];
+        Int4 r = [Definitions rectWithX:x y:y w:w h:h];
+        if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+            [object drawInBitmap:bitmap rect:r context:context];
+        } else if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
+            [object drawInBitmap:bitmap rect:r];
         } else {
-            id bitmap = [Definitions bitmapWithWidth:w height:h];
-            Int4 r = [Definitions rectWithX:x y:y w:w h:h];
-            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
-                [object drawInBitmap:bitmap rect:r context:context];
-            } else if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
-                [object drawInBitmap:bitmap rect:r];
-            } else {
-                [bitmap setColor:@"white"];
-                [bitmap fillRect:r];
-                [bitmap setColor:@"black"];
-                id text = [object description];
-                text = [bitmap fitBitmapString:text width:r.w-10];
-                [bitmap drawBitmapText:text x:r.x+5 y:r.y+5];
-            }
-
-            XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, _visualInfo.depth);
-            GC gc = XCreateGC(_display, win, 0, 0);
-            XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
-            XFreeGC(_display, gc);
-            XDestroyImage(ximage);
+            [bitmap setColor:@"white"];
+            [bitmap fillRect:r];
+            [bitmap setColor:@"black"];
+            id text = [object description];
+            text = [bitmap fitBitmapString:text width:r.w-10];
+            [bitmap drawBitmapText:text x:r.x+5 y:r.y+5];
         }
+
+        XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, _visualInfo.depth);
+        GC gc = XCreateGC(_display, win, 0, 0);
+        XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
+        XFreeGC(_display, gc);
+        XDestroyImage(ximage);
     } else {
 //NSLog(@"drawObject:%@ drawInRect", object);
         id bitmap = [Definitions bitmapWithWidth:w height:h];
@@ -1594,38 +1563,15 @@ NSLog(@"no object windows, exiting pid %d", getpid());
             time_t timestamp = time(0);
             if (timestamp != _backgroundUpdateTimestamp) {
 
-                if (!_isWindowManager) {
-                    for (int i=0; i<[_objectWindows count]; i++) {
-                        id elt = [_objectWindows nth:i];
-                        id obj = [elt valueForKey:@"object"];
-                        if ([obj respondsToSelector:@selector(handleBackgroundUpdate:)]) {
-                            id dict = nsdict();
-                            [dict setValue:self forKey:@"windowManager"];
-                            [dict setValue:elt forKey:@"x11dict"];
-                            [obj handleBackgroundUpdate:dict];
-                            [elt setValue:@"1" forKey:@"needsRedraw"];
-                        }
-                    }
-                } else {
-                    time_t timestamp = [[Definitions configDir:@"Desktop"] fileModificationTimestamp];
-                    if (timestamp != _desktopPathTimestamp) {
-                        [self handleDesktopPath];
-                        _desktopPathTimestamp = timestamp;
-                    } else {
-                        for (int i=0; i<[_objectWindows count]; i++) {
-                            id elt = [_objectWindows nth:i];
-                            if (![elt intValueForKey:@"isIcon"]) {
-                                continue;
-                            }
-                            id obj = [elt valueForKey:@"object"];
-                            if ([obj respondsToSelector:@selector(handleBackgroundUpdate:)]) {
-                                id dict = nsdict();
-                                [dict setValue:self forKey:@"windowManager"];
-                                [dict setValue:elt forKey:@"x11dict"];
-                                [obj handleBackgroundUpdate:dict];
-                                [elt setValue:@"1" forKey:@"needsRedraw"];
-                            }
-                        }
+                for (int i=0; i<[_objectWindows count]; i++) {
+                    id elt = [_objectWindows nth:i];
+                    id obj = [elt valueForKey:@"object"];
+                    if ([obj respondsToSelector:@selector(handleBackgroundUpdate:)]) {
+                        id dict = nsdict();
+                        [dict setValue:self forKey:@"windowManager"];
+                        [dict setValue:elt forKey:@"x11dict"];
+                        [obj handleBackgroundUpdate:dict];
+                        [elt setValue:@"1" forKey:@"needsRedraw"];
                     }
                 }
 
@@ -2635,92 +2581,6 @@ NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e-
             }
             [x11dict setValue:@"1" forKey:@"needsRedraw"];
         }
-    }
-}
-
-- (void)handleDesktopPath
-{
-    id contents = [[Definitions configDir:@"Desktop"] contentsOfDirectoryWithFullPaths];
-    for (int i=0; i<[_objectWindows count]; i++) {
-        id dict = [_objectWindows nth:i];
-        id filePath = [dict valueForKey:@"filePath"];
-        if (!filePath) {
-            continue;
-        }
-        if ([contents containsObject:filePath]) {
-            continue;
-        }
-        [dict setValue:@"1" forKey:@"shouldCloseWindow"];
-    }
-
-
-    int monitorWidth = _rootWindowWidth;
-    int monitorHeight = _rootWindowHeight;
-
-
-    int maxWidth = 16;
-    int cursorX = 10;
-    int cursorY = 30;
-    for (int i=0; i<[contents count]; i++) {
-        id path = [contents nth:i];
-        if ([[path lastPathComponent] hasPrefix:@"."]) {
-            continue;
-        }
-        id dict = [self dictForObjectFilePath:path];
-        if (!dict) {
-            id obj = [path iconFromFile];
-            int w = 16;
-            if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                int preferredWidth = [obj preferredWidth];
-                if (preferredWidth) {
-                    w = preferredWidth;
-                }
-            }
-            int h = 16;
-            if ([obj respondsToSelector:@selector(preferredHeight)]) {
-                int preferredHeight = [obj preferredHeight];
-                if (preferredHeight) {
-                    h = preferredHeight;
-                }
-            }
-            if (w > maxWidth) {
-                maxWidth = w;
-            }
-            if (cursorY + h >= monitorHeight) {
-                cursorY = 30;
-                cursorX += maxWidth + 10;
-                maxWidth = 16;
-            }
-            [self openWindowForObject:obj x:cursorX y:cursorY w:w h:h];
-            cursorY += h+10;
-            dict = [self dictForObject:obj];
-            [dict setValue:@"1" forKey:@"isIcon"];
-            [dict setValue:path forKey:@"filePath"];
-            [dict setValue:@"1" forKey:@"transparent"];
-        } else {
-            id icon = [path iconFromFile];
-            id fileDict = [icon valueForKey:@"fileDict"];
-            if (fileDict) {
-                id obj = [dict valueForKey:@"object"];
-                [obj setValue:fileDict forKey:@"fileDict"];
-                int w = 16;
-                if ([obj respondsToSelector:@selector(preferredWidth)]) {
-                    int preferredWidth = [obj preferredWidth];
-                    if (preferredWidth) {
-                        w = preferredWidth;
-                    }
-                }
-                int h = 16;
-                if ([obj respondsToSelector:@selector(preferredHeight)]) {
-                    int preferredHeight = [obj preferredHeight];
-                    if (preferredHeight) {
-                        h = preferredHeight;
-                    }
-                }
-                [dict setValue:nsfmt(@"%d %d", w, h) forKey:@"resizeWindow"];
-            }
-        }
-        [dict setValue:@"1" forKey:@"needsRedraw"];
     }
 }
 
