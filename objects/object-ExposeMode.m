@@ -102,7 +102,6 @@
     [windowManager setValue:rootObject forKey:@"rootWindowObject"];
     id obj = [@"ExposeWindow" asInstance];
     id dict = [windowManager openWindowForObject:obj x:0 y:0 w:1 h:1];
-    [dict setValue:@"1" forKey:@"transparent"];
     [windowManager unmapObjectWindow:dict];
     [rootObject tileWindows];
 }
@@ -321,6 +320,12 @@
     right.w = 5;
     right.x = r.x+r.w-5;
     [bitmap fillRect:right];
+
+    id windowManager = [@"windowManager" valueForKey];
+    unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+    if (win) {
+        [windowManager addMaskToWindow:win bitmap:bitmap];
+    }
 }
 @end
 
