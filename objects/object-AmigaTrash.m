@@ -265,10 +265,12 @@ static char *openTrashPixels =
 
     id windowManager = [@"windowManager" valueForKey];
     unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
-    if (hasFocus) {
-        [windowManager addMaskToWindow:win cString:openTrashPixels c:' '];
-    } else {
-        [windowManager addMaskToWindow:win cString:trashPixels c:' '];
+    if (win) {
+        if (hasFocus) {
+            [windowManager addMaskToWindow:win cString:openTrashPixels c:' '];
+        } else {
+            [windowManager addMaskToWindow:win cString:trashPixels c:' '];
+        }
     }
 }
 
