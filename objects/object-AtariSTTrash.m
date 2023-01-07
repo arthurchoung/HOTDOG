@@ -25,77 +25,65 @@
 
 #import "HOTDOG.h"
 
-static id trashPalette =
-@"b #000000\n"
-@". #ffffff\n"
+#include <sys/time.h>
+
+static id menuCSV =
+@"displayName,messageForClick\n"
+@"\"Open Trash\",\"handleOpen\"\n"
+@",\n"
+@"Quit,\"exit:0\"\n"
 ;
 
-static id selectedTrashPalette =
-@". #000000\n"
-@"b #ffffff\n"
+static char *trashPalette =
+"b #000000\n"
+". #ffffff\n"
 ;
 
-static id trashPixels =
-@"                bbbbbbbbbb                \n"
-@"                bbbbbbbbbb                \n"
-@"      bbbbbbbbbbbb      bbbbbbbbbbbb      \n"
-@"      bbbbbbbbbbbb      bbbbbbbbbbbb      \n"
-@"  bbbbbb......bbbb......bbbb......bbbbbb  \n"
-@"  bbbbbb......bbbb......bbbb......bbbbbb  \n"
-@"bb......................................bb\n"
-@"bb......................................bb\n"
-@"bbbbbbbb..........................bbbbbbbb\n"
-@"bbbbbbbb..........................bbbbbbbb\n"
-@"  bb..bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..bb  \n"
-@"  bb..bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..bb  \n"
-@"  bb..................................bb  \n"
-@"  bb..................................bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb....bb......bb..bb....bb  \n"
-@"  bb..bb......bb....bb......bb..bb....bb  \n"
-@"  bb..bb......bb....bbbb..bbbb..bb....bb  \n"
-@"  bb..bb......bb....bbbb..bbbb..bb....bb  \n"
-@"  bb..bb......bb......bbbbbb....bb....bb  \n"
-@"  bb..bb......bb......bbbbbb....bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bb......bb........bb......bb....bb  \n"
-@"  bb..bbbb....bb........bb....bbbb....bb  \n"
-@"  bb..bbbb....bb........bb....bbbb....bb  \n"
-@"  bbbb........bbbb....bbbb..........bbbb  \n"
-@"  bbbb........bbbb....bbbb..........bbbb  \n"
-@"    bbbbbb......................bbbbbb    \n"
-@"    bbbbbb......................bbbbbb    \n"
-@"        bbbbbbbbbbbbbbbbbbbbbbbbbb        \n"
-@"        bbbbbbbbbbbbbbbbbbbbbbbbbb        \n"
+static char *selectedTrashPalette =
+". #000000\n"
+"b #ffffff\n"
 ;
 
+static char *trashPixels =
+"                                  bbbbb                                 \n"
+"                             bbbbbb   bbbbbb                            \n"
+"                           bbb...bb   bb...bbb                          \n"
+"                          b...................b                         \n"
+"                          bbbb.............bbbb                         \n"
+"                           b.bbbbbbbbbbbbbbb.b                          \n"
+"                           b.................b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b..b...b.b..b                          \n"
+"                           b.b...b..bb.bb.b..b                          \n"
+"                           b.b...b...bbb..b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.b...b....b...b..b                          \n"
+"                           b.bb..b....b..bb..b                          \n"
+"                           bb....bb..bb.....bb                          \n"
+"                            bbb...........bbb                           \n"
+"                              bbbbbbbbbbbbb                             \n"
+"                                                                        \n"
+"........................................................................\n"
+".....................bbbbb.bbbb...bbb...bbbb.b...b......................\n"
+".......................b...b...b.b...b.b.....b...b......................\n"
+".......................b...bbbb..bbbbb..bbb..bbbbb......................\n"
+".......................b...b.b...b...b.....b.b...b......................\n"
+".......................b...b..bb.b...b.bbbb..b...b......................\n"
+"........................................................................\n"
+"........................................................................\n"
+;
 
 @implementation Definitions(INMfewlfmklsdmvklsjdklfjklsdffjdkslmfklxcmvklcxkl)
 + (id)AtariSTTrash
@@ -108,23 +96,131 @@ static id trashPixels =
 
 @interface AtariSTTrash : IvarObject
 {
+    int _buttonDown;
+    int _buttonDownX;
+    int _buttonDownY;
+    id _buttonDownTimestamp;
 }
 @end
 @implementation AtariSTTrash
+- (char *)x11WindowMaskCString
+{
+    return trashPixels;
+}
+- (char)x11WindowMaskChar
+{
+    return ' ';
+}
 - (int)preferredWidth
 {
-    return [Definitions widthForCString:[trashPixels UTF8String]]+10;
+    static int w = 0;
+    if (!w) {
+        w = [Definitions widthForCString:trashPixels];
+    }
+    return w;
 }
 - (int)preferredHeight
 {
-    return [Definitions heightForCString:[trashPixels UTF8String]]+10;
+    static int h = 0;
+    if (!h) {
+        h = [Definitions heightForCString:trashPixels];
+    }
+    return h;
 }
 
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
-    [bitmap setColor:@"#00ee00"];
+    BOOL hasFocus = NO;
+    {
+        id windowManager = [@"windowManager" valueForKey];
+        unsigned long focusInEventWindow = [[windowManager valueForKey:@"focusInEventWindow"] unsignedLongValue];
+        unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+        if (focusInEventWindow && (focusInEventWindow == win)) {
+            hasFocus = YES;
+        }
+    }
+    [bitmap setColor:@"black"];
     [bitmap fillRect:r];
-    [bitmap drawCString:[trashPixels UTF8String] palette:[trashPalette UTF8String] x:r.x+5 y:r.y+5];
+    if (hasFocus) {
+        [bitmap drawCString:trashPixels palette:selectedTrashPalette x:r.x y:r.y];
+    } else {
+        [bitmap drawCString:trashPixels palette:trashPalette x:r.x y:r.y];
+    }
+}
+
+- (void)handleMouseDown:(id)event
+{
+    {
+        id x11dict = [event valueForKey:@"x11dict"];
+        unsigned long win = [[x11dict valueForKey:@"window"] unsignedLongValue];
+        id windowManager = [@"windowManager" valueForKey];
+        [windowManager XRaiseWindow:win];
+    }
+
+    int mouseX = [event intValueForKey:@"mouseX"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+    _buttonDown = YES;
+    _buttonDownX = mouseX;
+    _buttonDownY = mouseY;
+
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
+    if (_buttonDownTimestamp) {
+        if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
+            [self setValue:nil forKey:@"buttonDownTimestamp"];
+            [self handleDoubleClick];
+            return;
+        }
+    }
+    [self setValue:timestamp forKey:@"buttonDownTimestamp"];
+}
+
+- (void)handleMouseMoved:(id)event
+{
+    if (!_buttonDown) {
+        return;
+    }
+    int mouseRootX = [event intValueForKey:@"mouseRootX"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+    id dict = [event valueForKey:@"x11dict"];
+
+    int newX = mouseRootX - _buttonDownX;
+    int newY = mouseRootY - _buttonDownY;
+
+    [dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+    [dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+}
+- (void)handleMouseUp:(id)event
+{
+    _buttonDown = NO;
+}
+- (void)handleRightMouseDown:(id)event
+{
+    id windowManager = [event valueForKey:@"windowManager"];
+    int mouseRootX = [event intValueForKey:@"mouseRootX"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+    id obj = [[menuCSV parseCSVFromString] asMenu];
+    if (obj) {
+        [obj setValue:self forKey:@"contextualObject"];
+        [windowManager openButtonDownMenuForObject:obj x:mouseRootX y:mouseRootY w:0 h:0];
+    }
+}
+- (void)handleDoubleClick
+{
+    [self handleOpen];
+}
+- (void)handleOpen
+{
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:@"ataristdir"];
+    [cmd addObject:[Definitions homeDir:@"Trash"]];
+    [cmd runCommandInBackground];
 }
 
 @end
