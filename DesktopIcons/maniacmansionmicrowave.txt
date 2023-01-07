@@ -31,7 +31,7 @@ then:[['hotdog' 'alert' 'The microwave is closed.']|runCommandInBackground;retur
 | ifFalse:[object|userObject|return:1]
 then:[['hotdog' 'alert' 'There is nothing inside the microwave.']|runCommandInBackground;returnNil]
 | ifTrue:[object|userObject|currentState|isEqual:'cooked']
-then:[object|setNilValueForKey:'userObject';['hotdog' 'alert' 'Nom nom nom nom nom nom']|runCommandInBackground;returnNil]
+then:[object|setNilValueForKey:'userObject';['hotdog' 'alert' 'Nom nom nom nom nom nom']|runCommandInBackground;NSArray|addObject:'aplay'|addObject:(configDir:'Sounds/homer_eating.wav')|runCommandInBackground;returnNil]
 | object|setNilValueForKey:'userObject';['hotdog' 'alert' "It's not actually cooked... but oh well"]|runCommandInBackground
 
 drawMessage
