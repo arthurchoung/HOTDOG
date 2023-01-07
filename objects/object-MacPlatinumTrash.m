@@ -25,119 +25,146 @@
 
 #import "HOTDOG.h"
 
-static id trashPalette =
-@"b #000000\n"
-@". #222222\n"
-@"X #333333\n"
-@"o #323240\n"
-@"O #333341\n"
-@"+ #343443\n"
-@"@ #363647\n"
-@"# #363648\n"
-@"$ #37374A\n"
-@"% #3A3A4F\n"
-@"& #3A3A50\n"
-@"* #3C3C53\n"
-@"= #3C3C54\n"
-@"- #444444\n"
-@"; #40405A\n"
-@": #40405B\n"
-@"> #40405C\n"
-@", #555555\n"
-@"< #434361\n"
-@"1 #464666\n"
-@"2 #49496C\n"
-@"3 #4F4F77\n"
-@"4 #53537E\n"
-@"5 #666666\n"
-@"6 #777777\n"
-@"7 #555583\n"
-@"8 #575787\n"
-@"9 #5A5A8B\n"
-@"0 #5C5C90\n"
-@"q #5E5E93\n"
-@"e #888888\n"
-@"r #AAAAAA\n"
-@"t #BBBBBB\n"
-@"y #DDDDDD\n"
-@"u #CFCFE1\n"
-@"i #FFFFFF\n"
+#include <sys/time.h>
+
+static id menuCSV =
+@"displayName,messageForClick\n"
+@"\"Open Trash\",\"handleOpen\"\n"
+@",\n"
+@"Quit,\"exit:0\"\n"
 ;
 
-static id selectedTrashPalette =
-@"b #000000\n"
-@". #222222\n"
-@"X #333333\n"
-@"o #323240\n"
-@"O #333341\n"
-@"+ #343443\n"
-@"@ #363647\n"
-@"# #363648\n"
-@"$ #37374A\n"
-@"% #3A3A4F\n"
-@"& #3A3A50\n"
-@"* #3C3C53\n"
-@"= #3C3C54\n"
-@"- #444444\n"
-@"; #40405A\n"
-@": #40405B\n"
-@"> #40405C\n"
-@", #555555\n"
-@"< #434361\n"
-@"1 #464666\n"
-@"2 #49496C\n"
-@"3 #4F4F77\n"
-@"4 #53537E\n"
-@"5 #666666\n"
-@"6 #777777\n"
-@"7 #555583\n"
-@"8 #575787\n"
-@"9 #5A5A8B\n"
-@"0 #5C5C90\n"
-@"q #5E5E93\n"
-@"e #888888\n"
-@"r #AAAAAA\n"
-@"t #BBBBBB\n"
-@"y #DDDDDD\n"
-@"u #CFCFE1\n"
-@"i #FFFFFF\n"
+static char *trashPalette =
+"b #000000\n"
+". #222222\n"
+"X #333333\n"
+"o #444444\n"
+"O #555555\n"
+"+ #666666\n"
+"@ #777777\n"
+"# #888888\n"
+"$ #999999\n"
+"% #AAAAAA\n"
+"& #BBBBBB\n"
+"* #cccccc\n"
+"= #DDDDDD\n"
+"- #EEEEEE\n"
+"; #ffffff\n"
 ;
 
-static id trashPixels =
-@"     8.2      8.2               \n"
-@"    8.y.2    8.i.2              \n"
-@"   8.yyy......iii.2             \n"
-@"  8b.........iiiii.3            \n"
-@"8bby.iiyyyy.iii.ittb            \n"
-@"bbty.iiyyy.iii.y.tt.-           \n"
-@"bbtt.iyyy.iii.yyy.-,b           \n"
-@"b6bt.yyy.iiy.yytt-,eb           \n"
-@"biebbby.iyy.tt6--,eeb           \n"
-@"beiie,bbbbbbb..eee6,b           \n"
-@"beyyiittttttttee6,--b           \n"
-@" .-yyyyyyttree6,.bbbbb2         \n"
-@" b6,5tyyytrree6.,yy6trb         \n"
-@" brtte6,,---XXX,yyeyytb.        \n"
-@" brrriyyyttreebyytyyiytb2       \n"
-@" br6ryii6yytrbtyyeyiiiyb.       \n"
-@" br6ryi6rryt,btiyeyiiiyeb       \n"
-@" br6ryi6rryt,byityiiiiiyb2      \n"
-@" br6ryi6rryt,byyeyiiii---b      \n"
-@" br6ryi6rryt,byyeyiiiy.t-b      \n"
-@" br6ryi6rryt,btteyyyit-b.eb0    \n"
-@" br6ryi6rryt,brr6yyyittb-yb380  \n"
-@" br6ryi6rryt,brr6tye---.ib#*<38q\n"
-@" br6ryi6rryt,bee,tyeb,e6ybO@%>28\n"
-@" br6ryi6rryt,bee,ty6-beyb.oO@%;4\n"
-@" br6ryi6rryt,b-6,ey6-.bbboo+$=17\n"
-@" brrryi6rryt,,.,,,y66---bo+@%:30\n"
-@" brryyi6rryt,6b,,,tye---b+#&:39 \n"
-@" .6yyiii6yytt,b-,,eyte-b+#&:39  \n"
-@" 3.briiyyyyrrre.,,-eteeb#:13q   \n"
-@"   3bbbrrttrr6bb---,6,b&:39q    \n"
-@"     3;.bbbbb....bbbbb;30       \n"
+static char *trashPixels =
+"         bb                     \n"
+"       bb#=ob                   \n"
+"     oooo.o#;bbo                \n"
+"   oo#=o#...@=b#bo.             \n"
+" oo&==;o.o&o#@b%##ob            \n"
+"o%&=;;;;=&&o@b.@%##Oo           \n"
+"b&=;;;;;;;;obo@@#%#@b           \n"
+"b@=;;;;;;;=##@@@#%#Ob           \n"
+"b@#=;;;;;===&&%%##oob           \n"
+"b#=&&&=;;==&&&#OOOOob           \n"
+"o#====&&&%##@@OO@@Oob           \n"
+" .o==;;==&%%##@@@O.b            \n"
+" b@O+&===&%%##@OXbob            \n"
+" b%&&##+ooooXX.OOOob            \n"
+" b%%%;===&&%##@@@@ob            \n"
+" b%@%=;;@==&%O%%%Xob            \n"
+" b%@%=;@%%=&O@@%@.Ob            \n"
+" b%@%=;@%%=&O@@%@.Ob            \n"
+" b%@%=;@%%=&O@@%@.Ob            \n"
+" b%@%=;@%%=&O@@%@.Ob            \n"
+" b%@%=;@%%=&O@@%@.Ob            \n"
+" b%@%=;@%%=&O@@%@.Ob@$          \n"
+" b%@%=;@%%=&O@@%@.ObO+@$        \n"
+" b%@%=;@%%=&O@@%@.ObOO+@#       \n"
+" b%@%=;@%%=&O@@%@.ObOOO+@#      \n"
+" b%@%=;@%%=&O@@%@.ObOOO+@$      \n"
+" b%%%=;@%%=&O@@%@OObOO+@#       \n"
+" b%%==;@%%=&O@@%@@ObO+@#        \n"
+" .@==;;;@==&&O%%@Oob+@#         \n"
+"  .b%;;====%%%##@bb+#$          \n"
+"    .b@%%&&%%@bb.+@#            \n"
+"      .bbbbbb.O+@#              \n"
+";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+";;bbbbb;;;;;;;;;;;;;;;;;;b;;;;;;\n"
+";;;;b;;;;;;;;;;;;;;;;;;;;b;;;;;;\n"
+";;;;b;;;;b;bb;;bb;;;bb;;;bbb;;;;\n"
+";;;;b;;;;bb;;;b;;b;b;;b;;b;;b;;;\n"
+";;;;b;;;;b;;;;;bbb;;bb;;;b;;b;;;\n"
+";;;;b;;;;b;;;;b;;b;;;;b;;b;;b;;;\n"
+";;;;b;;;;b;;;;b;;b;b;;b;;b;;b;;;\n"
+";;;;b;;;;b;;;;;bbb;;bb;;;b;;b;;;\n"
+";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
 ;
 
+static char *selectedTrashPalette =
+"b #000000\n"
+". #111111\n"
+"X #222222\n"
+"o #333333\n"
+"O #444444\n"
+"+ #555555\n"
+"@ #666666\n"
+"# #777777\n"
+"$ #888888\n"
+"% #999999\n"
+"& #AAAAAA\n"
+"* #BBBBBB\n"
+"= #cccccc\n"
+"- #DDDDDD\n"
+"; #EEEEEE\n"
+": #ffffff\n"
+;
+static char *selectedTrashPixels =
+"         bb                     \n"
+"       bbO@Xb                   \n"
+"     XXXX.XO#bbX                \n"
+"   XXO@XO...o@bObX.             \n"
+" XX+@@#X.X+XOob+OOXb            \n"
+"X++@####@++Xob.o+OOXX           \n"
+"b+@########XbXooO+Oob           \n"
+"bo@#######@OOoooO+OXb           \n"
+"boO@#####@@@++++OOXXb           \n"
+"bO@+++@##@@+++OXXXXXb           \n"
+"XO@@@@++++OOooXXooXXb           \n"
+" .X@@##@@+++OOoooX.b            \n"
+" boXo+@@@+++OOoX.bXb            \n"
+" b+++OOoXXXX...XXXXb            \n"
+" b+++#@@@+++OOooooXb            \n"
+" b+o+@##o@@++X+++.Xb            \n"
+" b+o+@#o++@+Xoo+o.Xb            \n"
+" b+o+@#o++@+Xoo+o.Xb            \n"
+" b+o+@#o++@+Xoo+o.Xb            \n"
+" b+o+@#o++@+Xoo+o.Xb            \n"
+" b+o+@#o++@+Xoo+o.Xb*-          \n"
+" b+o+@#o++@+Xoo+o.Xb#$*-        \n"
+" b+o+@#o++@+Xoo+o.XbO+#$*-      \n"
+" b+o+@#o++@+Xoo+o.XbOO+@$&      \n"
+" b+o+@#o++@+Xoo+o.XbOOO+@#      \n"
+" b+o+@#o++@+Xoo+o.XbOO++#%      \n"
+" b+++@#o++@+Xoo+oXXbO++@$*      \n"
+" b++@@#o++@+Xoo+ooXb++@$*       \n"
+" .o@@###o@@++X++oXXb+@$*        \n"
+"  .b+##@@@@+++OOobb+$%*         \n"
+"    .bo++++++obb.+@$*-          \n"
+"      .bbbbbb.O+@#*             \n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bb:::::bbbbbbbbbbbbbbbbbb:bbbbbb\n"
+"bbbb:bbbbbbbbbbbbbbbbbbbb:bbbbbb\n"
+"bbbb:bbbb:b::bb::bbb::bbb:::bbbb\n"
+"bbbb:bbbb::bbb:bb:b:bb:bb:bb:bbb\n"
+"bbbb:bbbb:bbbbb:::bb::bbb:bb:bbb\n"
+"bbbb:bbbb:bbbb:bb:bbbb:bb:bb:bbb\n"
+"bbbb:bbbb:bbbb:bb:b:bb:bb:bb:bbb\n"
+"bbbb:bbbb:bbbbb:::bb::bbb:bb:bbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+;
 
 @implementation Definitions(INMfefdisfjwlfmklsdmvklsjdklfjklsdffjdkslmfklxcmvklcfdsmkfmekkfxdsfmneoiiooikl)
 + (id)MacPlatinumTrash
@@ -150,23 +177,132 @@ static id trashPixels =
 
 @interface MacPlatinumTrash : IvarObject
 {
+    int _buttonDown;
+    int _buttonDownX;
+    int _buttonDownY;
+    id _buttonDownTimestamp;
 }
 @end
 @implementation MacPlatinumTrash
+- (char *)x11WindowMaskCString
+{
+    return trashPixels;
+}
+- (char)x11WindowMaskChar
+{
+    return ' ';
+}
 - (int)preferredWidth
 {
-    return 80;//[Definitions widthForCString:[trashPixels UTF8String]]+10;
+    static int w = 0;
+    if (!w) {
+        w = [Definitions widthForCString:trashPixels];
+    }
+    return w;
 }
 - (int)preferredHeight
 {
-    return 50;//[Definitions heightForCString:[trashPixels UTF8String]]+10;
+    static int h = 0;
+    if (!h) {
+        h = [Definitions heightForCString:trashPixels];
+    }
+    return h;
 }
 
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
-    [bitmap setColor:@"white"];
+    BOOL hasFocus = NO;
+    {
+        id windowManager = [@"windowManager" valueForKey];
+        unsigned long focusInEventWindow = [[windowManager valueForKey:@"focusInEventWindow"] unsignedLongValue];
+        unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+        if (focusInEventWindow && (focusInEventWindow == win)) {
+            hasFocus = YES;
+        }
+    }
+
+    [bitmap setColor:@"black"];
     [bitmap fillRect:r];
-    [bitmap drawCString:[trashPixels UTF8String] palette:[trashPalette UTF8String] x:r.x+5 y:r.y+5];
+    if (hasFocus) {
+        [bitmap drawCString:selectedTrashPixels palette:selectedTrashPalette x:r.x y:r.y];
+    } else {
+        [bitmap drawCString:trashPixels palette:trashPalette x:r.x y:r.y];
+    }
+}
+
+- (void)handleMouseDown:(id)event
+{
+    {
+        id x11dict = [event valueForKey:@"x11dict"];
+        unsigned long win = [[x11dict valueForKey:@"window"] unsignedLongValue];
+        id windowManager = [@"windowManager" valueForKey];
+        [windowManager XRaiseWindow:win];
+    }
+
+    int mouseX = [event intValueForKey:@"mouseX"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+    _buttonDown = YES;
+    _buttonDownX = mouseX;
+    _buttonDownY = mouseY;
+
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
+    if (_buttonDownTimestamp) {
+        if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
+            [self setValue:nil forKey:@"buttonDownTimestamp"];
+            [self handleDoubleClick];
+            return;
+        }
+    }
+    [self setValue:timestamp forKey:@"buttonDownTimestamp"];
+}
+
+- (void)handleMouseMoved:(id)event
+{
+    if (!_buttonDown) {
+        return;
+    }
+    int mouseRootX = [event intValueForKey:@"mouseRootX"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+    id dict = [event valueForKey:@"x11dict"];
+
+    int newX = mouseRootX - _buttonDownX;
+    int newY = mouseRootY - _buttonDownY;
+
+    [dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+    [dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+}
+- (void)handleMouseUp:(id)event
+{
+    _buttonDown = NO;
+}
+- (void)handleRightMouseDown:(id)event
+{
+    id windowManager = [event valueForKey:@"windowManager"];
+    int mouseRootX = [event intValueForKey:@"mouseRootX"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+    id obj = [[menuCSV parseCSVFromString] asMenu];
+    if (obj) {
+        [obj setValue:self forKey:@"contextualObject"];
+        [windowManager openButtonDownMenuForObject:obj x:mouseRootX y:mouseRootY w:0 h:0];
+    }
+}
+- (void)handleDoubleClick
+{
+    [self handleOpen];
+}
+- (void)handleOpen
+{
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:@"macplatinumdir"];
+    [cmd addObject:[Definitions homeDir:@"Trash"]];
+    [cmd runCommandInBackground];
 }
 
 @end
