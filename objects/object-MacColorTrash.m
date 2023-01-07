@@ -25,65 +25,86 @@
 
 #import "HOTDOG.h"
 
-static id trashPalette =
-@"b #000000\n"
-@". #222222\n"
-@"X #444444\n"
-@"o #555555\n"
-@"+ #777777\n"
-@"@ #888888\n"
-@"$ #aaaaaa\n"
-@"% #bbbbbb\n"
-@"& #dddddd\n"
-@"* #ffffff\n"
+#include <sys/time.h>
+
+static id menuCSV =
+@"displayName,messageForClick\n"
+@"\"Open Trash\",\"handleOpen\"\n"
+@",\n"
+@"Quit,\"exit:0\"\n"
 ;
 
-static id selectedTrashPalette =
-@"b #000000\n"
-@". #111111\n"
-@"X #222222\n"
-@"o #2a2a2a\n"
-@"+ #3b3b3b\n"
-@"@ #444444\n"
-@"$ #555555\n"
-@"% #5d5d5d\n"
-@"& #6e6e6e\n"
-@"* #7f7f7f\n"
+static char *trashPalette =
+"b #000000\n"
+". #222222\n"
+"X #444444\n"
+"o #555555\n"
+"+ #777777\n"
+"@ #888888\n"
+"$ #aaaaaa\n"
+"% #bbbbbb\n"
+"& #dddddd\n"
+"* #ffffff\n"
 ;
 
-static id trashPixels =
-@"        bbbbbb        \n"
-@"       b+&&$+Xb       \n"
-@" bbbbbbbbbbbbbbbbbbbb \n"
-@"bX++$$&*&&$$@@+++ooXXb\n"
-@"bbbbbbbbbbbbbbbbbbbbbb\n"
-@" b+$%&&&%%%$$$$++ooob \n"
-@" b+$%***&&&&$$$$$+oob \n"
-@" b+$&***+&&&$o$$++oob \n"
-@" b+$$&*+$$&&o++$+.+ob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$$&*+$$&&o++$+.oob \n"
-@" b+$&***+&&&$o$$+o+ob \n"
-@" b+$%***&&&&&$$$++oob \n"
-@" b+$&***&&%%$$+++ooob \n"
-@"  bbbbbbbbbbbbbbbbbb  \n"
+static char *selectedTrashPalette =
+"b #000000\n"
+". #111111\n"
+"X #222222\n"
+"o #2a2a2a\n"
+"+ #3b3b3b\n"
+"@ #444444\n"
+"$ #555555\n"
+"% #5d5d5d\n"
+"& #6e6e6e\n"
+"* #7f7f7f\n"
+;
+
+static char *trashPixels =
+"            bbbbbb            \n"
+"           b+&&$+Xb           \n"
+"     bbbbbbbbbbbbbbbbbbbb     \n"
+"    bX++$$&*&&$$@@+++ooXXb    \n"
+"    bbbbbbbbbbbbbbbbbbbbbb    \n"
+"     b+$%&&&%%%$$$$++ooob     \n"
+"     b+$%***&&&&$$$$$+oob     \n"
+"     b+$&***+&&&$o$$++oob     \n"
+"     b+$$&*+$$&&o++$+.+ob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$$&*+$$&&o++$+.oob     \n"
+"     b+$&***+&&&$o$$+o+ob     \n"
+"     b+$%***&&&&&$$$++oob     \n"
+"     b+$&***&&%%$$+++ooob     \n"
+"      bbbbbbbbbbbbbbbbbb      \n"
+"******************************\n"
+"******************************\n"
+"******************************\n"
+"**bbbbb****************b******\n"
+"****b******************b******\n"
+"****b***b*bb**bb***bbb*bbb****\n"
+"****b***bb******b*b****b**b***\n"
+"****b***b*****bbb**bb**b**b***\n"
+"****b***b****b**b****b*b**b***\n"
+"****b***b*****bbb*bbb**b**b***\n"
+"******************************\n"
+"******************************\n"
 ;
 
 
@@ -98,23 +119,132 @@ static id trashPixels =
 
 @interface MacColorTrash : IvarObject
 {
+    int _buttonDown;
+    int _buttonDownX;
+    int _buttonDownY;
+    id _buttonDownTimestamp;
 }
 @end
 @implementation MacColorTrash
+- (char *)x11WindowMaskCString
+{
+    return trashPixels;
+}
+- (char)x11WindowMaskChar
+{
+    return ' ';
+}
 - (int)preferredWidth
 {
-    return 80;//[Definitions widthForCString:[trashPixels UTF8String]]+10;
+    static int w = 0;
+    if (!w) {
+        w = [Definitions widthForCString:trashPixels];
+    }
+    return w;
 }
 - (int)preferredHeight
 {
-    return 50;//[Definitions heightForCString:[trashPixels UTF8String]]+10;
+    static int h = 0;
+    if (!h) {
+        h = [Definitions heightForCString:trashPixels];
+    }
+    return h;
 }
 
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
-    [bitmap setColor:@"white"];
+    BOOL hasFocus = NO;
+    {
+        id windowManager = [@"windowManager" valueForKey];
+        unsigned long focusInEventWindow = [[windowManager valueForKey:@"focusInEventWindow"] unsignedLongValue];
+        unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+        if (focusInEventWindow && (focusInEventWindow == win)) {
+            hasFocus = YES;
+        }
+    }
+
+    [bitmap setColor:@"black"];
     [bitmap fillRect:r];
-    [bitmap drawCString:[trashPixels UTF8String] palette:[trashPalette UTF8String] x:r.x+5 y:r.y+5];
+    if (hasFocus) {
+        [bitmap drawCString:trashPixels palette:selectedTrashPalette x:r.x y:r.y];
+    } else {
+        [bitmap drawCString:trashPixels palette:trashPalette x:r.x y:r.y];
+    }
+}
+
+- (void)handleMouseDown:(id)event
+{
+    {
+        id x11dict = [event valueForKey:@"x11dict"];
+        unsigned long win = [[x11dict valueForKey:@"window"] unsignedLongValue];
+        id windowManager = [@"windowManager" valueForKey];
+        [windowManager XRaiseWindow:win];
+    }
+
+    int mouseX = [event intValueForKey:@"mouseX"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+    _buttonDown = YES;
+    _buttonDownX = mouseX;
+    _buttonDownY = mouseY;
+
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
+    if (_buttonDownTimestamp) {
+        if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
+            [self setValue:nil forKey:@"buttonDownTimestamp"];
+            [self handleDoubleClick];
+            return;
+        }
+    }
+    [self setValue:timestamp forKey:@"buttonDownTimestamp"];
+}
+
+- (void)handleMouseMoved:(id)event
+{
+    if (!_buttonDown) {
+        return;
+    }
+    int mouseRootX = [event intValueForKey:@"mouseRootX"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+    id dict = [event valueForKey:@"x11dict"];
+
+    int newX = mouseRootX - _buttonDownX;
+    int newY = mouseRootY - _buttonDownY;
+
+    [dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+    [dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+}
+- (void)handleMouseUp:(id)event
+{
+    _buttonDown = NO;
+}
+- (void)handleRightMouseDown:(id)event
+{
+    id windowManager = [event valueForKey:@"windowManager"];
+    int mouseRootX = [event intValueForKey:@"mouseRootX"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+    id obj = [[menuCSV parseCSVFromString] asMenu];
+    if (obj) {
+        [obj setValue:self forKey:@"contextualObject"];
+        [windowManager openButtonDownMenuForObject:obj x:mouseRootX y:mouseRootY w:0 h:0];
+    }
+}
+- (void)handleDoubleClick
+{
+    [self handleOpen];
+}
+- (void)handleOpen
+{
+    id cmd = nsarr();
+    [cmd addObject:@"hotdog"];
+    [cmd addObject:@"maccolordir"];
+    [cmd addObject:[Definitions homeDir:@"Trash"]];
+    [cmd runCommandInBackground];
 }
 
 @end
