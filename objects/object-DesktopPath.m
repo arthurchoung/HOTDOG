@@ -25,11 +25,27 @@
 
 #import "HOTDOG.h"
 
-static id _text = @"FIXME: This window should not be displayed";
+static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
 @implementation Definitions(fmkelwmfklsdklfmklsdmfklsdklfm)
 + (id)DesktopPath
 {
+    id arr = [@"maniacmansionmicrowave.txt maniacmansionhamster.txt" split:@" "];
+    for (int i=0; i<[arr count]; i++) {
+        id elt = [arr nth:i];
+        id srcpath = [Definitions configDir:nsfmt(@"DesktopIcons/%@", elt)];
+        id dstpath = [Definitions configDir:nsfmt(@"Desktop/%@", elt)];
+        if ([dstpath fileExists]) {
+NSLog(@"dstpath '%@' already exists", dstpath);
+        } else {
+            id src = [srcpath stringFromFile];
+            if ([src writeToFile:dstpath]) {
+NSLog(@"copied '%@' to '%@'", srcpath, dstpath);
+            } else {
+NSLog(@"unable to copy '%@' to '%@'", srcpath, dstpath);
+            }
+        }
+    }
     return [@"DesktopPath" asInstance];
 }
 @end
