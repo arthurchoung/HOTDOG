@@ -18,6 +18,7 @@ hotKey,displayName,messageForClick
 ,AtariSTDir,"['hotdog' 'ataristdir']|runCommandInBackground"
 ,AtariSTDrives,"['hotdog' 'show' 'homeDir|changeDirectory;AtariSTDrives']|runCommandInBackground"
 ,AtariSTTrash,"['hotdog' 'noframe' 'AtariSTTrash']|runCommandInBackground"
+,DesktopPath,"['hotdog' 'show' 'DesktopPath']|runCommandInBackground"
 ,HotDogStandPrograms,"['hotdog' 'show' 'HotDogStandPrograms']|runCommandInBackground"
 ,MacClassicDir,"['hotdog' 'macclassicdir']|runCommandInBackground"
 ,MacClassicDrives,"['hotdog' 'show' 'MacClassicDrives']|runCommandInBackground"
