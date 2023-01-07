@@ -40,7 +40,7 @@
 {
     return 1;
 }
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
     if ((r.w < 1) || (r.h < 1)) {
         return;
@@ -50,6 +50,12 @@
     [bitmap drawLineAtX:r.x y:r.y+r.h-1 x:r.x+r.w-1 y:r.y+r.h-1];
     [bitmap drawLineAtX:r.x y:r.y x:r.x y:r.y+r.h-1];
     [bitmap drawLineAtX:r.x+r.w-1 y:r.y x:r.x+r.w-1 y:r.y+r.h-1];
+
+    id windowManager = [@"windowManager" valueForKey];
+    unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+    if (win) {
+        [windowManager addMaskToWindow:win bitmap:bitmap];
+    }
 }
 - (void)handleMouseDown:(id)event
 {
@@ -59,6 +65,7 @@ NSLog(@"SelectionBox handleMouseDown");
     [windowManager setFocusDict:nil];
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
+//FIXME: check if not SelectionBox instead of isIcon
         if ([dict intValueForKey:@"isIcon"]) {
             if ([dict valueForKey:@"selectedTimestamp"]) {
                 [dict setValue:nil forKey:@"selectedTimestamp"];
@@ -66,8 +73,6 @@ NSLog(@"SelectionBox handleMouseDown");
             }
         }
     }
-    id x11dict = [event valueForKey:@"x11dict"];
-    [x11dict setValue:@"1" forKey:@"transparent"];
     _buttonDownRootX = [event intValueForKey:@"mouseRootX"];
     _buttonDownRootY = [event intValueForKey:@"mouseRootY"];
 }
@@ -107,6 +112,7 @@ NSLog(@"SelectionBox handleMouseMoved");
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
+//FIXME: check if not SelectionBox instead of isIcon
         if (![dict intValueForKey:@"isIcon"]) {
             continue;
         }
