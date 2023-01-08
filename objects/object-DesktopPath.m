@@ -56,17 +56,6 @@ NSLog(@"unable to copy '%@' to '%@'", srcpath, dstpath);
 }
 @end
 @implementation DesktopPath
-- (id)dictForObjectFilePath:(id)filePath objectWindows:(id)objectWindows
-{
-    for (int i=0; i<[objectWindows count]; i++) {
-        id dict = [objectWindows nth:i];
-        id val = [dict valueForKey:@"filePath"];
-        if ([val isEqual:filePath]) {
-            return dict;
-        }
-    }
-    return nil;
-}
 - (void)handleBackgroundUpdate:(id)event
 {
     id path = [Definitions configDir:@"Desktop"];
@@ -108,7 +97,7 @@ NSLog(@"unable to copy '%@' to '%@'", srcpath, dstpath);
         if ([[path lastPathComponent] hasPrefix:@"."]) {
             continue;
         }
-        id dict = [self dictForObjectFilePath:path objectWindows:objectWindows];
+        id dict = [objectWindows objectWithValue:path forKey:@"filePath"];
         if (!dict) {
             id obj = [path iconFromFile];
             int w = 16;
