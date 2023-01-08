@@ -7,6 +7,7 @@ hotdog-setALSAVolume
 hotdog-monitorBlockDevices
 hotdog-monitorNetworkInterfaces
 hotdog-monitorMonitors
+hotdog-monitorMountChanges
 hotdog-generateALSAPanel
 hotdog-printALSAUpdates
 hotdog-setALSAValues
