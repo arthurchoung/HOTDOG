@@ -2258,6 +2258,7 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
         [_objectWindows addObject:dict];
         [dict setValue:nsfmt(@"%lu", e->window) forKey:@"childWindow"];
 //        [dict setValue:name forKey:@"name"];
+        [dict setValue:@"1" forKey:@"HOTDOGNOFRAME"];
 
         if (moveWindowIfNoFrame) {
             XMoveWindow(_display, e->window, attrs.x, attrs.y);
