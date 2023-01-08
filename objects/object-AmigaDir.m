@@ -1125,7 +1125,7 @@ static char *verticalScrollBarBottom =
         }
     }
     _contentXMax += 14 + 20;
-    _contentYMax += 20 + 10;
+    _contentYMax += 20 + 10 + 20;
     _visibleW = r.w;
     _visibleH = r.h;
     if (_contentXMin > _visibleX) {
