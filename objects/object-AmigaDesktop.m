@@ -101,6 +101,7 @@ NSLog(@"windowManager %@", windowManager);
     [lines addObject:@"builtin:AmigaRAMDisk mountpoint:RAM%20Disk"];
     [lines addObject:@"builtin:AmigaDisk mountpoint:Workbench1.3"];
     [lines addObjectsFromArray:blockDevicesLines];
+    [lines addObject:@"builtin:AmigaTrash mountpoint:Trash"];
 
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
