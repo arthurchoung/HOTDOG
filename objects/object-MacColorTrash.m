@@ -119,6 +119,8 @@ static char *trashPixels =
 
 @interface MacColorTrash : IvarObject
 {
+    int _builtin;
+    id _path;
     int _buttonDown;
     int _buttonDownX;
     int _buttonDownY;
@@ -126,14 +128,6 @@ static char *trashPixels =
 }
 @end
 @implementation MacColorTrash
-- (char *)x11WindowMaskCString
-{
-    return trashPixels;
-}
-- (char)x11WindowMaskChar
-{
-    return ' ';
-}
 - (int)preferredWidth
 {
     static int w = 0;
@@ -163,12 +157,16 @@ static char *trashPixels =
         }
     }
 
-    [bitmap setColor:@"black"];
-    [bitmap fillRect:r];
     if (hasFocus) {
         [bitmap drawCString:trashPixels palette:selectedTrashPalette x:r.x y:r.y];
     } else {
         [bitmap drawCString:trashPixels palette:trashPalette x:r.x y:r.y];
+    }
+
+    id windowManager = [@"windowManager" valueForKey];
+    unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+    if (win) {
+        [windowManager addMaskToWindow:win bitmap:bitmap];
     }
 }
 
@@ -202,25 +200,68 @@ static char *trashPixels =
 
 - (void)handleMouseMoved:(id)event
 {
-    if (!_buttonDown) {
+    id x11dict = [event valueForKey:@"x11dict"];
+    id dragx11dict = [x11dict valueForKey:@"dragx11dict"];
+
+    if (!_buttonDown && !dragx11dict) {
         return;
     }
+
+    if (!dragx11dict) {
+        int x = [x11dict intValueForKey:@"x"];
+        int y = [x11dict intValueForKey:@"y"];
+        int w = [x11dict intValueForKey:@"w"];
+        int h = [x11dict intValueForKey:@"h"];
+        id windowManager = [event valueForKey:@"windowManager"];
+        id newx11dict = [windowManager openWindowForObject:self x:x y:y w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+        [windowManager setValue:newx11dict forKey:@"buttonDownDict"];
+        [windowManager setValue:newx11dict forKey:@"menuDict"];
+        [newx11dict setValue:x11dict forKey:@"dragx11dict"];
+        x11dict = newx11dict;
+    }
+
     int mouseRootX = [event intValueForKey:@"mouseRootX"];
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
-
-    id dict = [event valueForKey:@"x11dict"];
 
     int newX = mouseRootX - _buttonDownX;
     int newY = mouseRootY - _buttonDownY;
 
-    [dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
-    [dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+    [x11dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+    [x11dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
 
-    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+    [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
 }
 - (void)handleMouseUp:(id)event
 {
     _buttonDown = NO;
+    id x11dict = [event valueForKey:@"x11dict"];
+    id dragx11dict = [x11dict valueForKey:@"dragx11dict"];
+    if (dragx11dict) {
+        [x11dict setValue:nil forKey:@"dragx11dict"];
+
+        id windowManager = [event valueForKey:@"windowManager"];
+        unsigned long window = [x11dict unsignedLongValueForKey:@"window"];
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+        unsigned long underneathWindow = [windowManager topMostWindowUnderneathWindow:window x:mouseRootX y:mouseRootY];
+        if (underneathWindow) {
+            id underneathx11dict = [windowManager dictForObjectWindow:underneathWindow];
+            if (underneathx11dict == dragx11dict) {
+                [dragx11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+                return;
+            }
+
+            id object = [underneathx11dict valueForKey:@"object"];
+            if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
+                [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+                [object handleDragAndDrop:dragx11dict];
+                return;
+            }
+        }
+
+        [dragx11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+    }
 }
 - (void)handleRightMouseDown:(id)event
 {
@@ -245,6 +286,11 @@ static char *trashPixels =
     [cmd addObject:@"maccolordir"];
     [cmd addObject:[Definitions homeDir:@"Trash"]];
     [cmd runCommandInBackground];
+}
+
+- (void)handleDragAndDrop:(id)obj
+{
+    [nsfmt(@"%@ dropped onto %@", obj, self) showAlert];
 }
 
 @end
