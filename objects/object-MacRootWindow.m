@@ -41,30 +41,6 @@
 }
 - (void)handleMouseDown:(id)event
 {
-NSLog(@"MacRootWindow handleMouseDown");
-    id windowManager = [event valueForKey:@"windowManager"];
-    int mouseRootX = [event intValueForKey:@"mouseRootX"];
-    int mouseRootY = [event intValueForKey:@"mouseRootY"];
-    int viewWidth = [event intValueForKey:@"viewWidth"];
-    int viewHeight = [event intValueForKey:@"viewHeight"];
-    id buttonDownWhich = [event valueForKey:@"buttonDownWhich"];
-
-    id object = [@"SelectionBox" asInstance];
-    int w = 1;
-    int h = 1;
-    if ([object respondsToSelector:@selector(preferredWidth)]) {
-        w = [object preferredWidth];
-    }
-    if ([object respondsToSelector:@selector(preferredHeight)]) {
-        h = [object preferredHeight];
-    }
-    id dict = [windowManager openWindowForObject:object x:mouseRootX y:mouseRootY w:w h:h];
-    id eventDict = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX y:mouseRootY w:viewWidth h:viewHeight x11dict:dict];
-    if ([object respondsToSelector:@selector(handleMouseDown:)]) {
-        [object handleMouseDown:eventDict];
-    }
-    [windowManager setValue:dict forKey:@"buttonDownDict"];
-    [windowManager setValue:buttonDownWhich forKey:@"buttonDownWhich"];
 }
 - (void)handleRightMouseDown:(id)event
 {
