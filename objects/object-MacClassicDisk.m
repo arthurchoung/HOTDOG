@@ -113,6 +113,8 @@ static char *diskPixels =
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    int isSelected = [context intValueForKey:@"isSelected"];
+
     BOOL hasFocus = NO;
     {
         id windowManager = [@"windowManager" valueForKey];
@@ -126,7 +128,7 @@ static char *diskPixels =
     int w = [Definitions widthForCString:diskPixels];
     int h = [Definitions heightForCString:diskPixels];
 
-    if (hasFocus) {
+    if (hasFocus || isSelected) {
         [bitmap drawCString:diskPixels palette:selectedDiskPalette x:r.x+(r.w-w)/2 y:r.y];
     } else {
         [bitmap drawCString:diskPixels palette:diskPalette x:r.x+(r.w-w)/2 y:r.y];
@@ -135,13 +137,13 @@ static char *diskPixels =
         [bitmap useMonacoFont];
         int textWidth = [bitmap bitmapWidthForText:_path];
         int textHeight = [bitmap bitmapHeightForText:_path];
-        if (hasFocus) {
+        if (hasFocus || isSelected) {
             [bitmap setColor:@"black"];
         } else {
             [bitmap setColor:@"white"];
         }
         [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
-        if (hasFocus) {
+        if (hasFocus || isSelected) {
             [bitmap setColor:@"white"];
         } else {
             [bitmap setColor:@"black"];
