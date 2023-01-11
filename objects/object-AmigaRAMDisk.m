@@ -117,6 +117,8 @@ static char *ramDiskPixels =
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    int isSelected = [context intValueForKey:@"isSelected"];
+
     BOOL hasFocus = NO;
     {
         id windowManager = [@"windowManager" valueForKey];
@@ -130,7 +132,7 @@ static char *ramDiskPixels =
     int w = [Definitions widthForCString:ramDiskPixels];
     int h = [Definitions heightForCString:ramDiskPixels];
 
-    if (hasFocus) {
+    if (hasFocus || isSelected) {
         [bitmap drawCString:ramDiskPixels palette:ramDiskSelectedPalette x:r.x+(r.w-w)/2 y:r.y];
     } else {
         [bitmap drawCString:ramDiskPixels palette:ramDiskPalette x:r.x+(r.w-w)/2 y:r.y];
