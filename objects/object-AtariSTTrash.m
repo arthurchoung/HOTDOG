@@ -30,8 +30,6 @@
 static id menuCSV =
 @"displayName,messageForClick\n"
 @"\"Open Trash\",\"handleOpen\"\n"
-@",\n"
-@"Quit,\"exit:0\"\n"
 ;
 
 static char *trashPalette =
