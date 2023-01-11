@@ -25,6 +25,12 @@
 
 #import "HOTDOG.h"
 
+static char *horizontalPixels = "bw\n";
+static char *verticalPixels = 
+"b\n"
+"w\n"
+;
+
 @interface SelectionBox : IvarObject
 {
     int _buttonDownRootX;
@@ -45,99 +51,17 @@
     if ((r.w < 1) || (r.h < 1)) {
         return;
     }
-    [bitmap setColor:@"black"];
-    [bitmap drawLineAtX:r.x y:r.y x:r.x+r.w-1 y:r.y];
-    [bitmap drawLineAtX:r.x y:r.y+r.h-1 x:r.x+r.w-1 y:r.y+r.h-1];
-    [bitmap drawLineAtX:r.x y:r.y x:r.x y:r.y+r.h-1];
-    [bitmap drawLineAtX:r.x+r.w-1 y:r.y x:r.x+r.w-1 y:r.y+r.h-1];
+    char *palette = "b #000000\nw #ffffff\n";
+    [Definitions drawInBitmap:bitmap left:horizontalPixels middle:horizontalPixels right:horizontalPixels x:r.x y:r.y w:r.w palette:palette];
+    [Definitions drawInBitmap:bitmap left:horizontalPixels middle:horizontalPixels right:horizontalPixels x:r.x y:r.y+r.h-1 w:r.w palette:palette];
+    [Definitions drawInBitmap:bitmap top:verticalPixels palette:palette middle:verticalPixels palette:palette bottom:verticalPixels palette:palette x:r.x y:r.y+1 h:r.h-2];
+    [Definitions drawInBitmap:bitmap top:verticalPixels palette:palette middle:verticalPixels palette:palette bottom:verticalPixels palette:palette x:r.x+r.w-1 y:r.y+1 h:r.h-2];
 
     id windowManager = [@"windowManager" valueForKey];
     unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
     if (win) {
         [windowManager addMaskToWindow:win bitmap:bitmap];
     }
-}
-- (void)handleMouseDown:(id)event
-{
-NSLog(@"SelectionBox handleMouseDown");
-    id windowManager = [event valueForKey:@"windowManager"];
-    id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    [windowManager setFocusDict:nil];
-    for (int i=0; i<[objectWindows count]; i++) {
-        id dict = [objectWindows nth:i];
-//FIXME: check if not SelectionBox instead of isIcon
-        if ([dict intValueForKey:@"isIcon"]) {
-            if ([dict valueForKey:@"selectedTimestamp"]) {
-                [dict setValue:nil forKey:@"selectedTimestamp"];
-                [dict setValue:@"1" forKey:@"needsRedraw"];
-            }
-        }
-    }
-    _buttonDownRootX = [event intValueForKey:@"mouseRootX"];
-    _buttonDownRootY = [event intValueForKey:@"mouseRootY"];
-}
-- (void)handleMouseMoved:(id)event
-{
-NSLog(@"SelectionBox handleMouseMoved");
-    int mouseRootX = [event intValueForKey:@"mouseRootX"];
-    int mouseRootY = [event intValueForKey:@"mouseRootY"];
-    int newX = _buttonDownRootX;
-    int newY = _buttonDownRootY;
-    int newWidth = mouseRootX - _buttonDownRootX;
-    int newHeight = mouseRootY - _buttonDownRootY;
-    if (newWidth == 0) {
-        newWidth = 1;
-    } else if (newWidth < 0) {
-        newX = mouseRootX;
-        newWidth *= -1;
-        newWidth++;
-    }
-    if (newHeight == 0) {
-        newHeight = 1;
-    } else if (newHeight < 0) {
-        newY = mouseRootY;
-        newHeight *= -1;
-        newHeight++;
-    }
-    id x11dict = [event valueForKey:@"x11dict"];
-    [x11dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
-    [x11dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
-    [x11dict setValue:nsfmt(@"%d", newWidth) forKey:@"w"];
-    [x11dict setValue:nsfmt(@"%d", newHeight) forKey:@"h"];
-    [x11dict setValue:@"1" forKey:@"needsRedraw"];
-    id windowManager = [event valueForKey:@"windowManager"];
-    [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-    [x11dict setValue:nsfmt(@"%d %d", newWidth, newHeight) forKey:@"resizeWindow"];
-    Int4 r = [Definitions rectWithX:newX y:newY w:newWidth h:newHeight];
-    id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    for (int i=0; i<[objectWindows count]; i++) {
-        id dict = [objectWindows nth:i];
-//FIXME: check if not SelectionBox instead of isIcon
-        if (![dict intValueForKey:@"isIcon"]) {
-            continue;
-        }
-        int x = [dict intValueForKey:@"x"];
-        int y = [dict intValueForKey:@"y"];
-        int w = [dict intValueForKey:@"w"];
-        int h = [dict intValueForKey:@"h"];
-        Int4 r2 = [Definitions rectWithX:x y:y w:w h:h];
-        if ([Definitions doesRect:r intersectRect:r2]) {
-            if (![dict valueForKey:@"selectedTimestamp"]) {
-                [dict setValue:@"1" forKey:@"selectedTimestamp"];
-                [dict setValue:@"1" forKey:@"needsRedraw"];
-            }
-        } else {
-            if ([dict valueForKey:@"selectedTimestamp"]) {
-                [dict setValue:nil forKey:@"selectedTimestamp"];
-                [dict setValue:@"1" forKey:@"needsRedraw"];
-            }
-        }
-    }
-}
-- (void)handleMouseUp:(id)event
-{
-    id x11dict = [event valueForKey:@"x11dict"];
-    [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
 }
 @end
 
