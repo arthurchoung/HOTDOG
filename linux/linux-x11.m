@@ -549,6 +549,37 @@ exit(0);
         
     [windowManager runLoop];
 }
++ (void)runWindowManagerForObject:(id)object propertyName:(char *)propertyName
+{
+    int w = 640-3;
+    int h = 0;
+    if ([object respondsToSelector:@selector(preferredWidth)]) {
+        int preferredWidth = [object preferredWidth];
+        if (preferredWidth) {
+            w = preferredWidth;
+        }
+    }
+    if ([object respondsToSelector:@selector(preferredHeight)]) {
+        int preferredHeight = [object preferredHeight];
+        if (preferredHeight) {
+            h = preferredHeight;
+        }
+    }
+
+    [Definitions runWindowManagerForObject:object x:0 y:0 w:w h:h propertyName:propertyName];
+}
++ (void)runWindowManagerForObject:(id)object x:(int)x y:(int)y w:(int)w h:(int)h propertyName:(char *)propertyName
+{
+    id windowManager = [@"WindowManager" asInstance];
+    [windowManager setAsValueForKey:@"windowManager"];
+    if (![windowManager setupX11]) {
+NSLog(@"unable to setup window manager");
+exit(0);
+    }
+    id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h overrideRedirect:NO propertyName:propertyName];
+        
+    [windowManager runLoop];
+}
 @end
 @implementation NSObject(fjdklsfjkldsjfklsdjkljf)
 - (void)runWindowManagerForObject
@@ -603,6 +634,8 @@ exit(0);
     id _menuDict;
 
     Window _focusInEventWindow;
+
+    Window _desktopWindow;
 }
 @end
 @implementation WindowManager
@@ -712,6 +745,7 @@ NSLog(@"Another window manager is running");
 
     return YES;
 }
+
 - (void)getX11Color:(void *)ptr colormap:(unsigned long)colormap r:(int)r g:(int)g b:(int)b
 {
     r = r & 0xff;
@@ -2193,6 +2227,11 @@ NSLog(@"changes x %d y %d width %d height %d", e->x, e->y, e->width, e->height);
     XMapRequestEvent *e = eptr;
 NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
 
+if ([self window:e->window hasProperty:"HOTDOGDESKTOP"]) {
+    _desktopWindow = e->window;
+}
+
+
     BOOL noframe = [self window:e->window hasProperty:"HOTDOGNOFRAME"];
 
     if (noframe) {
@@ -2291,6 +2330,13 @@ NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
 {
     XDestroyWindowEvent *e = eptr;
 NSLog(@"handleX11DestroyNotify e->event %x e->window %x", e->event, e->window);
+
+    if (_desktopWindow) {
+        if (_desktopWindow == e->window) {
+            _desktopWindow = 0;
+        }
+    }
+
     id dict = [self dictForObjectChildWindow:e->window];
 NSLog(@"dictForObjectChildWindow %@", dict);
     if (dict) {
@@ -2339,6 +2385,8 @@ NSLog(@"handleX11UnmapNotify e->event %x e->window %x", e->event, e->window);
 - (void)handleX11ButtonPress:(void *)eptr
 {
     XButtonEvent *e = eptr;
+
+
     if (_buttonDownDict) {
         if (e->button == 4) {
             id dict = _buttonDownDict;
@@ -2387,7 +2435,16 @@ NSLog(@"rootWindow object %@", _rootWindowObject);
         id eventDict = [self dictForButtonEvent:e w:w h:h x11dict:nil];
         [eventDict setValue:nsfmt(@"%d", e->button) forKey:@"buttonDownWhich"];
         if (e->button == 1) {
-            if ([object respondsToSelector:@selector(handleMouseDown:)]) {
+NSLog(@"_desktopWindow %lu", _desktopWindow);
+            if (_desktopWindow) {
+                if (_isWindowManager) {
+                    [self setFocusDict:nil];
+                    e->window = _desktopWindow;
+                    XSendEvent(_display, _desktopWindow, False, ButtonPressMask, e);
+                    [self setValue:nsdict() forKey:@"buttonDownDict"];
+                    _buttonDownWhich = e->button;
+                }
+            } else if ([object respondsToSelector:@selector(handleMouseDown:)]) {
                 [object handleMouseDown:eventDict];
             }
         } else if (e->button == 3) {
@@ -2507,12 +2564,31 @@ NSLog(@"rootWindow object %@", _rootWindowObject);
 {
     XButtonEvent *e = eptr;
 NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e->button, _buttonDownWhich);
+
     if (!_buttonDownDict) {
         return;
     }
     if (e->button != _buttonDownWhich) {
         return;
     }
+
+
+    if (_isWindowManager) {
+        if (_desktopWindow) {
+            if (e->window == _rootWindow) {
+                if (e->button == 1) {
+                    e->window = _desktopWindow;
+                    XSendEvent(_display, _desktopWindow, False, ButtonReleaseMask, e);
+                    [self setValue:nil forKey:@"buttonDownDict"];
+                    _buttonDownWhich = 0;
+                    return;
+                }
+            }
+        }
+    }
+
+
+
     id dict = _buttonDownDict;
     id object = [dict valueForKey:@"object"];
     int x = [dict intValueForKey:@"x"];
@@ -2541,11 +2617,25 @@ NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e-
 - (void)handleX11MotionNotify:(void *)eptr
 {
     XMotionEvent *e = eptr;
+
     _mouseX = e->x_root;
     _mouseY = e->y_root;
     if (_isWindowManager) {
         id x11dict = nil;
         if (_buttonDownDict) {
+
+            if (_desktopWindow) {
+                if (e->window == _rootWindow) {
+                    if (_buttonDownWhich == 1) {
+                        e->window = _desktopWindow;
+                        XSendEvent(_display, _desktopWindow, False, PointerMotionMask, e);
+                        return;
+                    }
+                }
+            }
+
+
+
             x11dict = _buttonDownDict;
         } else if (e->window == _rootWindow) {
             if ([_rootWindowObject respondsToSelector:@selector(handleMouseMoved:)]) {
