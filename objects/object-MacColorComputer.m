@@ -130,6 +130,8 @@ static char *computerPixels =
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    int isSelected = [context intValueForKey:@"isSelected"];
+
     BOOL hasFocus = NO;
     {
         id windowManager = [@"windowManager" valueForKey];
@@ -143,7 +145,7 @@ static char *computerPixels =
     int w = [Definitions widthForCString:computerPixels];
     int h = [Definitions heightForCString:computerPixels];
 
-    if (hasFocus) {
+    if (hasFocus || isSelected) {
         [bitmap drawCString:computerPixels palette:selectedComputerPalette x:r.x+(r.w-w)/2 y:r.y];
     } else {
         [bitmap drawCString:computerPixels palette:computerPalette x:r.x+(r.w-w)/2 y:r.y];
@@ -152,13 +154,13 @@ static char *computerPixels =
         [bitmap useMonacoFont];
         int textWidth = [bitmap bitmapWidthForText:_path];
         int textHeight = [bitmap bitmapHeightForText:_path];
-        if (hasFocus) {
+        if (hasFocus || isSelected) {
             [bitmap setColor:@"black"];
         } else {
             [bitmap setColor:@"white"];
         }
         [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
-        if (hasFocus) {
+        if (hasFocus || isSelected) {
             [bitmap setColor:@"white"];
         } else {
             [bitmap setColor:@"black"];
