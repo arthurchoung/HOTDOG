@@ -560,137 +560,7 @@ static char *disabledRightScrollBarBottomPixels =
 "b$$$$$$$$$$$$$$bb\n"
 ;
 
-static id folderPalette =
-@"b #000000\n"
-@". #9999ff\n"
-@"X #ccccff\n"
-@"o #ffffff\n"
-;
-static id selectedFolderPalette = 
-@"b #000000\n"
-@". #26267f\n"
-@"X #33337f\n"
-@"o #7f7f7f\n"
-;
-static id folderPixels =
-@"     bbbbbbb                   \n"
-@"    bXXXXXXXb                  \n"
-@"   bXXXXXXXXXb                 \n"
-@"  bXXXXXXXXXXXb                \n"  
-@" bXXXXXXXXXXXXXbbbbbbbbbbbbbbb \n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"booooooooooooooooooooooooooooob\n"
-@"boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b\n"
-@"bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b\n"
-@"boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b\n"
-@"bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b\n"
-@"boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b\n"
-@"bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b\n"
-@"boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b\n"
-@"bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b\n"
-@"boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b\n"
-@"bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b\n"
-@"boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b\n"
-@"bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b\n"
-@"boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b\n"
-@"bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b\n"
-@"boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b\n"
-@"bXoXoXoXoXoXoXoXoXoXoXoXoXoXo.b\n"
-@"boXoXoXoXoXoXoXoXoXoXoXoXoXoX.b\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-;
 
-static id documentPalette =
-@"b #000000\n"
-@". #cccccc\n"
-@"X #eeeeee\n"
-@"o #ffffff\n"
-;
-static id selectedDocumentPalette =
-@"b #000000\n"
-@". #666666\n"
-@"X #777777\n"
-@"o #ffffff\n"
-;
-static id documentPixels =
-@"bbbbbbbbbbbbbbbbbbb      \n"
-@"bXXXXXXXXXXXXXXXXXbb     \n"
-@"bXXXXXXXXXXXXXXXXXb.b    \n"
-@"bXXXXXXXXXXXXXXXXXb..b   \n"
-@"bXXXXXXXXXXXXXXXXXb...b  \n"
-@"bXXXXXXXXXXXXXXXXXb....b \n"
-@"bXXXXXXXXXXXXXXXXXbbbbbbb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bXXXXXXXXXXXXXXXXXXXXXXXb\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbb\n"
-;
-static id readmePalette =
-@"b #000000\n"
-@". #777777\n"
-@"X #888888\n"
-@"o #eeeeee\n"
-@"O #ffffff\n"
-;
-static id selectedReadmePalette =
-@"b #000000\n"
-@". #3b3b3b\n"
-@"X #444444\n"
-@"o #777777\n"
-@"O #7f7f7f\n"
-;
-static id readmePixels =
-@"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOO \n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"boooooooooooooooooooooooooooobO\n"
-@"bo....ooOboooooooooooooo....obb\n"
-@"boooooooboobbobbbobbobboooooobb\n"
-@"bo....obobobbobobobbobbo....obb\n"
-@"bo....oooooboooooooooboo....obb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"boobbboboobobbbboobbooobboobobb\n"
-@"boobooooobooooooobooboboobobobb\n"
-@"booooooobooooboooooboobobbooobb\n"
-@"boobobobooboobooobooboboobobobb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"bo......oobbbbbbbbbboo......obb\n"
-@"bo......obObOOOOOOOObo......obb\n"
-@"boooooooobbbbbbbbbbbboooooooobb\n"
-@"bo......obXXXXXXXXXXbo......obb\n"
-@"boooooooobXXXXXXXXXXboooooooobb\n"
-@"bo......obXXXXXXXXXXbo......obb\n"
-@"boooooooobXXXXXXXXXXboooooooobb\n"
-@"bo......obXXXXXXXXXXbo......obb\n"
-@"booooooooobbbbbbbbbbooooooooobb\n"
-@"bo......oooooooooooooo......obb\n"
-@"boooooooooo........oooooooooobb\n"
-@" ooooooooooooooooooooooooooooo \n"
-;
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksdkdjkfsdkjfj)
 + (id)MacColorDir
@@ -859,39 +729,31 @@ static id readmePixels =
     int y = 5;
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
-        id palette = nil;
-        id pixels = nil;
-        id selectedPalette = nil;
-        id selectedPixels = nil;
+        id object = nil;
+        id filePath = [elt valueForKey:@"filePath"];
         id fileType = [elt valueForKey:@"fileType"];
         if ([fileType isEqual:@"file"]) {
-            id filePath = [elt valueForKey:@"filePath"];
             if ([[filePath lowercaseString] hasSuffix:@".txt"]) {
-                palette = readmePalette;
-                pixels = readmePixels;
-                selectedPalette = selectedReadmePalette;
-                selectedPixels = readmePixels;
+                object = [@"MacColorReadmeIcon" asInstace];
             } else {
-                palette = documentPalette;
-                pixels = documentPixels;
-                selectedPalette = selectedDocumentPalette;
-                selectedPixels = documentPixels;
+                object = [@"MacColorDocumentIcon" asInstance];
             }
         } else if ([fileType isEqual:@"directory"]) {
-            palette = folderPalette;
-            pixels = folderPixels;
-            selectedPalette = selectedFolderPalette;
-            selectedPixels = folderPixels;
+            object = [@"MacColorFolderIcon" asInstance];
         }
-        if (!palette || !pixels) {
+        if (!object) {
             continue;
         }
-        [elt setValue:palette forKey:@"palette"];
-        [elt setValue:pixels forKey:@"pixels"];
-        [elt setValue:selectedPalette forKey:@"selectedPalette"];
-        [elt setValue:selectedPixels forKey:@"selectedPixels"];
-        int w = [Definitions widthForCString:[pixels UTF8String]];
-        int h = [Definitions heightForCString:[pixels UTF8String]];
+        [object setValue:filePath forKey:@"path"];
+        [elt setValue:object forKey:@"object"];
+        int w = 16;
+        if ([object respondsToSelector:@selector(preferredWidth)]) {
+            w = [object preferredWidth];
+        }
+        int h = 16;
+        if ([object respondsToSelector:@selector(preferredHeight)]) {
+            h = [object preferredHeight];
+        }
         if (x + w + 5 >= r.w) {
             x = 40;
             y += h + 30;
@@ -1087,21 +949,28 @@ static id readmePixels =
         int y = -_visibleY + [elt intValueForKey:@"y"] + 19 + 20;
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
+        id object = [elt valueForKey:@"object"];
         if ((_selected == elt) || [elt intValueForKey:@"isSelected"]) {
-            id palette = [elt valueForKey:@"selectedPalette"];
-            id pixels = [elt valueForKey:@"selectedPixels"];
-            if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+            Int4 r1;
+            r1.x = r.x+x;
+            r1.y = r.y+y;
+            r1.w = w;
+            r1.h = h;
+            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+                id dict = nsdict();
+                [dict setValue:@"1" forKey:@"isSelected"];
+                [object drawInBitmap:bitmap rect:r1 context:dict];
             }
         } else {
-            id palette = [elt valueForKey:@"palette"];
-            id pixels = [elt valueForKey:@"pixels"];
-            if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+            Int4 r1;
+            r1.x = r.x+x;
+            r1.y = r.y+y;
+            r1.w = w;
+            r1.h = h;
+            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+                [object drawInBitmap:bitmap rect:r1 context:nil];
             }
         }
-        id filePath = [elt valueForKey:@"filePath"];
-        [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-2];
     }
 
     BOOL hasFocus = NO;
