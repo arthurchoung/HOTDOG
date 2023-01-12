@@ -101,7 +101,7 @@ NSLog(@"windowManager %@", windowManager);
     id cmd = nsarr();
     [cmd addObject:@"hotdog-listBlockDevices.pl"];
     id lines = [[[cmd runCommandAndReturnOutput] asString] split:@"\n"];
-    [lines addObject:@"builtin:AtariSTTrash mountpoint:Trash"];
+    [lines addObject:@"builtin:AtariSTTrashIcon mountpoint:Trash"];
 
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
@@ -137,7 +137,7 @@ NSLog(@"windowManager %@", windowManager);
                 obj = [className asInstance];
                 [obj setValue:@"1" forKey:@"builtin"];
             } else {
-                obj = [@"AtariSTDisk" asInstance];
+                obj = [@"AtariSTDiskIcon" asInstance];
             }
             [obj setValue:mountpoint forKey:@"path"];
             int w = 16;
