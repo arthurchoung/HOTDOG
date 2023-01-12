@@ -1,5 +1,18 @@
 #!/usr/bin/perl
 
+$realpath = `realpath .`;
+chomp $realpath;
+if ($realpath eq '/') {
+    $output = `hotdog-getDiskUsage.pl`;
+    chomp $output;
+    if ($output =~ m/\bused:([0-9]+)/) {
+        print "total:$1\n";
+    } else {
+        print "total:\n";
+    }
+    exit 0;
+}
+
 $total = undef;
 
 $output = `du -ksc .`;
