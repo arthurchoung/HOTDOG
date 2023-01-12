@@ -103,10 +103,10 @@ NSLog(@"windowManager %@", windowManager);
     [cmd addObject:@"hotdog-listBlockDevices.pl"];
     id blockDevicesLines = [[[cmd runCommandAndReturnOutput] asString] split:@"\n"];
     id lines = nsarr();
-    [lines addObject:@"builtin:AmigaRAMDisk mountpoint:RAM%20Disk"];
-    [lines addObject:@"builtin:AmigaDisk mountpoint:Workbench1.3"];
+    [lines addObject:@"builtin:AmigaRAMDiskIcon mountpoint:RAM%20Disk"];
+    [lines addObject:@"builtin:AmigaDiskIcon mountpoint:Workbench1.3"];
     [lines addObjectsFromArray:blockDevicesLines];
-    [lines addObject:@"builtin:AmigaTrash mountpoint:Trash"];
+    [lines addObject:@"builtin:AmigaTrashIcon mountpoint:Trash"];
 
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
@@ -142,7 +142,7 @@ NSLog(@"windowManager %@", windowManager);
                 obj = [className asInstance];
                 [obj setValue:@"1" forKey:@"builtin"];
             } else {
-                obj = [@"AmigaDisk" asInstance];
+                obj = [@"AmigaDiskIcon" asInstance];
             }
             [obj setValue:mountpoint forKey:@"path"];
             int w = 16;
