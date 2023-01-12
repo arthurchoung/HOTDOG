@@ -312,6 +312,10 @@ static id executablePixels =
 
     int _disableHorizontalScrollBar;
     int _disableVerticalScrollBar;
+
+    id _selectionBox;
+    int _selectionBoxRootX;
+    int _selectionBoxRootY;
 }
 @end
 @implementation AtariSTDir
@@ -607,7 +611,7 @@ static id executablePixels =
         int y = -_visibleY + [elt intValueForKey:@"y"] + 19 + 20;
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
-        if (_selected == elt) {
+        if ((_selected == elt) || [elt intValueForKey:@"isSelected"]) {
             id palette = [elt valueForKey:@"selectedPalette"];
             id pixels = [elt valueForKey:@"selectedPixels"];
             if (palette && pixels) {
@@ -1004,9 +1008,24 @@ static id executablePixels =
             } else {
                 [self setValue:timestamp forKey:@"buttonDownTimestamp"];
             }
-            break;
+            return;
         }
     }
+
+    for (int i=0; i<[_array count]; i++) {
+        id elt = [_array nth:i];
+        [elt setValue:nil forKey:@"isSelected"];
+    }
+
+    if (_selectionBox) {
+        [_selectionBox setValue:@"1" forKey:@"shouldCloseWindow"];
+        [self setValue:nil forKey:@"selectionBox"];
+    }
+
+    _selectionBoxRootX = [event intValueForKey:@"mouseRootX"];
+    _selectionBoxRootY = [event intValueForKey:@"mouseRootY"];
+    [self setValue:@"selectionBox" forKey:@"buttonDown"];
+
 }
 
 - (void)handleMouseMoved:(id)event
@@ -1101,6 +1120,85 @@ static id executablePixels =
             _verticalKnobVal = _verticalKnobMaxVal;
         }
 
+    } else if ([_buttonDown isEqual:@"selectionBox"]) {
+
+        id windowManager = [event valueForKey:@"windowManager"];
+
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+        int newX = _selectionBoxRootX;
+        int newY = _selectionBoxRootY;
+        int newWidth = mouseRootX - _selectionBoxRootX;
+        int newHeight = mouseRootY - _selectionBoxRootY;
+        if (newWidth == 0) {
+            newWidth = 1;
+        } else if (newWidth < 0) {
+            newX = mouseRootX;
+            newWidth *= -1;
+            newWidth++;
+        }
+        if (newHeight == 0) {
+            newHeight = 1;
+        } else if (newHeight < 0) {
+            newY = mouseRootY;
+            newHeight *= -1;
+            newHeight++;
+        }
+        if (!_selectionBox) {
+            id object = [@"SelectionBox" asInstance];
+            id dict = [windowManager openWindowForObject:object x:newX y:newY w:newWidth h:newHeight overrideRedirect:YES];
+            [self setValue:dict forKey:@"selectionBox"];
+        } else {
+            [_selectionBox setValue:nsfmt(@"%d", newX) forKey:@"x"];
+            [_selectionBox setValue:nsfmt(@"%d", newY) forKey:@"y"];
+            [_selectionBox setValue:nsfmt(@"%d", newWidth) forKey:@"w"];
+            [_selectionBox setValue:nsfmt(@"%d", newHeight) forKey:@"h"];
+            [_selectionBox setValue:@"1" forKey:@"needsRedraw"];
+            [_selectionBox setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+            [_selectionBox setValue:nsfmt(@"%d %d", newWidth, newHeight) forKey:@"resizeWindow"];
+        }
+
+        id x11dict = [event valueForKey:@"x11dict"];
+        int windowX = [x11dict intValueForKey:@"x"];
+        int windowY = [x11dict intValueForKey:@"y"];
+        int windowW = [x11dict intValueForKey:@"w"];
+        int windowH = [x11dict intValueForKey:@"h"];
+        int selectionX = newX - windowX;
+        int selectionMaxX = selectionX + newWidth - 1;
+        if (selectionX < 0) {
+            selectionX = 0;
+        }
+        if (selectionMaxX > windowX + windowW - 1) {
+            selectionMaxX = windowX + windowX - 1;
+        }
+        int selectionY = newY - windowY;
+        int selectionMaxY = selectionY + newHeight - 1;
+        if (selectionY < 0) {
+            selectionY = 0;
+        }
+        if (selectionMaxY > windowY + windowH - 1) {
+            selectionMaxY = windowY + windowH - 1;
+        }
+        selectionX += _visibleX;
+        selectionY += _visibleY;
+        selectionMaxX += _visibleX;
+        selectionMaxY += _visibleY;
+        Int4 r = [Definitions rectWithX:selectionX y:selectionY w:selectionMaxX-selectionX+1 h:selectionMaxY-selectionY+1];
+
+        for (int i=0; i<[_array count]; i++) {
+            id elt = [_array nth:i];
+            int x = [elt intValueForKey:@"x"] + 1;
+            int y = [elt intValueForKey:@"y"] + 19 + 18;
+            int w = [elt intValueForKey:@"w"];
+            int h = [elt intValueForKey:@"h"];
+            Int4 r2 = [Definitions rectWithX:x y:y w:w h:h];
+            if ([Definitions doesRect:r intersectRect:r2]) {
+                [elt setValue:@"1" forKey:@"isSelected"];
+            } else {
+                [elt setValue:nil forKey:@"isSelected"];
+            }
+        }
+
     } else {
         [_buttonDown setValue:nsfmt(@"%d", mouseX - _buttonDownOffsetX + _visibleX) forKey:@"x"];
         [_buttonDown setValue:nsfmt(@"%d", mouseY - _buttonDownOffsetY + _visibleY - 19 - 20) forKey:@"y"];
@@ -1135,6 +1233,12 @@ static id executablePixels =
             pct = (double)_verticalKnobVal / (double)_verticalKnobMaxVal;
         }
         _visibleY = _contentYMin + contentHeight*pct;
+    }
+    if ([_buttonDown isEqual:@"selectionBox"]) {
+        if (_selectionBox) {
+            [_selectionBox setValue:@"1" forKey:@"shouldCloseWindow"];
+            [self setValue:nil forKey:@"selectionBox"];
+        }
     }
     [self setValue:nil forKey:@"buttonDown"];
     [self setValue:nil forKey:@"buttonHover"];
