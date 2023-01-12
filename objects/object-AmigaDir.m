@@ -467,7 +467,6 @@ static char *verticalScrollBarBottom =
     int _buttonDownOffsetX;
     int _buttonDownOffsetY;
     id _buttonDownTimestamp;
-    id _selected;
     Int4 _leftArrowRect;
     Int4 _rightArrowRect;
     Int4 _upArrowRect;
@@ -507,6 +506,8 @@ static char *verticalScrollBarBottom =
     id _selectionBox;
     int _selectionBoxRootX;
     int _selectionBoxRootY;
+
+    id _dragX11Dict;
 }
 @end
 @implementation AmigaDir
@@ -747,7 +748,7 @@ static char *verticalScrollBarBottom =
         int h = [elt intValueForKey:@"h"];
         id object = [elt valueForKey:@"object"];
 
-        if ((_selected == elt) || [elt intValueForKey:@"isSelected"]) {
+        if ([elt intValueForKey:@"isSelected"]) {
             Int4 r1;
             r1.x = r.x+x;
             r1.y = r.y+y;
@@ -845,7 +846,6 @@ static char *verticalScrollBarBottom =
     [self setValue:nil forKey:@"buttonDown"];
     [self setValue:nil forKey:@"buttonHover"];
 
-    [self setValue:nil forKey:@"selected"];
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
     int viewWidth = [event intValueForKey:@"viewWidth"];
@@ -969,7 +969,6 @@ static char *verticalScrollBarBottom =
         }
     }
 
-
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
         int x = -_visibleX + [elt intValueForKey:@"x"] + 16;
@@ -978,18 +977,24 @@ static char *verticalScrollBarBottom =
         int h = [elt intValueForKey:@"h"];
         if ((mouseX >= x) && (mouseX < x+w) && (mouseY >= y) && (mouseY < y+h)) {
             [self setValue:elt forKey:@"buttonDown"];
-            [self setValue:elt forKey:@"selected"];
+            if (![elt intValueForKey:@"isSelected"]) {
+                for (int j=0; j<[_array count]; j++) {
+                    id jelt = [_array nth:j];
+                    [jelt setValue:nil forKey:@"isSelected"];
+                }
+                [elt setValue:@"1" forKey:@"isSelected"];
+            }
             _buttonDownOffsetX = mouseX - x;
             _buttonDownOffsetY = mouseY - y;
             struct timeval tv;
             gettimeofday(&tv, NULL);
             id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
             if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
-                id command = [_selected valueForKey:@"doubleClickCommand"];
+                id command = [elt valueForKey:@"doubleClickCommand"];
                 if (command) {
                     [command runCommandInBackground];
                 } else {
-                    id filePath = [_selected valueForKey:@"filePath"];
+                    id filePath = [elt valueForKey:@"filePath"];
                     if ([filePath length]) {
                         if ([filePath isDirectory]) {
                             id cmd = nsarr();
@@ -1013,11 +1018,11 @@ static char *verticalScrollBarBottom =
         }
     }
 
-
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
         [elt setValue:nil forKey:@"isSelected"];
     }
+
 
     if (_selectionBox) {
         [_selectionBox setValue:@"1" forKey:@"shouldCloseWindow"];
@@ -1177,6 +1182,11 @@ static char *verticalScrollBarBottom =
             [_selectionBox setValue:@"1" forKey:@"needsRedraw"];
             [_selectionBox setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
             [_selectionBox setValue:nsfmt(@"%d %d", newWidth, newHeight) forKey:@"resizeWindow"];
+
+            unsigned long win = [[_selectionBox valueForKey:@"window"] unsignedLongValue];
+            if (win) {
+                [windowManager XRaiseWindow:win];
+            }
         }
 
         id x11dict = [event valueForKey:@"x11dict"];
@@ -1221,9 +1231,93 @@ static char *verticalScrollBarBottom =
         }
 
     } else {
-        [_buttonDown setValue:nsfmt(@"%d", mouseX - _buttonDownOffsetX + _visibleX - 16) forKey:@"x"];
-        [_buttonDown setValue:nsfmt(@"%d", mouseY - _buttonDownOffsetY + _visibleY - 20) forKey:@"y"];
-        [self setValue:nil forKey:@"buttonDownTimestamp"];
+        id x11dict = [event valueForKey:@"x11dict"];
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+        if (!_dragX11Dict) {
+
+            int selectedCount = 0;
+            int minX = 0;
+            int minY = 0;
+            int maxX = 0;
+            int maxY = 0;
+            for (int i=0; i<[_array count]; i++) {
+                id elt = [_array nth:i];
+                if (![elt intValueForKey:@"isSelected"]) {
+                    continue;
+                }
+                int x = [elt intValueForKey:@"x"];
+                int y = [elt intValueForKey:@"y"];
+                int w = [elt intValueForKey:@"w"];
+                int h = [elt intValueForKey:@"h"];
+                if (!selectedCount) {
+                    minX = x;
+                    minY = y;
+                    maxX = x+w-1;
+                    maxY = y+h-1;
+                } else {
+                    if (x < minX) {
+                        minX = x;
+                    }
+                    if (y < minY) {
+                        minY = y;
+                    }
+                    if (x+w-1 > maxX) {
+                        maxX = x+w-1;
+                    }
+                    if (y+h-1 > maxY) {
+                        maxY = y+h-1;
+                    }
+                }
+                selectedCount++;
+            }
+            int selectionWidth = maxX - minX + 1;
+            int selectionHeight = maxY - minY + 1;
+
+            id bitmap = [Definitions bitmapWithWidth:selectionWidth height:selectionHeight];
+            id context = nsdict();
+            [context setValue:@"1" forKey:@"isSelected"];
+            for (int i=0; i<[_array count]; i++) {
+                id elt = [_array nth:i];
+                if (![elt intValueForKey:@"isSelected"]) {
+                    continue;
+                }
+                int x = [elt intValueForKey:@"x"];
+                int y = [elt intValueForKey:@"y"];
+                int w = [elt intValueForKey:@"w"];
+                int h = [elt intValueForKey:@"h"];
+                id object = [elt valueForKey:@"object"];
+                Int4 r;
+                r.x = x - minX;
+                r.y = y - minY;
+                r.w = w;
+                r.h = h;
+                if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+                    [object drawInBitmap:bitmap rect:r context:context];
+                }
+            }
+
+            int x = [_buttonDown intValueForKey:@"x"] + _buttonDownOffsetX - minX;
+            int y = [_buttonDown intValueForKey:@"y"] + _buttonDownOffsetY - minY;
+            _buttonDownOffsetX = x;
+            _buttonDownOffsetY = y;
+
+            id selectionBitmap = [@"SelectionBitmap" asInstance];
+            [selectionBitmap setValue:bitmap forKey:@"bitmap"];
+            id windowManager = [event valueForKey:@"windowManager"];
+            id newx11dict = [windowManager openWindowForObject:selectionBitmap x:mouseRootX - _buttonDownOffsetX y:mouseRootY - _buttonDownOffsetY w:selectionWidth h:selectionHeight overrideRedirect:YES];
+            [self setValue:newx11dict forKey:@"dragX11Dict"];
+        } else {
+
+            int newX = mouseRootX - _buttonDownOffsetX;
+            int newY = mouseRootY - _buttonDownOffsetY;
+
+            [_dragX11Dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+            [_dragX11Dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+            [_dragX11Dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        }
     }
 }
 
@@ -1247,6 +1341,34 @@ static char *verticalScrollBarBottom =
             [_selectionBox setValue:@"1" forKey:@"shouldCloseWindow"];
             [self setValue:nil forKey:@"selectionBox"];
         }
+    }
+    if (_dragX11Dict) {
+
+        id windowManager = [event valueForKey:@"windowManager"];
+        unsigned long window = [_dragX11Dict unsignedLongValueForKey:@"window"];
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+        unsigned long underneathWindow = [windowManager topMostWindowUnderneathWindow:window x:mouseRootX y:mouseRootY];
+        if (underneathWindow) {
+            id underneathx11dict = [windowManager dictForObjectWindow:underneathWindow];
+            id x11dict = [event valueForKey:@"x11dict"];
+            if (underneathx11dict == x11dict) {
+                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
+            } else {
+                id object = [underneathx11dict valueForKey:@"object"];
+                if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
+                    [object handleDragAndDrop:_dragX11Dict];
+                } else {
+                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
+                }
+            }
+        } else {
+            [@"Dropped onto desktop" showAlert];
+        }
+
+        [_dragX11Dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        [self setValue:nil forKey:@"dragX11Dict"];
     }
     [self setValue:nil forKey:@"buttonDown"];
     [self setValue:nil forKey:@"buttonHover"];
