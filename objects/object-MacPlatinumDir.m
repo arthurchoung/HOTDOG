@@ -980,429 +980,8 @@ static char *resizeSelectionVerticalPixels =
 "w\n"
 ;
 
-static id folderPalette =
-@". #202040\n"
-@"X #282850\n"
-@"o #303060\n"
-@"O #303068\n"
-@"+ #383870\n"
-@"@ #383878\n"
-@"# #505050\n"
-@"$ #585858\n"
-@"% #606060\n"
-@"& #686868\n"
-@"* #707070\n"
-@"= #787878\n"
-@"- #404080\n"
-@"; #404088\n"
-@": #484888\n"
-@"> #484890\n"
-@", #484898\n"
-@"< #505098\n"
-@"1 #5050A0\n"
-@"2 #5850A0\n"
-@"3 #5858A0\n"
-@"4 #5858A8\n"
-@"5 #5858B0\n"
-@"6 #6058B0\n"
-@"7 #6060B0\n"
-@"8 #6060B8\n"
-@"9 #6868B8\n"
-@"0 #6060C0\n"
-@"q #6868C0\n"
-@"w #6060C8\n"
-@"e #7878D8\n"
-@"r #7878E0\n"
-@"t #8078E0\n"
-@"y #808080\n"
-@"u #888888\n"
-@"i #909090\n"
-@"p #989898\n"
-@"a #A0A0A0\n"
-@"s #b8b8b8\n"
-@"d #8080E0\n"
-@"f #8080E8\n"
-@"g #8888E8\n"
-@"h #8888F0\n"
-@"j #9090F0\n"
-@"k #9898F0\n"
-@"l #9090F8\n"
-@"z #9898F8\n"
-@"x #A0A0F0\n"
-@"c #A8A0F0\n"
-@"v #A0A8F0\n"
-@"b #A8A8F0\n"
-@"n #A8A8F8\n"
-@"m #B0A8F0\n"
-@"M #A8B0F0\n"
-@"N #B0B0F0\n"
-@"B #B0B0F8\n"
-@"V #B8B0F8\n"
-@"C #B8B8F8\n"
-@"Z #C0B8F8\n"
-@"A #C8C8C8\n"
-@"S #C8C8D0\n"
-@"D #C8C8D8\n"
-@"F #D0D0D0\n"
-@"G #D8D8D8\n"
-@"H #C0C0F8\n"
-@"J #C8C0F8\n"
-@"K #C8C8F8\n"
-@"L #D0C8F8\n"
-@"P #D0D0F8\n"
-@"I #D8D8F8\n"
-@"U #e0e0e0\n"
-@"Y #e8e8e8\n"
-@"T #E0E0F8\n"
-@"R #F8F8F8\n"
-;
-static id folderPixels =
-@"  41XD                          \n"
-@"  1zq1oD                        \n"
-@"84+fzzq1oD                      \n"
-@"7Td,+fllq1oD                    \n"
-@"7KKTd,@fllq1oD oooD             \n"
-@"6LKKKId,@flhq1oqhq1oD           \n"
-@"4KKKKKKId,@rhhqhfdhq1oD         \n"
-@"4KKKKKJHHId,@rhgfddtf5o         \n"
-@"4KKKKHHHHHHId,@qfddtre1D        \n"
-@"3KKKHHHHHHHCCId,@qdtreqoD       \n"
-@"2KKHHHHHHHCCCCCId,@qrre1o       \n"
-@"1KHHHHHHHCCCCCCCBId,@qeq.       \n"
-@"<HHHHHHHZCCCCCVBBBBId@q9.       \n"
-@"<HHHHHZCCCCCCVBBBBBBNPo0.       \n"
-@"<HHHHZZCCCCCVBBBBNBmbeo5.       \n"
-@">HHHHCCCCCCVBBBBBBmbbeo5.       \n"
-@">HHHZCCCCCVBBBBBBNbbbeo1.       \n"
-@">HHCCCCCCCBBBBNNNnbbbeo,.       \n"
-@":HZCCCCCCBBBBBNMbbbbbeo,.       \n"
-@":ZCCCCCVBBBBBNNnbbbbbeo,.       \n"
-@";ezCCCVBBBBBNNbbbbbbceo,.sFU    \n"
-@"SO-ezCBBBBBNmbbbbbbvxeo,.*isFU  \n"
-@"  SO-ezBBBBmbbbbbbxxxeo,.$&*isFY\n"
-@"    SO-ezBBnbbbbbxxxxeo,.#$%*uaF\n"
-@"      SO-ezbbbbbxxxxxeo,.##$%*yA\n"
-@"        SO-ezbbbxxxxxeo,.##$&=pA\n"
-@"          SO-ejxxxxxxeo,.#$%*ysU\n"
-@"            SO-ejxxxkeo,.$%*ysG \n"
-@"              SO-ejkkeo,.&*ysG  \n"
-@"                SO-qeeo,.*ysG   \n"
-@"                  SO-wo,.ysG    \n"
-@"                    So..*sU     \n"
-;
-static id selectedFolderPalette = 
-@". #101020\n"
-@"X #101028\n"
-@"o #181830\n"
-@"O #181838\n"
-@"+ #202040\n"
-@"@ #202048\n"
-@"# #282848\n"
-@"$ #282850\n"
-@"% #282858\n"
-@"& #302858\n"
-@"* #303058\n"
-@"= #303060\n"
-@"- #383868\n"
-@"; #383870\n"
-@": #403870\n"
-@"> #484848\n"
-@", #505050\n"
-@"< #585858\n"
-@"1 #404070\n"
-@"2 #404078\n"
-@"3 #484878\n"
-@"4 #505078\n"
-@"5 #585078\n"
-@"6 #505878\n"
-@"7 #585878\n"
-@"8 #605878\n"
-@"9 #606060\n"
-@"0 #686868\n"
-@"q #606078\n"
-@"w #686078\n"
-@"e #686878\n"
-@"r #707070\n"
-@"t #707078\n"
-@"y #787878\n"
-@"u #808080\n"
-@"i #888888\n"
-@"p #909090\n"
-@"a #A0A0A0\n"
-@"s #b0b0b0\n"
-@"d #C0C0C0\n"
-@"f #C0C0C8\n"
-@"g #C8C8C8\n"
-@"h #D0D0D0\n"
-@"j #D8D8D8\n"
-@"k #e0e0e0\n"
-@"l #e8e8e8\n"
-@"z #F8F8F8\n"
-;
-static id selectedFolderPixels =
-@"  $$Xf                          \n"
-@"  $3=$of                        \n"
-@"*$O133=$of                      \n"
-@"*t1@O133=$of                    \n"
-@"*qqt1@O133=$of ooof             \n"
-@"&wqqqe1@O132=$o=2=$of           \n"
-@"$qqqqqqe1@O;22=2112=$of         \n"
-@"$qqqqqqqqe1@O;21111:1%o         \n"
-@"$qqqqqqqqqqe1@O=111:;-$f        \n"
-@"$qqqqqqqqqq77e1@O=1:;-=of       \n"
-@"$qqqqqqqqq77777e1@O=;;-$o       \n"
-@"$qqqqqqqq77777777e1@O=-=.       \n"
-@"#qqqqqqq87777777777e1O=*.       \n"
-@"#qqqqq877777777777777eo=.       \n"
-@"#qqqq8877777777777754-o%.       \n"
-@"@qqqq7777777777777544-o%.       \n"
-@"@qqq87777777777777444-o$.       \n"
-@"@qq777777777777774444-o@.       \n"
-@"+q8777777777777644444-o@.       \n"
-@"+87777777777777444444-o@.       \n"
-@"+-3777777777774444444-o@.shk    \n"
-@"fo+-37777777544444444-o@.0ishk  \n"
-@"  fo+-377775444444444-o@.,<0ishl\n"
-@"    fo+-3774444444444-o@.>,<9uah\n"
-@"      fo+-34444444444-o@.>>,<9yd\n"
-@"        fo+-344444444-o@.>>,<rpg\n"
-@"          fo+-3444444-o@.>,<9ysk\n"
-@"            fo+-34443-o@.,<0ysj \n"
-@"              fo+-333-o@.<0ysj  \n"
-@"                fo+=--o@.0ysj   \n"
-@"                  fo+=o@.ysj    \n"
-@"                    fo..0sk     \n"
-;
 
 
-
-static id documentPalette =
-@"b #000000\n"
-@". #080000\n"
-@"X #080808\n"
-@"o #080810\n"
-@"O #101010\n"
-@"+ #181818\n"
-@"@ #182020\n"
-@"# #202020\n"
-@"$ #202820\n"
-@"% #202028\n"
-@"& #282828\n"
-@"* #302828\n"
-@"= #283028\n"
-@"- #303030\n"
-@"; #383838\n"
-@": #404040\n"
-@"> #404048\n"
-@", #404848\n"
-@"< #484848\n"
-@"1 #485050\n"
-@"2 #505050\n"
-@"3 #505058\n"
-@"4 #585858\n"
-@"5 #606060\n"
-@"6 #706868\n"
-@"7 #707070\n"
-@"8 #787878\n"
-@"9 #787880\n"
-@"0 #808080\n"
-@"q #888888\n"
-@"w #909090\n"
-@"e #989898\n"
-@"r #A0A0A0\n"
-@"t #a8a8a8\n"
-@"y #b0b0b0\n"
-@"u #b8b8b8\n"
-@"i #C0C0C0\n"
-@"p #D0D0D0\n"
-@"a #D8D8D8\n"
-@"s #e0e0e0\n"
-@"d #e8e8e8\n"
-@"f #f0f0f0\n"
-@"g #F8F8F8\n"
-;
-static id documentPixels =
-@"54444222<<<<:::;;;;s            \n"
-@"4ggggggfffffddddds:2s           \n"
-@"4ggggggfffffddddds>i4s          \n"
-@"4ggggggfffffddddds<fu5s         \n"
-@"4ggggggfffffddddds2gsy4s        \n"
-@"4ggggggfffffddddds2ggat2s       \n"
-@"3ggggggfffffddddds2<<:;-*       \n"
-@"2ggggggfffffdddddsp09876&       \n"
-@"2ggggggfffffdddddssuytte&       \n"
-@"2ggggggfffffdddddsssssae&       \n"
-@"2ggggggfffffdddddsssssae%       \n"
-@"1ggggggfffffdddddsssssae#       \n"
-@"<ggggggfffffdddddsssssae#       \n"
-@"<ggggggfffffdddddsssssar#       \n"
-@"<ggggggfffffdddddsssssar#       \n"
-@"<ggggggfffffdddddsssssar+       \n"
-@",ggggggfffffdddddsssssar+       \n"
-@":ggggggfffffdddddsssssar+       \n"
-@":ggggggfffffdddddsssssat+       \n"
-@":ggggggfffffdddddsssssatO       \n"
-@":ggggggfffffdddddsssssatO       \n"
-@":ggggggfffffdddddsssssatO       \n"
-@";ggggggfffffdddddsssssatO       \n"
-@";ggggggfffffdddddsssssato       \n"
-@";ggggggfffffdddddsssssayX       \n"
-@";ggggggfffffdddddsssssayX       \n"
-@";ggggggfffffdddddsssssayXad     \n"
-@"-ggggggfffffdddddsssssay.ruad   \n"
-@"-ggggggfffffdddddsssssaybqruiad \n"
-@"-ggggggfffffdddddsssssaub8qrtusf\n"
-@"-ggggggfffffdddddsssssaub88wris \n"
-@"-=&&&$###@++++OOOOXXXXXbb80euaf \n"
-;
-static id selectedDocumentPalette =
-@"b #000000\n"
-@". #000008\n"
-@"X #080808\n"
-@"o #081010\n"
-@"O #101010\n"
-@"+ #181010\n"
-@"@ #101810\n"
-@"# #181818\n"
-@"$ #202020\n"
-@"% #202828\n"
-@"& #282828\n"
-@"* #303030\n"
-@"= #383030\n"
-@"- #383838\n"
-@"; #383840\n"
-@": #404040\n"
-@"> #484848\n"
-@", #505050\n"
-@"< #585858\n"
-@"1 #606060\n"
-@"2 #686868\n"
-@"3 #707070\n"
-@"4 #787878\n"
-@"5 #888888\n"
-@"6 #909090\n"
-@"7 #989898\n"
-@"8 #A0A0A0\n"
-@"9 #b0b0b0\n"
-@"0 #b8b8b8\n"
-@"q #D0D0D0\n"
-@"w #D8D8D8\n"
-@"e #e0e0e0\n"
-@"r #e8e8e8\n"
-@"t #f0f0f0\n"
-@"y #F8F8F8\n"
-;
-static id selectedDocumentPixels =
-@"*&&&&&&&$$$$$$$####e            \n"
-@"&44444444444333333$&e           \n"
-@"&44444444444333333$1&e          \n"
-@"&44444444444333333$4<*e         \n"
-@"&44444444444333333&43<&e        \n"
-@"&44444444444333333&442,&e       \n"
-@"&44444444444333333&$$$##+       \n"
-@"&444444444443333332:;--=O       \n"
-@"&444444444443333333<<,,>O       \n"
-@"&4444444444433333333332>O       \n"
-@"&4444444444433333333332>O       \n"
-@"%4444444444433333333332>O       \n"
-@"$4444444444433333333332>O       \n"
-@"$4444444444433333333332,O       \n"
-@"$4444444444433333333332,O       \n"
-@"$4444444444433333333332,X       \n"
-@"$4444444444433333333332,X       \n"
-@"$4444444444433333333332,X       \n"
-@"$4444444444433333333332,X       \n"
-@"$4444444444433333333332,X       \n"
-@"$4444444444433333333332,X       \n"
-@"$4444444444433333333332,X       \n"
-@"#4444444444433333333332,X       \n"
-@"#4444444444433333333332,.       \n"
-@"#4444444444433333333332<b       \n"
-@"#4444444444433333333332<b       \n"
-@"#4444444444433333333332<bqr     \n"
-@"#4444444444433333333332<b69qr   \n"
-@"#4444444444433333333332<b3690qr \n"
-@"#4444444444433333333332<b23689wt\n"
-@"#4444444444433333333332<b11470e \n"
-@"#@OOOOOOOoXXXXXXXXbbbbbbb1359qt \n"
-;
-static id readmePalette =
-@"b #000000\n"
-@". #707070\n"
-@"X #888888\n"
-@"o #e8e8e8\n"
-@"O #F8F8F8\n"
-;
-static id readmePixels =
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"boooooooooooooooooooooooooooob \n"
-@"bo....ooOboooooooooooooo....obb\n"
-@"boooooooboobbobbbobbobboooooobb\n"
-@"bo....obobobbobobobbobbo....obb\n"
-@"bo....oooooboooooooooboo....obb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"boobbboboobobbbboobbooobboobobb\n"
-@"boobooooobooooooobooboboobobobb\n"
-@"booooooobooooboooooboobobbooobb\n"
-@"boobobobooboobooobooboboobobobb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"bo......oobbbbbbbbbboo......obb\n"
-@"bo......obObOOOOOOOObo......obb\n"
-@"boooooooobbbbbbbbbbbboooooooobb\n"
-@"bo......obXXXXXXXXXXbo......obb\n"
-@"boooooooobXXXXXXXXXXboooooooobb\n"
-@"bo......obXXXXXXXXXXbo......obb\n"
-@"boooooooobXXXXXXXXXXboooooooobb\n"
-@"bo......obXXXXXXXXXXbo......obb\n"
-@"booooooooobbbbbbbbbbooooooooobb\n"
-@"bo......oooooooooooooo......obb\n"
-@"boooooooooo........oooooooooobb\n"
-@"booooooooooooooooooooooooooooob\n"
-@" bbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-;
-static id selectedReadmePalette =
-@"b #000000\n"
-@". #383838\n"
-@"X #404040\n"
-@"o #707070\n"
-@"O #787878\n"
-@"+ #F8F8F8\n"
-;
-static id selectedReadmePixels =
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-@"boooooooooooooooooooooooooooob \n"
-@"bo....ooOboooooooooooooo....obb\n"
-@"boooooooboobbobbbobbobboooooobb\n"
-@"bo....obobobbobobobbobbo....obb\n"
-@"bo....oooooboooooooooboo....obb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"boobbboboobobbbboobbooobboobobb\n"
-@"boobooooobooooooobooboboobobobb\n"
-@"booooooobooooboooooboobobbooobb\n"
-@"boobobobooboobooobooboboobobobb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
-@"boooooooooooooooooooooooooooobb\n"
-@"bo......oobbbbbbbbbboo......obb\n"
-@"bo......obObOOOOOOOObo......obb\n"
-@"boooooooobbbbbbbbbbbboooooooobb\n"
-@"bo......obXXXXXXXXXXbo......obb\n"
-@"boooooooobXXXXXXXXXXboooooooobb\n"
-@"bo......obXXXXXXXXXXbo......obb\n"
-@"boooooooobXXXXXXXXXXboooooooobb\n"
-@"bo......obXXXXXXXXXXbo......obb\n"
-@"booooooooobbbbbbbbbbooooooooobb\n"
-@"bo......oooooooooooooo......obb\n"
-@"boooooooooo........oooooooooobb\n"
-@"booooooooooooooooooooooooooooob\n"
-@" bbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
-;
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksdkdjkfsdkjfjdksfjkfj)
 + (id)MacPlatinumDir
@@ -1527,39 +1106,31 @@ static id selectedReadmePixels =
     int y = 5;
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
-        id palette = nil;
-        id pixels = nil;
-        id selectedPalette = nil;
-        id selectedPixels = nil;
+        id object = nil;
+        id filePath = [elt valueForKey:@"filePath"];
         id fileType = [elt valueForKey:@"fileType"];
         if ([fileType isEqual:@"file"]) {
-            id filePath = [elt valueForKey:@"filePath"];
             if ([[filePath lowercaseString] hasSuffix:@".txt"]) {
-                palette = readmePalette;
-                pixels = readmePixels;
-                selectedPalette = selectedReadmePalette;
-                selectedPixels = selectedReadmePixels;
+                object = [@"MacPlatinumReadmeIcon" asInstance];
             } else {
-                palette = documentPalette;
-                pixels = documentPixels;
-                selectedPalette = selectedDocumentPalette;
-                selectedPixels = selectedDocumentPixels;
+                object = [@"MacPlatinumDocumentIcon" asInstance];
             }
         } else if ([fileType isEqual:@"directory"]) {
-            palette = folderPalette;
-            pixels = folderPixels;
-            selectedPalette = selectedFolderPalette;
-            selectedPixels = selectedFolderPixels;
+            object = [@"MacPlatinumFolderIcon" asInstance];
         }
-        if (!palette || !pixels) {
+        if (!object) {
             continue;
         }
-        [elt setValue:palette forKey:@"palette"];
-        [elt setValue:pixels forKey:@"pixels"];
-        [elt setValue:selectedPalette forKey:@"selectedPalette"];
-        [elt setValue:selectedPixels forKey:@"selectedPixels"];
-        int w = [Definitions widthForCString:[pixels UTF8String]];
-        int h = [Definitions heightForCString:[pixels UTF8String]];
+        [object setValue:filePath forKey:@"path"];
+        [elt setValue:object forKey:@"object"];
+        int w = 16;
+        if ([object respondsToSelector:@selector(preferredWidth)]) {
+            w = [object preferredWidth];
+        }
+        int h = 16;
+        if ([object respondsToSelector:@selector(preferredHeight)]) {
+            h = [object preferredHeight];
+        }
         if (x + w + 5 >= r.w) {
             x = 40;
             y += h + 30;
@@ -1760,21 +1331,28 @@ static id selectedReadmePixels =
         int y = -_visibleY + [elt intValueForKey:@"y"] + _titleBarHeight + 20;
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
+        id object = [elt valueForKey:@"object"];
         if ((_selected == elt) || [elt intValueForKey:@"isSelected"]) {
-            id palette = [elt valueForKey:@"selectedPalette"];
-            id pixels = [elt valueForKey:@"selectedPixels"];
-            if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+            Int4 r1;
+            r1.x = r.x+x;
+            r1.y = r.y+y;
+            r1.w = w;
+            r1.h = h;
+            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+                id dict = nsdict();
+                [dict setValue:@"1" forKey:@"isSelected"];
+                [object drawInBitmap:bitmap rect:r1 context:dict];
             }
         } else {
-            id palette = [elt valueForKey:@"palette"];
-            id pixels = [elt valueForKey:@"pixels"];
-            if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+            Int4 r1;
+            r1.x = r.x+x;
+            r1.y = r.y+y;
+            r1.w = w;
+            r1.h = h;
+            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+                [object drawInBitmap:bitmap rect:r1 context:nil];
             }
         }
-        id filePath = [elt valueForKey:@"filePath"];
-        [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-2];
     }
 
     BOOL hasFocus = NO;
