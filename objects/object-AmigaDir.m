@@ -110,438 +110,14 @@ static char *downArrowPixels =
 "ooooXXXXXXoooo\n"
 "ooooXXXXXXoooo\n"
 ;
-static id drawerPalette =
-@"b #000000\n"
-@". #000022\n"
-@"* #ff8800\n"
-@"X #0055aa\n"
-@"o #ffffff\n"
-;
-
-static id drawerPixels =
-@"              ...........................................................\n"
-@"              ...........................................................\n"
-@"          ....oooooooooooooooooooooooooooooooooooooooooooooooooooooo...o.\n"
-@"          ....oooooooooooooooooooooooooooooooooooooooooooooooooooooo...o.\n"
-@"      ....oooooooooooooooooooooooooooooooooooooooooooooooooooooooo...oo..\n"
-@"      ....oooooooooooooooooooooooooooooooooooooooooooooooooooooooo...oo..\n"
-@"   ................................................................ooo.o.\n"
-@"   ................................................................ooo.o.\n"
-@"   ..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo..oooo..\n"
-@"   ..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo..oooo..\n"
-@"   ..ooo......................................................ooo..ooo.o.\n"
-@"   ..ooo......................................................ooo..ooo.o.\n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..oo.o..\n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..oo.o..\n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..ooo.o.\n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..ooo.o.\n"
-@"   ..ooo..ooooooooooooooooo...oooooooooo...ooooooooooooooooo..ooo..oo.o..\n"
-@"   ..ooo..ooooooooooooooooo...oooooooooo...ooooooooooooooooo..ooo..oo.o..\n"
-@"   ..ooo..oooooooooooooooo................oooooooooooooooooo..ooo..o.o.. \n"
-@"   ..ooo..oooooooooooooooo................oooooooooooooooooo..ooo..o.o.. \n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..oo..  \n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..oo..  \n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..o..   \n"
-@"   ..ooo..oooooooooooooooooooooooooooooooooooooooooooooooooo..ooo..o..   \n"
-@"   ..ooo......................................................ooo....    \n"
-@"   ..ooo......................................................ooo....    \n"
-@"   ..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo...     \n"
-@"   ..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo...     \n"
-@"   ................................................................      \n"
-@"   ................................................................      \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-;
-
-static id openDrawerPalette =
-@"b #000000\n"
-@". #000022\n"
-@"* #ff8800\n"
-@"X #0055aa\n"
-@"o #ffffff\n"
-;
-
-static id openDrawerPixels =
-@"              ...........................................................\n"
-@"              ...........................................................\n"
-@"          ....oooooooooooooooooooooooooooooooooooooooooooooooooooooo...o.\n"
-@"          ....oooooooooooooooooooooooooooooooooooooooooooooooooooooo...o.\n"
-@"      ....oooooooooooooooooooooooooooooooooooooooooooooooooooooooo...oo..\n"
-@"      ....oooooooooooooooooooooooooooooooooooooooooooooooooooooooo...oo..\n"
-@"   ................................................................ooo.o.\n"
-@"   ................................................................ooo.o.\n"
-@"   ..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo..oooo..\n"
-@"   ..oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo..oooo..\n"
-@"   ..ooo......................................................ooo..ooo.o.\n"
-@"   ..ooo......................................................ooo..ooo.o.\n"
-@"   ..o...  .. . . . . . . . . . . . . . . . . . . . . . . ....ooo..oo.o..\n"
-@"   ..o...  .. . . . . . . . . . . . . . . . . . . . . . . ....ooo..oo.o..\n"
-@"  .... . . ..  . . . . . . . . . . . . . . . . . . . . . ..o..ooo..ooo.o.\n"
-@"  .... . . ..  . . . . . . . . . . . . . . . . . . . . . ..o..ooo..ooo.o.\n"
-@"..........................................................oo..ooo..oo.o..\n"
-@"..........................................................oo..ooo..oo.o..\n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo..oo..ooo..o.o.. \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo..oo..ooo..o.o.. \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo..oo..ooo..oo..  \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo..oo..ooo..oo..  \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo..oo..ooo..o..   \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo..oo..ooo..o..   \n"
-@"..ooooooooooooooooooo...oooooooooo...ooooooooooooooooooo..oo..ooo....    \n"
-@"..ooooooooooooooooooo...oooooooooo...ooooooooooooooooooo..oo..ooo....    \n"
-@"..oooooooooooooooooo................oooooooooooooooooooo..o..oooo...     \n"
-@"..oooooooooooooooooo................oooooooooooooooooooo..o..oooo...     \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo...........      \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo...........      \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo...              \n"
-@"..oooooooooooooooooooooooooooooooooooooooooooooooooooooo...              \n"
-@"..........................................................               \n"
-@"..........................................................               \n"
-;
-
-static id textFilePalette =
-@"b #000000\n"
-@". #000022\n"
-@"X #0055AA\n"
-@"o #FFFFFF\n"
-;
-static id textFileSelectedPalette =
-@"b #000000\n"
-@"o #000022\n"
-@"X #0055AA\n"
-@". #FFFFFF\n"
-;
-static id textFilePixels =
-@"..............................          \n"
-@"..............................          \n"
-@"..oooooooooooooooooooooooo..oo..        \n"
-@"..oooooooooooooooooooooooo..oo..        \n"
-@"..oooooooooooooooooooooooo..oooo..      \n"
-@"..oooooooooooooooooooooooo..oooo..      \n"
-@"..oooooooooooooooooooooooo..oooooo..    \n"
-@"..oooooooooooooooooooooooo..oooooo..    \n"
-@"..ooo.........oooooooooooo..oooooooo..  \n"
-@"..ooo.........oooooooooooo..oooooooo..  \n"
-@"..oooooooooooooooooooooooo..............\n"
-@"..oooooooooooooooooooooooo..............\n"
-@"..ooo.........oooooooooooooooooooooooo..\n"
-@"..ooo.........oooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..ooooooo....o..........oo.......ooooo..\n"
-@"..ooooooo....o..........oo.......ooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..ooo..o........o................ooooo..\n"
-@"..ooo..o........o................ooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..ooo....................o.......ooooo..\n"
-@"..ooo....................o.......ooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..ooooooooooooooooooooo..........ooooo..\n"
-@"..ooooooooooooooooooooo..........ooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"..oooooooooooooooooooooooooooooooooooo..\n"
-@"........................................\n"
-@"........................................\n"
-;
-
-static id shellPalette =
-@"b #000000\n"
-@". #000022\n"
-@"* #ff8800\n"
-@"X #0055aa\n"
-@"o #ffffff\n"
-;
-static id selectedShellPalette =
-@"b #000000\n"
-@"o #000022\n"
-@"X #ff8800\n"
-@"* #0055aa\n"
-@". #ffffff\n"
-;
-static id shellPixels =
-@".....................................................\n"
-@".....................................................\n"
-@".ooooooooooooooooooooooooooooooooooooXoooooXoooooXo..\n"
-@".ooooooooooooooooooooooooooooooooooooXoooooXoooooXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXoooooXoooooXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXoooooXoooooXo..\n"
-@".ooooooooooooooooooooooooooooooooooooXoooooXoooooXo..\n"
-@".ooooooooooooooooooooooooooooooooooooXoooooXoooooXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXooXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXooXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXoooXXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXoooXXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXooXXXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXooXXXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXooXXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXooXXXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXooooXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXooooXXXooXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXooooo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXooooo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXoXXXo..\n"
-@".oXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXoXXXo..\n"
-@".oooooooooooooooooooooooooooooooooooooooooooooooooo..\n"
-@".oooooooooooooooooooooooooooooooooooooooooooooooooo..\n"
-@".....................................................\n"
-@".....................................................\n"
-;
-
-static id prefsPalette =
-@"b #000000\n"
-@". #000022\n"
-@"X #ff8800\n"
-@"* #0055aa\n"
-@"O #ffffff\n"
-;
-static id prefsPixels =
-@"              ...........................................................\n"
-@"              ...........................................................\n"
-@"          ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...O.\n"
-@"          ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...O.\n"
-@"      ....OOOOOOOOOOOOOOOOOOO..........OOOOOOOOOOOOOOOOOOOOOOOOOOO...OO..\n"
-@"      ....OOOOOOOOOOOOOOOOOOO..........OOOOOOOOOOOOOOOOOOOOOOOOOOO...OO..\n"
-@"   ...........................XXXXXXXX.............................OOO.O.\n"
-@"   ...........................XXXXXXXX.............................OOO.O.\n"
-@"   ..OOOOOOOOOOOOOOOOOOOOO..XXXXXXXXXXXX..OOOOOOOOOOOOOOOOOOOOOOO..OOOO..\n"
-@"   ..OOOOOOOOOOOOOOOOOOOOO..XXXXXXXXXXXX..OOOOOOOOOOOOOOOOOOOOOOO..OOOO..\n"
-@"   ..OOO...................XXXXX....XXXXX.....................OOO..OOO.O.\n"
-@"   ..OOO...................XXXXX....XXXXX.....................OOO..OOO.O.\n"
-@"   ..OOO..OOOOOOOOOOOOOOO........O..XXXXX..OOOOOOOOOOOOOOOOO..OOO..OO.O..\n"
-@"   ..OOO..OOOOOOOOOOOOOOO........O..XXXXX..OOOOOOOOOOOOOOOOO..OOO..OO.O..\n"
-@"   ..OOO..OOOOOOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOO..OOO..OOO.O.\n"
-@"   ..OOO..OOOOOOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOO..OOO..OOO.O.\n"
-@"   ..OOO..OOOOOOOOOOOOOOOOO...O..XXXXX..OO...OOOOOOOOOOOOOOO..OOO..OO.O..\n"
-@"   ..OOO..OOOOOOOOOOOOOOOOO...O..XXXXX..OO...OOOOOOOOOOOOOOO..OOO..OO.O..\n"
-@"   ..OOO..OOOOOOOOOOOOOOOO......XXXXX.......OOOOOOOOOOOOOOOO..OOO..O.O.. \n"
-@"   ..OOO..OOOOOOOOOOOOOOOO......XXXXX.......OOOOOOOOOOOOOOOO..OOO..O.O.. \n"
-@"   ..OOO..OOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOOOOOO..OOO..OO..  \n"
-@"   ..OOO..OOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOOOOOO..OOO..OO..  \n"
-@"   ..OOO..OOOOOOOOOOOOOOOOOOOO.......OOOOOOOOOOOOOOOOOOOOOOO..OOO..O..   \n"
-@"   ..OOO..OOOOOOOOOOOOOOOOOOOO.......OOOOOOOOOOOOOOOOOOOOOOO..OOO..O..   \n"
-@"   ..OOO.......................XXXXX..........................OOO....    \n"
-@"   ..OOO.......................XXXXX..........................OOO....    \n"
-@"   ..OOOOOOOOOOOOOOOOOOOOOOOOO.......OOOOOOOOOOOOOOOOOOOOOOOOOOOO...     \n"
-@"   ..OOOOOOOOOOOOOOOOOOOOOOOOO.......OOOOOOOOOOOOOOOOOOOOOOOOOOOO...     \n"
-@"   ................................................................      \n"
-@"   ................................................................      \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-@"                                                                         \n"
-;
-
-static id openPrefsPalette =
-@"b #000000\n"
-@". #000022\n"
-@"X #ff8800\n"
-@"* #0055aa\n"
-@"O #ffffff\n"
-;
-static id openPrefsPixels =
-@"              ...........................................................\n"
-@"              ...........................................................\n"
-@"          ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...O.\n"
-@"          ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...O.\n"
-@"      ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...OO..\n"
-@"      ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...OO..\n"
-@"   ................................................................OOO.O.\n"
-@"   ................................................................OOO.O.\n"
-@"   ..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..OOOO..\n"
-@"   ..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..OOOO..\n"
-@"   ..OOO......................................................OOO..OOO.O.\n"
-@"   ..OOO......................................................OOO..OOO.O.\n"
-@"   ..O...oo..o.o.o.o.o.o.........o.o.o.o.o.o.o.o.o.o.o.o.o....OOO..OO.O..\n"
-@"   ..O...oo..o.o.o.o.o.o.........o.o.o.o.o.o.o.o.o.o.o.o.o....OOO..OO.O..\n"
-@"  ....o.o.o..oo.o.o.o...XXXXXXXX....o.o.o.o.o.o.o.o.o.o.o..O..OOO..OOO.O.\n"
-@"  ....o.o.o..oo.o.o.o...XXXXXXXX....o.o.o.o.o.o.o.o.o.o.o..O..OOO..OOO.O.\n"
-@"......................XXXXXXXXXXXX........................OO..OOO..OO.O..\n"
-@"......................XXXXXXXXXXXX........................OO..OOO..OO.O..\n"
-@"..OOOOOOOOOOOOOOOOO..XXXXX....XXXXX..OOOOOOOOOOOOOOOOOOO..OO..OOO..O.O.. \n"
-@"..OOOOOOOOOOOOOOOOO..XXXXX....XXXXX..OOOOOOOOOOOOOOOOOOO..OO..OOO..O.O.. \n"
-@"..OOOOOOOOOOOOOOOOO........O..XXXXX..OOOOOOOOOOOOOOOOOOO..OO..OOO..OO..  \n"
-@"..OOOOOOOOOOOOOOOOO........O..XXXXX..OOOOOOOOOOOOOOOOOOO..OO..OOO..OO..  \n"
-@"..OOOOOOOOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOOOO..OO..OOO..O..   \n"
-@"..OOOOOOOOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOOOO..OO..OOO..O..   \n"
-@"..OOOOOOOOOOOOOOOOOOO...O..XXXXX..OO...OOOOOOOOOOOOOOOOO..OO..OOO....    \n"
-@"..OOOOOOOOOOOOOOOOOOO...O..XXXXX..OO...OOOOOOOOOOOOOOOOO..OO..OOO....    \n"
-@"..OOOOOOOOOOOOOOOOOO......XXXXX.......OOOOOOOOOOOOOOOOOO..O..OOOO...     \n"
-@"..OOOOOOOOOOOOOOOOOO......XXXXX.......OOOOOOOOOOOOOOOOOO..O..OOOO...     \n"
-@"..OOOOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOOOOOOOO...........      \n"
-@"..OOOOOOOOOOOOOOOOOOOOO..XXXXX..OOOOOOOOOOOOOOOOOOOOOOOO...........      \n"
-@"..OOOOOOOOOOOOOOOOOOOOOO.......OOOOOOOOOOOOOOOOOOOOOOOOO...              \n"
-@"..OOOOOOOOOOOOOOOOOOOOOO.......OOOOOOOOOOOOOOOOOOOOOOOOO...              \n"
-@".........................XXXXX............................               \n"
-@".........................XXXXX............................               \n"
-@"                        .......                                          \n"
-@"                        .......                                          \n"
-;
-
-static char *trashCanPalette =
-@"b #000000\n"
-@". #000022\n"
-@"X #FF8800\n"
-@"o #0055AA\n"
-@"O #FFFFFF\n"
-;
-
-static char *trashCanPixels =
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                                                          \n"
-@"                            ................              \n"
-@"                            ................              \n"
-@"                           ...            ...             \n"
-@"                           ...            ...             \n"
-@"                ......................................    \n"
-@"                ......................................    \n"
-@"              ..X.X.X.X.X.X.XXXXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              ..X.X.X.X.X.X.XXXXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"             ..X.X.X.X.X.X.X.X.X.X.X.XXXXXXXXXXXXXXXXXX.. \n"
-@"             ..X.X.X.X.X.X.X.X.X.X.X.XXXXXXXXXXXXXXXXXX.. \n"
-@"             ............................................ \n"
-@"             ............................................ \n"
-@"              ..X.X.X.X.X.X.X.XXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              ..X.X.X.X.X.X.X.XXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              ...X.X.X.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              ...X.X.X.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"               ...X......XXXXXXX.......XXXXXX.....XXX..   \n"
-@"               ...X......XXXXXXX.......XXXXXX.....XXX..   \n"
-@"               ..X...X.X...XXX...X.X.X..XXX..X.X...XX..   \n"
-@"               ..X...X.X...XXX...X.X.X..XXX..X.X...XX..   \n"
-@"               ...X...XXX..XXX..X.XXXX..XXX...XXX..XX..   \n"
-@"               ...X...XXX..XXX..X.XXXX..XXX...XXX..XX..   \n"
-@"               ..X...X.XX..XXX...X.XXX..XXX..X.XX..XX..   \n"
-@"               ..X...X.XX..XXX...X.XXX..XXX..X.XX..XX..   \n"
-@"                ..X...XXX..XXX..X.XXXX..XXX...XXX..X..    \n"
-@"                ..X...XXX..XXX..X.XXXX..XXX...XXX..X..    \n"
-@"                ...X...XXX..XX...X.XXX..XX...XXX..XX..    \n"
-@"                ...X...XXX..XX...X.XXX..XX...XXX..XX..    \n"
-@"                ..X...X.XX..XX..X.XXXX..XX..X.XX..XX..    \n"
-@"                ..X...X.XX..XX..X.XXXX..XX..X.XX..XX..    \n"
-@"                ...X...XXX..XXX..X.XX..XXX...XXX..XX..    \n"
-@"                ...X...XXX..XXX..X.XX..XXX...XXX..XX..    \n"
-@"                 ...X...XX..XXX...XXX..XXX..XXX..XX..     \n"
-@"                 ...X...XX..XXX...XXX..XXX..XXX..XX..     \n"
-@"                 ..X...X.X..XXX..X.XX..XXX...XX..XX..     \n"
-@"                 ..X...X.X..XXX..X.XX..XXX...XX..XX..     \n"
-@"                 ...X...XXX..XX...XXX..XX...XXX..XX..     \n"
-@"                 ...X...XXX..XX...XXX..XX...XXX..XX..     \n"
-@"                 ..X.X...XX..XX..X.XX..XX..X.X..XXX..     \n"
-@"                 ..X.X...XX..XX..X.XX..XX..X.X..XXX..     \n"
-@"             .......X...X.X..XXX..XX..XXX...XX..XX..      \n"
-@"             .......X...X.X..XXX..XX..XXX...XX..XX..      \n"
-@"    .................X...X...XXX...X..XXX..X...XXX..      \n"
-@"    .................X...X...XXX...X..XXX..X...XXX..      \n"
-@"....................X.X.....X.X.X....XXXXX....XXXX..      \n"
-@"....................X.X.....X.X.X....XXXXX....XXXX..      \n"
-@"  .....................X.X.X.X.X.XXXXXXXXXXXXXXX...       \n"
-@"  .....................X.X.X.X.X.XXXXXXXXXXXXXXX...       \n"
-@"       ..........................................         \n"
-@"       ..........................................         \n"
-@"                 ....................                     \n"
-@"                 ....................                     \n"
-;
 
 
-static char *openTrashCanPalette =
-@"b #000000\n"
-@". #000022\n"
-@"X #FF8800\n"
-@"o #0055AA\n"
-@"O #FFFFFF\n"
-;
 
-static char *openTrashCanPixels =
-@"                          ..................              \n"
-@"                          ..................              \n"
-@"                   .......XXXXXXXXXXXXXXXXXX.......       \n"
-@"                   .......XXXXXXXXXXXXXXXXXX.......       \n"
-@"              .....XXXXXXXX.................XXXXXXX.....  \n"
-@"              .....XXXXXXXX.................XXXXXXX.....  \n"
-@"             ..XXXX........X.X.X.XXXXX.X.X.X......XXXXX.. \n"
-@"             ..XXXX........X.X.X.XXXXX.X.X.X......XXXXX.. \n"
-@"            ..XX....X.X.X.X.X.XXXX.X.XXXX.X.X.X.X.....XX..\n"
-@"            ..XX....X.X.X.X.X.XXXX.X.XXXX.X.X.X.X.....XX..\n"
-@"             ..X..XX.X.X.X.X.X.X.XXXXX.X.X.X.X.X.XXX..X.. \n"
-@"             ..X..XX.X.X.X.X.X.X.XXXXX.X.X.X.X.X.XXX..X.. \n"
-@"              ......XXXXXXX.X.X.X.X.X.X.X.X.XXXXXX......  \n"
-@"              ......XXXXXXX.X.X.X.X.X.X.X.X.XXXXXX......  \n"
-@"                  .........XXXXXXXXXXXXXXXXX........      \n"
-@"                  .........XXXXXXXXXXXXXXXXX........      \n"
-@"                          ...................             \n"
-@"                          ...................             \n"
-@"              ..........................................  \n"
-@"              ..........................................  \n"
-@"              ..X.X.X.X.X.X.X.XXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              ..X.X.X.X.X.X.X.XXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              ...X.X.X.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"              ...X.X.X.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..  \n"
-@"               ...X......XXXXXXX.......XXXXXX.....XXX..   \n"
-@"               ...X......XXXXXXX.......XXXXXX.....XXX..   \n"
-@"               ..X...X.X...XXX...X.X.X..XXX..X.X...XX..   \n"
-@"               ..X...X.X...XXX...X.X.X..XXX..X.X...XX..   \n"
-@"               ...X...XXX..XXX..X.XXXX..XXX...XXX..XX..   \n"
-@"               ...X...XXX..XXX..X.XXXX..XXX...XXX..XX..   \n"
-@"               ..X...X.XX..XXX...X.XXX..XXX..X.XX..XX..   \n"
-@"               ..X...X.XX..XXX...X.XXX..XXX..X.XX..XX..   \n"
-@"                ..X...XXX..XXX..X.XXXX..XXX...XXX..X..    \n"
-@"                ..X...XXX..XXX..X.XXXX..XXX...XXX..X..    \n"
-@"                ...X...XXX..XX...X.XXX..XX...XXX..XX..    \n"
-@"                ...X...XXX..XX...X.XXX..XX...XXX..XX..    \n"
-@"                ..X...X.XX..XX..X.XXXX..XX..X.XX..XX..    \n"
-@"                ..X...X.XX..XX..X.XXXX..XX..X.XX..XX..    \n"
-@"                ...X...XXX..XXX..X.XX..XXX...XXX..XX..    \n"
-@"                ...X...XXX..XXX..X.XX..XXX...XXX..XX..    \n"
-@"                 ...X...XX..XXX...XXX..XXX..XXX..XX..     \n"
-@"                 ...X...XX..XXX...XXX..XXX..XXX..XX..     \n"
-@"                 ..X...X.X..XXX..X.XX..XXX...XX..XX..     \n"
-@"                 ..X...X.X..XXX..X.XX..XXX...XX..XX..     \n"
-@"                 ...X...XXX..XX...XXX..XX...XXX..XX..     \n"
-@"                 ...X...XXX..XX...XXX..XX...XXX..XX..     \n"
-@"                 ..X.X...XX..XX..X.XX..XX..X.X..XXX..     \n"
-@"                 ..X.X...XX..XX..X.XX..XX..X.X..XXX..     \n"
-@"             .......X...X.X..XXX..XX..XXX...XX..XX..      \n"
-@"             .......X...X.X..XXX..XX..XXX...XX..XX..      \n"
-@"    .................X...X...XXX...X..XXX..X...XXX..      \n"
-@"    .................X...X...XXX...X..XXX..X...XXX..      \n"
-@"....................X.X.....X.X.X....XXXXX....XXXX..      \n"
-@"....................X.X.....X.X.X....XXXXX....XXXX..      \n"
-@"  .....................X.X.X.X.X.XXXXXXXXXXXXXXX...       \n"
-@"  .....................X.X.X.X.X.XXXXXXXXXXXXXXX...       \n"
-@"       ..........................................         \n"
-@"       ..........................................         \n"
-@"                 ....................                     \n"
-@"                 ....................                     \n"
-;
+
+
+
+
+
 
 @implementation Definitions(fmeiowfmkdsljvklxcmkljfklds)
 + (id)AmigaBuiltInDir:(id)builtin
@@ -552,104 +128,100 @@ static char *openTrashCanPixels =
     if ([builtin isEqual:@"Workbench1.3"]) {
         int x = 20;
         int y = 20;
-        int w = [Definitions widthForCString:[drawerPixels UTF8String]];
-        int h = [Definitions heightForCString:[drawerPixels UTF8String]];
+        int w = 0;
+        int h = 0;
         id elt;
+        id object;
         elt = nsdict();
+        object = [@"AmigaDrawerIcon" asInstance];
+        [object setValue:@"Utilities" forKey:@"path"];
+        w = [object preferredWidth];
+        h = [object preferredHeight];
+        [elt setValue:object forKey:@"object"];
         [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
         [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
         [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
         [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
         [elt setValue:@"Utilities" forKey:@"filePath"];
-        [elt setValue:drawerPalette forKey:@"palette"];
-        [elt setValue:drawerPixels forKey:@"pixels"];
-        [elt setValue:openDrawerPalette forKey:@"selectedPalette"];
-        [elt setValue:openDrawerPixels forKey:@"selectedPixels"];
         [elt setValue:[@"hotdog amigabuiltindir" split] forKey:@"doubleClickCommand"];
         [arr addObject:elt];
         x += w + 20;
         elt = nsdict();
+        object = [@"AmigaDrawerIcon" asInstance];
+        [object setValue:@"System" forKey:@"path"];
+        [elt setValue:object forKey:@"object"];
         [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
         [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
         [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
         [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
         [elt setValue:@"System" forKey:@"filePath"];
-        [elt setValue:drawerPalette forKey:@"palette"];
-        [elt setValue:drawerPixels forKey:@"pixels"];
-        [elt setValue:openDrawerPalette forKey:@"selectedPalette"];
-        [elt setValue:openDrawerPixels forKey:@"selectedPixels"];
         [elt setValue:[@"hotdog amigabuiltindir" split] forKey:@"doubleClickCommand"];
         [arr addObject:elt];
         x += w + 20;
         elt = nsdict();
+        object = [@"AmigaDrawerIcon" asInstance];
+        [object setValue:@"Expansion" forKey:@"path"];
+        [elt setValue:object forKey:@"object"];
         [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
         [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
         [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
         [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
         [elt setValue:@"Expansion" forKey:@"filePath"];
-        [elt setValue:drawerPalette forKey:@"palette"];
-        [elt setValue:drawerPixels forKey:@"pixels"];
-        [elt setValue:openDrawerPalette forKey:@"selectedPalette"];
-        [elt setValue:openDrawerPixels forKey:@"selectedPixels"];
         [elt setValue:[@"hotdog amigabuiltindir" split] forKey:@"doubleClickCommand"];
         [arr addObject:elt];
         x += w + 20;
         elt = nsdict();
+        object = [@"AmigaDrawerIcon" asInstance];
+        [object setValue:@"Empty" forKey:@"path"];
+        [elt setValue:object forKey:@"object"];
         [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
         [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
         [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
         [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
         [elt setValue:@"Empty" forKey:@"filePath"];
-        [elt setValue:drawerPalette forKey:@"palette"];
-        [elt setValue:drawerPixels forKey:@"pixels"];
-        [elt setValue:openDrawerPalette forKey:@"selectedPalette"];
-        [elt setValue:openDrawerPixels forKey:@"selectedPixels"];
         [elt setValue:[@"hotdog amigabuiltindir" split] forKey:@"doubleClickCommand"];
         [arr addObject:elt];
         x = 20;
         y += h + 20;
-        w = [Definitions widthForCString:[shellPixels UTF8String]];
-        h = [Definitions heightForCString:[shellPixels UTF8String]];
         elt = nsdict();
+        object = [@"AmigaShellIcon" asInstance];
+        [object setValue:@"Shell" forKey:@"path"];
+        w = [object preferredWidth];
+        h = [object preferredHeight];
+        [elt setValue:object forKey:@"object"];
         [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
         [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
         [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
         [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
         [elt setValue:@"Shell" forKey:@"filePath"];
-        [elt setValue:shellPalette forKey:@"palette"];
-        [elt setValue:shellPixels forKey:@"pixels"];
-        [elt setValue:selectedShellPalette forKey:@"selectedPalette"];
-        [elt setValue:shellPixels forKey:@"selectedPixels"];
         [elt setValue:[@"xterm -geometry 80x50 -bg #0055aa -fg white -cr #ff8800 +bc +uc" split] forKey:@"doubleClickCommand"];
         [arr addObject:elt];
         x += w + 20;
-        w = [Definitions widthForCString:[prefsPixels UTF8String]];
-        h = [Definitions heightForCString:[prefsPixels UTF8String]];
         elt = nsdict();
+        object = [@"AmigaPrefsIcon" asInstance];
+        [object setValue:@"Prefs" forKey:@"path"];
+        w = [object preferredWidth];
+        h = [object preferredHeight];
+        [elt setValue:object forKey:@"object"];
         [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
         [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
         [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
         [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
         [elt setValue:@"Prefs" forKey:@"filePath"];
-        [elt setValue:prefsPalette forKey:@"palette"];
-        [elt setValue:prefsPixels forKey:@"pixels"];
-        [elt setValue:openPrefsPalette forKey:@"selectedPalette"];
-        [elt setValue:openPrefsPixels forKey:@"selectedPixels"];
         [elt setValue:[@"hotdog amigabuiltindir" split] forKey:@"doubleClickCommand"];
         [arr addObject:elt];
         x += w + 20;
-        w = [Definitions widthForCString:[trashCanPixels UTF8String]];
-        h = [Definitions heightForCString:[trashCanPixels UTF8String]];
         elt = nsdict();
+        object = [@"AmigaTrashIcon" asInstance];
+        [object setValue:@"Trash" forKey:@"path"];
+        w = [object preferredWidth];
+        h = [object preferredHeight];
+        [elt setValue:object forKey:@"object"];
         [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
         [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
         [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
         [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
         [elt setValue:@"Trash" forKey:@"filePath"];
-        [elt setValue:trashCanPalette forKey:@"palette"];
-        [elt setValue:trashCanPixels forKey:@"pixels"];
-        [elt setValue:openTrashCanPalette forKey:@"selectedPalette"];
-        [elt setValue:openTrashCanPixels forKey:@"selectedPixels"];
         [elt setValue:[@"hotdog amigabuiltindir" split] forKey:@"doubleClickCommand"];
         [arr addObject:elt];
     }
@@ -964,62 +536,40 @@ static char *verticalScrollBarBottom =
     int y = 10;
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
-        id palette = nil;
-        id pixels = nil;
-        id selectedPalette = nil;
-        id selectedPixels = nil;
+        id object = nil;
+        id filePath = [elt valueForKey:@"filePath"];
         id fileType = [elt valueForKey:@"fileType"];
         if ([fileType isEqual:@"file"]) {
-            palette = textFilePalette;
-            pixels = textFilePixels;
-            selectedPalette = textFileSelectedPalette;
-            selectedPixels = textFilePixels;
+            object = [@"AmigaTextFileIcon" asInstance];
         } else if ([fileType isEqual:@"directory"]) {
-            id filePath = [elt valueForKey:@"filePath"];
             if ([filePath isEqual:@"Trash"]) {
-                palette = trashCanPalette;
-                pixels = trashCanPixels;
-                selectedPalette = openTrashCanPalette;
-                selectedPixels = openTrashCanPixels;
+                object = [@"AmigaTrashIcon" asInstance];
             } else {
-                palette = drawerPalette;
-                pixels = drawerPixels;
-                selectedPalette = drawerPalette;
-                selectedPixels = openDrawerPixels;
+                object = [@"AmigaDrawerIcon" asInstance];
             }
         }
-        if (!palette || !pixels) {
+        if (!object) {
             continue;
         }
-        [elt setValue:palette forKey:@"palette"];
-        [elt setValue:pixels forKey:@"pixels"];
-        [elt setValue:selectedPalette forKey:@"selectedPalette"];
-        [elt setValue:selectedPixels forKey:@"selectedPixels"];
-        int w = [Definitions widthForCString:[pixels UTF8String]];
-        int h = [Definitions heightForCString:[pixels UTF8String]];
-        int textWidth = [Definitions bitmapWidthForText:@"X"]*MAX_CHARS_TO_DRAW;
-        if (textWidth > w) {
-            if (x + textWidth + 5 >= r.w) {
-                x = 20;
-                y += h + 30;
-            }
-            x += (textWidth - w) / 2;
-            [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
-            [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
-            [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
-            [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
-            x += w + ((textWidth - w) / 2) + 20;
-        } else {
-            if (x + w + 5 >= r.w) {
-                x = 20;
-                y += h + 30;
-            }
-            [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
-            [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
-            [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
-            [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
-            x += w + 20;
+        [object setValue:filePath forKey:@"path"];
+        [elt setValue:object forKey:@"object"];
+        int w = 16;
+        if ([object respondsToSelector:@selector(preferredWidth)]) {
+            w = [object preferredWidth];
         }
+        int h = 16;
+        if ([object respondsToSelector:@selector(preferredHeight)]) {
+            h = [object preferredHeight];
+        }
+        if (x + w + 5 >= r.w) {
+            x = 20;
+            y += h + 20;
+        }
+        [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
+        [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
+        [elt setValue:nsfmt(@"%d", w) forKey:@"w"];
+        [elt setValue:nsfmt(@"%d", h) forKey:@"h"];
+        x += w + 20;
     }
     [self setValue:arr forKey:@"array"];
 }
@@ -1195,26 +745,29 @@ static char *verticalScrollBarBottom =
         int y = -_visibleY + [elt intValueForKey:@"y"] + 20;
         int w = [elt intValueForKey:@"w"];
         int h = [elt intValueForKey:@"h"];
+        id object = [elt valueForKey:@"object"];
+
         if ((_selected == elt) || [elt intValueForKey:@"isSelected"]) {
-            id palette = [elt valueForKey:@"selectedPalette"];
-            id pixels = [elt valueForKey:@"selectedPixels"];
-            if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+            Int4 r1;
+            r1.x = r.x+x;
+            r1.y = r.y+y;
+            r1.w = w;
+            r1.h = h;
+            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+                id dict = nsdict();
+                [dict setValue:@"1" forKey:@"isSelected"];
+                [object drawInBitmap:bitmap rect:r1 context:dict];
             }
         } else {
-            id palette = [elt valueForKey:@"palette"];
-            id pixels = [elt valueForKey:@"pixels"];
-            if (palette && pixels) {
-                [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r.x+x y:r.y+y];
+            Int4 r1;
+            r1.x = r.x+x;
+            r1.y = r.y+y;
+            r1.w = w;
+            r1.h = h;
+            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+                [object drawInBitmap:bitmap rect:r1 context:nil];
             }
         }
-        id filePath = [elt valueForKey:@"filePath"];
-        if ([filePath length] > MAX_CHARS_TO_DRAW) {
-            id a = [filePath stringToIndex:(MAX_CHARS_TO_DRAW/2)-1];
-            id b = [filePath stringFromIndex:(MAX_CHARS_TO_DRAW/2)+1];
-            filePath = nsfmt(@"%@..%@", a, b);
-        }
-        [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-8];
     }
     [Definitions drawAmigaFuelGaugeInBitmap:bitmap x:r.x y:r.y+20 h:r.h-20-18 pct:_diskFreePct];
     [self drawVerticalScrollBarInBitmap:bitmap x:r.x+r.w-16 y:r.y+20 h:r.h-20-18];
