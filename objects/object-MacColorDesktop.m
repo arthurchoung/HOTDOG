@@ -101,7 +101,7 @@ NSLog(@"windowManager %@", windowManager);
     id cmd = nsarr();
     [cmd addObject:@"hotdog-listBlockDevices.pl"];
     id lines = [[[cmd runCommandAndReturnOutput] asString] split:@"\n"];
-    [lines addObject:@"builtin:MacColorTrash mountpoint:Trash"];
+    [lines addObject:@"builtin:MacColorTrashIcon mountpoint:Trash"];
 
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
@@ -137,7 +137,7 @@ NSLog(@"windowManager %@", windowManager);
                 obj = [className asInstance];
                 [obj setValue:@"1" forKey:@"builtin"];
             } else {
-                obj = [@"MacColorComputer" asInstance];
+                obj = [@"MacColorComputerIcon" asInstance];
             }
             [obj setValue:mountpoint forKey:@"path"];
             int w = 16;
