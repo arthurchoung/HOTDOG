@@ -34,88 +34,71 @@ static id menuCSV =
 
 static char *trashPalette =
 "b #000000\n"
-". #222222\n"
-"X #444444\n"
-"o #555555\n"
-"+ #777777\n"
-"@ #888888\n"
-"$ #aaaaaa\n"
-"% #bbbbbb\n"
-"& #dddddd\n"
-"* #ffffff\n"
+". #ffffff\n"
 ;
 
 static char *selectedTrashPalette =
-"b #000000\n"
-". #111111\n"
-"X #222222\n"
-"o #2a2a2a\n"
-"+ #3b3b3b\n"
-"@ #444444\n"
-"$ #555555\n"
-"% #5d5d5d\n"
-"& #6e6e6e\n"
-"* #7f7f7f\n"
+". #000000\n"
+"b #ffffff\n"
 ;
 
 static char *trashPixels =
 "            bbbbbb            \n"
-"           b+&&$+Xb           \n"
+"           b......b           \n"
 "     bbbbbbbbbbbbbbbbbbbb     \n"
-"    bX++$$&*&&$$@@+++ooXXb    \n"
+"    b....................b    \n"
 "    bbbbbbbbbbbbbbbbbbbbbb    \n"
-"     b+$%&&&%%%$$$$++ooob     \n"
-"     b+$%***&&&&$$$$$+oob     \n"
-"     b+$&***+&&&$o$$++oob     \n"
-"     b+$$&*+$$&&o++$+.+ob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$$&*+$$&&o++$+.oob     \n"
-"     b+$&***+&&&$o$$+o+ob     \n"
-"     b+$%***&&&&&$$$++oob     \n"
-"     b+$&***&&%%$$+++ooob     \n"
-"      bbbbbbbbbbbbbbbbbb      \n"
-"******************************\n"
-"******************************\n"
-"******************************\n"
-"**bbbbb****************b******\n"
-"****b******************b******\n"
-"****b***b*bb**bb***bbb*bbb****\n"
-"****b***bb******b*b****b**b***\n"
-"****b***b*****bbb**bb**b**b***\n"
-"****b***b****b**b****b*b**b***\n"
-"****b***b*****bbb*bbb**b**b***\n"
-"******************************\n"
-"******************************\n"
+"     b..................b     \n"
+"     b..................b     \n"
+"     b..b...b...b...b...b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b...b...b...b...b..b     \n"
+"     b..b...b...b...b...b     \n"
+"     b..................b     \n"
+"     b..................b     \n"
+"     bbbbbbbbbbbbbbbbbbbb     \n"
+"..............................\n"
+"..............................\n"
+"..............................\n"
+"..bbbbb................b......\n"
+"....b..................b......\n"
+"....b...b.bb..bb...bbb.bbb....\n"
+"....b...bb......b.b....b..b...\n"
+"....b...b.....bbb..bb..b..b...\n"
+"....b...b....b..b....b.b..b...\n"
+"....b...b.....bbb.bbb..b..b...\n"
+"..............................\n"
+"..............................\n"
 ;
 
-
-@implementation Definitions(INMfewlfmklsdmvklsjdklfjklsdffjdkslmfklxcmvklcfdsmkfmekkfxdsfmneoiiooikl)
-+ (id)MacColorTrash
+@implementation Definitions(INMfewlfmklsdmvklsjdklfjklsdffjdkslmfklxcmvklcfdsmkfmekkfxkl)
++ (id)MacClassicTrashIcon
 {
-    id obj = [@"MacColorTrash" asInstance];
+    id obj = [@"MacClassicTrashIcon" asInstance];
     return obj;
 }
 @end
 
 
-@interface MacColorTrash : IvarObject
+@interface MacClassicTrashIcon : IvarObject
 {
     int _builtin;
     id _path;
@@ -125,7 +108,7 @@ static char *trashPixels =
     id _buttonDownTimestamp;
 }
 @end
-@implementation MacColorTrash
+@implementation MacClassicTrashIcon
 - (int)preferredWidth
 {
     static int w = 0;
@@ -281,15 +264,13 @@ static char *trashPixels =
 {
     id cmd = nsarr();
     [cmd addObject:@"hotdog"];
-    [cmd addObject:@"maccolordir"];
+    [cmd addObject:@"macclassicdir"];
     [cmd addObject:[Definitions homeDir:@"Trash"]];
     [cmd runCommandInBackground];
 }
-
 - (void)handleDragAndDrop:(id)obj
 {
     [nsfmt(@"%@ dropped onto %@", obj, self) showAlert];
 }
-
 @end
 

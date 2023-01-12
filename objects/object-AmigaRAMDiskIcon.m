@@ -27,80 +27,60 @@
 
 #include <sys/time.h>
 
-static char *diskPalette =
+static char *ramDiskPalette =
 "b #000000\n"
-". #ffffff\n"
+". #000022\n"
+"X #FF8800\n"
+"o #0055AA\n"
+"O #FFFFFF\n"
 ;
-static char *selectedDiskPalette =
-". #000000\n"
-"b #ffffff\n"
+static char *ramDiskSelectedPalette =
+"b #000000\n"
+"O #000022\n"
+"o #FF8800\n"
+"X #0055AA\n"
+". #FFFFFF\n"
 ;
-static char *diskPixels =
-"                                        bbbbbbbbbbbbbb          \n"
-"                                        bbbbbbbbbbbbbb          \n"
-"                                      bbbb..........bbbb        \n"
-"                                      bbbb..........bbbb        \n"
-"                  bbbbbbbbbbbbbb  bbbbbb..............bbbbbb    \n"
-"                  bbbbbbbbbbbbbb  bbbbbb..............bbbbbb    \n"
-"                bbbb..........bbbb........................bb    \n"
-"                bbbb..........bbbb........................bb    \n"
-"            bbbbbb..............bbbbbbbbbbbbbbbbbbbbbbbb..bbbbbb\n"
-"            bbbbbb..............bbbbbbbbbbbbbbbbbbbbbbbb..bbbbbb\n"
-"            bb........................................bb..bb..bb\n"
-"            bb........................................bb..bb..bb\n"
-"        bbbbbbbbbbbbbbbbbb..bbbbbbbbbbbbbb..bbbbbbbb..bb....bbbb\n"
-"        bbbbbbbbbbbbbbbbbb..bbbbbbbbbbbbbb..bbbbbbbb..bb....bbbb\n"
-"        bb................bbbb..........bbbb......bb..bb..bbbbbb\n"
-"        bb................bbbb..........bbbb......bb..bb..bbbbbb\n"
-"    bbbbbbbbbbbbbbbbbbbbbbbb..............bbbbbb..bb....bbbb..bb\n"
-"    bbbbbbbbbbbbbbbbbbbbbbbb..............bbbbbb..bb....bbbb..bb\n"
-"    bb........................................bb..bb..bbbb....bb\n"
-"    bb........................................bb..bb..bbbb....bb\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb......bbbb......bb\n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb......bbbb......bb\n"
-"bb..........................................bb....bbbb......bbbb\n"
-"bb..........................................bb....bbbb......bbbb\n"
-"bb..........bbbbbb..........................bb..bbbb......bb..bb\n"
-"bb..........bbbbbb..........................bb..bbbb......bb..bb\n"
-"bb........bb......bb........................bbbbbb......bb....bb\n"
-"bb........bb......bb........................bbbbbb......bb....bb\n"
-"bb........bbbbbbbbbb........................bbbb......bb....bbbb\n"
-"bb........bbbbbbbbbb........................bbbb......bb....bbbb\n"
-"bb........bb......bb........................bb......bb....bb..bb\n"
-"bb........bb......bb........................bb......bb....bb..bb\n"
-"bb........bb......bb........................bb....bb....bb....bb\n"
-"bb........bb......bb........................bb....bb....bb....bb\n"
-"bb..........................................bb..bb....bb......bb\n"
-"bb..........................................bb..bb....bb......bb\n"
-"bb............bbbbbbbbbbbbbbbb..............bbbb....bb......bbbb\n"
-"bb............bbbbbbbbbbbbbbbb..............bbbb....bb......bbbb\n"
-"bb............bb............bb..............bb....bb......bbbb..\n"
-"bb............bb............bb..............bb....bb......bbbb..\n"
-"bb............bb............bb..............bb..bb......bbbb..  \n"
-"bb............bb............bb..............bb..bb......bbbb..  \n"
-"bb............bbbbbbbbbbbbbbbb..............bbbb......bbbb..    \n"
-"bb............bbbbbbbbbbbbbbbb..............bbbb......bbbb..    \n"
-"bb..........................................bb......bbbb..      \n"
-"bb..........................................bb......bbbb..      \n"
-"bb..........................................bb....bbbb..        \n"
-"bb..........................................bb....bbbb..        \n"
-"bb..........bbbb..........bbbb..............bb..bbbb..          \n"
-"bb..........bbbb..........bbbb..............bb..bbbb..          \n"
-"bb........bbbbbbbbbbbbbbbbbb................bbbbbb..            \n"
-"bb........bbbbbbbbbbbbbbbbbb................bbbbbb..            \n"
-"bb..........................................bbbb..              \n"
-"bb..........................................bbbb..              \n"
-"bb..........................................bb..                \n"
-"bb..........................................bb..                \n"
-"bb..........................................bb                  \n"
-"bb..........................................bb                  \n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb                  \n"
-"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb                  \n"
+static char *ramDiskPixels =
+"..........................      \n"
+"..........................      \n"
+"..OOOOOOXXXXXX....XXXXOO....    \n"
+"..OOOOOOXXXXXX....XXXXOO....    \n"
+"..OOOOOOXXXXXX....XXXXOOOO....  \n"
+"..OOOOOOXXXXXX....XXXXOOOO....  \n"
+"..OOOOOOXXXXXX....XXXXOOOOOO....\n"
+"..OOOOOOXXXXXX....XXXXOOOOOO....\n"
+"..OOOOOOXXXXXX....XXXXOOOOOOOO..\n"
+"..OOOOOOXXXXXX....XXXXOOOOOOOO..\n"
+"..OOOOOOXXXXXXXXXXXXXXOOOOOOOO..\n"
+"..OOOOOOXXXXXXXXXXXXXXOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
+"................................\n"
+"................................\n"
 ;
 
 
-@interface AtariSTDisk : IvarObject
+
+@interface AmigaRAMDiskIcon : IvarObject
 {
+    int _builtin;
     id _path;
     id _buttonDown;
     int _buttonDownX;
@@ -108,19 +88,16 @@ static char *diskPixels =
     id _buttonDownTimestamp;
 }
 @end
-@implementation AtariSTDisk
+@implementation AmigaRAMDiskIcon
 - (int)preferredWidth
 {
     static int w = 0;
     if (!w) {
-        w = [Definitions widthForCString:diskPixels];
+        w = [Definitions widthForCString:ramDiskPixels];
         if ([_path length]) {
             id bitmap = [Definitions bitmapWithWidth:1 height:1];
-            [bitmap useAtariSTFont];
+            [bitmap useTopazFont];
             int textWidth = [bitmap bitmapWidthForText:_path];
-            if (textWidth < 8*16) {
-                textWidth = 8*16;
-            }
             if (textWidth > w) {
                 w = textWidth;
             }
@@ -132,7 +109,7 @@ static char *diskPixels =
 {
     static int h = 0;
     if (!h) {
-        h = [Definitions heightForCString:diskPixels];
+        h = [Definitions heightForCString:ramDiskPixels];
         h += 16;
     }
     return h;
@@ -152,27 +129,17 @@ static char *diskPixels =
         }
     }
 
-    int w = [Definitions widthForCString:diskPixels];
-    int h = [Definitions heightForCString:diskPixels];
+    int w = [Definitions widthForCString:ramDiskPixels];
+    int h = [Definitions heightForCString:ramDiskPixels];
 
     if (hasFocus || isSelected) {
-        [bitmap drawCString:diskPixels palette:selectedDiskPalette x:r.x+(r.w-w)/2 y:r.y];
+        [bitmap drawCString:ramDiskPixels palette:ramDiskSelectedPalette x:r.x+(r.w-w)/2 y:r.y];
     } else {
-        [bitmap drawCString:diskPixels palette:diskPalette x:r.x+(r.w-w)/2 y:r.y];
+        [bitmap drawCString:ramDiskPixels palette:ramDiskPalette x:r.x+(r.w-w)/2 y:r.y];
     }
-    if (hasFocus || isSelected) {
-        [bitmap setColor:@"black"];
-    } else {
-        [bitmap setColor:@"white"];
-    }
-    [bitmap fillRectangleAtX:r.x y:r.y+h w:r.w h:r.h-h];
     if ([_path length]) {
-        if (hasFocus || isSelected) {
-            [bitmap setColor:@"white"];
-        } else {
-            [bitmap setColor:@"black"];
-        }
-        [bitmap useAtariSTFont];
+        [bitmap setColor:@"white"];
+        [bitmap useTopazFont];
         int textWidth = [bitmap bitmapWidthForText:_path];
         [bitmap drawBitmapText:_path x:r.x+(r.w-textWidth)/2 y:r.y+h];
     }
@@ -245,6 +212,7 @@ static char *diskPixels =
 
     [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
 }
+
 - (void)handleMouseUp:(id)event
 {
     _buttonDown = NO;
@@ -298,8 +266,8 @@ static char *diskPixels =
     if ([_path length]) {
         id cmd = nsarr();
         [cmd addObject:@"hotdog"];
-        [cmd addObject:@"ataristdir"];
-        [cmd addObject:_path];
+        [cmd addObject:@"amigabuiltindir"];
+        [cmd addObject:@"RAM DISK"];
         [cmd runCommandInBackground];
     }
 }

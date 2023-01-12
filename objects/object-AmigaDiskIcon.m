@@ -27,68 +27,70 @@
 
 #include <sys/time.h>
 
-static char *computerPalette =
+//int textWidth = [Definitions bitmapWidthForText:@"X"]*MAX_CHARS_TO_DRAW;
+/*
+        id filePath = [elt valueForKey:@"filePath"];
+        if ([filePath length] > MAX_CHARS_TO_DRAW) {
+            id a = [filePath stringToIndex:(MAX_CHARS_TO_DRAW/2)-1];
+            id b = [filePath stringFromIndex:(MAX_CHARS_TO_DRAW/2)+1];
+            filePath = nsfmt(@"%@..%@", a, b);
+        }
+        [bitmap drawBitmapText:filePath centeredAtX:x+w/2 y:y+h-8];
+*/
+
+static char *diskPalette =
 "b #000000\n"
-". #222222\n"
-"X #444444\n"
-"o #555555\n"
-"+ #777777\n"
-"@ #DD0000\n"
-"# #00BB00\n"
-"$ #888888\n"
-"& #cccccc\n"
-"* #ccccff\n"
-"= #ffffff\n"
+". #000022\n"
+"X #FF8800\n"
+"o #0055AA\n"
+"O #FFFFFF\n"
 ;
-static char *selectedComputerPalette =
+static char *selectedDiskPalette =
 "b #000000\n"
-". #111111\n"
-"X #222222\n"
-"o #2a2a2a\n"
-"+ #3b3b3b\n"
-"@ #6e0000\n"
-"# #005d00\n"
-"$ #444444\n"
-"& #666666\n"
-"* #33337f\n"
-"= #7f7f7f\n"
-;
-static char *computerPixels =
-" bbbbbbbbbbbbbbbbbbbbbb \n"
-"b&&&&&&&&&&&&&&&&&&&&&&b\n"
-"b&&&&&&&&&&&&&&&&&&&&&&b\n"
-"b&&&XXXXXXXXXXXXXXXX&&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&X****************=&&b\n"
-"b&&&================&&&b\n"
-"b&&&&&&&&&&&&&&&&&&&&&&b\n"
-"b&&&&&&&&&&&&&&&&&&&&&&b\n"
-"b&&&&&&&&&&&&&&&&&&&&&&b\n"
-"b&&&&&&&&&&&&&&&&&&&&&&b\n"
-"b&&&&&&&&&&&bbbbbbbb&&&b\n"
-"b&&&&&&&&&&&========&&&b\n"
-"b&&##&&&&&&&&&&&&&&&&&&b\n"
-"b&&@@&&&&&&&&&&&&&&&&&&b\n"
-"b&&&&&&&&&&&&&&&&&&&&&&b\n"
-" bbbbbbbbbbbbbbbbbbbbbb \n"
-" booooooXXXXX.........b \n"
-" b++++++++ooXXXX......b \n"
-" b$$$$$$$$+++ooXXXX...b \n"
-" bbbbbbbbbbbbbbbbbbbbbb \n"
+"O #000022\n"
+"o #FF8800\n"
+"X #0055AA\n"
+". #FFFFFF\n"
 ;
 
-@interface MacColorComputer : IvarObject
+static char *diskPixels =
+".........XXXXXXXXXXXXXXXXX.......  \n"
+".........XXXXXXXXXXXXXXXXX.......  \n"
+".........XXXXXXXXXX....XXX........ \n"
+".........XXXXXXXXXX....XXX........ \n"
+".........XXXXXXXXXX....XXX.........\n"
+".........XXXXXXXXXX....XXX.........\n"
+".........XXXXXXXXXX....XXX.........\n"
+".........XXXXXXXXXX....XXX.........\n"
+".........XXXXXXXXXXXXXXXXX.........\n"
+".........XXXXXXXXXXXXXXXXX.........\n"
+"...................................\n"
+"...................................\n"
+"...................................\n"
+"...................................\n"
+"......OOOOOOO.X.X.X.O.o.OOOO.......\n"
+"......OOOOOOO.X.X.X.O.o.OOOO.......\n"
+"......OOOOOO.X.O.X.o.O.o.OOOO......\n"
+"......OOOOOO.X.O.X.o.O.o.OOOO......\n"
+"......OOOOO.X.O.X.O.o.O.o.OOO......\n"
+"......OOOOO.X.O.X.O.o.O.o.OOO......\n"
+"......OOOO.X.O.X.OOO.o.O.o.OO......\n"
+"......OOOO.X.O.X.OOO.o.O.o.OO......\n"
+"......OOO.X.O.X.OOOOOOOOOOOOO......\n"
+"......OOO.X.O.X.OOOOOOOOOOOOO......\n"
+"......OO.X.O.X.OOOOOOOOOOOOOO......\n"
+"......OO.X.O.X.OOOOOOOOOOOOOO......\n"
+"..oo..O.X.O.X.OOOOOOOOOOOOOOO......\n"
+"..oo..O.X.O.X.OOOOOOOOOOOOOOO......\n"
+"......OOOOOOOOOOOOOOOOOOOOOOO......\n"
+"......OOOOOOOOOOOOOOOOOOOOOOO......\n"
+;
+
+
+
+@interface AmigaDiskIcon : IvarObject
 {
+    int _builtin;
     id _path;
     id _buttonDown;
     int _buttonDownX;
@@ -96,15 +98,15 @@ static char *computerPixels =
     id _buttonDownTimestamp;
 }
 @end
-@implementation MacColorComputer
+@implementation AmigaDiskIcon
 - (int)preferredWidth
 {
     static int w = 0;
     if (!w) {
-        w = [Definitions widthForCString:computerPixels];
+        w = [Definitions widthForCString:diskPixels];
         if ([_path length]) {
             id bitmap = [Definitions bitmapWithWidth:1 height:1];
-            [bitmap useMonacoFont];
+            [bitmap useTopazFont];
             int textWidth = [bitmap bitmapWidthForText:_path];
             if (textWidth > w) {
                 w = textWidth;
@@ -117,13 +119,8 @@ static char *computerPixels =
 {
     static int h = 0;
     if (!h) {
-        h = [Definitions heightForCString:computerPixels];
-        if ([_path length]) {
-            id bitmap = [Definitions bitmapWithWidth:1 height:1];
-            [bitmap useMonacoFont];
-            int textHeight = [bitmap bitmapHeightForText:_path];
-            h += textHeight;
-        }
+        h = [Definitions heightForCString:diskPixels];
+        h += 16;
     }
     return h;
 }
@@ -142,29 +139,18 @@ static char *computerPixels =
         }
     }
 
-    int w = [Definitions widthForCString:computerPixels];
-    int h = [Definitions heightForCString:computerPixels];
+    int w = [Definitions widthForCString:diskPixels];
+    int h = [Definitions heightForCString:diskPixels];
 
     if (hasFocus || isSelected) {
-        [bitmap drawCString:computerPixels palette:selectedComputerPalette x:r.x+(r.w-w)/2 y:r.y];
+        [bitmap drawCString:diskPixels palette:selectedDiskPalette x:r.x+(r.w-w)/2 y:r.y];
     } else {
-        [bitmap drawCString:computerPixels palette:computerPalette x:r.x+(r.w-w)/2 y:r.y];
+        [bitmap drawCString:diskPixels palette:diskPalette x:r.x+(r.w-w)/2 y:r.y];
     }
     if ([_path length]) {
-        [bitmap useMonacoFont];
+        [bitmap setColor:@"white"];
+        [bitmap useTopazFont];
         int textWidth = [bitmap bitmapWidthForText:_path];
-        int textHeight = [bitmap bitmapHeightForText:_path];
-        if (hasFocus || isSelected) {
-            [bitmap setColor:@"black"];
-        } else {
-            [bitmap setColor:@"white"];
-        }
-        [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
-        if (hasFocus || isSelected) {
-            [bitmap setColor:@"white"];
-        } else {
-            [bitmap setColor:@"black"];
-        }
         [bitmap drawBitmapText:_path x:r.x+(r.w-textWidth)/2 y:r.y+h];
     }
 
@@ -236,6 +222,7 @@ static char *computerPixels =
 
     [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
 }
+
 - (void)handleMouseUp:(id)event
 {
     _buttonDown = NO;
@@ -287,11 +274,19 @@ static char *computerPixels =
 - (void)handleOpen
 {
     if ([_path length]) {
-        id cmd = nsarr();
-        [cmd addObject:@"hotdog"];
-        [cmd addObject:@"maccolordir"];
-        [cmd addObject:_path];
-        [cmd runCommandInBackground];
+        if (_builtin) {
+            id cmd = nsarr();
+            [cmd addObject:@"hotdog"];
+            [cmd addObject:@"amigabuiltindir"];
+            [cmd addObject:_path];
+            [cmd runCommandInBackground];
+        } else {
+            id cmd = nsarr();
+            [cmd addObject:@"hotdog"];
+            [cmd addObject:@"amigadir"];
+            [cmd addObject:_path];
+            [cmd runCommandInBackground];
+        }
     }
 }
 - (void)handleDragAndDrop:(id)obj

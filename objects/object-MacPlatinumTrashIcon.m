@@ -167,15 +167,15 @@ static char *selectedTrashPixels =
 ;
 
 @implementation Definitions(INMfefdisfjwlfmklsdmvklsjdklfjklsdffjdkslmfklxcmvklcfdsmkfmekkfxdsfmneoiiooikl)
-+ (id)MacPlatinumTrash
++ (id)MacPlatinumTrashIcon
 {
-    id obj = [@"MacPlatinumTrash" asInstance];
+    id obj = [@"MacPlatinumTrashIcon" asInstance];
     return obj;
 }
 @end
 
 
-@interface MacPlatinumTrash : IvarObject
+@interface MacPlatinumTrashIcon : IvarObject
 {
     int _buttonDown;
     int _buttonDownX;
@@ -183,7 +183,7 @@ static char *selectedTrashPixels =
     id _buttonDownTimestamp;
 }
 @end
-@implementation MacPlatinumTrash
+@implementation MacPlatinumTrashIcon
 - (char *)x11WindowMaskCString
 {
     return trashPixels;

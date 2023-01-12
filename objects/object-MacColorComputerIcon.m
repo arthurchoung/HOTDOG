@@ -27,88 +27,89 @@
 
 #include <sys/time.h>
 
-static id menuCSV =
-@"displayName,messageForClick\n"
-@"\"Open Trash\",\"handleOpen\"\n"
-;
-
-static char *trashPalette =
+static char *computerPalette =
 "b #000000\n"
-". #ffffff\n"
+". #222222\n"
+"X #444444\n"
+"o #555555\n"
+"+ #777777\n"
+"@ #DD0000\n"
+"# #00BB00\n"
+"$ #888888\n"
+"& #cccccc\n"
+"* #ccccff\n"
+"= #ffffff\n"
+;
+static char *selectedComputerPalette =
+"b #000000\n"
+". #111111\n"
+"X #222222\n"
+"o #2a2a2a\n"
+"+ #3b3b3b\n"
+"@ #6e0000\n"
+"# #005d00\n"
+"$ #444444\n"
+"& #666666\n"
+"* #33337f\n"
+"= #7f7f7f\n"
+;
+static char *computerPixels =
+" bbbbbbbbbbbbbbbbbbbbbb \n"
+"b&&&&&&&&&&&&&&&&&&&&&&b\n"
+"b&&&&&&&&&&&&&&&&&&&&&&b\n"
+"b&&&XXXXXXXXXXXXXXXX&&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&X****************=&&b\n"
+"b&&&================&&&b\n"
+"b&&&&&&&&&&&&&&&&&&&&&&b\n"
+"b&&&&&&&&&&&&&&&&&&&&&&b\n"
+"b&&&&&&&&&&&&&&&&&&&&&&b\n"
+"b&&&&&&&&&&&&&&&&&&&&&&b\n"
+"b&&&&&&&&&&&bbbbbbbb&&&b\n"
+"b&&&&&&&&&&&========&&&b\n"
+"b&&##&&&&&&&&&&&&&&&&&&b\n"
+"b&&@@&&&&&&&&&&&&&&&&&&b\n"
+"b&&&&&&&&&&&&&&&&&&&&&&b\n"
+" bbbbbbbbbbbbbbbbbbbbbb \n"
+" booooooXXXXX.........b \n"
+" b++++++++ooXXXX......b \n"
+" b$$$$$$$$+++ooXXXX...b \n"
+" bbbbbbbbbbbbbbbbbbbbbb \n"
 ;
 
-static char *selectedTrashPalette =
-". #000000\n"
-"b #ffffff\n"
-;
-
-static char *trashPixels =
-"                                  bbbbb                                 \n"
-"                             bbbbbb   bbbbbb                            \n"
-"                           bbb...bb   bb...bbb                          \n"
-"                          b...................b                         \n"
-"                          bbbb.............bbbb                         \n"
-"                           b.bbbbbbbbbbbbbbb.b                          \n"
-"                           b.................b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b..b...b.b..b                          \n"
-"                           b.b...b..bb.bb.b..b                          \n"
-"                           b.b...b...bbb..b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.b...b....b...b..b                          \n"
-"                           b.bb..b....b..bb..b                          \n"
-"                           bb....bb..bb.....bb                          \n"
-"                            bbb...........bbb                           \n"
-"                              bbbbbbbbbbbbb                             \n"
-"                                                                        \n"
-"........................................................................\n"
-".....................bbbbb.bbbb...bbb...bbbb.b...b......................\n"
-".......................b...b...b.b...b.b.....b...b......................\n"
-".......................b...bbbb..bbbbb..bbb..bbbbb......................\n"
-".......................b...b.b...b...b.....b.b...b......................\n"
-".......................b...b..bb.b...b.bbbb..b...b......................\n"
-"........................................................................\n"
-"........................................................................\n"
-;
-
-@implementation Definitions(INMfewlfmklsdmvklsjdklfjklsdffjdkslmfklxcmvklcxkl)
-+ (id)AtariSTTrash
+@interface MacColorComputerIcon : IvarObject
 {
-    id obj = [@"AtariSTTrash" asInstance];
-    return obj;
-}
-@end
-
-
-@interface AtariSTTrash : IvarObject
-{
-    int _builtin;
     id _path;
-    int _buttonDown;
+    id _buttonDown;
     int _buttonDownX;
     int _buttonDownY;
     id _buttonDownTimestamp;
 }
 @end
-@implementation AtariSTTrash
-
+@implementation MacColorComputerIcon
 - (int)preferredWidth
 {
     static int w = 0;
     if (!w) {
-        w = [Definitions widthForCString:trashPixels];
+        w = [Definitions widthForCString:computerPixels];
+        if ([_path length]) {
+            id bitmap = [Definitions bitmapWithWidth:1 height:1];
+            [bitmap useMonacoFont];
+            int textWidth = [bitmap bitmapWidthForText:_path];
+            if (textWidth > w) {
+                w = textWidth;
+            }
+        }
     }
     return w;
 }
@@ -116,13 +117,21 @@ static char *trashPixels =
 {
     static int h = 0;
     if (!h) {
-        h = [Definitions heightForCString:trashPixels];
+        h = [Definitions heightForCString:computerPixels];
+        if ([_path length]) {
+            id bitmap = [Definitions bitmapWithWidth:1 height:1];
+            [bitmap useMonacoFont];
+            int textHeight = [bitmap bitmapHeightForText:_path];
+            h += textHeight;
+        }
     }
     return h;
 }
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    int isSelected = [context intValueForKey:@"isSelected"];
+
     BOOL hasFocus = NO;
     {
         id windowManager = [@"windowManager" valueForKey];
@@ -132,10 +141,31 @@ static char *trashPixels =
             hasFocus = YES;
         }
     }
-    if (hasFocus) {
-        [bitmap drawCString:trashPixels palette:selectedTrashPalette x:r.x y:r.y];
+
+    int w = [Definitions widthForCString:computerPixels];
+    int h = [Definitions heightForCString:computerPixels];
+
+    if (hasFocus || isSelected) {
+        [bitmap drawCString:computerPixels palette:selectedComputerPalette x:r.x+(r.w-w)/2 y:r.y];
     } else {
-        [bitmap drawCString:trashPixels palette:trashPalette x:r.x y:r.y];
+        [bitmap drawCString:computerPixels palette:computerPalette x:r.x+(r.w-w)/2 y:r.y];
+    }
+    if ([_path length]) {
+        [bitmap useMonacoFont];
+        int textWidth = [bitmap bitmapWidthForText:_path];
+        int textHeight = [bitmap bitmapHeightForText:_path];
+        if (hasFocus || isSelected) {
+            [bitmap setColor:@"black"];
+        } else {
+            [bitmap setColor:@"white"];
+        }
+        [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
+        if (hasFocus || isSelected) {
+            [bitmap setColor:@"white"];
+        } else {
+            [bitmap setColor:@"black"];
+        }
+        [bitmap drawBitmapText:_path x:r.x+(r.w-textWidth)/2 y:r.y+h];
     }
 
     id windowManager = [@"windowManager" valueForKey];
@@ -244,7 +274,7 @@ static char *trashPixels =
     int mouseRootX = [event intValueForKey:@"mouseRootX"];
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
 
-    id obj = [[menuCSV parseCSVFromString] asMenu];
+    id obj = nil;//[[menuCSV parseCSVFromString] asMenu];
     if (obj) {
         [obj setValue:self forKey:@"contextualObject"];
         [windowManager openButtonDownMenuForObject:obj x:mouseRootX y:mouseRootY w:0 h:0];
@@ -256,17 +286,17 @@ static char *trashPixels =
 }
 - (void)handleOpen
 {
-    id cmd = nsarr();
-    [cmd addObject:@"hotdog"];
-    [cmd addObject:@"ataristdir"];
-    [cmd addObject:[Definitions homeDir:@"Trash"]];
-    [cmd runCommandInBackground];
+    if ([_path length]) {
+        id cmd = nsarr();
+        [cmd addObject:@"hotdog"];
+        [cmd addObject:@"maccolordir"];
+        [cmd addObject:_path];
+        [cmd runCommandInBackground];
+    }
 }
-
 - (void)handleDragAndDrop:(id)obj
 {
     [nsfmt(@"%@ dropped onto %@", obj, self) showAlert];
 }
-
 @end
 

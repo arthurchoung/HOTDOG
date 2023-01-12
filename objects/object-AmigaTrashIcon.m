@@ -207,15 +207,15 @@ static char *openTrashPixels =
 ;
 
 @implementation Definitions(INMfewlfmklsdmvklsjdklfjklsdfjfksdjfkj)
-+ (id)AmigaTrash
++ (id)AmigaTrashIcon
 {
-    id obj = [@"AmigaTrash" asInstance];
+    id obj = [@"AmigaTrashIcon" asInstance];
     return obj;
 }
 @end
 
 
-@interface AmigaTrash : IvarObject
+@interface AmigaTrashIcon : IvarObject
 {
     int _builtin;
     id _path;
@@ -225,7 +225,7 @@ static char *openTrashPixels =
     id _buttonDownTimestamp;
 }
 @end
-@implementation AmigaTrash
+@implementation AmigaTrashIcon
 
 - (int)preferredWidth
 {

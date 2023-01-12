@@ -27,60 +27,51 @@
 
 #include <sys/time.h>
 
-static char *ramDiskPalette =
+static char *diskPalette =
 "b #000000\n"
-". #000022\n"
-"X #FF8800\n"
-"o #0055AA\n"
-"O #FFFFFF\n"
+". #ffffff\n"
 ;
-static char *ramDiskSelectedPalette =
-"b #000000\n"
-"O #000022\n"
-"o #FF8800\n"
-"X #0055AA\n"
-". #FFFFFF\n"
+static char *selectedDiskPalette =
+". #000000\n"
+"b #ffffff\n"
 ;
-static char *ramDiskPixels =
-"..........................      \n"
-"..........................      \n"
-"..OOOOOOXXXXXX....XXXXOO....    \n"
-"..OOOOOOXXXXXX....XXXXOO....    \n"
-"..OOOOOOXXXXXX....XXXXOOOO....  \n"
-"..OOOOOOXXXXXX....XXXXOOOO....  \n"
-"..OOOOOOXXXXXX....XXXXOOOOOO....\n"
-"..OOOOOOXXXXXX....XXXXOOOOOO....\n"
-"..OOOOOOXXXXXX....XXXXOOOOOOOO..\n"
-"..OOOOOOXXXXXX....XXXXOOOOOOOO..\n"
-"..OOOOOOXXXXXXXXXXXXXXOOOOOOOO..\n"
-"..OOOOOOXXXXXXXXXXXXXXOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"..OOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n"
-"................................\n"
-"................................\n"
+static char *diskPixels =
+" bbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
+"b......b...............b....b   \n"
+"b......b.........bbb...b.....b  \n"
+"b......b........b...b..b......b \n"
+"b......b........b...b..b.......b\n"
+"b......b........b...b..b.......b\n"
+"b......b........b...b..b.......b\n"
+"b......b........b...b..b.......b\n"
+"b......b........b...b..b.......b\n"
+"b......b.........bbb...b.......b\n"
+"b......b...............b.......b\n"
+"b.......bbbbbbbbbbbbbbb........b\n"
+"b..............................b\n"
+"b..............................b\n"
+"b..............................b\n"
+"b..............................b\n"
+"b.....bbbbbbbbbbbbbbbbbbbb.....b\n"
+"b....b....................b....b\n"
+"b....b....................b....b\n"
+"b....b....................b....b\n"
+"b....b....................b....b\n"
+"b....b....................b....b\n"
+"b....b.......bb...bb......b....b\n"
+"b....b.......bb..bb.......b....b\n"
+"b....b.......bb.bb........b....b\n"
+"b....b.......bbbb.........b....b\n"
+"b....b.......bbb..........b....b\n"
+"b....b.......bb...........b....b\n"
+"b....b....................b....b\n"
+"b....b....................b....b\n"
+"b....b....................b....b\n"
+" bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
 ;
 
-
-
-@interface AmigaRAMDisk : IvarObject
+@interface MacClassicDiskIcon : IvarObject
 {
-    int _builtin;
     id _path;
     id _buttonDown;
     int _buttonDownX;
@@ -88,15 +79,15 @@ static char *ramDiskPixels =
     id _buttonDownTimestamp;
 }
 @end
-@implementation AmigaRAMDisk
+@implementation MacClassicDiskIcon
 - (int)preferredWidth
 {
     static int w = 0;
     if (!w) {
-        w = [Definitions widthForCString:ramDiskPixels];
+        w = [Definitions widthForCString:diskPixels];
         if ([_path length]) {
             id bitmap = [Definitions bitmapWithWidth:1 height:1];
-            [bitmap useTopazFont];
+            [bitmap useMonacoFont];
             int textWidth = [bitmap bitmapWidthForText:_path];
             if (textWidth > w) {
                 w = textWidth;
@@ -109,8 +100,13 @@ static char *ramDiskPixels =
 {
     static int h = 0;
     if (!h) {
-        h = [Definitions heightForCString:ramDiskPixels];
-        h += 16;
+        h = [Definitions heightForCString:diskPixels];
+        if ([_path length]) {
+            id bitmap = [Definitions bitmapWithWidth:1 height:1];
+            [bitmap useMonacoFont];
+            int textHeight = [bitmap bitmapHeightForText:_path];
+            h += textHeight;
+        }
     }
     return h;
 }
@@ -129,18 +125,29 @@ static char *ramDiskPixels =
         }
     }
 
-    int w = [Definitions widthForCString:ramDiskPixels];
-    int h = [Definitions heightForCString:ramDiskPixels];
+    int w = [Definitions widthForCString:diskPixels];
+    int h = [Definitions heightForCString:diskPixels];
 
     if (hasFocus || isSelected) {
-        [bitmap drawCString:ramDiskPixels palette:ramDiskSelectedPalette x:r.x+(r.w-w)/2 y:r.y];
+        [bitmap drawCString:diskPixels palette:selectedDiskPalette x:r.x+(r.w-w)/2 y:r.y];
     } else {
-        [bitmap drawCString:ramDiskPixels palette:ramDiskPalette x:r.x+(r.w-w)/2 y:r.y];
+        [bitmap drawCString:diskPixels palette:diskPalette x:r.x+(r.w-w)/2 y:r.y];
     }
     if ([_path length]) {
-        [bitmap setColor:@"white"];
-        [bitmap useTopazFont];
+        [bitmap useMonacoFont];
         int textWidth = [bitmap bitmapWidthForText:_path];
+        int textHeight = [bitmap bitmapHeightForText:_path];
+        if (hasFocus || isSelected) {
+            [bitmap setColor:@"black"];
+        } else {
+            [bitmap setColor:@"white"];
+        }
+        [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
+        if (hasFocus || isSelected) {
+            [bitmap setColor:@"white"];
+        } else {
+            [bitmap setColor:@"black"];
+        }
         [bitmap drawBitmapText:_path x:r.x+(r.w-textWidth)/2 y:r.y+h];
     }
 
@@ -212,7 +219,6 @@ static char *ramDiskPixels =
 
     [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
 }
-
 - (void)handleMouseUp:(id)event
 {
     _buttonDown = NO;
@@ -266,8 +272,8 @@ static char *ramDiskPixels =
     if ([_path length]) {
         id cmd = nsarr();
         [cmd addObject:@"hotdog"];
-        [cmd addObject:@"amigabuiltindir"];
-        [cmd addObject:@"RAM DISK"];
+        [cmd addObject:@"macclassicdir"];
+        [cmd addObject:_path];
         [cmd runCommandInBackground];
     }
 }
