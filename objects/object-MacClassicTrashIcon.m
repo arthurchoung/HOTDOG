@@ -106,6 +106,8 @@ static char *trashPixels =
     int _buttonDownX;
     int _buttonDownY;
     id _buttonDownTimestamp;
+
+    id _dragX11Dict;
 }
 @end
 @implementation MacClassicTrashIcon
@@ -128,6 +130,8 @@ static char *trashPixels =
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    int isSelected = [context intValueForKey:@"isSelected"];
+
     BOOL hasFocus = NO;
     {
         id windowManager = [@"windowManager" valueForKey];
@@ -138,7 +142,7 @@ static char *trashPixels =
         }
     }
 
-    if (hasFocus) {
+    if (hasFocus || isSelected) {
         [bitmap drawCString:trashPixels palette:selectedTrashPalette x:r.x y:r.y];
     } else {
         [bitmap drawCString:trashPixels palette:trashPalette x:r.x y:r.y];
@@ -153,11 +157,14 @@ static char *trashPixels =
 
 - (void)handleMouseDown:(id)event
 {
+    id windowManager = [@"windowManager" valueForKey];
+    id x11dict = [event valueForKey:@"x11dict"];
+
     {
-        id x11dict = [event valueForKey:@"x11dict"];
         unsigned long win = [[x11dict valueForKey:@"window"] unsignedLongValue];
-        id windowManager = [@"windowManager" valueForKey];
-        [windowManager XRaiseWindow:win];
+        if (win) {
+            [windowManager XRaiseWindow:win];
+        }
     }
 
     int mouseX = [event intValueForKey:@"mouseX"];
@@ -165,6 +172,15 @@ static char *trashPixels =
     _buttonDown = YES;
     _buttonDownX = mouseX;
     _buttonDownY = mouseY;
+
+    if (![x11dict intValueForKey:@"isSelected"]) {
+        id objectWindows = [windowManager valueForKey:@"objectWindows"];
+        for (int i=0; i<[objectWindows count]; i++) {
+            id elt = [objectWindows nth:i];
+            [elt setValue:nil forKey:@"isSelected"];
+        }
+        [x11dict setValue:@"1" forKey:@"isSelected"];
+    }
 
     struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -182,66 +198,79 @@ static char *trashPixels =
 - (void)handleMouseMoved:(id)event
 {
     id x11dict = [event valueForKey:@"x11dict"];
-    id dragx11dict = [x11dict valueForKey:@"dragx11dict"];
 
-    if (!_buttonDown && !dragx11dict) {
+    if (!_buttonDown && !_dragX11Dict) {
         return;
-    }
-
-    if (!dragx11dict) {
-        int x = [x11dict intValueForKey:@"x"];
-        int y = [x11dict intValueForKey:@"y"];
-        int w = [x11dict intValueForKey:@"w"];
-        int h = [x11dict intValueForKey:@"h"];
-        id windowManager = [event valueForKey:@"windowManager"];
-        id newx11dict = [windowManager openWindowForObject:self x:x y:y w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
-        [windowManager setValue:newx11dict forKey:@"buttonDownDict"];
-        [windowManager setValue:newx11dict forKey:@"menuDict"];
-        [newx11dict setValue:x11dict forKey:@"dragx11dict"];
-        x11dict = newx11dict;
     }
 
     int mouseRootX = [event intValueForKey:@"mouseRootX"];
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
 
-    int newX = mouseRootX - _buttonDownX;
-    int newY = mouseRootY - _buttonDownY;
+    if (!_dragX11Dict) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        id objectWindows = [windowManager valueForKey:@"objectWindows"];
 
-    [x11dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
-    [x11dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+        id newx11dict = [Definitions selectedBitmapForSelectedItemsInArray:objectWindows buttonDownElt:x11dict offsetX:_buttonDownX y:_buttonDownY mouseRootX:mouseRootX y:mouseRootY windowManager:windowManager];
 
-    [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        [self setValue:newx11dict forKey:@"dragX11Dict"];
+    } else {
+
+        int newX = mouseRootX - [_dragX11Dict intValueForKey:@"buttonDownOffsetX"];
+        int newY = mouseRootY - [_dragX11Dict intValueForKey:@"buttonDownOffsetY"];
+
+        [_dragX11Dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+        [_dragX11Dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+        [_dragX11Dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+    }
 }
 - (void)handleMouseUp:(id)event
 {
     _buttonDown = NO;
     id x11dict = [event valueForKey:@"x11dict"];
-    id dragx11dict = [x11dict valueForKey:@"dragx11dict"];
-    if (dragx11dict) {
-        [x11dict setValue:nil forKey:@"dragx11dict"];
+    if (_dragX11Dict) {
 
         id windowManager = [event valueForKey:@"windowManager"];
-        unsigned long window = [x11dict unsignedLongValueForKey:@"window"];
+        unsigned long window = [_dragX11Dict unsignedLongValueForKey:@"window"];
         int mouseRootX = [event intValueForKey:@"mouseRootX"];
         int mouseRootY = [event intValueForKey:@"mouseRootY"];
 
         unsigned long underneathWindow = [windowManager topMostWindowUnderneathWindow:window x:mouseRootX y:mouseRootY];
         if (underneathWindow) {
             id underneathx11dict = [windowManager dictForObjectWindow:underneathWindow];
-            if (underneathx11dict == dragx11dict) {
-                [dragx11dict setValue:@"1" forKey:@"shouldCloseWindow"];
-                return;
+            if (underneathx11dict == x11dict) {
+                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
+            } else {
+                id object = [underneathx11dict valueForKey:@"object"];
+                if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
+                    [object handleDragAndDrop:_dragX11Dict];
+                } else {
+                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
+                }
             }
-
-            id object = [underneathx11dict valueForKey:@"object"];
-            if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
-                [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
-                [object handleDragAndDrop:dragx11dict];
-                return;
+        } else {
+            int oldX = [x11dict intValueForKey:@"x"];
+            int oldY = [x11dict intValueForKey:@"y"];
+            int newX = mouseRootX - _buttonDownX;
+            int newY = mouseRootY - _buttonDownY;
+            int deltaX = newX - oldX;
+            int deltaY = newY - oldY;
+            id objectWindows = [windowManager valueForKey:@"objectWindows"];
+            for (int i=0; i<[objectWindows count]; i++) {
+                id elt = [objectWindows nth:i];
+                if (![elt intValueForKey:@"isSelected"]) {
+                    continue;
+                }
+                newX = [elt intValueForKey:@"x"] + deltaX;
+                newY = [elt intValueForKey:@"y"] + deltaY;
+                [elt setValue:nsfmt(@"%d", newX) forKey:@"x"];
+                [elt setValue:nsfmt(@"%d", newY) forKey:@"y"];
+                [elt setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
             }
         }
 
-        [dragx11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        [_dragX11Dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        [self setValue:nil forKey:@"dragX11Dict"];
     }
 }
 - (void)handleRightMouseDown:(id)event
