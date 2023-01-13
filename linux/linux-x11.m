@@ -2206,7 +2206,7 @@ NSLog(@"handleX11ConfigureRequest: parent %x window %x x %d y %d w %d h %d", e->
     if (dict) {
 NSLog(@"handleX11ConfigureRequest dict: %@", dict);
 NSLog(@"changes x %d y %d width %d height %d", e->x, e->y, e->width, e->height);
-        if ([self window:e->window hasProperty:"HOTDOGNOFRAME"]) {
+        if ([self doesWindow:e->window haveProperty:"HOTDOGNOFRAME"]) {
         } else {
             return;
         }
@@ -2227,12 +2227,12 @@ NSLog(@"changes x %d y %d width %d height %d", e->x, e->y, e->width, e->height);
     XMapRequestEvent *e = eptr;
 NSLog(@"handleX11MapRequest parent %x window %x", e->parent, e->window);
 
-if ([self window:e->window hasProperty:"HOTDOGDESKTOP"]) {
+if ([self doesWindow:e->window haveProperty:"HOTDOGDESKTOP"]) {
     _desktopWindow = e->window;
 }
 
 
-    BOOL noframe = [self window:e->window hasProperty:"HOTDOGNOFRAME"];
+    BOOL noframe = [self doesWindow:e->window haveProperty:"HOTDOGNOFRAME"];
 
     if (noframe) {
     } else {
@@ -2892,7 +2892,7 @@ NSLog(@"XSetInputFocus:%lu", window);
     Atom atom = XInternAtom(_display, name, False);
     XChangeProperty(_display, window, atom, atom, 8, PropModeReplace, "", 0);
 }
-- (BOOL)window:(unsigned long)win hasProperty:(char *)propertyName
+- (BOOL)doesWindow:(unsigned long)win haveProperty:(char *)propertyName
 {
     BOOL result = NO;
 
