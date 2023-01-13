@@ -150,6 +150,18 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             if (object) {
                 [Definitions runWindowManagerForObject:object propertyName:propertyName];
             }
+        } else if ((argc > 1) && !strcmp(argv[1], "desktop")) {
+            id args = nsarr();
+            for (int i=2; i<argc; i++) {
+                id str = nscstr(argv[i]);
+                [args addObject:str];
+            }
+            id message = [args join:@" "];
+//NSLog(@"message %@", message);
+            id object = [nsdict() evaluateMessage:message];
+            if (object) {
+                [Definitions runWindowManagerForObject:object propertyName:"HOTDOGDESKTOP"];
+            }
         } else if ((argc == 2) && !strcmp(argv[1], ".")) {
             id obj = [Definitions ObjectInterface];
             [Definitions runWindowManagerForObject:obj];
