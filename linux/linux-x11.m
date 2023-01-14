@@ -2085,18 +2085,6 @@ NSLog(@"FocusOut event win %lu", win);
         }
     }
 
-// FIXME this is for linux-dialog --infobox
-{
-    id dict = [self dictForObjectWindow:e->window];
-    if (dict) {
-        id object = [dict valueForKey:@"object"];
-        if ([object intValueForKey:@"x11WaitForFocusOutThenClose"]) {
-            [dict setValue:@"1" forKey:@"shouldCloseWindow"];
-        }
-    }
-}
-// ENDFIXME
-
     id x11dict = [self dictForObjectWindow:e->window];
     if (x11dict) {
         id object = [x11dict valueForKey:@"object"];
