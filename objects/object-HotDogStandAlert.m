@@ -806,5 +806,12 @@ NSLog(@"cancelButtonWidth %d cancelTextWidth %d", cancelButtonWidth, cancelTextW
         }
     }
 }
+- (void)handleFocusOutEvent:(id)event
+{
+    if (_x11WaitForFocusOutThenClose) {
+        id x11dict = [event valueForKey:@"x11dict"];
+        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+    }
+}
 @end
 
