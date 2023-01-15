@@ -185,7 +185,9 @@ static char *readmePixels =
     if (_buttonDownTimestamp) {
         if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
             [self setValue:nil forKey:@"buttonDownTimestamp"];
-            [self handleDoubleClick];
+            if ([self respondsToSelector:@selector(handleDoubleClick)]) {
+                [self handleDoubleClick];
+            }
             return;
         }
     }

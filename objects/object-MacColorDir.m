@@ -735,7 +735,7 @@ static char *disabledRightScrollBarBottomPixels =
         id fileType = [elt valueForKey:@"fileType"];
         if ([fileType isEqual:@"file"]) {
             if ([[filePath lowercaseString] hasSuffix:@".txt"]) {
-                object = [@"MacColorReadmeIcon" asInstace];
+                object = [@"MacColorReadmeIcon" asInstance];
             } else {
                 object = [@"MacColorDocumentIcon" asInstance];
             }

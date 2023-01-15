@@ -188,7 +188,9 @@ static char *trashPixels =
     if (_buttonDownTimestamp) {
         if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
             [self setValue:nil forKey:@"buttonDownTimestamp"];
-            [self handleDoubleClick];
+            if ([self respondsToSelector:@selector(handleDoubleClick)]) {
+                [self handleDoubleClick];
+            }
             return;
         }
     }
@@ -239,7 +241,6 @@ static char *trashPixels =
         if (underneathWindow) {
             id underneathx11dict = [windowManager dictForObjectWindow:underneathWindow];
             if (underneathx11dict == x11dict) {
-                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
             } else {
                 id object = [underneathx11dict valueForKey:@"object"];
                 if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {

@@ -68,16 +68,18 @@ static char *programGroupPixels =
 " ##############################\n"
 ;
 
-@interface HotDogStandProgramGroup : IvarObject
+@interface HotDogStandProgramGroupIcon : IvarObject
 {
     id _path;
     id _buttonDown;
     int _buttonDownX;
     int _buttonDownY;
     id _buttonDownTimestamp;
+
+    id _dragX11Dict;
 }
 @end
-@implementation HotDogStandProgramGroup
+@implementation HotDogStandProgramGroupIcon
 - (int)preferredWidth
 {
     static int w = 0;
@@ -111,6 +113,8 @@ static char *programGroupPixels =
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    int isSelected = [context intValueForKey:@"isSelected"];
+
     BOOL hasFocus = NO;
     {
         id windowManager = [@"windowManager" valueForKey];
@@ -130,13 +134,13 @@ static char *programGroupPixels =
         [bitmap useWinSystemFont];
         int textWidth = [bitmap bitmapWidthForText:_path];
         int textHeight = [bitmap bitmapHeightForText:_path];
-        if (hasFocus) {
+        if (hasFocus || isSelected) {
             [bitmap setColor:@"black"];
         } else {
             [bitmap setColor:@"white"];
         }
         [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
-        if (hasFocus) {
+        if (hasFocus || isSelected) {
             [bitmap setColor:@"white"];
         } else {
             [bitmap setColor:@"black"];
@@ -153,11 +157,14 @@ static char *programGroupPixels =
 
 - (void)handleMouseDown:(id)event
 {
+    id windowManager = [@"windowManager" valueForKey];
+    id x11dict = [event valueForKey:@"x11dict"];
+
     {
-        id x11dict = [event valueForKey:@"x11dict"];
         unsigned long win = [[x11dict valueForKey:@"window"] unsignedLongValue];
-        id windowManager = [@"windowManager" valueForKey];
-        [windowManager XRaiseWindow:win];
+        if (win) {
+            [windowManager XRaiseWindow:win];
+        }
     }
 
     int mouseX = [event intValueForKey:@"mouseX"];
@@ -166,13 +173,24 @@ static char *programGroupPixels =
     _buttonDownX = mouseX;
     _buttonDownY = mouseY;
 
+    if (![x11dict intValueForKey:@"isSelected"]) {
+        id objectWindows = [windowManager valueForKey:@"objectWindows"];
+        for (int i=0; i<[objectWindows count]; i++) {
+            id elt = [objectWindows nth:i];
+            [elt setValue:nil forKey:@"isSelected"];
+        }
+        [x11dict setValue:@"1" forKey:@"isSelected"];
+    }
+
     struct timeval tv;
     gettimeofday(&tv, NULL);
     id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
     if (_buttonDownTimestamp) {
         if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
             [self setValue:nil forKey:@"buttonDownTimestamp"];
-            [self handleDoubleClick];
+            if ([self respondsToSelector:@selector(handleDoubleClick)]) {
+                [self handleDoubleClick];
+            }
             return;
         }
     }
@@ -181,25 +199,80 @@ static char *programGroupPixels =
 
 - (void)handleMouseMoved:(id)event
 {
-    if (!_buttonDown) {
+    id x11dict = [event valueForKey:@"x11dict"];
+
+    if (!_buttonDown && !_dragX11Dict) {
         return;
     }
+
     int mouseRootX = [event intValueForKey:@"mouseRootX"];
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
 
-    id dict = [event valueForKey:@"x11dict"];
+    if (!_dragX11Dict) {
+        id windowManager = [event valueForKey:@"windowManager"];
+        id objectWindows = [windowManager valueForKey:@"objectWindows"];
 
-    int newX = mouseRootX - _buttonDownX;
-    int newY = mouseRootY - _buttonDownY;
+        id newx11dict = [Definitions selectedBitmapForSelectedItemsInArray:objectWindows buttonDownElt:x11dict offsetX:_buttonDownX y:_buttonDownY mouseRootX:mouseRootX y:mouseRootY windowManager:windowManager];
 
-    [dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
-    [dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+        [self setValue:newx11dict forKey:@"dragX11Dict"];
+    } else {
 
-    [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        int newX = mouseRootX - [_dragX11Dict intValueForKey:@"buttonDownOffsetX"];
+        int newY = mouseRootY - [_dragX11Dict intValueForKey:@"buttonDownOffsetY"];
+
+        [_dragX11Dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+        [_dragX11Dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+        [_dragX11Dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+    }
 }
 - (void)handleMouseUp:(id)event
 {
     _buttonDown = NO;
+    id x11dict = [event valueForKey:@"x11dict"];
+    if (_dragX11Dict) {
+
+        id windowManager = [event valueForKey:@"windowManager"];
+        unsigned long window = [_dragX11Dict unsignedLongValueForKey:@"window"];
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+        unsigned long underneathWindow = [windowManager topMostWindowUnderneathWindow:window x:mouseRootX y:mouseRootY];
+        if (underneathWindow) {
+            id underneathx11dict = [windowManager dictForObjectWindow:underneathWindow];
+            if (underneathx11dict == x11dict) {
+            } else {
+                id object = [underneathx11dict valueForKey:@"object"];
+                if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
+                    [object handleDragAndDrop:_dragX11Dict];
+                } else {
+                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
+                }
+            }
+        } else {
+            int oldX = [x11dict intValueForKey:@"x"];
+            int oldY = [x11dict intValueForKey:@"y"];
+            int newX = mouseRootX - _buttonDownX;
+            int newY = mouseRootY - _buttonDownY;
+            int deltaX = newX - oldX;
+            int deltaY = newY - oldY;
+            id objectWindows = [windowManager valueForKey:@"objectWindows"];
+            for (int i=0; i<[objectWindows count]; i++) {
+                id elt = [objectWindows nth:i];
+                if (![elt intValueForKey:@"isSelected"]) {
+                    continue;
+                }
+                newX = [elt intValueForKey:@"x"] + deltaX;
+                newY = [elt intValueForKey:@"y"] + deltaY;
+                [elt setValue:nsfmt(@"%d", newX) forKey:@"x"];
+                [elt setValue:nsfmt(@"%d", newY) forKey:@"y"];
+                [elt setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+            }
+        }
+
+        [_dragX11Dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        [self setValue:nil forKey:@"dragX11Dict"];
+    }
 }
 - (void)handleRightMouseDown:(id)event
 {
