@@ -24,6 +24,7 @@ hotKey,displayName,messageForClick
 ,MacColorDesktop,"['hotdog' 'windowproperty' 'HOTDOGDESKTOP' 'MacColorDesktop']|runCommandInBackground"
 ,MacPlatinumDir,"['hotdog' 'macplatinumdir']|runCommandInBackground"
 ,MacPlatinumTrash,"['hotdog' 'noframe' 'MacPlatinumTrash']|runCommandInBackground"
+,MiscDesktop,"['hotdog' 'show' 'MiscDesktop']|runCommandInBackground"
 ,,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
