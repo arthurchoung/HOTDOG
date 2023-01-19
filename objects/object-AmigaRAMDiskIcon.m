@@ -176,8 +176,10 @@ static char *ramDiskPixels =
         for (int i=0; i<[objectWindows count]; i++) {
             id elt = [objectWindows nth:i];
             [elt setValue:nil forKey:@"isSelected"];
+            [elt setValue:@"1" forKey:@"needsRedraw"];
         }
         [x11dict setValue:@"1" forKey:@"isSelected"];
+        [x11dict setValue:@"1" forKey:@"needsRedraw"];
     }
 
     struct timeval tv;
@@ -185,6 +187,7 @@ static char *ramDiskPixels =
     id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
     if (_buttonDownTimestamp) {
         if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
+            _buttonDown = NO;
             [self setValue:nil forKey:@"buttonDownTimestamp"];
             if ([self respondsToSelector:@selector(handleDoubleClick)]) {
                 [self handleDoubleClick];
@@ -245,7 +248,7 @@ static char *ramDiskPixels =
                 if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
                     [object handleDragAndDrop:_dragX11Dict];
                 } else {
-                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
+//                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
                 }
             }
         } else {
@@ -292,16 +295,12 @@ static char *ramDiskPixels =
 - (void)handleOpen
 {
     if ([_path length]) {
-        id cmd = nsarr();
-        [cmd addObject:@"hotdog"];
-        [cmd addObject:@"amigabuiltindir"];
-        [cmd addObject:@"RAM DISK"];
-        [cmd runCommandInBackground];
+        [Definitions openAmigaBuiltInDirForPath:@"RAM DISK"];
     }
 }
 - (void)handleDragAndDrop:(id)obj
 {
-    [nsfmt(@"%@ dropped onto %@", obj, self) showAlert];
+//    [nsfmt(@"%@ dropped onto %@", obj, self) showAlert];
 }
 @end
 

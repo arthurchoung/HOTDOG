@@ -27,6 +27,73 @@
 
 static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
+@implementation Definitions(fmeklwmfkdsmklf)
++ (void)openAmigaBuiltInDirForPath:(id)path
+{
+    id windowManager = [@"windowManager" valueForKey];
+    id objectWindows = [windowManager valueForKey:@"objectWindows"];
+    for (int i=0; i<[objectWindows count]; i++) {
+        id elt = [objectWindows nth:i];
+        id object = [elt valueForKey:@"object"];
+        if (object) {
+            id className = [object className];
+            if ([className isEqual:@"AmigaDir"]) {
+                id title = [object valueForKey:@"title"];
+                if ([title isEqual:path]) {
+                    [windowManager raiseObjectWindow:elt];
+                    return;
+                }
+            }
+        }
+    }
+    id object = [Definitions AmigaBuiltInDir:path];
+    if (object) {
+        [object setValue:path forKey:@"title"];
+        id dict = [windowManager openWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+        if (dict) {
+            [windowManager raiseObjectWindow:dict];
+        }
+    }
+}
++ (void)openAmigaDirForPath:(id)path
+{
+NSLog(@"openAmigaDirForPath:%@", path);
+    id realPath = [path asRealPath];
+NSLog(@"realPath %@", realPath);
+
+    id windowManager = [@"windowManager" valueForKey];
+    id objectWindows = [windowManager valueForKey:@"objectWindows"];
+    for (int i=0; i<[objectWindows count]; i++) {
+        id elt = [objectWindows nth:i];
+        id object = [elt valueForKey:@"object"];
+NSLog(@"object %@", object);
+        if (object) {
+            id className = [object className];
+NSLog(@"className %@", className);
+            if ([className isEqual:@"AmigaDir"]) {
+                id objectPath = [object valueForKey:@"path"];
+NSLog(@"objectPath %@", objectPath);
+                if ([objectPath isEqual:realPath]) {
+                    [windowManager raiseObjectWindow:elt];
+                    return;
+                }
+            }
+        }
+    }
+
+    if ([realPath isDirectory]) {
+        id object = [Definitions AmigaDir:realPath];
+        if (object) {
+            id dict = [windowManager openWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+            if (dict) {
+                [windowManager raiseObjectWindow:dict];
+            }
+        }
+    }
+}
+@end
+
+
 @implementation Definitions(fmekwlmfklsdmfklsmdklfmksldfjdksjfkfjsdkfkfjkd)
 + (id)AmigaDesktop
 {

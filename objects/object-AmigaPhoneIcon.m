@@ -199,8 +199,10 @@ static char *phonePixels =
         for (int i=0; i<[objectWindows count]; i++) {
             id elt = [objectWindows nth:i];
             [elt setValue:nil forKey:@"isSelected"];
+            [elt setValue:@"1" forKey:@"needsRedraw"];
         }
         [x11dict setValue:@"1" forKey:@"isSelected"];
+        [x11dict setValue:@"1" forKey:@"needsRedraw"];
 
         id newx11dict = [Definitions selectedBitmapForSelectedItemsInArray:objectWindows buttonDownElt:x11dict offsetX:_buttonDownX y:_buttonDownY mouseRootX:mouseRootX y:mouseRootY windowManager:windowManager];
 

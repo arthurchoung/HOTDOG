@@ -296,8 +296,10 @@ static char *openTrashPixels =
         for (int i=0; i<[objectWindows count]; i++) {
             id elt = [objectWindows nth:i];
             [elt setValue:nil forKey:@"isSelected"];
+            [elt setValue:@"1" forKey:@"needsRedraw"];
         }
         [x11dict setValue:@"1" forKey:@"isSelected"];
+        [x11dict setValue:@"1" forKey:@"needsRedraw"];
     }
 
     struct timeval tv;
@@ -305,6 +307,7 @@ static char *openTrashPixels =
     id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
     if (_buttonDownTimestamp) {
         if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
+            _buttonDown = NO;
             [self setValue:nil forKey:@"buttonDownTimestamp"];
             if ([self respondsToSelector:@selector(handleDoubleClick)]) {
                 [self handleDoubleClick];
@@ -364,7 +367,7 @@ static char *openTrashPixels =
                 if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
                     [object handleDragAndDrop:_dragX11Dict];
                 } else {
-                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
+//                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
                 }
             }
         } else {
@@ -410,16 +413,12 @@ static char *openTrashPixels =
 }
 - (void)handleOpen
 {
-    id cmd = nsarr();
-    [cmd addObject:@"hotdog"];
-    [cmd addObject:@"amigadir"];
-    [cmd addObject:[Definitions homeDir:@"Trash"]];
-    [cmd runCommandInBackground];
+    [Definitions openAmigaDirForPath:[Definitions homeDir:@"Trash"]];
 }
 
 - (void)handleDragAndDrop:(id)obj
 {
-    [nsfmt(@"%@ dropped onto %@", obj, self) showAlert];
+//    [nsfmt(@"%@ dropped onto %@", obj, self) showAlert];
 }
 
 @end

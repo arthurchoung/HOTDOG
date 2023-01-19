@@ -287,7 +287,7 @@ static char *shellPixels =
 }
 - (void)handleDragAndDrop:(id)obj
 {
-    [nsfmt(@"%@ dropped onto %@", obj, self) showAlert];
+//    [nsfmt(@"%@ dropped onto %@", obj, self) showAlert];
 }
 @end
 
