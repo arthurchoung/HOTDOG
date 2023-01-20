@@ -209,8 +209,10 @@ static char *diskPixels =
         for (int i=0; i<[objectWindows count]; i++) {
             id elt = [objectWindows nth:i];
             [elt setValue:nil forKey:@"isSelected"];
+            [elt setValue:@"1" forKey:@"needsRedraw"];
         }
         [x11dict setValue:@"1" forKey:@"isSelected"];
+        [x11dict setValue:@"1" forKey:@"needsRedraw"];
     }
 
     struct timeval tv;
@@ -324,11 +326,7 @@ static char *diskPixels =
 - (void)handleOpen
 {
     if ([_path length]) {
-        id cmd = nsarr();
-        [cmd addObject:@"hotdog"];
-        [cmd addObject:@"ataristdir"];
-        [cmd addObject:_path];
-        [cmd runCommandInBackground];
+        [Definitions openAtariSTDirForPath:_path];
     }
 }
 - (void)handleDragAndDrop:(id)obj
