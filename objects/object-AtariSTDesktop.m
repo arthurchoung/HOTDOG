@@ -27,6 +27,24 @@
 
 static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
+@implementation Definitions(fmekwlmfklsjfkdsjfdmfklsdmklfmlskdkf)
++ (void)openAtariSTDirForPath:(id)path
+{
+    id realPath = [path asRealPath];
+
+    if ([realPath isDirectory]) {
+        id windowManager = [@"windowManager" valueForKey];
+        id object = [Definitions AtariSTDir:realPath];
+        if (object) {
+            id dict = [windowManager openWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+            if (dict) {
+                [windowManager raiseObjectWindow:dict];
+            }
+        }
+    }
+}
+@end
+
 @implementation Definitions(fmekwlmfklsdmfklsmdklfmksldfjdksjfkfjsdkfk)
 + (id)AtariSTDesktop
 {
