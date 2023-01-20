@@ -31,7 +31,7 @@ static id _text = @"Close window to remove icons\nFIXME: This window should not 
 + (id)getMacClassicDirForPath:(id)path
 {
     if (!path) {
-        return NO;
+        return nil;
     }
 
     id windowManager = [@"windowManager" valueForKey];
@@ -62,6 +62,7 @@ static id _text = @"Close window to remove icons\nFIXME: This window should not 
     id elt = [Definitions getMacClassicDirForPath:realPath];
     if (elt) {
         [windowManager raiseObjectWindow:elt];
+        return;
     }
 
     if ([realPath isDirectory]) {
