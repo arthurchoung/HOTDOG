@@ -203,10 +203,10 @@ static char *rightDisabledScrollBarPixels =
 
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksdkjfj)
-+ (id)MacClassicDir
++ (id)MacClassicDir:(id)path
 {
     id obj = [@"MacClassicDir" asInstance];
-    [obj setValue:[@"." asRealPath] forKey:@"title"];
+    [obj setValue:path forKey:@"path"];
     [obj updateDiskFreeText];
     [obj calculateDiskUsed];
     return obj;
@@ -269,6 +269,8 @@ static char *rightDisabledScrollBarPixels =
     int _selectionBoxRootY;
 
     id _dragX11Dict;
+
+    id _path;
 }
 @end
 @implementation MacClassicDir
@@ -291,6 +293,10 @@ static char *rightDisabledScrollBarPixels =
 }
 - (void)updateDiskFreeText
 {
+    if ([_path isDirectory]) {
+        chdir([_path UTF8String]);
+    }
+
     id cmd = nsarr();
     [cmd addObject:@"hotdog-getDiskUsage.pl"];
     id output = [[cmd runCommandAndReturnOutput] asString];
@@ -315,6 +321,11 @@ static char *rightDisabledScrollBarPixels =
 - (void)calculateDiskUsed
 {
     [self setValue:@"Calculating..." forKey:@"diskUsedText"];
+
+    if ([_path isDirectory]) {
+        chdir([_path UTF8String]);
+    }
+
     id cmd = nsarr();
     [cmd addObject:@"hotdog-getFileUsage.pl"];
     id process = [cmd runCommandAndReturnProcess];
@@ -360,8 +371,12 @@ static char *rightDisabledScrollBarPixels =
 {
     return 360;
 }
-- (void)updateFromCurrentDirectory:(Int4)r
+- (void)updateDirectory:(Int4)r
 {
+    if ([_path isDirectory]) {
+        chdir([_path UTF8String]);
+    }
+
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
     [bitmap useMonacoFont];
     id arr = [@"." contentsOfDirectory];
@@ -407,7 +422,7 @@ static char *rightDisabledScrollBarPixels =
 
 - (void)handleBackgroundUpdate:(id)event
 {
-    time_t timestamp = [@"." fileModificationTimestamp];
+    time_t timestamp = [_path fileModificationTimestamp];
     if (timestamp != _timestamp) {
         _timestamp = 0;
     }
@@ -430,8 +445,8 @@ static char *rightDisabledScrollBarPixels =
 - (void)beginIteration:(id)event rect:(Int4)r
 {
     if (!_timestamp) {
-        _timestamp = [@"." fileModificationTimestamp];
-        [self updateFromCurrentDirectory:r];
+        _timestamp = [_path fileModificationTimestamp];
+        [self updateDirectory:r];
     }
 
     if ([_buttonDown isEqual:_buttonHover]) {
@@ -643,9 +658,12 @@ static char *rightDisabledScrollBarPixels =
         [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
     }
     if (_titleBarTextRect.w > 0) {
-        id text = _title;
+        id text = _path;
         if (!text) {
-            text = @"(no title)";
+            text = _title;
+            if (!text) {
+                text = @"(no title)";
+            }
         }
 
         [bitmap useChicagoFont];
@@ -979,8 +997,10 @@ static char *rightDisabledScrollBarPixels =
                 for (int j=0; j<[_array count]; j++) {
                     id jelt = [_array nth:j];
                     [jelt setValue:nil forKey:@"isSelected"];
+                    [jelt setValue:@"1" forKey:@"needsRedraw"];
                 }
                 [elt setValue:@"1" forKey:@"isSelected"];
+                [elt setValue:@"1" forKey:@"needsRedraw"];
             }
             _buttonDownOffsetX = mouseX - x;
             _buttonDownOffsetY = mouseY - y;
@@ -988,14 +1008,14 @@ static char *rightDisabledScrollBarPixels =
             gettimeofday(&tv, NULL);
             id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
             if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
+                if ([_path isDirectory]) {
+                    chdir([_path UTF8String]);
+                }
+
                 id filePath = [elt valueForKey:@"filePath"];
                 if ([filePath length]) {
                     if ([filePath isDirectory]) {
-                        id cmd = nsarr();
-                        [cmd addObject:@"hotdog"];
-                        [cmd addObject:@"macclassicdir"];
-                        [cmd addObject:filePath];
-                        [cmd runCommandInBackground];
+                        [Definitions openMacClassicDirForPath:filePath];
                     } else {
                         id cmd = nsarr();
                         [cmd addObject:@"hotdog-open:.pl"];
@@ -1014,6 +1034,7 @@ static char *rightDisabledScrollBarPixels =
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
         [elt setValue:nil forKey:@"isSelected"];
+        [elt setValue:@"1" forKey:@"needsRedraw"];
     }
 
     if (_selectionBox) {
@@ -1196,8 +1217,10 @@ static char *rightDisabledScrollBarPixels =
             Int4 r2 = [Definitions rectWithX:x y:y w:w h:h];
             if ([Definitions doesRect:r intersectRect:r2]) {
                 [elt setValue:@"1" forKey:@"isSelected"];
+                [elt setValue:@"1" forKey:@"needsRedraw"];
             } else {
                 [elt setValue:nil forKey:@"isSelected"];
+                [elt setValue:@"1" forKey:@"needsRedraw"];
             }
         }
 
@@ -1296,7 +1319,9 @@ static char *rightDisabledScrollBarPixels =
 - (void)handleMouseUp:(id)event
 {
     if ([_buttonDown isEqual:@"closeButton"] && [_buttonDown isEqual:_buttonHover]) {
-        exit(0);
+        id x11dict = [event valueForKey:@"x11dict"];
+        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        return;
     }
     if ([_buttonDown isEqual:@"maximizeButton"] && [_buttonDown isEqual:_buttonHover]) {
 /*
@@ -1359,5 +1384,30 @@ static char *rightDisabledScrollBarPixels =
     [self setValue:nil forKey:@"buttonHover"];
 }
 
+- (void)handleFocusInEvent:(id)event
+{
+NSLog(@"handleFocusInEvent");
+    if (!_path) {
+        return;
+    }
+
+    id windowManager = [event valueForKey:@"windowManager"];
+    id objectWindows = [windowManager valueForKey:@"objectWindows"];
+    for (int i=0; i<[objectWindows count]; i++) {
+        id elt = [objectWindows nth:i];
+        id object = [elt valueForKey:@"object"];
+        id className = [object className];
+        if ([className isEqual:@"MacClassicDiskIcon"]) {
+            id path = [object valueForKey:@"path"];
+            if ([path isEqual:_path]) {
+                [elt setValue:@"1" forKey:@"isSelected"];
+                [elt setValue:@"1" forKey:@"needsRedraw"];
+                continue;
+            }
+        }
+        [elt setValue:nil forKey:@"isSelected"];
+        [elt setValue:@"1" forKey:@"needsRedraw"];
+    }
+}
 @end
 
