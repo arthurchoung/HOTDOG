@@ -27,6 +27,55 @@
 
 static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
+@implementation Definitions(fmekwlmfklsdmfklsdmklfmlskdkf)
++ (id)getMacClassicDirForPath:(id)path
+{
+    if (!path) {
+        return NO;
+    }
+
+    id windowManager = [@"windowManager" valueForKey];
+    id objectWindows = [windowManager valueForKey:@"objectWindows"];
+    for (int i=0; i<[objectWindows count]; i++) {
+        id elt = [objectWindows nth:i];
+        id object = [elt valueForKey:@"object"];
+        if (object) {
+            id className = [object className];
+            if ([className isEqual:@"MacClassicDir"]) {
+                id objectPath = [object valueForKey:@"path"];
+                if ([objectPath isEqual:path]) {
+                    return elt;
+                }
+            }
+        }
+    }
+
+    return nil;
+}
+
++ (void)openMacClassicDirForPath:(id)path
+{
+    id realPath = [path asRealPath];
+
+    id windowManager = [@"windowManager" valueForKey];
+
+    id elt = [Definitions getMacClassicDirForPath:realPath];
+    if (elt) {
+        [windowManager raiseObjectWindow:elt];
+    }
+
+    if ([realPath isDirectory]) {
+        id object = [Definitions MacClassicDir:realPath];
+        if (object) {
+            id dict = [windowManager openWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+            if (dict) {
+                [windowManager raiseObjectWindow:dict];
+            }
+        }
+    }
+}
+@end
+
 @implementation Definitions(fmekwlmfklsdmfklsmdklfmksld)
 + (id)MacClassicDesktop
 {
