@@ -138,10 +138,10 @@ static char *activeVerticalScrollBarPixels =
 
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksdkjffjkdsjfksdj)
-+ (id)AtariSTDir
++ (id)AtariSTDir:(id)path
 {
     id obj = [@"AtariSTDir" asInstance];
-    [obj setValue:[@"." asRealPath] forKey:@"title"];
+    [obj setValue:path forKey:@"path"];
     [obj calculateDiskUsed];
     return obj;
 }
@@ -202,6 +202,9 @@ static char *activeVerticalScrollBarPixels =
     int _selectionBoxRootY;
 
     id _dragX11Dict;
+
+    id _path;
+    id _previousPaths;
 }
 @end
 @implementation AtariSTDir
@@ -225,6 +228,11 @@ static char *activeVerticalScrollBarPixels =
 - (void)calculateDiskUsed
 {
     [self setValue:@"Calculating" forKey:@"diskUsedText"];
+
+    if ([_path isDirectory]) {
+        chdir([_path UTF8String]);
+    }
+
     id cmd = nsarr();
     [cmd addObject:@"hotdog-getFileUsage.pl"];
     id process = [cmd runCommandAndReturnProcess];
@@ -256,8 +264,24 @@ static char *activeVerticalScrollBarPixels =
 {
     return 360;
 }
-- (void)updateFromCurrentDirectory:(Int4)r
+- (void)loadPath:(id)path
 {
+    [self setValue:path forKey:@"path"];
+    [self setValue:nil forKey:@"array"];
+    _timestamp = 0;
+    _visibleX = 0;
+    _visibleY = 0;
+    _horizontalKnobVal = 0;
+    _horizontalKnobMaxVal = 0;
+    _verticalKnobVal = 0;
+    _verticalKnobMaxVal = 0;
+}
+- (void)updateDirectory:(Int4)r
+{
+    if ([_path isDirectory]) {
+        chdir([_path UTF8String]);
+    }
+
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
     [bitmap useMonacoFont];
     id arr = [@"." contentsOfDirectory];
@@ -307,7 +331,7 @@ static char *activeVerticalScrollBarPixels =
 
 - (void)handleBackgroundUpdate:(id)event
 {
-    time_t timestamp = [@"." fileModificationTimestamp];
+    time_t timestamp = [_path fileModificationTimestamp];
     if (timestamp != _timestamp) {
         _timestamp = 0;
     }
@@ -330,8 +354,8 @@ static char *activeVerticalScrollBarPixels =
 - (void)beginIteration:(id)event rect:(Int4)r
 {
     if (!_timestamp) {
-        _timestamp = [@"." fileModificationTimestamp];
-        [self updateFromCurrentDirectory:r];
+        _timestamp = [_path fileModificationTimestamp];
+        [self updateDirectory:r];
     }
 
     if ([_buttonDown isEqual:_buttonHover]) {
@@ -547,9 +571,12 @@ static char *activeVerticalScrollBarPixels =
         [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
     }
     if (_titleBarTextRect.w > 0) {
-        id text = _title;
+        id text = _path;
         if (!text) {
-            text = @"(no title)";
+            text = _title;
+            if (!text) {
+                text = @"(no title)";
+            }
         }
 
         [bitmap useAtariSTFont];
@@ -870,8 +897,10 @@ static char *activeVerticalScrollBarPixels =
                 for (int j=0; j<[_array count]; j++) {
                     id jelt = [_array nth:j];
                     [jelt setValue:nil forKey:@"isSelected"];
+                    [jelt setValue:@"1" forKey:@"needsRedraw"];
                 }
                 [elt setValue:@"1" forKey:@"isSelected"];
+                [elt setValue:@"1" forKey:@"needsRedraw"];
             }
             _buttonDownOffsetX = mouseX - x;
             _buttonDownOffsetY = mouseY - y;
@@ -879,14 +908,19 @@ static char *activeVerticalScrollBarPixels =
             gettimeofday(&tv, NULL);
             id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
             if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
+                if ([_path isDirectory]) {
+                    chdir([_path UTF8String]);
+                }
+
                 id filePath = [elt valueForKey:@"filePath"];
                 if ([filePath length]) {
                     if ([filePath isDirectory]) {
-                        id cmd = nsarr();
-                        [cmd addObject:@"hotdog"];
-                        [cmd addObject:@"ataristdir"];
-                        [cmd addObject:filePath];
-                        [cmd runCommandInBackground];
+                        if (!_previousPaths) {
+                            [self setValue:nsarr() forKey:@"previousPaths"];
+                        }
+                        [_previousPaths addObject:_path];
+                        id realPath = [filePath asRealPath];
+                        [self loadPath:realPath];
                     } else {
                         id cmd = nsarr();
                         [cmd addObject:@"hotdog-open:.pl"];
@@ -905,6 +939,7 @@ static char *activeVerticalScrollBarPixels =
     for (int i=0; i<[_array count]; i++) {
         id elt = [_array nth:i];
         [elt setValue:nil forKey:@"isSelected"];
+        [elt setValue:@"1" forKey:@"needsRedraw"];
     }
 
     if (_selectionBox) {
@@ -1089,8 +1124,10 @@ static char *activeVerticalScrollBarPixels =
             Int4 r2 = [Definitions rectWithX:x y:y w:w h:h];
             if ([Definitions doesRect:r intersectRect:r2]) {
                 [elt setValue:@"1" forKey:@"isSelected"];
+                [elt setValue:@"1" forKey:@"needsRedraw"];
             } else {
                 [elt setValue:nil forKey:@"isSelected"];
+                [elt setValue:@"1" forKey:@"needsRedraw"];
             }
         }
 
@@ -1188,7 +1225,17 @@ static char *activeVerticalScrollBarPixels =
 - (void)handleMouseUp:(id)event
 {
     if ([_buttonDown isEqual:@"closeButton"] && [_buttonDown isEqual:_buttonHover]) {
-        exit(0);
+        int count = [_previousPaths count];
+        if (!count) {
+            id x11dict = [event valueForKey:@"x11dict"];
+            [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+            return;
+        } else {
+            id filePath = [_previousPaths nth:count-1];
+            [_previousPaths removeObjectAtIndex:count-1];
+            [self loadPath:filePath];
+            return;
+        }
     }
     if ([_buttonDown isEqual:@"maximizeButton"] && [_buttonDown isEqual:_buttonHover]) {
 /*
@@ -1231,17 +1278,17 @@ static char *activeVerticalScrollBarPixels =
             id underneathx11dict = [windowManager dictForObjectWindow:underneathWindow];
             id x11dict = [event valueForKey:@"x11dict"];
             if (underneathx11dict == x11dict) {
-                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
+//                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
             } else {
                 id object = [underneathx11dict valueForKey:@"object"];
                 if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
                     [object handleDragAndDrop:_dragX11Dict];
                 } else {
-                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
+//                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
                 }
             }
         } else {
-            [@"Dropped onto desktop" showAlert];
+//            [@"Dropped onto desktop" showAlert];
         }
 
         [_dragX11Dict setValue:@"1" forKey:@"shouldCloseWindow"];
