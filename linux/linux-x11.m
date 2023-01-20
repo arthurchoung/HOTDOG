@@ -2070,6 +2070,15 @@ NSLog(@"FocusIn event win %lu", win);
         id dict = [self dictForObjectWindow:win];
         [dict setValue:@"1" forKey:@"needsRedraw"];
     }
+
+    id x11dict = [self dictForObjectWindow:e->window];
+    if (x11dict) {
+        id object = [x11dict valueForKey:@"object"];
+        if ([object respondsToSelector:@selector(handleFocusInEvent:)]) {
+            id eventDict = [self generateEventDictRootX:0 /*e->x_root*/ rootY:0 /*e->y_root*/ x:0 /*e->x_root*/ y:0 /*e->y_root*/ w:_rootWindowWidth h:_rootWindowHeight x11dict:x11dict];
+            [object handleFocusInEvent:eventDict];
+        }
+    }
 }
 
 - (void)handleX11FocusOut:(void *)eptr
