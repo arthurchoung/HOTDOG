@@ -69,6 +69,40 @@ static char *diskPixels =
 "b....b....................b....b\n"
 " bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
 ;
+static char *openDiskPixels =
+" ..b...b...b...b...b...b...     \n"
+".b...b...b...b...b...b...b...   \n"
+"...b...b...b...b...b...b...b..  \n"
+".b...b...b...b...b...b...b...b. \n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+"...b...b...b...b...b...b...b...b\n"
+".b...b...b...b...b...b...b...b..\n"
+" ..b...b...b...b...b...b...b..b \n"
+"  ...b...b...b...b...b...b...b  \n"
+;
 
 @interface MacClassicDiskIcon : IvarObject
 {
@@ -115,6 +149,11 @@ static char *diskPixels =
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    int isOpen = 0;
+    if ([Definitions getMacClassicDirForPath:_path]) {
+        isOpen = 1;
+    }
+
     int isSelected = [context intValueForKey:@"isSelected"];
 
     BOOL hasFocus = NO;
@@ -131,9 +170,17 @@ static char *diskPixels =
     int h = [Definitions heightForCString:diskPixels];
 
     if (hasFocus || isSelected) {
-        [bitmap drawCString:diskPixels palette:selectedDiskPalette x:r.x+(r.w-w)/2 y:r.y];
+        if (isOpen) {
+            [bitmap drawCString:openDiskPixels palette:selectedDiskPalette x:r.x+(r.w-w)/2 y:r.y];
+        } else {
+            [bitmap drawCString:diskPixels palette:selectedDiskPalette x:r.x+(r.w-w)/2 y:r.y];
+        }
     } else {
-        [bitmap drawCString:diskPixels palette:diskPalette x:r.x+(r.w-w)/2 y:r.y];
+        if (isOpen) {
+            [bitmap drawCString:openDiskPixels palette:diskPalette x:r.x+(r.w-w)/2 y:r.y];
+        } else {
+            [bitmap drawCString:diskPixels palette:diskPalette x:r.x+(r.w-w)/2 y:r.y];
+        }
     }
     if ([_path length]) {
         [bitmap useMonacoFont];
@@ -183,8 +230,10 @@ static char *diskPixels =
         for (int i=0; i<[objectWindows count]; i++) {
             id elt = [objectWindows nth:i];
             [elt setValue:nil forKey:@"isSelected"];
+            [elt setValue:@"1" forKey:@"needsRedraw"];
         }
         [x11dict setValue:@"1" forKey:@"isSelected"];
+        [x11dict setValue:@"1" forKey:@"needsRedraw"];
     }
 
     struct timeval tv;
@@ -299,11 +348,7 @@ static char *diskPixels =
 - (void)handleOpen
 {
     if ([_path length]) {
-        id cmd = nsarr();
-        [cmd addObject:@"hotdog"];
-        [cmd addObject:@"macclassicdir"];
-        [cmd addObject:_path];
-        [cmd runCommandInBackground];
+        [Definitions openMacClassicDirForPath:_path];
     }
 }
 - (void)handleDragAndDrop:(id)obj
