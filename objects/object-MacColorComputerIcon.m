@@ -87,6 +87,88 @@ static char *computerPixels =
 " bbbbbbbbbbbbbbbbbbbbbb \n"
 ;
 
+static char *openComputerPalette =
+"b #000000\n"
+". #606060\n"
+"X #A0A0A0\n"
+"o #CCCCFF\n"
+"O #ffffff\n"
+;
+
+static char *openComputerPixels =
+" bbbbbbbbbbbbbbbbbbbbbb \n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+"bobooobooobooobooobooobb\n"
+"boooboooboooboooboooboob\n"
+" bbooobooobooobooobooob \n"
+" boobooobooobooobooobob \n"
+" bbooobooobooobooobooob \n"
+" boobooobooobooobooobob \n"
+" bbbbbbbbbbbbbbbbbbbbbb \n"
+;
+static char *selectedOpenComputerPalette =
+"b #000000\n"
+". #33337F\n"
+"X #606060\n"
+"o #A0A0A0\n"
+"O #ffffff\n"
+;
+static char *selectedOpenComputerPixels =
+" bbbbbbbbbbbbbbbbbbbbbb \n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+"b.b...b...b...b...b...bb\n"
+"b...b...b...b...b...b..b\n"
+" bb...b...b...b...b...b \n"
+" b..b...b...b...b...b.b \n"
+" bb...b...b...b...b...b \n"
+" b..b...b...b...b...b.b \n"
+" bbbbbbbbbbbbbbbbbbbbbb \n"
+;
+
 @interface MacColorComputerIcon : IvarObject
 {
     id _path;
@@ -132,6 +214,11 @@ static char *computerPixels =
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    int isOpen = 0;
+    if ([Definitions getMacColorDirForPath:_path]) {
+        isOpen = 1;
+    }
+
     int isSelected = [context intValueForKey:@"isSelected"];
 
     BOOL hasFocus = NO;
@@ -148,9 +235,17 @@ static char *computerPixels =
     int h = [Definitions heightForCString:computerPixels];
 
     if (hasFocus || isSelected) {
-        [bitmap drawCString:computerPixels palette:selectedComputerPalette x:r.x+(r.w-w)/2 y:r.y];
+        if (isOpen) {
+            [bitmap drawCString:selectedOpenComputerPixels palette:selectedOpenComputerPalette x:r.x+(r.w-w)/2 y:r.y];
+        } else {
+            [bitmap drawCString:computerPixels palette:selectedComputerPalette x:r.x+(r.w-w)/2 y:r.y];
+        }
     } else {
-        [bitmap drawCString:computerPixels palette:computerPalette x:r.x+(r.w-w)/2 y:r.y];
+        if (isOpen) {
+            [bitmap drawCString:openComputerPixels palette:openComputerPalette x:r.x+(r.w-w)/2 y:r.y];
+        } else {
+            [bitmap drawCString:computerPixels palette:computerPalette x:r.x+(r.w-w)/2 y:r.y];
+        }
     }
     if ([_path length]) {
         [bitmap useMonacoFont];
@@ -200,8 +295,10 @@ static char *computerPixels =
         for (int i=0; i<[objectWindows count]; i++) {
             id elt = [objectWindows nth:i];
             [elt setValue:nil forKey:@"isSelected"];
+            [elt setValue:@"1" forKey:@"needsRedraw"];
         }
         [x11dict setValue:@"1" forKey:@"isSelected"];
+        [x11dict setValue:@"1" forKey:@"needsRedraw"];
     }
 
     struct timeval tv;
@@ -316,11 +413,7 @@ static char *computerPixels =
 - (void)handleOpen
 {
     if ([_path length]) {
-        id cmd = nsarr();
-        [cmd addObject:@"hotdog"];
-        [cmd addObject:@"maccolordir"];
-        [cmd addObject:_path];
-        [cmd runCommandInBackground];
+        [Definitions openMacColorDirForPath:_path];
     }
 }
 - (void)handleDragAndDrop:(id)obj
