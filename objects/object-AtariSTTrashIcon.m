@@ -172,8 +172,10 @@ static char *trashPixels =
         for (int i=0; i<[objectWindows count]; i++) {
             id elt = [objectWindows nth:i];
             [elt setValue:nil forKey:@"isSelected"];
+            [elt setValue:@"1" forKey:@"needsRedraw"];
         }
         [x11dict setValue:@"1" forKey:@"isSelected"];
+        [x11dict setValue:@"1" forKey:@"needsRedraw"];
     }
 
     struct timeval tv;
@@ -286,11 +288,7 @@ static char *trashPixels =
 }
 - (void)handleOpen
 {
-    id cmd = nsarr();
-    [cmd addObject:@"hotdog"];
-    [cmd addObject:@"ataristdir"];
-    [cmd addObject:[Definitions homeDir:@"Trash"]];
-    [cmd runCommandInBackground];
+    [Definitions openAtariSTDirForPath:[Definitions homeDir:@"Trash"]];
 }
 
 - (void)handleDragAndDrop:(id)obj
