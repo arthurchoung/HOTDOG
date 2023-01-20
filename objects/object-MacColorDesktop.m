@@ -27,6 +27,56 @@
 
 static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
+@implementation Definitions(fmekwljfkdsjfksdmfklsdmfklsdmklfmlskdkf)
++ (id)getMacColorDirForPath:(id)path
+{
+    if (!path) {
+        return nil;
+    }
+
+    id windowManager = [@"windowManager" valueForKey];
+    id objectWindows = [windowManager valueForKey:@"objectWindows"];
+    for (int i=0; i<[objectWindows count]; i++) {
+        id elt = [objectWindows nth:i];
+        id object = [elt valueForKey:@"object"];
+        if (object) {
+            id className = [object className];
+            if ([className isEqual:@"MacColorDir"]) {
+                id objectPath = [object valueForKey:@"path"];
+                if ([objectPath isEqual:path]) {
+                    return elt;
+                }
+            }
+        }
+    }
+
+    return nil;
+}
+
++ (void)openMacColorDirForPath:(id)path
+{
+    id realPath = [path asRealPath];
+
+    id windowManager = [@"windowManager" valueForKey];
+
+    id elt = [Definitions getMacColorDirForPath:realPath];
+    if (elt) {
+        [windowManager raiseObjectWindow:elt];
+        return;
+    }
+
+    if ([realPath isDirectory]) {
+        id object = [Definitions MacColorDir:realPath];
+        if (object) {
+            id dict = [windowManager openWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+            if (dict) {
+                [windowManager raiseObjectWindow:dict];
+            }
+        }
+    }
+}
+@end
+
 @implementation Definitions(fmekwlmfklsdmfklsmdklfmksldfjdksjfk)
 + (id)MacColorDesktop
 {
