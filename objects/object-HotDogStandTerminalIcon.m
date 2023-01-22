@@ -71,7 +71,7 @@ static char *phonePixels =
 " ...............                \n"
 ;
 
-@interface HotDogStandPhoneIcon : IvarObject
+@interface HotDogStandTerminalIcon : IvarObject
 {
     id _path;
     id _buttonDown;
@@ -82,7 +82,7 @@ static char *phonePixels =
     id _dragX11Dict;
 }
 @end
-@implementation HotDogStandPhoneIcon
+@implementation HotDogStandTerminalIcon
 - (int)preferredWidth
 {
     static int w = 0;
