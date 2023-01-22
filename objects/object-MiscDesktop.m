@@ -61,7 +61,6 @@ NSLog(@"windowManager %@", windowManager);
     [lines addObject:@"builtin:RugIcon mountpoint:Rug"];
     [lines addObject:@"builtin:AmigaPhoneIcon mountpoint:AmigaPhone"];
     [lines addObject:@"builtin:MacColorSoundIcon mountpoint:Sound"];
-    [lines addObject:@"builtin:HotDogStandPhoneIcon mountpoint:Phone"];
     [lines addObject:@"builtin:ManiacMansionHamsterIcon mountpoint:Hamster"];
     [lines addObject:@"builtin:ManiacMansionMicrowaveIcon mountpoint:Microwave"];
 
