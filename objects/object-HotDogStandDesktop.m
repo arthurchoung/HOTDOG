@@ -30,59 +30,17 @@ static id _text = @"Close window to remove icons\nFIXME: This window should not 
 @implementation Definitions(fmekwlmfklsdmfklsmdklfmksldjfkdsjfk)
 + (id)HotDogStandDesktop
 {
-    id observercmd = nsarr();
-    [observercmd addObject:@"hotdog-monitorMountChanges"];
-    id observer = [observercmd runCommandAndReturnProcess];
-    if (!observer) {
-NSLog(@"unable to run observer command %@", observercmd);
-exit(1);
-    }
-
     id obj = [@"HotDogStandDesktop" asInstance];
-    [obj setValue:observer forKey:@"observer"];
     return obj;
 }
 @end
 
 @interface HotDogStandDesktop : IvarObject
 {
-    id _observer;
     time_t _timestamp;
-
-    id _selectionBox;
-    int _buttonDownRootX;
-    int _buttonDownRootY;
 }
 @end
 @implementation HotDogStandDesktop
-- (int)fileDescriptor
-{
-    if (_observer) {
-        return [_observer fileDescriptor];
-    }
-    return -1;
-}
-- (void)handleFileDescriptor
-{
-    if (_observer) {
-        [_observer handleFileDescriptor];
-        id data = [_observer valueForKey:@"data"];
-        id lastLine = nil;
-        for(;;) {
-            id line = [data readLine];
-//NSLog(@"line '%@'", line);
-            if (!line) {
-                break;
-            }
-            lastLine = line;
-        }
-        if (lastLine) {
-            _timestamp = 0;
-        }
-        return;
-    }
-}
-
 - (void)beginIteration:(id)event rect:(Int4)r
 {
     if (!_timestamp) {
@@ -98,9 +56,30 @@ NSLog(@"windowManager %@", windowManager);
 
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
 
-    id cmd = nsarr();
-    [cmd addObject:@"hotdog-listBlockDevices.pl"];
-    id lines = [[[cmd runCommandAndReturnOutput] asString] split:@"\n"];
+    id lines = nsarr();
+    [lines addObject:@"builtin:HotDogStandTerminalIcon mountpoint:Terminal"];
+    [lines addObject:@"builtin:HotDogStandFileManagerIcon mountpoint:File%20Manager"];
+    [lines addObject:@"builtin:HotDogStandControlPanelIcon mountpoint:Control%20Panel"];
+    [lines addObject:@"builtin:HotDogStandPrintManagerIcon mountpoint:Print%20Manager"];
+    [lines addObject:@"builtin:HotDogStandClipboardViewerIcon mountpoint:Clipboard%20Viewer"];
+    [lines addObject:@"builtin:HotDogStandMSDOSPromptIcon mountpoint:MS-DOS%20Prompt"];
+    [lines addObject:@"builtin:HotDogStandWindowsSetupIcon mountpoint:Windows%20Setup"];
+    [lines addObject:@"builtin:HotDogStandPIFEditorIcon mountpoint:PIF%20Editor"];
+    [lines addObject:@"builtin:HotDogStandWriteIcon mountpoint:Write"];
+    [lines addObject:@"builtin:HotDogStandPaintbrushIcon mountpoint:Paintbrush"];
+    [lines addObject:@"builtin:HotDogStandNotepadIcon mountpoint:Notepad"];
+    [lines addObject:@"builtin:HotDogStandRecorderIcon mountpoint:Recorder"];
+    [lines addObject:@"builtin:HotDogStandCardfileIcon mountpoint:Cardfile"];
+    [lines addObject:@"builtin:HotDogStandCalendarIcon mountpoint:Calendar"];
+    [lines addObject:@"builtin:HotDogStandCalculatorIcon mountpoint:Calculator"];
+    [lines addObject:@"builtin:HotDogStandClockIcon mountpoint:Clock"];
+    [lines addObject:@"builtin:HotDogStandObjectPackagerIcon mountpoint:Object%20Packager"];
+    [lines addObject:@"builtin:HotDogStandCharacterMapIcon mountpoint:Character%20Map"];
+    [lines addObject:@"builtin:HotDogStandMediaPlayerIcon mountpoint:Media%20Player"];
+    [lines addObject:@"builtin:HotDogStandSoundRecorderIcon mountpoint:Sound%20Recorder"];
+    [lines addObject:@"builtin:HotDogStandSolitaireIcon mountpoint:Solitaire"];
+    [lines addObject:@"builtin:HotDogStandMinesweeperIcon mountpoint:Minesweeper"];
+    [lines addObject:@"builtin:HotDogStandProgramManagerIcon mountpoint:Program%20Manager"];
 
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
@@ -135,8 +114,9 @@ NSLog(@"windowManager %@", windowManager);
             if ([className length]) {
                 obj = [className asInstance];
                 [obj setValue:@"1" forKey:@"builtin"];
-            } else {
-                obj = [@"HotDogStandProgramGroupIcon" asInstance];
+            }
+            if (!obj) {
+                continue;
             }
             [obj setValue:mountpoint forKey:@"path"];
             int w = 16;
@@ -187,115 +167,6 @@ NSLog(@"windowManager %@", windowManager);
     [bitmap fillRect:r];
     [bitmap setColor:@"black"];
     [bitmap drawBitmapText:_text x:r.x+5 y:r.y+5];
-}
-- (void)handleMouseDown:(id)event
-{
-NSLog(@"Desktop handleMouseDown");
-    id windowManager = [event valueForKey:@"windowManager"];
-    int mouseRootX = [event intValueForKey:@"mouseRootX"];
-    int mouseRootY = [event intValueForKey:@"mouseRootY"];
-    int viewWidth = [event intValueForKey:@"viewWidth"];
-    int viewHeight = [event intValueForKey:@"viewHeight"];
-    id x11dict = [event valueForKey:@"x11dict"];
-
-    id object = [@"SelectionBox" asInstance];
-    int w = 1;
-    int h = 1;
-    if ([object respondsToSelector:@selector(preferredWidth)]) {
-        w = [object preferredWidth];
-    }
-    if ([object respondsToSelector:@selector(preferredHeight)]) {
-        h = [object preferredHeight];
-    }
-    id dict = [windowManager openWindowForObject:object x:mouseRootX y:mouseRootY w:w h:h overrideRedirect:YES];
-    [self setValue:dict forKey:@"selectionBox"];
-
-    id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    for (int i=0; i<[objectWindows count]; i++) {
-        id dict = [objectWindows nth:i];
-        if (dict == _selectionBox) {
-NSLog(@"skipping SelectionBox");
-            continue;
-        }
-        if (dict == x11dict) {
-NSLog(@"skipping *Desktop");
-            continue;
-        }
-        [dict setValue:nil forKey:@"isSelected"];
-        [dict setValue:@"1" forKey:@"needsRedraw"];
-    }
-    _buttonDownRootX = [event intValueForKey:@"mouseRootX"];
-    _buttonDownRootY = [event intValueForKey:@"mouseRootY"];
-}
-- (void)handleMouseMoved:(id)event
-{
-NSLog(@"Desktop handleMouseMoved");
-    if (!_selectionBox) {
-        return;
-    }
-
-    int mouseRootX = [event intValueForKey:@"mouseRootX"];
-    int mouseRootY = [event intValueForKey:@"mouseRootY"];
-    int newX = _buttonDownRootX;
-    int newY = _buttonDownRootY;
-    int newWidth = mouseRootX - _buttonDownRootX;
-    int newHeight = mouseRootY - _buttonDownRootY;
-    if (newWidth == 0) {
-        newWidth = 1;
-    } else if (newWidth < 0) {
-        newX = mouseRootX;
-        newWidth *= -1;
-        newWidth++;
-    }
-    if (newHeight == 0) {
-        newHeight = 1;
-    } else if (newHeight < 0) {
-        newY = mouseRootY;
-        newHeight *= -1;
-        newHeight++;
-    }
-    [_selectionBox setValue:nsfmt(@"%d", newX) forKey:@"x"];
-    [_selectionBox setValue:nsfmt(@"%d", newY) forKey:@"y"];
-    [_selectionBox setValue:nsfmt(@"%d", newWidth) forKey:@"w"];
-    [_selectionBox setValue:nsfmt(@"%d", newHeight) forKey:@"h"];
-    [_selectionBox setValue:@"1" forKey:@"needsRedraw"];
-    [_selectionBox setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
-    [_selectionBox setValue:nsfmt(@"%d %d", newWidth, newHeight) forKey:@"resizeWindow"];
-    Int4 r = [Definitions rectWithX:newX y:newY w:newWidth h:newHeight];
-    id windowManager = [event valueForKey:@"windowManager"];
-    id x11dict = [event valueForKey:@"x11dict"];
-    id objectWindows = [windowManager valueForKey:@"objectWindows"];
-    for (int i=0; i<[objectWindows count]; i++) {
-        id dict = [objectWindows nth:i];
-        if (dict == _selectionBox) {
-NSLog(@"skipping SelectionBox");
-            continue;
-        }
-        if (dict == x11dict) {
-NSLog(@"skipping *Desktop");
-            continue;
-        }
-        int x = [dict intValueForKey:@"x"];
-        int y = [dict intValueForKey:@"y"];
-        int w = [dict intValueForKey:@"w"];
-        int h = [dict intValueForKey:@"h"];
-        Int4 r2 = [Definitions rectWithX:x y:y w:w h:h];
-        if ([Definitions doesRect:r intersectRect:r2]) {
-            [dict setValue:@"1" forKey:@"isSelected"];
-            [dict setValue:@"1" forKey:@"needsRedraw"];
-        } else {
-            [dict setValue:nil forKey:@"isSelected"];
-            [dict setValue:@"1" forKey:@"needsRedraw"];
-        }
-    }
-}
-- (void)handleMouseUp:(id)event
-{
-NSLog(@"Desktop handleMouseUp");
-    if (_selectionBox) {
-        [_selectionBox setValue:@"1" forKey:@"shouldCloseWindow"];
-        [self setValue:nil forKey:@"selectionBox"];
-    }
 }
 @end
 
