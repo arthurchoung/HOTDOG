@@ -502,61 +502,6 @@ NSLog(@"lines %@", lines);
                 obj = [Definitions MacColorDrives];
             }
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "amigadir")) {
-            if (argc > 2) {
-                id filePath = nscstr(argv[2]);
-                if ([filePath isDirectory]) {
-                    chdir(argv[2]);
-                }
-            }
-            id object = [Definitions AmigaDir];
-            if (object) {
-                [Definitions runWindowManagerForObjectWithNoFrame:object];
-            }
-        } else if ((argc > 1) && !strcmp(argv[1], "macclassicdir")) {
-            if (argc > 2) {
-                id filePath = nscstr(argv[2]);
-                if ([filePath isDirectory]) {
-                    chdir(argv[2]);
-                }
-            }
-            id object = [Definitions MacClassicDir];
-            if (object) {
-                [Definitions runWindowManagerForObjectWithNoFrame:object];
-            }
-        } else if ((argc > 1) && !strcmp(argv[1], "maccolordir")) {
-            if (argc > 2) {
-                id filePath = nscstr(argv[2]);
-                if ([filePath isDirectory]) {
-                    chdir(argv[2]);
-                }
-            }
-            id object = [Definitions MacColorDir];
-            if (object) {
-                [Definitions runWindowManagerForObjectWithNoFrame:object];
-            }
-        } else if ((argc > 1) && !strcmp(argv[1], "macplatinumdir")) {
-            if (argc > 2) {
-                id filePath = nscstr(argv[2]);
-                if ([filePath isDirectory]) {
-                    chdir(argv[2]);
-                }
-            }
-            id object = [Definitions MacPlatinumDir];
-            if (object) {
-                [Definitions runWindowManagerForObjectWithNoFrame:object];
-            }
-        } else if ((argc > 1) && !strcmp(argv[1], "ataristdir")) {
-            if (argc > 2) {
-                id filePath = nscstr(argv[2]);
-                if ([filePath isDirectory]) {
-                    chdir(argv[2]);
-                }
-            }
-            id object = [Definitions AtariSTDir];
-            if (object) {
-                [Definitions runWindowManagerForObjectWithNoFrame:object];
-            }
         } else if ((argc > 1) && !strcmp(argv[1], "dir")) {
             if (argc > 2) {
                 id filePath = nscstr(argv[2]);
@@ -579,26 +524,17 @@ NSLog(@"lines %@", lines);
                     }
                 }
             } else if ([hotdogMode isEqual:@"amiga"]) {
-                obj = [Definitions AmigaDir];
+                obj = [Definitions AmigaDir:@"."];
             } else if ([hotdogMode isEqual:@"macclassic"]) {
-                obj = [Definitions MacClassicDir];
+                obj = [Definitions MacClassicDir:@"."];
             } else if ([hotdogMode isEqual:@"maccolor"]) {
-                obj = [Definitions MacColorDir];
+                obj = [Definitions MacColorDir:@"."];
             } else {
-                obj = [Definitions MacColorDir];
+                obj = [Definitions MacColorDir:@"."];
             }
             [Definitions runWindowManagerForObject:obj];
             if (clearNavigationStack) {
                 [[Definitions navigationStack] setValue:nil forKey:@"context"];
-            }
-        } else if ((argc > 1) && !strcmp(argv[1], "amigabuiltindir")) {
-            if (argc > 2) {
-                id name = nscstr(argv[2]);
-                id obj = [Definitions AmigaBuiltInDir:name];
-                [Definitions runWindowManagerForObjectWithNoFrame:obj];
-            } else {
-                id obj = [Definitions AmigaBuiltInDir:nil];
-                [Definitions runWindowManagerForObjectWithNoFrame:obj];
             }
         } else if ((argc > 1) && !strcmp(argv[1], "dialog")) {
             if (argc > 3) {
