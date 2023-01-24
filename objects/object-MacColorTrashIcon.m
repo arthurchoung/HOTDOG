@@ -312,11 +312,7 @@ static char *trashPixels =
 }
 - (void)handleOpen
 {
-    id cmd = nsarr();
-    [cmd addObject:@"hotdog"];
-    [cmd addObject:@"maccolordir"];
-    [cmd addObject:[Definitions homeDir:@"Trash"]];
-    [cmd runCommandInBackground];
+    [Definitions openMacColorDirForPath:[Definitions homeDir:@"Trash"]];
 }
 
 - (void)handleDragAndDrop:(id)obj
