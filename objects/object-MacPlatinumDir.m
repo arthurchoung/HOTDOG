@@ -984,10 +984,10 @@ static char *resizeSelectionVerticalPixels =
 
 
 @implementation Definitions(hkukgfdfthfnvbchjgfjygikghjghfjgfjdksfjksdkdjkfsdkjfjdksfjkfj)
-+ (id)MacPlatinumDir
++ (id)MacPlatinumDir:(id)path
 {
     id obj = [@"MacPlatinumDir" asInstance];
-    [obj setValue:[@"." asRealPath] forKey:@"title"];
+    [obj setValue:path forKey:@"path"];
     [obj updateDiskFreeText];
     return obj;
 }
@@ -1048,6 +1048,8 @@ static char *resizeSelectionVerticalPixels =
     int _selectionBoxRootY;
 
     id _dragX11Dict;
+
+    id _path;
 }
 @end
 @implementation MacPlatinumDir
@@ -1074,6 +1076,10 @@ static char *resizeSelectionVerticalPixels =
 }
 - (void)updateDiskFreeText
 {
+    if ([_path isDirectory]) {
+        chdir([_path UTF8String]);
+    }
+
     id cmd = nsarr();
     [cmd addObject:@"hotdog-getDiskUsage.pl"];
     id output = [[cmd runCommandAndReturnOutput] asString];
@@ -1097,8 +1103,12 @@ static char *resizeSelectionVerticalPixels =
 {
     return 360;
 }
-- (void)updateFromCurrentDirectory:(Int4)r
+- (void)updateDirectory:(Int4)r
 {
+    if ([_path isDirectory]) {
+        chdir([_path UTF8String]);
+    }
+
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
     [bitmap useGenevaFont];
     id arr = [@"." contentsOfDirectory];
@@ -1148,7 +1158,7 @@ static char *resizeSelectionVerticalPixels =
 
 - (void)handleBackgroundUpdate:(id)event
 {
-    time_t timestamp = [@"." fileModificationTimestamp];
+    time_t timestamp = [_path fileModificationTimestamp];
     if (timestamp != _timestamp) {
         _timestamp = 0;
     }
@@ -1172,8 +1182,8 @@ static char *resizeSelectionVerticalPixels =
 - (void)beginIteration:(id)event rect:(Int4)r
 {
     if (!_timestamp) {
-        _timestamp = [@"." fileModificationTimestamp];
-        [self updateFromCurrentDirectory:r];
+        _timestamp = [_path fileModificationTimestamp];
+        [self updateDirectory:r];
     }
 
     if ([_buttonDown isEqual:_buttonHover]) {
@@ -1401,9 +1411,12 @@ static char *resizeSelectionVerticalPixels =
     }
 
     if (_titleBarTextRect.w > 0) {
-        id text = _title;
+        id text = _path;
         if (!text) {
-            text = @"(no title)";
+            text = _title;
+            if (!text) {
+                text = @"(no title)";
+            }
         }
 
         [bitmap useChicagoFont];
@@ -1795,14 +1808,14 @@ static char *resizeSelectionVerticalPixels =
             gettimeofday(&tv, NULL);
             id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
             if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
+                if ([_path isDirectory]) {
+                    chdir([_path UTF8String]);
+                }
+
                 id filePath = [elt valueForKey:@"filePath"];
                 if ([filePath length]) {
                     if ([filePath isDirectory]) {
-                        id cmd = nsarr();
-                        [cmd addObject:@"hotdog"];
-                        [cmd addObject:@"macplatinumdir"];
-                        [cmd addObject:filePath];
-                        [cmd runCommandInBackground];
+                        [Definitions openMacPlatinumDirForPath:filePath];
                     } else {
                         id cmd = nsarr();
                         [cmd addObject:@"hotdog-open:.pl"];
@@ -2124,7 +2137,9 @@ static char *resizeSelectionVerticalPixels =
 - (void)handleMouseUp:(id)event
 {
     if ([_buttonDown isEqual:@"closeButton"] && [_buttonDown isEqual:_buttonHover]) {
-        exit(0);
+        id x11dict = [event valueForKey:@"x11dict"];
+        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        return;
     }
     if ([_buttonDown isEqual:@"maximizeButton"] && [_buttonDown isEqual:_buttonHover]) {
 /*
@@ -2151,17 +2166,17 @@ static char *resizeSelectionVerticalPixels =
             id underneathx11dict = [windowManager dictForObjectWindow:underneathWindow];
             id x11dict = [event valueForKey:@"x11dict"];
             if (underneathx11dict == x11dict) {
-                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
+//                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
             } else {
                 id object = [underneathx11dict valueForKey:@"object"];
                 if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
                     [object handleDragAndDrop:_dragX11Dict];
                 } else {
-                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
+//                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
                 }
             }
         } else {
-            [@"Dropped onto desktop" showAlert];
+//            [@"Dropped onto desktop" showAlert];
         }
 
         [_dragX11Dict setValue:@"1" forKey:@"shouldCloseWindow"];
@@ -2170,6 +2185,33 @@ static char *resizeSelectionVerticalPixels =
     [self setValue:nil forKey:@"buttonDown"];
     [self setValue:nil forKey:@"buttonHover"];
 }
+
+- (void)handleFocusInEvent:(id)event
+{
+NSLog(@"handleFocusInEvent");
+    if (!_path) {
+        return;
+    }
+
+    id windowManager = [event valueForKey:@"windowManager"];
+    id objectWindows = [windowManager valueForKey:@"objectWindows"];
+    for (int i=0; i<[objectWindows count]; i++) {
+        id elt = [objectWindows nth:i];
+        id object = [elt valueForKey:@"object"];
+        id className = [object className];
+        if ([className isEqual:@"MacColorComputerIcon"]) {
+            id path = [object valueForKey:@"path"];
+            if ([path isEqual:_path]) {
+                [elt setValue:@"1" forKey:@"isSelected"];
+                [elt setValue:@"1" forKey:@"needsRedraw"];
+                continue;
+            }
+        }
+        [elt setValue:nil forKey:@"isSelected"];
+        [elt setValue:@"1" forKey:@"needsRedraw"];
+    }
+}
+
 
 @end
 
