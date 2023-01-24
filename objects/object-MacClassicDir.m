@@ -1364,17 +1364,17 @@ static char *rightDisabledScrollBarPixels =
             id underneathx11dict = [windowManager dictForObjectWindow:underneathWindow];
             id x11dict = [event valueForKey:@"x11dict"];
             if (underneathx11dict == x11dict) {
-                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
+//                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
             } else {
                 id object = [underneathx11dict valueForKey:@"object"];
                 if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
                     [object handleDragAndDrop:_dragX11Dict];
                 } else {
-                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
+//                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
                 }
             }
         } else {
-            [@"Dropped onto desktop" showAlert];
+//            [@"Dropped onto desktop" showAlert];
         }
 
         [_dragX11Dict setValue:@"1" forKey:@"shouldCloseWindow"];
