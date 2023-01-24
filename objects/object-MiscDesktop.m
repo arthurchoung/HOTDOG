@@ -63,8 +63,8 @@ NSLog(@"windowManager %@", windowManager);
     [lines addObject:@"builtin:MacColorSoundIcon mountpoint:Sound"];
     [lines addObject:@"builtin:ManiacMansionHamsterIcon mountpoint:Hamster"];
     [lines addObject:@"builtin:ManiacMansionMicrowaveIcon mountpoint:Microwave"];
-    [lines addObject:@"builtin:ImpossibleMissionRobotIcon mountpoint:Robot-0"];
-    [lines addObject:@"builtin:RobotronRobotIcon mountpoint:Robot-1"];
+    [lines addObject:@"builtin:ImpossibleMissionRobotIcon mountpoint:Robot-10"];
+    [lines addObject:@"builtin:RobotronRobotIcon mountpoint:Robot-01"];
 
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
