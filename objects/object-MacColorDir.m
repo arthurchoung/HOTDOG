@@ -1395,7 +1395,7 @@ static char *disabledRightScrollBarBottomPixels =
                 id filePath = [elt valueForKey:@"filePath"];
                 if ([filePath length]) {
                     if ([filePath isDirectory]) {
-                        [Definitions openMacClassicDirForPath:filePath];
+                        [Definitions openMacColorDirForPath:filePath];
                     } else {
                         id cmd = nsarr();
                         [cmd addObject:@"hotdog-open:.pl"];
@@ -1745,17 +1745,17 @@ static char *disabledRightScrollBarBottomPixels =
             id underneathx11dict = [windowManager dictForObjectWindow:underneathWindow];
             id x11dict = [event valueForKey:@"x11dict"];
             if (underneathx11dict == x11dict) {
-                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
+//                [nsfmt(@"Dropped onto %@", x11dict) showAlert];
             } else {
                 id object = [underneathx11dict valueForKey:@"object"];
                 if ([object respondsToSelector:@selector(handleDragAndDrop:)]) {
                     [object handleDragAndDrop:_dragX11Dict];
                 } else {
-                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
+//                    [nsfmt(@"Dropped onto window %lu", underneathWindow) showAlert];
                 }
             }
         } else {
-            [@"Dropped onto desktop" showAlert];
+//            [@"Dropped onto desktop" showAlert];
         }
 
         [_dragX11Dict setValue:@"1" forKey:@"shouldCloseWindow"];
