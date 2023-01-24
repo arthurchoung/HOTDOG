@@ -528,12 +528,14 @@ static char *chatBubblePixels =
 
 @implementation Definitions(fjkldsjflkdslkfj)
 
-+ (int)drawChatBubbleInBitmap:(id)bitmap rect:(Int4)r text:(id)text
++ (Int4)drawChatBubbleInBitmap:(id)bitmap rect:(Int4)r text:(id)text
 {
-    return [Definitions drawChatBubbleInBitmap:bitmap rect:r text:text fgcolor:@"#000000" bgcolor:@"#ffffff" flipHorizontal:NO];
+    Int4 chatRect = [Definitions drawChatBubbleInBitmap:bitmap rect:r text:text fgcolor:@"#000000" bgcolor:@"#ffffff" flipHorizontal:NO flipVertical:NO];
+    return chatRect;
 }
 
-+ (int)drawChatBubbleInBitmap:(id)bitmap rect:(Int4)r text:(id)text fgcolor:(id)fgcolor bgcolor:(id)bgcolor flipHorizontal:(BOOL)flipHorizontal flipVertical:(BOOL)flipVertical
+
++ (Int4)drawChatBubbleInBitmap:(id)bitmap rect:(Int4)r text:(id)text fgcolor:(id)fgcolor bgcolor:(id)bgcolor flipHorizontal:(BOOL)flipHorizontal flipVertical:(BOOL)flipVertical
 {
     id palettestr = nsfmt(@"b %@\n. %@\n", fgcolor, bgcolor);
     char *palette = [palettestr UTF8String];
@@ -606,8 +608,9 @@ static char *chatBubblePixels =
     [bitmap setColor:fgcolor];
     [bitmap drawBitmapText:text x:textRect.x y:textRect.y];
 
-    return bubbleRect.h;
+    return bubbleRect;
 }
+
 
 @end
 
