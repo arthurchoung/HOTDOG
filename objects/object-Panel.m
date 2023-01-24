@@ -1067,8 +1067,8 @@ NSLog(@"waiting for input");
     r.x += 5;
     r.y = _cursorY;
     r.w -= 30;
-    int h = [Definitions drawChatBubbleInBitmap:_bitmap rect:r text:text fgcolor:fgcolor bgcolor:bgcolor flipHorizontal:NO flipVertical:YES];
-    _cursorY += h;
+    Int4 chatRect = [Definitions drawChatBubbleInBitmap:_bitmap rect:r text:text fgcolor:fgcolor bgcolor:bgcolor flipHorizontal:NO flipVertical:YES];
+    _cursorY += chatRect.h;
 }
 
 - (void)panelRightSideChatBubble:(id)text
@@ -1083,8 +1083,8 @@ NSLog(@"waiting for input");
     r.x += 25;
     r.y = _cursorY;
     r.w -= 30;
-    int h = [Definitions drawChatBubbleInBitmap:_bitmap rect:r text:text fgcolor:fgcolor bgcolor:bgcolor flipHorizontal:YES flipVertical:YES];
-    _cursorY += h;
+    Int4 chatRect = [Definitions drawChatBubbleInBitmap:_bitmap rect:r text:text fgcolor:fgcolor bgcolor:bgcolor flipHorizontal:YES flipVertical:YES];
+    _cursorY += chatRect.h;
 }
 
 - (void)handleMouseDown:(id)event
