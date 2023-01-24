@@ -184,14 +184,6 @@ static char *selectedTrashPixels =
 }
 @end
 @implementation MacPlatinumTrashIcon
-- (char *)x11WindowMaskCString
-{
-    return trashPixels;
-}
-- (char)x11WindowMaskChar
-{
-    return ' ';
-}
 - (int)preferredWidth
 {
     static int w = 0;
@@ -221,12 +213,16 @@ static char *selectedTrashPixels =
         }
     }
 
-    [bitmap setColor:@"black"];
-    [bitmap fillRect:r];
     if (hasFocus) {
         [bitmap drawCString:selectedTrashPixels palette:selectedTrashPalette x:r.x y:r.y];
     } else {
         [bitmap drawCString:trashPixels palette:trashPalette x:r.x y:r.y];
+    }
+
+    id windowManager = [@"windowManager" valueForKey];
+    unsigned long win = [[context valueForKey:@"window"] unsignedLongValue];
+    if (win) {
+        [windowManager addMaskToWindow:win bitmap:bitmap];
     }
 }
 
@@ -300,11 +296,7 @@ static char *selectedTrashPixels =
 }
 - (void)handleOpen
 {
-    id cmd = nsarr();
-    [cmd addObject:@"hotdog"];
-    [cmd addObject:@"macplatinumdir"];
-    [cmd addObject:[Definitions homeDir:@"Trash"]];
-    [cmd runCommandInBackground];
+    [Definitions openMacPlatinumDirForPath:[Definitions homeDir:@"Trash"]];
 }
 
 @end
