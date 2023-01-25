@@ -12,7 +12,6 @@ hotKey,displayName,messageForClick
 ,,
 ,AmigaDesktop,"['hotdog' 'desktop' 'AmigaDesktop']|runCommandInBackground"
 ,AmigaGuruMeditation,"['hotdog' 'noframe' 'AmigaGuruMeditation']|runCommandInBackground"
-,AmigaSay,"['hotdog' 'show' 'AmigaSay']|runCommandInBackground"
 ,AtariSTDesktop,"['hotdog' 'desktop' 'AtariSTDesktop']|runCommandInBackground"
 ,HotDogStandDesktop,"['hotdog' 'show' 'HotDogStandDesktop']|runCommandInBackground"
 ,MacClassicDesktop,"['hotdog' 'desktop' 'MacClassicDesktop']|runCommandInBackground"
