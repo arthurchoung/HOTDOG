@@ -136,10 +136,8 @@ static char *programGroupPixels =
         int textHeight = [bitmap bitmapHeightForText:_path];
         if (hasFocus || isSelected) {
             [bitmap setColor:@"black"];
-        } else {
-            [bitmap setColor:@"white"];
+            [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
         }
-        [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
         if (hasFocus || isSelected) {
             [bitmap setColor:@"white"];
         } else {

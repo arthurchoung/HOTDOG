@@ -133,10 +133,8 @@ static char *iconPixels =
         int textHeight = [bitmap bitmapHeightForText:_path];
         if (hasFocus) {
             [bitmap setColor:@"black"];
-        } else {
-            [bitmap setColor:@"white"];
+            [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
         }
-        [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
         if (hasFocus) {
             [bitmap setColor:@"white"];
         } else {
