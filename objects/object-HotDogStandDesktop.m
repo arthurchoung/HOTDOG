@@ -57,29 +57,11 @@ NSLog(@"windowManager %@", windowManager);
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
 
     id lines = nsarr();
-    [lines addObject:@"builtin:HotDogStandTerminalIcon mountpoint:Terminal"];
-    [lines addObject:@"builtin:HotDogStandFileManagerIcon mountpoint:File%20Manager"];
-    [lines addObject:@"builtin:HotDogStandControlPanelIcon mountpoint:Control%20Panel"];
-    [lines addObject:@"builtin:HotDogStandPrintManagerIcon mountpoint:Print%20Manager"];
-    [lines addObject:@"builtin:HotDogStandClipboardViewerIcon mountpoint:Clipboard%20Viewer"];
-    [lines addObject:@"builtin:HotDogStandMSDOSPromptIcon mountpoint:MS-DOS%20Prompt"];
-    [lines addObject:@"builtin:HotDogStandWindowsSetupIcon mountpoint:Windows%20Setup"];
-    [lines addObject:@"builtin:HotDogStandPIFEditorIcon mountpoint:PIF%20Editor"];
-    [lines addObject:@"builtin:HotDogStandWriteIcon mountpoint:Write"];
-    [lines addObject:@"builtin:HotDogStandPaintbrushIcon mountpoint:Paintbrush"];
-    [lines addObject:@"builtin:HotDogStandNotepadIcon mountpoint:Notepad"];
-    [lines addObject:@"builtin:HotDogStandRecorderIcon mountpoint:Recorder"];
-    [lines addObject:@"builtin:HotDogStandCardfileIcon mountpoint:Cardfile"];
-    [lines addObject:@"builtin:HotDogStandCalendarIcon mountpoint:Calendar"];
-    [lines addObject:@"builtin:HotDogStandCalculatorIcon mountpoint:Calculator"];
-    [lines addObject:@"builtin:HotDogStandClockIcon mountpoint:Clock"];
-    [lines addObject:@"builtin:HotDogStandObjectPackagerIcon mountpoint:Object%20Packager"];
-    [lines addObject:@"builtin:HotDogStandCharacterMapIcon mountpoint:Character%20Map"];
-    [lines addObject:@"builtin:HotDogStandMediaPlayerIcon mountpoint:Media%20Player"];
-    [lines addObject:@"builtin:HotDogStandSoundRecorderIcon mountpoint:Sound%20Recorder"];
-    [lines addObject:@"builtin:HotDogStandSolitaireIcon mountpoint:Solitaire"];
-    [lines addObject:@"builtin:HotDogStandMinesweeperIcon mountpoint:Minesweeper"];
     [lines addObject:@"builtin:HotDogStandProgramManagerIcon mountpoint:Program%20Manager"];
+    [lines addObject:@"builtin:HotDogStandProgramGroupIcon mountpoint:Main"];
+    [lines addObject:@"builtin:HotDogStandProgramGroupIcon mountpoint:Accessories"];
+    [lines addObject:@"builtin:HotDogStandProgramGroupIcon mountpoint:Games"];
+    [lines addObject:@"builtin:HotDogStandProgramGroupIcon mountpoint:Startup"];
 
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
