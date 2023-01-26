@@ -32,7 +32,7 @@ static id builtinMain =
 @"class:HotDogStandControlPanelIcon name:Control%20Panel x:120 y:20\n"
 @"class:HotDogStandPrintManagerIcon name:Print%20Manager x:220 y:20\n"
 @"class:HotDogStandClipboardViewerIcon name:Clipboard%20Viewer x:320 y:20\n"
-@"class:HotDogStandMSDOSPromptIcon name:MS-DOS%20Prompt x:440 y:20\n"
+@"class:HotDogStandMSDOSPromptIcon name:MS-DOS%20Prompt x:440 y:20 doubleClickCommand:hotdog-xterm.sh\n"
 @"class:HotDogStandWindowsSetupIcon name:Windows%20Setup x:20 y:80\n"
 @"class:HotDogStandPIFEditorIcon name:PIF%20Editor x:130 y:95\n"
 @"class:HotDogStandWriteIcon name:Read%20Me x:220 y:80\n"
@@ -54,7 +54,7 @@ static id builtinAccessories =
 @"class:HotDogStandSoundRecorderIcon name:Sound%20Recorder x:220 y:140\n"
 ;
 static id builtinGames =
-@"class:HotDogStandSolitaireIcon name:Solitaire x:20 y:20\n"
+@"class:HotDogStandSolitaireIcon name:Solitaire x:20 y:20 doubleClickCommand:hotdog%20show%20Spider\n"
 @"class:HotDogStandMinesweeperIcon name:Minesweeper x:100 y:20\n"
 ;
 
@@ -84,6 +84,7 @@ static id builtinGames =
             id name = [elt valueForKey:@"name"];
             int x = [elt intValueForKey:@"x"];
             int y = [elt intValueForKey:@"y"];
+            id doubleClickCommand = [[elt valueForKey:@"doubleClickCommand"] split];
 
             if (!className) {
                 continue;
@@ -100,6 +101,9 @@ static id builtinGames =
             [dict setValue:nsfmt(@"%d", w) forKey:@"w"];
             [dict setValue:nsfmt(@"%d", h) forKey:@"h"];
             [dict setValue:name forKey:@"filePath"];
+            if (doubleClickCommand) {
+                [dict setValue:doubleClickCommand forKey:@"doubleClickCommand"];
+            }
             [arr addObject:dict];
         }
         [obj setValue:arr forKey:@"array"];
@@ -366,7 +370,6 @@ static id builtinGames =
             gettimeofday(&tv, NULL);
             id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
             if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
-
                 id command = [elt valueForKey:@"doubleClickCommand"];
                 if (command) {
                     [command runCommandInBackground];
