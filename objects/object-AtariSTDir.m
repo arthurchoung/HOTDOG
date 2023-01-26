@@ -250,9 +250,9 @@ static char *activeVerticalScrollBarPixels =
     if (_diskUsedProcess) {
         [_diskUsedProcess handleFileDescriptor];
         id str = [[_diskUsedProcess valueForKey:@"data"] asString];
-        int total = [str intValueForKey:@"total"];
+        long total = [str longValueForKey:@"total"];
                 
-        str = nsfmt(@"%d", total*1024);
+        str = nsfmt(@"%ld", total*1024);
         [self setValue:str forKey:@"diskUsedText"];
     }
 }
