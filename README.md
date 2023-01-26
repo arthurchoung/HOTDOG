@@ -73,6 +73,14 @@ Some of the Perl scripts use the JSON module.
 
 ## Screenshots
 
+Mac Platinum 1280x1024
+
+![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
+
+Atari ST GEM 1280x1024
+
+![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
+
 Aqua 1280x1024
 
 ![Aqua Screenshot](Screenshots/hotdog-screenshot-aqua.png)
@@ -85,10 +93,6 @@ Hot Dog Stand 640x480
 
 ![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
-Atari ST GEM 1280x1024
-
-![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
-
 Mac Classic 640x480
 
 ![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
@@ -96,10 +100,6 @@ Mac Classic 640x480
 Mac Color 640x480
 
 ![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
-
-Mac Platinum 640x480
-
-![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
 
 ALSA Mixer Panel
 
