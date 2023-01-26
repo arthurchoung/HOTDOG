@@ -85,7 +85,7 @@ Hot Dog Stand 640x480
 
 ![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
-Atari ST GEM 640x480
+Atari ST GEM 1280x1024
 
 ![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
 
