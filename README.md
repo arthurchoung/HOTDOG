@@ -97,7 +97,7 @@ Aqua 1280x1024
 
 ![Aqua Screenshot](Screenshots/hotdog-screenshot-aqua.png)
 
-Hot Dog Stand 640x480
+Hot Dog Stand 1280x1024
 
 ![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
