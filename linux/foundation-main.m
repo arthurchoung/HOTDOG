@@ -502,6 +502,9 @@ NSLog(@"lines %@", lines);
                 obj = [Definitions MacColorDrives];
             }
             [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 2) && !strcmp(argv[1], "hotdogstandbuiltindir")) {
+            id obj = [Definitions HotDogStandBuiltInDir:nsfmt(@"%s", argv[2])];
+            [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "dir")) {
             if (argc > 2) {
                 id filePath = nscstr(argv[2]);
