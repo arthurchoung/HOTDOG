@@ -82,7 +82,7 @@ static char *programGroupPixels =
 @implementation HotDogStandProgramGroupIcon
 - (int)preferredWidth
 {
-    static int w = 0;
+    int w = 0;
     if (!w) {
         w = [Definitions widthForCString:programGroupPixels];
         if ([_path length]) {
@@ -98,7 +98,7 @@ static char *programGroupPixels =
 }
 - (int)preferredHeight
 {
-    static int h = 0;
+    int h = 0;
     if (!h) {
         h = [Definitions heightForCString:programGroupPixels];
         if ([_path length]) {
@@ -176,8 +176,10 @@ static char *programGroupPixels =
         for (int i=0; i<[objectWindows count]; i++) {
             id elt = [objectWindows nth:i];
             [elt setValue:nil forKey:@"isSelected"];
+            [elt setValue:@"1" forKey:@"needsRedraw"];
         }
         [x11dict setValue:@"1" forKey:@"isSelected"];
+        [x11dict setValue:@"1" forKey:@"needsRedraw"];
     }
 
     struct timeval tv;
@@ -293,7 +295,7 @@ static char *programGroupPixels =
     if ([_path length]) {
         id cmd = nsarr();
         [cmd addObject:@"hotdog"];
-        [cmd addObject:@"amigadir"];
+        [cmd addObject:@"hotdogstandbuiltindir"];
         [cmd addObject:_path];
         [cmd runCommandInBackground];
     }
