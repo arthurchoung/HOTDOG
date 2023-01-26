@@ -81,6 +81,10 @@ Mac Color 1280x1024
 
 ![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
 
+Mac Classic 1280x1024
+
+![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
+
 Atari ST GEM 1280x1024
 
 ![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
@@ -96,10 +100,6 @@ Amiga Screenshot 1280x1024
 Hot Dog Stand 640x480
 
 ![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
-
-Mac Classic 640x480
-
-![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
 
 ALSA Mixer Panel
 
