@@ -101,11 +101,6 @@ Hot Dog Stand 640x480
 
 ![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
-ALSA Mixer Panel
-
-$ hotdog-openALSAPanel.sh hw:0
-
-![ALSA Mixer Panel Screenshot](Screenshots/hotdog-screenshot-alsa-mixer-panel.png)
 
 ## HOTDOGbuntu -- Ubuntu compatibility
 
