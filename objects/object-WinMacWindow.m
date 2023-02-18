@@ -25,6 +25,48 @@
 
 #import "HOTDOG.h"
 
+@implementation Definitions(jfovcnvieiwejfklsdjfklsdjlkfjsdlkfjjfkdjsfksj)
++ (void)enterWin31Mode
+{
+    [Definitions enterWin31Mode:1];
+}
++ (void)enterWin31Mode:(int)scaling
+{
+    if (scaling < 1) {
+        scaling = 1;
+    }
+    [Definitions setValue:nsfmt(@"%d", scaling) forEnvironmentVariable:@"HOTDOG_SCALING"];
+
+    id windowManager = [@"windowManager" valueForKey];
+    [windowManager setFocusDict:nil];
+    [windowManager unparentAllWindows];
+
+    [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_HASFOCUSBORDERCOLOR"];
+    [Definitions setValue:@"blue" forEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
+    [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_NOFOCUSBORDERCOLOR"];
+    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_NOFOCUSTITLEBARCOLOR"];
+    [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_INACTIVETITLEBARTEXTCOLOR"];
+    [Definitions setValue:@"blue" forEnvironmentVariable:@"HOTDOG_HIGHLIGHTCOLOR"];
+    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_HIGHLIGHTEDTEXTCOLOR"];
+    [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_DESKTOPCOLOR"];
+    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_WINDOWBACKGROUNDCOLOR"];
+    [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_WINDOWTEXTCOLOR"];
+    [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_DESKTOPTEXTCOLOR"];
+    [Definitions setValue:@"winmac" forEnvironmentVariable:@"HOTDOG_MODE"];
+    [windowManager setBackgroundForCString:"b\n" palette:"b #c3c7cb\n"];
+    id rootWindowObject = [@"MacRootWindow" asInstance];
+    [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
+    [windowManager reparentAllWindows:@"WinMacWindow"];
+    [[windowManager valueForKey:@"menuBar"] setValue:@"1" forKey:@"shouldCloseWindow"];
+    int h = 20*scaling;
+    [windowManager setValue:nsfmt(@"%d", h) forKey:@"menuBarHeight"];
+    id menuBar = [windowManager openWindowForObject:[@"HotDogStandMenuBar" asInstance] x:0 y:0 w:[windowManager intValueForKey:@"rootWindowWidth"] h:h];
+    [windowManager setValue:menuBar forKey:@"menuBar"];
+    [windowManager setFocusDict:nil];
+    [@"hotdog-setupWindowManagerMode.sh" runCommandInBackground];
+}
+@end
+
 @implementation Definitions(jfovcnvieiwejfklsdjfklsdjlkfjsdlkfj)
 + (void)enterHotDogStandMode
 {
@@ -45,6 +87,13 @@
     [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
     [Definitions setValue:@"red" forEnvironmentVariable:@"HOTDOG_NOFOCUSBORDERCOLOR"];
     [Definitions setValue:@"red" forEnvironmentVariable:@"HOTDOG_NOFOCUSTITLEBARCOLOR"];
+    [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_INACTIVETITLEBARTEXTCOLOR"];
+    [Definitions setValue:@"blue" forEnvironmentVariable:@"HOTDOG_HIGHLIGHTCOLOR"];
+    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_HIGHLIGHTEDTEXTCOLOR"];
+    [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_DESKTOPCOLOR"];
+    [Definitions setValue:@"red" forEnvironmentVariable:@"HOTDOG_WINDOWBACKGROUNDCOLOR"];
+    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_WINDOWTEXTCOLOR"];
+    [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_DESKTOPTEXTCOLOR"];
     [Definitions setValue:@"winmac" forEnvironmentVariable:@"HOTDOG_MODE"];
     [windowManager setBackgroundForCString:"b\n" palette:"b #ffff00\n"];
     id rootWindowObject = [@"MacRootWindow" asInstance];
@@ -80,6 +129,13 @@
     [Definitions setValue:@"#ff8800" forEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
     [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_NOFOCUSBORDERCOLOR"];
     [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_NOFOCUSTITLEBARCOLOR"];
+    [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_INACTIVETITLEBARTEXTCOLOR"];
+    [Definitions setValue:@"blue" forEnvironmentVariable:@"HOTDOG_HIGHLIGHTCOLOR"];
+    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_HIGHLIGHTEDTEXTCOLOR"];
+    [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_DESKTOPCOLOR"];
+    [Definitions setValue:@"#0055aa" forEnvironmentVariable:@"HOTDOG_WINDOWBACKGROUNDCOLOR"];
+    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_WINDOWTEXTCOLOR"];
+    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_DESKTOPTEXTCOLOR"];
     [Definitions setValue:@"winmac" forEnvironmentVariable:@"HOTDOG_MODE"];
     [windowManager setBackgroundForCString:"b\n" palette:"b #0055aa\n"];
     id rootWindowObject = [@"MacRootWindow" asInstance];
@@ -434,6 +490,8 @@ static char *revertButtonDownPixels =
     id _scaledMinimizeButtonDownPixels;
     id _scaledMaximizeButtonDownPixels;
     id _scaledCloseButtonDownPixels;
+
+    id _inactiveTitleBarTextColor;
 }
 @end
 @implementation WinMacWindow
@@ -454,6 +512,8 @@ static char *revertButtonDownPixels =
         color3 = (color3) ? [color3 asRGBColor] : @"#ff0000";
         id color4 = [Definitions valueForEnvironmentVariable:@"HOTDOG_NOFOCUSTITLEBARCOLOR"];
         color4 = (color4) ? [color4 asRGBColor] : @"#ff0000";
+        id inactiveTitleBarTextColor = [[Definitions valueForEnvironmentVariable:@"HOTDOG_INACTIVETITLEBARTEXTCOLOR"] asRGBColor];
+        [self setValue:inactiveTitleBarTextColor forKey:@"inactiveTitleBarTextColor"];
         
         [self setValue:nsfmt(paletteFormat, color1, color2) forKey:@"hasFocusPalette"];
         [self setValue:nsfmt(paletteFormat, color3, color4) forKey:@"noFocusPalette"];
@@ -613,7 +673,11 @@ static char *revertButtonDownPixels =
                 [bitmap setColor:@"white"];
                 [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+7*_pixelScaling];
             } else {
-                [bitmap setColor:@"white"];
+                if (_inactiveTitleBarTextColor) {
+                    [bitmap setColor:_inactiveTitleBarTextColor];
+                } else {
+                    [bitmap setColor:@"white"];
+                }
                 [bitmap drawBitmapText:text x:textX y:_titleBarTextRect.y+7*_pixelScaling];
             }
         }

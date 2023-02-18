@@ -27,7 +27,7 @@
 
 #include <sys/time.h>
 
-static char *phonePalette =
+static char *iconPalette =
 ". #000000\n"
 "r #ff0000\n"
 "X #ffff00\n"
@@ -39,7 +39,7 @@ static char *phonePalette =
 "$ #C3C7CB\n"
 "% #ffffff\n"
 ;
-static char *phonePixels =
+static char *iconPixels =
 "           ................     \n"
 "          .$$$$$$$$$$$$$$%#.    \n"
 "         .%%%%%%%%%%%%%%%##.    \n"
@@ -87,7 +87,7 @@ static char *phonePixels =
 {
     static int w = 0;
     if (!w) {
-        w = [Definitions widthForCString:phonePixels];
+        w = [Definitions widthForCString:iconPixels];
         if ([_path length]) {
             id bitmap = [Definitions bitmapWithWidth:1 height:1];
             [bitmap useWinSystemFont];
@@ -103,7 +103,7 @@ static char *phonePixels =
 {
     static int h = 0;
     if (!h) {
-        h = [Definitions heightForCString:phonePixels];
+        h = [Definitions heightForCString:iconPixels];
         if ([_path length]) {
             id bitmap = [Definitions bitmapWithWidth:1 height:1];
             [bitmap useWinSystemFont];
@@ -128,21 +128,34 @@ static char *phonePixels =
         }
     }
 
-    int w = [Definitions widthForCString:phonePixels];
-    int h = [Definitions heightForCString:phonePixels];
+    int w = [Definitions widthForCString:iconPixels];
+    int h = [Definitions heightForCString:iconPixels];
 
-    [bitmap drawCString:phonePixels palette:phonePalette x:r.x+(r.w-w)/2 y:r.y];
+    [bitmap drawCString:iconPixels palette:iconPalette x:r.x+(r.w-w)/2 y:r.y];
 
     if ([_path length]) {
         [bitmap useWinSystemFont];
         int textWidth = [bitmap bitmapWidthForText:_path];
         int textHeight = [bitmap bitmapHeightForText:_path];
         if (hasFocus || isSelected) {
-            [bitmap setColor:@"black"];
+            id color = [Definitions valueForEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
+            if (color) {
+                [bitmap setColor:color];
+            } else {
+                [bitmap setColor:@"black"];
+            }
             [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
+            [bitmap setColor:@"white"];
+            [bitmap drawBitmapText:_path x:r.x+(r.w-textWidth)/2 y:r.y+h];
+        } else {
+            id color = [Definitions valueForEnvironmentVariable:@"HOTDOG_WINDOWTEXTCOLOR"];
+            if (color) {
+                [bitmap setColor:color];
+            } else {
+                [bitmap setColor:@"white"];
+            }
+            [bitmap drawBitmapText:_path x:r.x+(r.w-textWidth)/2 y:r.y+h];
         }
-        [bitmap setColor:@"white"];
-        [bitmap drawBitmapText:_path x:r.x+(r.w-textWidth)/2 y:r.y+h];
     }
 
     id windowManager = [@"windowManager" valueForKey];

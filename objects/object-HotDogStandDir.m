@@ -302,7 +302,12 @@ static id builtinGames =
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
     [bitmap useWinSystemFont];
-    [bitmap setColor:@"red"];
+    id windowBackgroundColor = [Definitions valueForEnvironmentVariable:@"HOTDOG_WINDOWBACKGROUNDCOLOR"];
+    if (windowBackgroundColor) {
+        [bitmap setColor:windowBackgroundColor];
+    } else {
+        [bitmap setColor:@"red"];
+    }
     [bitmap fillRect:r];
     [bitmap setColor:@"white"];
     for (int i=0; i<[_array count]; i++) {

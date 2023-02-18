@@ -138,13 +138,28 @@ static char *iconPixels =
         int textWidth = [bitmap bitmapWidthForText:_path];
         int textHeight = [bitmap bitmapHeightForText:_path];
         if (hasFocus) {
-            [bitmap setColor:@"black"];
+            id highlightColor = [Definitions valueForEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
+            if (highlightColor) {
+                [bitmap setColor:highlightColor];
+            } else {
+                [bitmap setColor:@"black"];
+            }
             [bitmap fillRectangleAtX:r.x+(r.w-textWidth)/2 y:r.y+h w:textWidth h:textHeight];
         }
         if (hasFocus) {
-            [bitmap setColor:@"white"];
+            id highlightedTextColor = [Definitions valueForEnvironmentVariable:@"HOTDOG_HIGHLIGHTEDTEXTCOLOR"];
+            if (highlightedTextColor) {
+                [bitmap setColor:highlightedTextColor];
+            } else {
+                [bitmap setColor:@"white"];
+            }
         } else {
-            [bitmap setColor:@"black"];
+            id windowTextColor = [Definitions valueForEnvironmentVariable:@"HOTDOG_DESKTOPTEXTCOLOR"];
+            if (windowTextColor) {
+                [bitmap setColor:windowTextColor];
+            } else {
+                [bitmap setColor:@"black"];
+            }
         }
         [bitmap drawBitmapText:_path x:r.x+(r.w-textWidth)/2 y:r.y+h];
     }
