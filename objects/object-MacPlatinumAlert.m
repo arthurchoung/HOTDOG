@@ -277,24 +277,6 @@ static char *okButtonRightPixels =
 "bbbo   \n"
 ;
 
-static char *cancelButtonPalette =
-"b #000000\n"
-". #111111\n"
-"X #222222\n"
-"o #333333\n"
-"O #444444\n"
-"+ #555555\n"
-"@ #666666\n"
-"# #777777\n"
-"$ #888888\n"
-"% #999999\n"
-"& #AAAAAA\n"
-"* #BBBBBB\n"
-"= #cccccc\n"
-"- #DDDDDD\n"
-"; #ffffff\n"
-;
-
 static char *okButtonDownPalette =
 "b #000000\n"
 ". #222222\n"
@@ -424,6 +406,25 @@ static char *okButtonDownRightPixels =
 "++++b  \n"
 "bbb.   \n"
 ;
+
+static char *cancelButtonPalette =
+"b #000000\n"
+". #111111\n"
+"X #222222\n"
+"o #333333\n"
+"O #444444\n"
+"+ #555555\n"
+"@ #666666\n"
+"# #777777\n"
+"$ #888888\n"
+"% #999999\n"
+"& #AAAAAA\n"
+"* #BBBBBB\n"
+"= #cccccc\n"
+"- #DDDDDD\n"
+"; #ffffff\n"
+;
+
 
 static char *cancelButtonPixels =
 "  XbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbX  \n"
