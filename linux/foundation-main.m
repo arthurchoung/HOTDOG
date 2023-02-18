@@ -560,6 +560,8 @@ NSLog(@"lines %@", lines);
                     classPrefix = "Mac";
                 } else if (!strcmp(argv[2], "aqua")) {
                     classPrefix = "Aqua";
+                } else if (!strcmp(argv[2], "macplatinum")) {
+                    classPrefix = "MacPlatinum";
                 }
                 [Definitions dialog:classPrefix :argc-3 :&argv[3]];
             }
