@@ -258,6 +258,8 @@ NSLog(@"lines %@", lines);
                     obj = [@"AquaAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"amiga"]) {
                     obj = [@"AmigaAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"macplatinum"]) {
+                    obj = [@"MacPlatinumAlert" asInstance];
                 } else {
                     obj = [@"MacAlert" asInstance];
                 }
@@ -294,6 +296,8 @@ NSLog(@"lines %@", lines);
                     obj = [@"AquaAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"amiga"]) {
                     obj = [@"AmigaAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"macplatinum"]) {
+                    obj = [@"MacPlatinumAlert" asInstance];
                 } else {
                     obj = [@"MacAlert" asInstance];
                 }
