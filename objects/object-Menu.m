@@ -41,6 +41,8 @@
         className = @"AquaMenu";
     } else if ([windowClassName isEqual:@"WinMacWindow"]) {
         className = @"HotDogStandMenu";
+    } else if ([windowClassName isEqual:@"MacPlatinumWindow"]) {
+        className = @"MacPlatinumMenu";
     }
     id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
