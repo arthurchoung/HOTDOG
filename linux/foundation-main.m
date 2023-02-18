@@ -428,6 +428,8 @@ NSLog(@"lines %@", lines);
                 obj = [@"AquaTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"amiga"]) {
                 obj = [@"AmigaTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"macplatinum"]) {
+                obj = [@"MacPlatinumTextFields" asInstance];
             } else {
                 obj = [@"MacTextFields" asInstance];
             }
@@ -473,6 +475,8 @@ NSLog(@"lines %@", lines);
                 obj = [@"AquaTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"amiga"]) {
                 obj = [@"AmigaTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"macplatinum"]) {
+                obj = [@"MacPlatinumTextFields" asInstance];
             } else {
                 obj = [@"MacTextFields" asInstance];
             }
