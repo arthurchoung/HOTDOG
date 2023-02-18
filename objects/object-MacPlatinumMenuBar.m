@@ -624,7 +624,7 @@ if (x+w+3 > monitorX+monitorWidth) {
                 Int4 r3 = r2;
                 r3.x += leftPadding;
                 r3.w -= leftPadding+rightPadding;
-                [bitmap setColor:@"black"];
+                [bitmap setColor:@"#333399"];
                 [bitmap fillRect:r2];
                 [bitmap setColor:@"white"];
                 if (i == flexibleIndex) {
@@ -645,7 +645,7 @@ if (x+w+3 > monitorX+monitorWidth) {
                         Int4 r3 = r2;
                         r3.x += leftPadding;
                         r3.w -= leftPadding+rightPadding;
-                        [bitmap setColor:@"black"];
+                        [bitmap setColor:@"#333399"];
                         [bitmap fillRect:r2];
                         pixels = [pixels asXYScaledPixels:_pixelScaling];
                         [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r3.x y:r3.y];
