@@ -34,6 +34,15 @@
     [obj setValue:@"Cancel" forKey:@"cancelText"];
     return obj;
 }
++ (id)testAquaAlertFocusOut
+{
+    id obj = [@"AquaAlert" asInstance];
+    [obj setValue:@"HJKLJDKLSFJDSKLF" forKey:@"text"];
+    [obj setValue:@"OK" forKey:@"okText"];
+    [obj setValue:@"Cancel" forKey:@"cancelText"];
+    [obj setValue:@"1" forKey:@"x11WaitForFocusOutThenClose"];
+    return obj;
+}
 + (id)AquaAlert:(id)text
 {
     id obj = [@"AquaAlert" asInstance];
@@ -226,6 +235,8 @@ static unsigned char blue_button_right[] = {
     int _dialogMode;
     int _x11WaitForFocusOutThenClose;
     int _returnKey;
+    int _didFocusOut;
+    int _backgroundCount;
 }
 @end
 
@@ -249,6 +260,17 @@ static unsigned char blue_button_right[] = {
         return textHeight;
     }
     return 288;
+}
+- (void)handleBackgroundUpdate:(id)event
+{
+    if (_x11WaitForFocusOutThenClose) {
+        if (_didFocusOut) {
+            if (_backgroundCount > 1) {
+                exit(0);
+            }
+        }
+    }
+    _backgroundCount++;
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
@@ -486,9 +508,11 @@ if (!rgb) {
 - (void)handleFocusOutEvent:(id)event
 {
     if (_x11WaitForFocusOutThenClose) {
-        id x11dict = [event valueForKey:@"x11dict"];
-        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        if (_backgroundCount > 1) {
+            exit(0);
+        }
     }
+    _didFocusOut = 1;
 }
 @end
 
