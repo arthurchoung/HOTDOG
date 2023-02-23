@@ -66,31 +66,6 @@ for custom in /mntinstaller/InstallerCustom* ; do
     cp -R -P -T $custom $ROOTDIR
 done
 
-# If running in Amiga mode then use the Amiga xdm config
-# Else If running in Aqua mode then use the Aqua xdm config
-# Else use the Mac xdm config
-
-echo "Setting /etc/X11/xinit/xinitrc..."
-echo -e -n "\r"
-
-rm $ROOTDIR/etc/X11/xinit/xinitrc
-if [ "x$HOTDOG_MODE" = "xamiga" ]; then
-    cp "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xresources~amiga" "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xresources"
-    cp "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xsetup~amiga" "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xsetup"
-    cp "$ROOTDIR/etc/X11/xdm/liveslak-xdm/slackware_traditional.svg~amiga" "$ROOTDIR/etc/X11/xdm/liveslak-xdm/slackware_traditional.svg"
-    ln -s xinitrc.hotdogamiga $ROOTDIR/etc/X11/xinit/xinitrc
-elif [ "x$HOTDOG_MODE" = "xaqua" ]; then
-    cp "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xresources~aqua" "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xresources"
-    cp "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xsetup~aqua" "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xsetup"
-    cp "$ROOTDIR/etc/X11/xdm/liveslak-xdm/slackware_traditional.svg~aqua" "$ROOTDIR/etc/X11/xdm/liveslak-xdm/slackware_traditional.svg"
-    ln -s xinitrc.hotdogaqua $ROOTDIR/etc/X11/xinit/xinitrc
-else
-    cp "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xresources~mac" "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xresources"
-    cp "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xsetup~mac" "$ROOTDIR/etc/X11/xdm/liveslak-xdm/Xsetup"
-    cp "$ROOTDIR/etc/X11/xdm/liveslak-xdm/slackware_traditional.svg~mac" "$ROOTDIR/etc/X11/xdm/liveslak-xdm/slackware_traditional.svg"
-    ln -s xinitrc.hotdogmac $ROOTDIR/etc/X11/xinit/xinitrc
-fi
-
 #
 # Done
 #
