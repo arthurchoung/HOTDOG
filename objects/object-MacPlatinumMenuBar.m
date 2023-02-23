@@ -644,6 +644,7 @@ if (x+w+3 > monitorX+monitorWidth) {
                     if (pixels) {
                         Int4 r3 = r2;
                         r3.x += leftPadding;
+                        r3.y -= 1;
                         r3.w -= leftPadding+rightPadding;
                         [bitmap setColor:@"#333399"];
                         [bitmap fillRect:r2];
@@ -679,6 +680,7 @@ if (x+w+3 > monitorX+monitorWidth) {
                     if (pixels) {
                         Int4 r3 = r2;
                         r3.x += leftPadding;
+                        r3.y -= 1;
                         r3.w -= leftPadding+rightPadding;
                         pixels = [pixels asXYScaledPixels:_pixelScaling];
                         [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:r3.x y:r3.y];
