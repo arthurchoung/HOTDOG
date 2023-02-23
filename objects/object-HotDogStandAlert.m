@@ -522,6 +522,15 @@ static char *textBorderRightPixels =
     [obj setValue:@"Cancel This is a long button" forKey:@"cancelText"];
     return obj;
 }
++ (id)testHotDogStandAlertFocusOut
+{
+    id obj = [@"HotDogStandAlert" asInstance];
+    [obj setValue:@"HJKLJDKLSFJDSKLF" forKey:@"text"];
+    [obj setValue:@"OK" forKey:@"okText"];
+    [obj setValue:@"Cancel This is a long button" forKey:@"cancelText"];
+    [obj setValue:@"1" forKey:@"x11WaitForFocusOutThenClose"];
+    return obj;
+}
 + (id)HotDogStandAlert:(id)text
 {
     id obj = [@"HotDogStandAlert" asInstance];
@@ -543,13 +552,15 @@ static char *textBorderRightPixels =
     int _x11WaitForFocusOutThenClose;
     int _returnKey;
     int _focusIndex;
+    int _didFocusOut;
+    int _backgroundCount;
 }
 @end
 
 @implementation HotDogStandAlert
 - (int)preferredWidth
 {
-    return 320;
+    return 480;
 }
 - (int)preferredHeight
 {
@@ -559,7 +570,7 @@ static char *textBorderRightPixels =
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
     [bitmap useWinSystemFont];
 
-    int textWidth = 320 - 89 - 18;
+    int textWidth = 480 - 89 - 18;
     id text = [bitmap fitBitmapString:_text width:textWidth];
     int textHeight = [bitmap bitmapHeightForText:text];
     int h = 24 + textHeight + 21 + 11 + 28;
@@ -568,11 +579,31 @@ static char *textBorderRightPixels =
     }
     return 192;
 }
+- (void)handleBackgroundUpdate:(id)event
+{
+    if (_x11WaitForFocusOutThenClose) {
+        if (_didFocusOut) {
+            if (_backgroundCount > 1) {
+                exit(0);
+            }
+        }
+    }
+    _backgroundCount++;
+}
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+    id windowBackgroundColor = [Definitions valueForEnvironmentVariable:@"HOTDOG_WINDOWBACKGROUNDCOLOR"];
+    if (!windowBackgroundColor) {
+        windowBackgroundColor = @"red";
+    }
+    id windowTextColor = [Definitions valueForEnvironmentVariable:@"HOTDOG_WINDOWTEXTCOLOR"];
+    if (!windowTextColor) {
+        windowTextColor = @"white";
+    }
+
     [bitmap useWinSystemFont];
 
-    [bitmap setColor:@"red"];
+    [bitmap setColor:windowBackgroundColor];
     [bitmap fillRect:r];
 
     char *palette = "b #000000\n. #ffffff\n";
@@ -582,7 +613,7 @@ static char *textBorderRightPixels =
 
     int textWidth = r.w - 89 - 18;
     id text = [bitmap fitBitmapString:_text width:textWidth];
-    [bitmap setColor:@"white"];
+    [bitmap setColor:windowTextColor];
     [bitmap drawBitmapText:text x:89 y:24];
 
     // metrics
@@ -809,9 +840,11 @@ NSLog(@"cancelButtonWidth %d cancelTextWidth %d", cancelButtonWidth, cancelTextW
 - (void)handleFocusOutEvent:(id)event
 {
     if (_x11WaitForFocusOutThenClose) {
-        id x11dict = [event valueForKey:@"x11dict"];
-        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        if (_backgroundCount > 1) {
+            exit(0);
+        }
     }
+    _didFocusOut = 1;
 }
 @end
 
