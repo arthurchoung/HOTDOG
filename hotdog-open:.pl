@@ -76,17 +76,22 @@ if ($path =~ m/\.csv$/i) {
 }
 
 if ($path =~ m/\.jpg$/i) {
-    system('chromium', $path);
+    system('feh', $path);
     exit 0;
 }
 
 if ($path =~ m/\.jpeg$/i) {
-    system('chromium', $path);
+    system('feh', $path);
     exit 0;
 }
 
 if ($path =~ m/\.png$/i) {
-    system('chromium', $path);
+    system('feh', $path);
+    exit 0;
+}
+
+if ($path =~ m/\.xpm$/i) {
+    system('feh', $path);
     exit 0;
 }
 
