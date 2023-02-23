@@ -29,7 +29,7 @@
 
 static id builtinMain =
 @"class:HotDogStandFileManagerIcon name:File%20Manager x:20 y:20\n"
-@"class:HotDogStandControlPanelIcon name:Control%20Panel x:120 y:20\n"
+@"class:HotDogStandControlPanelIcon name:Control%20Panel x:120 y:20 doubleClickCommand:hotdog%20hotdogstandbuiltindir%20ControlPanel\n"
 @"class:HotDogStandPrintManagerIcon name:Print%20Manager x:220 y:20\n"
 @"class:HotDogStandClipboardViewerIcon name:Clipboard%20Viewer x:320 y:20\n"
 @"class:HotDogStandMSDOSPromptIcon name:MS-DOS%20Prompt x:440 y:20 doubleClickCommand:hotdog-xterm.sh\n"
@@ -57,6 +57,22 @@ static id builtinGames =
 @"class:HotDogStandSolitaireIcon name:Solitaire x:20 y:20 doubleClickCommand:hotdog%20show%20Spider\n"
 @"class:HotDogStandMinesweeperIcon name:Minesweeper x:100 y:20\n"
 ;
+static id builtinControlPanel =
+@"class:HotDogStandColorIcon name:Color x:20 y:20\n"
+@"class:HotDogStandFontsIcon name:Fonts x:120 y:20\n"
+@"class:HotDogStandPortsIcon name:Ports x:220 y:20\n"
+@"class:HotDogStandMouseIcon name:Mouse x:320 y:20\n"
+@"class:HotDogStandDesktopIcon name:Desktop x:420 y:20\n"
+@"class:HotDogStandKeyboardIcon name:Keyboard x:520 y:20\n"
+@"class:HotDogStandPrintersIcon name:Printers x:20 y:80\n"
+@"class:HotDogStandInternationalIcon name:International x:120 y:80\n"
+@"class:HotDogStandDateTimeIcon name:Date/Time x:220 y:80\n"
+@"class:HotDogStandMIDIMapperIcon name:MIDI%20Mapper x:320 y:80\n"
+@"class:HotDogStandODBCIcon name:ODBC x:420 y:80\n"
+@"class:HotDogStand386EnhancedIcon name:386%20Enhanced x:500 y:80\n"
+@"class:HotDogStandDriversIcon name:Drivers x:20 y:140\n"
+@"class:HotDogStandSoundIcon name:Sound x:120 y:140\n"
+;
 
 @implementation Definitions(fmeiowfmkdsljvklxcmkljfkldfjkdsjfks)
 + (id)HotDogStandBuiltInDir:(id)builtin
@@ -73,6 +89,8 @@ static id builtinGames =
         str = builtinAccessories;
     } else if ([builtin isEqual:@"Games"]) {
         str = builtinGames;
+    } else if ([builtin isEqual:@"ControlPanel"]) {
+        str = builtinControlPanel;
     }
     
     if (str) {
