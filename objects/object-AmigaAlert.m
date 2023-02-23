@@ -34,6 +34,15 @@
     [obj setValue:@"Cancel" forKey:@"cancelText"];
     return obj;
 }
++ (id)testAmigaAlertFocusOut
+{
+    id obj = [@"AmigaAlert" asInstance];
+    [obj setValue:@"HJKLJDKLSFJDSKLF" forKey:@"text"];
+    [obj setValue:@"OK" forKey:@"okText"];
+    [obj setValue:@"Cancel" forKey:@"cancelText"];
+    [obj setValue:@"1" forKey:@"x11WaitForFocusOutThenClose"];
+    return obj;
+}
 + (id)AmigaAlert:(id)text
 {
     id obj = [@"AmigaAlert" asInstance];
@@ -54,6 +63,8 @@
     int _dialogMode;
     int _x11WaitForFocusOutThenClose;
     int _returnKey;
+    int _didFocusOut;
+    int _backgroundCount;
 }
 @end
 
@@ -77,6 +88,17 @@
         return textHeight;
     }
     return 288;
+}
+- (void)handleBackgroundUpdate:(id)event
+{
+    if (_x11WaitForFocusOutThenClose) {
+        if (_didFocusOut) {
+            if (_backgroundCount > 1) {
+                exit(0);
+            }
+        }
+    }
+    _backgroundCount++;
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
@@ -245,9 +267,11 @@
 - (void)handleFocusOutEvent:(id)event
 {
     if (_x11WaitForFocusOutThenClose) {
-        id x11dict = [event valueForKey:@"x11dict"];
-        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        if (_backgroundCount > 1) {
+            exit(0);
+        }
     }
+    _didFocusOut = 1;
 }
 @end
 
