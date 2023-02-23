@@ -537,6 +537,7 @@ if (x+w+4 > monitorX+monitorWidth) {
                     if (pixels) {
                         Int4 r3 = r2;
                         r3.x += leftPadding;
+                        r3.y -= 1;
                         r3.w -= leftPadding+rightPadding;
                         [bitmap setColor:@"black"];
                         [bitmap fillRect:r2];
@@ -572,6 +573,7 @@ if (x+w+4 > monitorX+monitorWidth) {
                     if (pixels) {
                         Int4 r3 = r2;
                         r3.x += leftPadding;
+                        r3.y -= 1;
                         r3.w -= leftPadding+rightPadding;
 //                        [bitmap setColorIntR:0x00 g:0x55 b:0xaa a:0xff];
                         pixels = [pixels asXYScaledPixels:_pixelScaling];
