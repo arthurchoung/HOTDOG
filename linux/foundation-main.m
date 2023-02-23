@@ -258,8 +258,12 @@ NSLog(@"lines %@", lines);
                     obj = [@"AquaAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"amiga"]) {
                     obj = [@"AmigaAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"atarist"]) {
+                    obj = [@"AtariSTAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"macplatinum"]) {
                     obj = [@"MacPlatinumAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"hotdogstand"]) {
+                    obj = [@"HotDogStandAlert" asInstance];
                 } else {
                     obj = [@"MacAlert" asInstance];
                 }
@@ -296,8 +300,12 @@ NSLog(@"lines %@", lines);
                     obj = [@"AquaAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"amiga"]) {
                     obj = [@"AmigaAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"atarist"]) {
+                    obj = [@"AtariSTAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"macplatinum"]) {
                     obj = [@"MacPlatinumAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"hotdogstand"]) {
+                    obj = [@"HotDogStandAlert" asInstance];
                 } else {
                     obj = [@"MacAlert" asInstance];
                 }
@@ -335,8 +343,12 @@ NSLog(@"lines %@", lines);
                 obj = [@"AquaChecklist" asInstance];
             } else if ([hotdogMode isEqual:@"amiga"]) {
                 obj = [@"AmigaChecklist" asInstance];
+            } else if ([hotdogMode isEqual:@"atarist"]) {
+                obj = [@"AtariSTChecklist" asInstance];
             } else if ([hotdogMode isEqual:@"macplatinum"]) {
                 obj = [@"MacPlatinumChecklist" asInstance];
+            } else if ([hotdogMode isEqual:@"hotdogstand"]) {
+                obj = [@"HotDogStandChecklist" asInstance];
             } else {
                 obj = [@"MacChecklist" asInstance];
             }
@@ -381,8 +393,12 @@ NSLog(@"lines %@", lines);
                 obj = [@"AquaRadio" asInstance];
             } else if ([hotdogMode isEqual:@"amiga"]) {
                 obj = [@"AmigaRadio" asInstance];
+            } else if ([hotdogMode isEqual:@"atarist"]) {
+                obj = [@"AtariSTRadio" asInstance];
             } else if ([hotdogMode isEqual:@"macplatinum"]) {
                 obj = [@"MacPlatinumRadio" asInstance];
+            } else if ([hotdogMode isEqual:@"hotdogstand"]) {
+                obj = [@"HotDogStandRadio" asInstance];
             } else {
                 obj = [@"MacRadio" asInstance];
             }
@@ -428,8 +444,12 @@ NSLog(@"lines %@", lines);
                 obj = [@"AquaTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"amiga"]) {
                 obj = [@"AmigaTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"atarist"]) {
+                obj = [@"AtariSTTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"macplatinum"]) {
                 obj = [@"MacPlatinumTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"hotdogstand"]) {
+                obj = [@"HotDogStandTextFields" asInstance];
             } else {
                 obj = [@"MacTextFields" asInstance];
             }
@@ -475,8 +495,12 @@ NSLog(@"lines %@", lines);
                 obj = [@"AquaTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"amiga"]) {
                 obj = [@"AmigaTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"atarist"]) {
+                obj = [@"AtariSTTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"macplatinum"]) {
                 obj = [@"MacPlatinumTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"hotdogstand"]) {
+                obj = [@"HotDogStandTextFields" asInstance];
             } else {
                 obj = [@"MacTextFields" asInstance];
             }
@@ -562,6 +586,10 @@ NSLog(@"lines %@", lines);
                     classPrefix = "Aqua";
                 } else if (!strcmp(argv[2], "macplatinum")) {
                     classPrefix = "MacPlatinum";
+                } else if (!strcmp(argv[2], "hotdogstand")) {
+                    classPrefix = "HotDogStand";
+                } else if (!strcmp(argv[2], "atarist")) {
+                    classPrefix = "AtariST";
                 }
                 [Definitions dialog:classPrefix :argc-3 :&argv[3]];
             }
