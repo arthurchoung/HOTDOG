@@ -174,7 +174,7 @@ static char *checkbox_down_pixels =
         }
         _rect[i].x = x;
         _rect[i].y = y;
-        text = [bitmap fitBitmapString:text width:r.w-checkboxWidth-10-(r.x-x)];
+        text = [bitmap fitBitmapString:text width:r.w-checkboxWidth-10-(x-r.x)-20];
         int textWidth = [bitmap bitmapWidthForText:text];
         int textHeight = [bitmap bitmapHeightForText:text];
         _rect[i].w = checkboxWidth+10+textWidth;
