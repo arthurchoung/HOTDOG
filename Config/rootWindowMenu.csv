@@ -28,5 +28,7 @@ hotKey,displayName,messageForClick
 ,Enter Atari ST Mode x2,"windowManager|setValue:'enterAtariSTMode:2' forKey:'pendingMessage'"
 ,Enter Aqua Mode,"windowManager|setValue:'enterAquaMode' forKey:'pendingMessage'"
 ,Enter Aqua Mode x2,"windowManager|setValue:'enterAquaMode:2' forKey:'pendingMessage'"
+,Enter Windows 3.1 Mode,"windowManager|setValue:'enterWin31Mode' forKey:'pendingMessage'"
+,Enter Windows 3.1 Mode x2,"windowManager|setValue:'enterWin31Mode:2' forKey:'pendingMessage'"
 ,Enter WinMac Mode,"windowManager|setValue:'enterWinMacMode' forKey:'pendingMessage'"
 ,Enter WinMac Mode x2,"windowManager|setValue:'enterWinMacMode:2' forKey:'pendingMessage'"
