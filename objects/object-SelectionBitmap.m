@@ -107,6 +107,7 @@
 
     return newx11dict;
 }
+@end
 
 @interface SelectionBitmap : IvarObject
 {
