@@ -205,9 +205,19 @@ static char *activeVerticalScrollBarPixels =
 
     id _path;
     id _previousPaths;
+
+    int _HOTDOGNOFRAME;
 }
 @end
 @implementation AtariSTDir
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _HOTDOGNOFRAME = 1;
+    }
+    return self;
+}
 - (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
 {
     static int points[5];
