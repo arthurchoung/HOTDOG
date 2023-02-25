@@ -11,7 +11,7 @@ hotKey,displayName,messageForClick
 ,"Audio Panel","['hotdog-openAudioPanel.sh']|runCommandInBackground"
 ,,
 ,AmigaDesktop,"['hotdog' 'desktop' 'AmigaDesktop']|runCommandInBackground"
-,AmigaGuruMeditation,"['hotdog' 'noframe' 'AmigaGuruMeditation']|runCommandInBackground"
+,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
 ,AtariSTDesktop,"['hotdog' 'desktop' 'AtariSTDesktop']|runCommandInBackground"
 ,HotDogStandDesktop,"['hotdog' 'show' 'HotDogStandDesktop']|runCommandInBackground"
 ,MacClassicDesktop,"['hotdog' 'desktop' 'MacClassicDesktop']|runCommandInBackground"
