@@ -505,48 +505,22 @@ NSLog(@"windowManager setNilValueForKey");
 NSLog(@"unable to setup window manager");
 exit(0);
     }
-    id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h];
-    [windowManager runLoop];
-}
-+ (void)runWindowManagerForObjectWithNoFrame:(id)object
-{
-    int w = 640-3;
-    int h = 0;
-    if ([object respondsToSelector:@selector(preferredWidth)]) {
-        int preferredWidth = [object preferredWidth];
-        if (preferredWidth) {
-            w = preferredWidth;
-        }
-    }
-    if ([object respondsToSelector:@selector(preferredHeight)]) {
-        int preferredHeight = [object preferredHeight];
-        if (preferredHeight) {
-            h = preferredHeight;
-        }
-    }
-
-    [Definitions runWindowManagerForObjectWithNoFrame:object x:0 y:0 w:w h:h];
-}
-+ (void)runWindowManagerForObjectWithNoFrame:(id)object x:(int)x y:(int)y w:(int)w h:(int)h
-{
-    id windowManager = [@"WindowManager" asInstance];
-    [windowManager setAsValueForKey:@"windowManager"];
-    if (![windowManager setupX11]) {
-NSLog(@"unable to setup window manager");
-exit(0);
-    }
-    id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
-    if (dict) {
-        if ([object respondsToSelector:@selector(x11WindowMaskCString)]) {
-            if ([object respondsToSelector:@selector(x11WindowMaskChar)]) {
-                char *cstr = [object x11WindowMaskCString];
-                char c = [object x11WindowMaskChar];
-                Window win = [[dict valueForKey:@"window"] unsignedLongValue];
-                [windowManager addMaskToWindow:win cString:cstr c:c];
+    int HOTDOGNOFRAME = [object intValueForKey:@"HOTDOGNOFRAME"];
+    if (HOTDOGNOFRAME) {
+        id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+        if (dict) {
+            if ([object respondsToSelector:@selector(x11WindowMaskCString)]) {
+                if ([object respondsToSelector:@selector(x11WindowMaskChar)]) {
+                    char *cstr = [object x11WindowMaskCString];
+                    char c = [object x11WindowMaskChar];
+                    Window win = [[dict valueForKey:@"window"] unsignedLongValue];
+                    [windowManager addMaskToWindow:win cString:cstr c:c];
+                }
             }
         }
+    } else {
+        id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h];
     }
-        
     [windowManager runLoop];
 }
 + (void)runWindowManagerForObject:(id)object propertyName:(char *)propertyName
