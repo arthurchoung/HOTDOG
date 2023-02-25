@@ -1050,9 +1050,19 @@ static char *resizeSelectionVerticalPixels =
     id _dragX11Dict;
 
     id _path;
+
+    int _HOTDOGNOFRAME;
 }
 @end
 @implementation MacPlatinumDir
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _HOTDOGNOFRAME = 1;
+    }
+    return self;
+}
 - (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
 {
     static int points[9];
