@@ -506,9 +506,19 @@ static char *verticalScrollBarBottom =
     id _dragX11Dict;
 
     id _path;
+
+    int _HOTDOGNOFRAME;
 }
 @end
 @implementation AmigaDir
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _HOTDOGNOFRAME = 1;
+    }
+    return self;
+}
 - (void)updateDiskFreePct
 {
     if ([_path isDirectory]) {
