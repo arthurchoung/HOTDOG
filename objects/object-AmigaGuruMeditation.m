@@ -14,9 +14,18 @@
 {
     int _iteration;
     id _text;
+    int _HOTDOGNOFRAME;
 }
 @end
 @implementation AmigaGuruMeditation
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _HOTDOGNOFRAME = 1;
+    }
+    return self;
+}
 - (int)preferredWidth
 {
     id bitmap = [[Definitions bitmapWithWidth:1 height:1] autorelease];
