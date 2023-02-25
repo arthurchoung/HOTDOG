@@ -125,18 +125,6 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             if (object) {
                 [Definitions runWindowManagerForObject:object];
             }
-        } else if ((argc > 1) && !strcmp(argv[1], "noframe")) {
-            id args = nsarr();
-            for (int i=2; i<argc; i++) {
-                id str = nscstr(argv[i]);
-                [args addObject:str];
-            }
-            id message = [args join:@" "];
-//NSLog(@"message %@", message);
-            id object = [nsdict() evaluateMessage:message];
-            if (object) {
-                [Definitions runWindowManagerForObjectWithNoFrame:object];
-            }
         } else if ((argc > 2) && !strcmp(argv[1], "windowproperty")) {
             char *propertyName = argv[2];
             id args = nsarr();
