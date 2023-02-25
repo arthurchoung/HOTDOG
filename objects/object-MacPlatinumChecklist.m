@@ -706,9 +706,38 @@ static char *cancelButtonDownRightPixels =
     Int4 _cancelRect;
     id _okText;
     id _cancelText;
+    int _HOTDOGNOFRAME;
+    int _buttonDownX;
+    int _buttonDownY;
 }
 @end
 @implementation MacPlatinumChecklist
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _HOTDOGNOFRAME = 1;
+    }
+    return self;
+}
+- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
+{
+    static int points[9];
+    points[0] = 9; // length of array including this number
+
+    points[1] = 0; // lower left corner
+    points[2] = h-1;
+
+    points[3] = 1; // lower left corner
+    points[4] = h-1;
+
+    points[5] = w-1; // upper right corner
+    points[6] = 0;
+
+    points[7] = w-1; // upper right corner
+    points[8] = 1;
+    return points;
+}
 - (BOOL)getCheckedForIndex:(int)index
 {
     if ((index >= 0) && (index < MAX_CHECKBOXES)) {
@@ -862,6 +891,13 @@ static char *cancelButtonDownRightPixels =
 }
 - (void)handleMouseDown:(id)event
 {
+    {
+        id x11dict = [event valueForKey:@"x11dict"];
+        unsigned long win = [[x11dict valueForKey:@"window"] unsignedLongValue];
+        id windowManager = [@"windowManager" valueForKey];
+        [windowManager XRaiseWindow:win];
+    }
+
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
     if (_okText && [Definitions isX:mouseX y:mouseY insideRect:_okRect]) {
@@ -881,11 +917,29 @@ static char *cancelButtonDownRightPixels =
             return;
         }
     }
-    _down = 0;
+    _down = 'b';
     _hover = 0;
+    _buttonDownX = mouseX;
+    _buttonDownY = mouseY;
 }
 - (void)handleMouseMoved:(id)event
 {
+    if (_down == 'b') {
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+        id dict = [event valueForKey:@"x11dict"];
+
+        int newX = mouseRootX - _buttonDownX;
+        int newY = mouseRootY - _buttonDownY;
+
+        [dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+        [dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+        [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        return;
+    }
+
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
     if (_okText && [Definitions isX:mouseX y:mouseY insideRect:_okRect]) {
