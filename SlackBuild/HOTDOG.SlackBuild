@@ -23,8 +23,8 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=HOTDOG
-VERSION=${VERSION:-20230223}	# replace with version of program
-BUILD=${BUILD:-6}
+VERSION=${VERSION:-20230225}	# replace with version of program
+BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}		# the "_SBo" is required
 
 # Automatically determine the architecture we're building on:
@@ -80,7 +80,7 @@ mkdir -p $PKG/usr/bin
 find hotdog* -executable -type f -exec cp -a {} $PKG/usr/bin \;
 # Configuration files end up in /etc/HOTDOG
 mkdir -p $PKG/etc/HOTDOG
-cp -a Config Sounds Wallpaper $PKG/etc/HOTDOG
+cp -a Config HomeScreen Sounds Wallpaper $PKG/etc/HOTDOG
 mkdir -p $PKG/etc/HOTDOG/Desktop
 mkdir -p $PKG/etc/HOTDOG/Temp
 chmod 1777 $PKG/etc/HOTDOG/Temp
