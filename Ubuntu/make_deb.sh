@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PRGNAM="HOTDOGbuntu"
-VERSION="20230224"
+VERSION="20230225"
 SRC=".."
 PKG="${PRGNAM}_${VERSION}_amd64"
 
@@ -10,7 +10,7 @@ mkdir -p $PKG/usr/bin
 find $SRC/hotdog* -executable -type f -exec cp -a {} $PKG/usr/bin \;
 # Configuration files end up in /etc/HOTDOG
 mkdir -p $PKG/etc/HOTDOG
-cp -a $SRC/Config $SRC/Sounds $SRC/Wallpaper $PKG/etc/HOTDOG
+cp -a $SRC/Config $SRC/HomeScreen $SRC/Sounds $SRC/Wallpaper $PKG/etc/HOTDOG
 mkdir -p $PKG/etc/HOTDOG/Desktop
 mkdir -p $PKG/etc/HOTDOG/Temp
 chmod 1777 $PKG/etc/HOTDOG/Temp
