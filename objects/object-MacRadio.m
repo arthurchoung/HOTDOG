@@ -97,9 +97,20 @@ static char *radio_down_pixels =
     Int4 _cancelRect;
     id _okText;
     id _cancelText;
+    int _HOTDOGNOFRAME;
+    int _buttonDownX;
+    int _buttonDownY;
 }
 @end
 @implementation MacRadio
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _HOTDOGNOFRAME = 1;
+    }
+    return self;
+}
 - (int)preferredWidth
 {
     return 640;
@@ -226,6 +237,13 @@ static char *radio_down_pixels =
 }
 - (void)handleMouseDown:(id)event
 {
+    {
+        id x11dict = [event valueForKey:@"x11dict"];
+        unsigned long win = [[x11dict valueForKey:@"window"] unsignedLongValue];
+        id windowManager = [@"windowManager" valueForKey];
+        [windowManager XRaiseWindow:win];
+    }
+
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
     if (_okText && [Definitions isX:mouseX y:mouseY insideRect:_okRect]) {
@@ -245,11 +263,29 @@ static char *radio_down_pixels =
             return;
         }
     }
-    _down = 0;
+    _down = 'b';
     _hover = 0;
+    _buttonDownX = mouseX;
+    _buttonDownY = mouseY;
 }
 - (void)handleMouseMoved:(id)event
 {
+    if (_down == 'b') {
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+        id dict = [event valueForKey:@"x11dict"];
+
+        int newX = mouseRootX - _buttonDownX;
+        int newY = mouseRootY - _buttonDownY;
+
+        [dict setValue:nsfmt(@"%d", newX) forKey:@"x"];
+        [dict setValue:nsfmt(@"%d", newY) forKey:@"y"];
+
+        [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        return;
+    }
+
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
     if (_okText && [Definitions isX:mouseX y:mouseY insideRect:_okRect]) {
