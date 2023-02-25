@@ -571,6 +571,7 @@ static char *moveWindowWhitePixels =
     int _height;
     int _buttonDownX;
     int _buttonDownY;
+    int _HOTDOGNOFRAME;
 }
 @end
 @implementation Calculator
@@ -578,6 +579,7 @@ static char *moveWindowWhitePixels =
 {
     self = [super init];
     if (self) {
+        _HOTDOGNOFRAME = 1;
         _width = [Definitions widthForCString:calculatorPixels];
         _height = [Definitions heightForCString:calculatorPixels];
         [self setValue:[Definitions bitmapWithWidth:_width height:_height] forKey:@"bitmap"];
