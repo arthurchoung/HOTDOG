@@ -27,6 +27,60 @@
 
 static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
+static id fileMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"New Folder\",\"'New Folder'|showAlert\"\n"
+@",\"Open\",\"1\"\n"
+@",\"Close Window\",\"1\"\n"
+@",,\n"
+@",\"Duplicate\",\"1\"\n"
+@",,\n"
+@",\"Find...\",\"1\"\n"
+@",\"Search Internet...\",\"1\"\n"
+;
+
+static id editMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Cut\",\"1\"\n"
+@",\"Copy\",\"1\"\n"
+@",\"Paste\",\"1\"\n"
+@",,\n"
+@",\"Preferences...\",\"1\"\n"
+;
+
+static id viewMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"as Icons\",\"1\"\n"
+@",\"as Buttons\",\"1\"\n"
+@",\"as List\",\"1\"\n"
+;
+
+static id windowMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Desktop\",\"1\"\n"
+@",,\n"
+;
+
+static id specialMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Empty Trash...\",\"1\"\n"
+@",,\n"
+@",\"Eject\",\"1\"\n"
+@",,\n"
+@",\"Shut Down\",\"1\"\n"
+;
+
+static id helpMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Help Center\",\"1\"\n"
+@",,\n"
+@",\"Show Balloons\",\"1\"\n"
+@",,\n"
+@",\"Mac Help\",\"1\"\n"
+;
+
+
+
 @implementation Definitions(fmekwljfkdsjfksdmfklsdmfklsdmklfmlskdkffjdskfjksdj)
 + (id)getMacPlatinumDirForPath:(id)path
 {
@@ -105,6 +159,35 @@ exit(1);
 }
 @end
 @implementation MacPlatinumDesktop
+- (id)generateAppMenuArray
+{
+    id fileMenu = [[fileMenuCSV parseCSVFromString] asMenu];
+    [fileMenu setValue:@"File" forKey:@"title"];
+    [fileMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id editMenu = [[editMenuCSV parseCSVFromString] asMenu];
+    [editMenu setValue:@"Edit" forKey:@"title"];
+    [editMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id viewMenu = [[viewMenuCSV parseCSVFromString] asMenu];
+    [viewMenu setValue:@"View" forKey:@"title"];
+    [viewMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id windowMenu = [[windowMenuCSV parseCSVFromString] asMenu];
+    [windowMenu setValue:@"Window" forKey:@"title"];
+    [windowMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id specialMenu = [[specialMenuCSV parseCSVFromString] asMenu];
+    [specialMenu setValue:@"Special" forKey:@"title"];
+    [specialMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id helpMenu = [[helpMenuCSV parseCSVFromString] asMenu];
+    [helpMenu setValue:@"Window" forKey:@"title"];
+    [helpMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id results = nsarr();
+    [results addObject:fileMenu];
+    [results addObject:editMenu];
+    [results addObject:viewMenu];
+    [results addObject:windowMenu];
+    [results addObject:specialMenu];
+    [results addObject:helpMenu];
+    return results;
+}
 - (int)fileDescriptor
 {
     if (_observer) {
