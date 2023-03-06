@@ -505,9 +505,20 @@ NSLog(@"windowManager setNilValueForKey");
 NSLog(@"unable to setup window manager");
 exit(0);
     }
+
+    unsigned long appMenuWindow = 0;
+    if ([object respondsToSelector:@selector(generateAppMenuArray)]) {
+        id appMenuArray = [object generateAppMenuArray];
+        if (appMenuArray) {
+            appMenuWindow = [windowManager openAppMenuWindowsForArray:appMenuArray];
+        }
+    }
+
+
+    id dict = nil;
     int HOTDOGNOFRAME = [object intValueForKey:@"HOTDOGNOFRAME"];
     if (HOTDOGNOFRAME) {
-        id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+        dict = [windowManager openWindowForObject:object x:x y:y w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
         if (dict) {
             if ([object respondsToSelector:@selector(x11WindowMaskCString)]) {
                 if ([object respondsToSelector:@selector(x11WindowMaskChar)]) {
@@ -519,7 +530,11 @@ exit(0);
             }
         }
     } else {
-        id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h];
+        dict = [windowManager openWindowForObject:object x:x y:y w:w h:h];
+    }
+    if (dict && appMenuWindow) {
+        unsigned long win = [dict unsignedLongValueForKey:@"window"];
+        [windowManager XChangeProperty:win name:"HOTDOGAPPMENUHEAD" str:nsfmt(@"%lu", appMenuWindow)];
     }
     [windowManager runLoop];
 }
@@ -550,7 +565,21 @@ exit(0);
 NSLog(@"unable to setup window manager");
 exit(0);
     }
+
+    unsigned long appMenuWindow = 0;
+    if ([object respondsToSelector:@selector(generateAppMenuArray)]) {
+        id appMenuArray = [object generateAppMenuArray];
+        if (appMenuArray) {
+            appMenuWindow = [windowManager openAppMenuWindowsForArray:appMenuArray];
+        }
+    }
+
     id dict = [windowManager openWindowForObject:object x:x y:y w:w h:h overrideRedirect:NO propertyName:propertyName];
+
+    if (dict && appMenuWindow) {
+        unsigned long win = [dict unsignedLongValueForKey:@"window"];
+        [windowManager XChangeProperty:win name:"HOTDOGAPPMENUHEAD" str:nsfmt(@"%lu", appMenuWindow)];
+    }
         
     [windowManager runLoop];
 }
@@ -610,6 +639,8 @@ exit(0);
     Window _focusInEventWindow;
 
     Window _desktopWindow;
+
+    id _focusAppMenu;
 }
 @end
 @implementation WindowManager
@@ -1495,6 +1526,19 @@ if ([monitor intValueForKey:@"height"] == 768) {
 - (void)setFocusDict:(id)dict raiseWindow:(BOOL)raiseWindow setInputFocus:(BOOL)setInputFocus
 {
 NSLog(@"setFocusDict:%@", dict);
+    {
+        id childWindow = [dict valueForKey:@"childWindow"];
+        if (childWindow) {
+            id arr = [self getAppMenuForWindow:[childWindow unsignedLongValue]];
+            [self setValue:arr forKey:@"focusAppMenu"];
+            id menuBar = [_menuBar valueForKey:@"object"];
+            id oldArray = [menuBar valueForKey:@"array"];
+            if (oldArray) {
+                id newArray = [self incorporateFocusAppMenu:oldArray];
+                [menuBar setValue:newArray forKey:@"array"];
+            }
+        }
+    }
     if (!dict) {
         dict = _menuBar;
     }
@@ -1650,7 +1694,6 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                         [elt setValue:@"1" forKey:@"needsRedraw"];
                         tv.tv_sec = 0;
                         tv.tv_usec = 0;
-                        break;
                     }
                 }
             }
@@ -2347,6 +2390,20 @@ NSLog(@"handleX11UnmapNotify e->event %x e->window %x", e->event, e->window);
             }
         }
     }
+
+    // For menu bar
+    {
+        id object = [_menuBar valueForKey:@"object"];
+        if (object) {
+            unsigned long win = [object unsignedLongValueForKey:@"menuWindowWaitForUnmapNotify"];
+            if (win) {
+                if (e->window == win) {
+                    [object setValue:@"0" forKey:@"menuWindowWaitForUnmapNotify"];
+                    [_menuBar setValue:@"1" forKey:@"needsRedraw"];
+                }
+            }
+        }
+    }
 }
 
 
@@ -2808,6 +2865,81 @@ NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e-
 {
     XStoreName(_display, win, [name UTF8String]);
 }
+- (void)XMapWindow:(unsigned long)win
+{
+    XMapWindow(_display, win);
+}
+- (void)XUnmapWindow:(unsigned long)win
+{
+    XUnmapWindow(_display, win);
+}
+- (void)XSendButtonPressEvent:(unsigned long)win button:(int)button
+{
+    XButtonEvent e;
+    memset(&e, 0, sizeof(XButtonEvent));
+    e.type = ButtonPress;
+    e.display = _display;
+    e.window = win;
+    e.root = _rootWindow;
+    e.time = CurrentTime;
+    e.x = 0;
+    e.y = 0;
+    e.x_root = 0;
+    e.y_root = 0;
+    e.button = button;
+    e.same_screen = True;
+    XSendEvent(_display, win, True, ButtonPressMask, (XEvent *)&e);
+}
+- (void)XSendButtonReleaseEvent:(unsigned long)win button:(int)button x:(int)x y:(int)y rootX:(int)rootX rootY:(int)rootY
+{
+    XButtonEvent e;
+    memset(&e, 0, sizeof(XButtonEvent));
+    e.type = ButtonRelease;
+    e.display = _display;
+    e.window = win;
+    e.root = _rootWindow;
+    e.time = CurrentTime;
+    e.x = x;
+    e.y = y;
+    e.x_root = rootX;
+    e.y_root = rootY;
+    e.button = button;
+    e.same_screen = True;
+    XSendEvent(_display, win, True, ButtonReleaseMask, (XEvent *)&e);
+}
+- (void)XSendButtonReleaseEvent:(unsigned long)win button:(int)button
+{
+    XButtonEvent e;
+    memset(&e, 0, sizeof(XButtonEvent));
+    e.type = ButtonRelease;
+    e.display = _display;
+    e.window = win;
+    e.root = _rootWindow;
+    e.time = CurrentTime;
+    e.x = 0;
+    e.y = 0;
+    e.x_root = 0;
+    e.y_root = 0;
+    e.button = button;
+    e.same_screen = True;
+    XSendEvent(_display, win, True, ButtonReleaseMask, (XEvent *)&e);
+}
+- (void)XSendMotionEvent:(unsigned long)win x:(int)x y:(int)y rootX:(int)rootX rootY:(int)rootY
+{
+    XMotionEvent e;
+    memset(&e, 0, sizeof(XMotionEvent));
+    e.type = MotionNotify;
+    e.display = _display;
+    e.window = win;
+    e.root = _rootWindow;
+    e.time = CurrentTime;
+    e.x = x;
+    e.y = y;
+    e.x_root = rootX;
+    e.y_root = rootY;
+    e.same_screen = True;
+    XSendEvent(_display, win, True, PointerMotionMask, (XEvent *)&e);
+}
 
 - (void)setX11Cursor:(char)cursor
 {
@@ -2858,11 +2990,52 @@ NSLog(@"XSetInputFocus:%lu", window);
     result.y = root_y;
     return result;
 }
+- (id)XFetchName:(unsigned long)win
+{
+    id result = nil;
+    char *windowNameReturn = NULL;
+    if (XFetchName(_display, win, &windowNameReturn)) {
+        result = nsfmt(@"%s", windowNameReturn);
+        XFree(windowNameReturn);
+    }
+    return result;
+}
 - (void)XChangeProperty:(unsigned long)window name:(char *)name value:(char *)value
 {
     Atom atom = XInternAtom(_display, name, False);
     XChangeProperty(_display, window, atom, atom, 8, PropModeReplace, "", 0);
 }
+- (void)XChangeProperty:(unsigned long)window name:(char *)name str:(id)str
+{
+    if (!str) {
+        return;
+    }
+    unsigned char *cstr = [str UTF8String];
+    int len = strlen(cstr);
+    Atom atom = XInternAtom(_display, name, False);
+    XChangeProperty(_display, window, atom, atom, 8, PropModeReplace, cstr, len);
+}
+- (id)XGetWindowProperty:(unsigned long)window name:(char *)name
+{
+    id result = nil;
+
+    Atom actual_type_return = None;
+    int actual_format_return = 0;
+    unsigned long nitems_return = 0;
+    unsigned long bytes_after_return = 0;
+    unsigned char *prop_return = NULL;
+    Atom atom = XInternAtom(_display, name, False);
+    int status = XGetWindowProperty(_display, window, atom, 0, 256, False, AnyPropertyType, &actual_type_return, &actual_format_return, &nitems_return, &bytes_after_return, &prop_return);
+    if ((status == Success) && prop_return) {
+        if (actual_format_return == 8) {
+            result = nsfmt(@"%s", prop_return);
+        }
+        XFree(prop_return);
+    }
+
+    return result;
+}
+
 - (BOOL)doesWindow:(unsigned long)win haveProperty:(char *)propertyName
 {
     BOOL result = NO;
@@ -3304,5 +3477,123 @@ NSLog(@"property %s prop_return '%s'", propertyName, prop_return);
         [dict setValue:nil forKey:@"revertMaximize"];
     }
 }
+@end
+
+@implementation WindowManager(jfkdslfjklsdjfksdjkfjksdljfkls)
+- (unsigned long)openAppMenuWindowsForArray:(id)array
+{
+    unsigned long prev = 0;
+    for (int i=[array count]-1; i>=0; i--) {
+        id elt = [array nth:i];
+        id title = [elt valueForKey:@"title"];
+        if (!title) {
+            title = @"Menu";
+        }
+        id dict = [self openAppMenuWindowForObject:elt name:title];
+        if (dict) {
+            unsigned long win = [dict unsignedLongValueForKey:@"window"];
+            [self XChangeProperty:win name:"HOTDOGAPPMENUNEXT" str:nsfmt(@"%lu", prev)];
+            prev = win;
+        }
+    }
+    return prev;
+}
+- (id)openAppMenuWindowForObject:(id)object name:(id)name
+{
+    int x = 0;
+    int y = 0;
+    int w = [object preferredWidth];
+    int h = [object preferredHeight];
+NSLog(@"object %@ name %@", object, name);
+    XSetWindowAttributes setAttrs;
+    setAttrs.colormap = _colormap;
+    setAttrs.event_mask = ButtonPressMask|ButtonReleaseMask|PointerMotionMask|VisibilityChangeMask|KeyPressMask|KeyReleaseMask|StructureNotifyMask|FocusChangeMask;
+    setAttrs.bit_gravity = NorthWestGravity;
+    setAttrs.background_pixmap = None;
+    setAttrs.border_pixel = 0;
+    unsigned long attrFlags = CWColormap|CWEventMask|CWBackPixmap|CWBorderPixel;
+    if (1 /*overrideRedirect*/) {
+        setAttrs.override_redirect = True;
+        attrFlags |= CWOverrideRedirect;
+    }
+    Window win = XCreateWindow(_display, _rootWindow, x, y, w, h, 0, _visualInfo.depth, InputOutput, _visualInfo.visual, attrFlags, &setAttrs);
+
+
+    if (name) {
+        [self XStoreName:win :name];
+    }
+
+    Atom wm_delete_window = XInternAtom(_display, "WM_DELETE_WINDOW", 0);
+    XSetWMProtocols(_display, win, &wm_delete_window, 1);
+
+//    XMapWindow(_display, win);
+
+    id dict = nsdict();
+    [dict setValue:nsfmt(@"%lu", win) forKey:@"window"];
+    [dict setValue:object forKey:@"object"];
+    [dict setValue:nsfmt(@"%d", x) forKey:@"x"];
+    [dict setValue:nsfmt(@"%d", y) forKey:@"y"];
+    [dict setValue:nsfmt(@"%d", w) forKey:@"w"];
+    [dict setValue:nsfmt(@"%d", h) forKey:@"h"];
+    [dict setValue:@"1" forKey:@"needsRedraw"];
+    [_objectWindows addObject:dict];
+    [self addShadowMaskToObjectWindow:dict];
+
+    return dict;
+}
+- (id)getAppMenuForWindow:(unsigned long)win
+{
+    id keys = nsdict();
+    id arr = nsarr();
+    id value = [self XGetWindowProperty:win name:"HOTDOGAPPMENUHEAD"];
+    for(;;) {
+        if (!value) {
+            break;
+        }
+        if ([keys valueForKey:value]) {
+            break;
+        }
+        [keys setValue:value forKey:value];
+        unsigned long win = [value unsignedLongValue];
+        if (!win) {
+            break;
+        }
+        id name = [self XFetchName:win];
+        if (!name) {
+            break;
+        }
+        id object = [Definitions TextMenuItem:name];
+        id dict = nsdict();
+        [dict setValue:@"4" forKey:@"leftPadding"];
+        [dict setValue:@"4" forKey:@"rightPadding"];
+        [dict setValue:object forKey:@"object"];
+        [dict setValue:value forKey:@"window"];
+        [arr addObject:dict];
+        value = [self XGetWindowProperty:win name:"HOTDOGAPPMENUNEXT"];
+    }
+    if ([arr count]) {
+        return arr;
+    }
+    return nil;
+}
+- (id)incorporateFocusAppMenu:(id)menuBarArray
+{
+    id results = nsarr();
+    for (int i=0; i<[menuBarArray count]; i++) {
+        id elt = [menuBarArray nth:i];
+        id window = [elt valueForKey:@"window"];
+        if (!window) {
+            int flexible = [elt intValueForKey:@"flexible"];
+            if (flexible) {
+                if (_focusAppMenu) {
+                    [results addObjectsFromArray:_focusAppMenu];
+                }
+            }
+            [results addObject:elt];
+        }
+    }
+    return results;
+}
+
 @end
 
