@@ -27,6 +27,33 @@
 
 static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
+static id workbenchMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Open\",\"1\"\n"
+@",\"Close\",\"1\"\n"
+@",\"Duplicate\",\"1\"\n"
+@",\"Rename\",\"1\"\n"
+@",\"Info\",\"1\"\n"
+@",\"Discard\",\"1\"\n"
+;
+
+static id diskMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Empty Trash\",\"1\"\n"
+@",\"Initialize\",\"1\"\n"
+;
+
+static id specialMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Clean Up\",\"1\"\n"
+@",\"Last Error\",\"1\"\n"
+@",\"Redraw\",\"1\"\n"
+@",\"Snapshot\",\"1\"\n"
+@",\"Version\",\"1\"\n"
+;
+
+
+
 @implementation Definitions(fmeklwmfkdsmklf)
 + (void)openAmigaBuiltInDirForPath:(id)path
 {
@@ -122,6 +149,23 @@ exit(1);
 }
 @end
 @implementation AmigaDesktop
+- (id)generateAppMenuArray
+{
+    id workbenchMenu = [[workbenchMenuCSV parseCSVFromString] asMenu];
+    [workbenchMenu setValue:@"Workbench" forKey:@"title"];
+    [workbenchMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id diskMenu = [[diskMenuCSV parseCSVFromString] asMenu];
+    [diskMenu setValue:@"Disk" forKey:@"title"];
+    [diskMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id specialMenu = [[specialMenuCSV parseCSVFromString] asMenu];
+    [specialMenu setValue:@"Special" forKey:@"title"];
+    [specialMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id results = nsarr();
+    [results addObject:workbenchMenu];
+    [results addObject:diskMenu];
+    [results addObject:specialMenu];
+    return results;
+}
 - (int)fileDescriptor
 {
     if (_observer) {
