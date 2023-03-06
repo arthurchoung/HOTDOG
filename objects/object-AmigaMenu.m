@@ -36,6 +36,9 @@
 
     int _pixelScaling;
     id _scaledFont;
+
+    int _unmapInsteadOfClose;
+    id _title;
 }
 @end
 
@@ -232,8 +235,11 @@ NSLog(@"Menu handleMouseMoved");
 - (void)handleMouseUp:(id)event
 {
 NSLog(@"Menu handleMouseUp");
-    id x11dict = [event valueForKey:@"x11dict"];
-    [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+    if (mouseRootY == -1) {
+        [self setValue:nil forKey:@"selectedObject"];
+    }
+
     if (_selectedObject) {
         id message = [_selectedObject valueForKey:@"messageForClick"];
         if (message) {
@@ -243,6 +249,16 @@ NSLog(@"Menu handleMouseUp");
             }
             [context  evaluateMessage:message];
         }
+    }
+    id x11dict = [event valueForKey:@"x11dict"];
+    if (_unmapInsteadOfClose) {
+        id windowManager = [@"windowManager" valueForKey];
+        id window = [x11dict valueForKey:@"window"];
+        if (window) {
+            [windowManager XUnmapWindow:[window unsignedLongValue]];
+        }
+    } else {
+        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
     }
 }
 - (void)handleRightMouseUp:(id)event
