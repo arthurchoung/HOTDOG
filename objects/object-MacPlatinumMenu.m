@@ -127,6 +127,9 @@ static char *rightHighlightedPixels =
 
     int _pixelScaling;
     id _scaledFont;
+
+    int _unmapInsteadOfClose;
+    id _title;
 }
 @end
 
@@ -242,7 +245,7 @@ NSLog(@"dealloc Menu %@", self);
 
 - (BOOL)shouldAnimate
 {
-    if (_closingIteration) {
+    if (_closingIteration > 0) {
         return YES;
     }
     return NO;
@@ -255,7 +258,8 @@ NSLog(@"dealloc Menu %@", self);
     }
     _closingIteration--;
     id x11dict = [event valueForKey:@"x11dict"];
-    if (_closingIteration == 0) {
+    if (_closingIteration < 2) {
+        _closingIteration = 0;
         id message = [_selectedObject valueForKey:@"messageForClick"];
         if (message) {
             id context = _contextualObject;
@@ -264,7 +268,15 @@ NSLog(@"dealloc Menu %@", self);
             }
             [context evaluateMessage:message];
         }
-        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        if (_unmapInsteadOfClose) {
+            id windowManager = [@"windowManager" valueForKey];
+            id window = [x11dict valueForKey:@"window"];
+            if (window) {
+                [windowManager XUnmapWindow:[window unsignedLongValue]];
+            }
+        } else {
+            [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        }
     }
 }
 
@@ -317,7 +329,7 @@ NSLog(@"dealloc Menu %@", self);
         if ([messageForClick length] && [Definitions isX:_mouseX y:_mouseY insideRect:origRect] && [Definitions isX:_mouseX y:_mouseY insideRect:cellRect]) {
             if ([text length]) {
                 if (_closingIteration) {
-                    if ((_closingIteration/20) % 2 == 0) {
+                    if ((_closingIteration/15) % 2 == 0) {
                         [bitmap setColor:@"black"];
                         [bitmap fillRect:cellRect];
                     }
@@ -361,8 +373,8 @@ NSLog(@"dealloc Menu %@", self);
 }
 - (void)handleKeyDown:(id)event
 {
-NSLog(@"AquaMenu handleKeyDown");
-    if (_closingIteration) {
+NSLog(@"MacPlatinumMenu handleKeyDown");
+    if (_closingIteration > 0) {
         return;
     }
     id keyString = [event valueForKey:@"keyString"];
@@ -375,8 +387,8 @@ NSLog(@"keyString %@", keyString);
 }
 - (void)handleScrollWheel:(id)event
 {
-NSLog(@"AquaMenu handleScrollWheel");
-    if (_closingIteration) {
+NSLog(@"MacPlatinumMenu handleScrollWheel");
+    if (_closingIteration > 0) {
         return;
     }
     int dy = [event intValueForKey:@"scrollingDeltaY"];
@@ -385,8 +397,8 @@ NSLog(@"dy %d", dy);
 }
 - (void)handleMouseMoved:(id)event
 {
-NSLog(@"Menu handleMouseMoved");
-    if (_closingIteration) {
+NSLog(@"MacPlatinumMenu handleMouseMoved");
+    if (_closingIteration > 0) {
         return;
     }
     _mouseX = [event intValueForKey:@"mouseX"];
@@ -395,15 +407,28 @@ NSLog(@"Menu handleMouseMoved");
 
 - (void)handleMouseUp:(id)event
 {
-NSLog(@"Menu handleMouseUp");
-    if (_closingIteration) {
+NSLog(@"MacPlatinumMenu handleMouseUp");
+    if (_closingIteration > 0) {
         return;
     }
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+    if (mouseRootY == -1) {
+        [self setValue:nil forKey:@"selectedObject"];
+    }
     if (_selectedObject) {
-        _closingIteration = 90;
+        _closingIteration = 120;//90
     } else {
-        id x11dict = [event valueForKey:@"x11dict"];
-        [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        if (_unmapInsteadOfClose) {
+            id windowManager = [@"windowManager" valueForKey];
+            id x11dict = [event valueForKey:@"x11dict"];
+            id window = [x11dict valueForKey:@"window"];
+            if (window) {
+                [windowManager XUnmapWindow:[window unsignedLongValue]];
+            }
+        } else { 
+            id x11dict = [event valueForKey:@"x11dict"];
+            [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
+        }
     }
 }
 - (void)handleRightMouseUp:(id)event
