@@ -27,6 +27,44 @@
 
 static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
+static id deskMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Desktop Info...\",\"1\"\n"
+;
+
+static id fileMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Open\",\"1\"\n"
+@",\"Show Info...\",\"1\"\n"
+@",,\n"
+@",\"New Folder...\",\"1\"\n"
+@",\"Close\",\"1\"\n"
+@",\"Close Window\",\"1\"\n"
+@",,\n"
+@",\"Format...\",\"1\"\n"
+;
+
+static id viewMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Show as Icons\",\"1\"\n"
+@",\"Show as Text\",\"1\"\n"
+@",,\n"
+@",\"Sort by Name\",\"1\"\n"
+@",\"Sort by Date\",\"1\"\n"
+@",\"Sort by Size\",\"1\"\n"
+@",\"Sort by Type\",\"1\"\n"
+;
+
+static id optionsMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Install Disk Drive...\",\"1\"\n"
+@",\"Install Application...\",\"1\"\n"
+@",,\n"
+@",\"Set Preferences...\",\"1\"\n"
+@",\"Save Desktop\",\"1\"\n"
+@",\"Print Screen\",\"1\"\n"
+;
+
 @implementation Definitions(fmekwlmfklsjfkdsjfdmfklsdmklfmlskdkf)
 + (void)openAtariSTDirForPath:(id)path
 {
@@ -73,6 +111,27 @@ exit(1);
 }
 @end
 @implementation AtariSTDesktop
+- (id)generateAppMenuArray
+{
+    id deskMenu = [[deskMenuCSV parseCSVFromString] asMenu];
+    [deskMenu setValue:@"Desk" forKey:@"title"];
+    [deskMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id fileMenu = [[fileMenuCSV parseCSVFromString] asMenu];
+    [fileMenu setValue:@"File" forKey:@"title"];
+    [fileMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id viewMenu = [[viewMenuCSV parseCSVFromString] asMenu];
+    [viewMenu setValue:@"View" forKey:@"title"];
+    [viewMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id optionsMenu = [[optionsMenuCSV parseCSVFromString] asMenu];
+    [optionsMenu setValue:@"Options" forKey:@"title"];
+    [optionsMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id results = nsarr();
+    [results addObject:deskMenu];
+    [results addObject:fileMenu];
+    [results addObject:viewMenu];
+    [results addObject:optionsMenu];
+    return results;
+}
 - (int)fileDescriptor
 {
     if (_observer) {
