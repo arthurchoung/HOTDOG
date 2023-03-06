@@ -27,6 +27,75 @@
 
 static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
+static id fileMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"New Folder\",\"'New Folder'|showAlert\"\n"
+@",\"Open\",\"1\"\n"
+@",\"Print\",\"1\"\n"
+@",\"Close Window\",\"1\"\n"
+@",,\n"
+@",\"Get Info\",\"1\"\n"
+@",\"Sharing...\",\"1\"\n"
+@",\"Duplicate\",\"1\"\n"
+@",\"Make Alias\",\"1\"\n"
+@",\"Put Away\",\"1\"\n"
+@",,\n"
+@",\"Find...\",\"1\"\n"
+@",\"Find Again\",\"1\"\n"
+@",,\n"
+@",\"Page Setup...\",\"1\"\n"
+@",\"Print Window...\",\"1\"\n"
+;
+
+static id editMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Undo\",\"1\"\n"
+@",,\n"
+@",\"Cut\",\"1\"\n"
+@",\"Copy\",\"1\"\n"
+@",\"Paste\",\"1\"\n"
+@",\"Clear\",\"1\"\n"
+@",\"Select All\",\"1\"\n"
+@",,\n"
+@",\"Show Clipboard\",\"1\"\n"
+;
+
+static id viewMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"by Small Icon\",\"1\"\n"
+@",\"by Icon\",\"1\"\n"
+@",\"by Name\",\"1\"\n"
+@",\"by Size\",\"1\"\n"
+@",\"by Kind\",\"1\"\n"
+@",\"by Label\",\"1\"\n"
+@",\"by Date\",\"1\"\n"
+;
+
+static id labelMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"None\",\"1\"\n"
+@",,\n"
+@",\"Essential\",\"1\"\n"
+@",\"Hot\",\"1\"\n"
+@",\"In Progress\",\"1\"\n"
+@",\"Cool\",\"1\"\n"
+@",\"Personal\",\"1\"\n"
+@",\"Project 1\",\"1\"\n"
+@",\"Project 2\",\"1\"\n"
+;
+
+static id specialMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Clean Up Window\",\"1\"\n"
+@",\"Empty Trash...\",\"1\"\n"
+@",,\n"
+@",\"Eject Disk\",\"1\"\n"
+@",\"Erase Disk...\",\"1\"\n"
+@",,\n"
+@",\"Restart\",\"1\"\n"
+@",\"Shut Down\",\"1\"\n"
+;
+
 @implementation Definitions(fmekwljfkdsjfksdmfklsdmfklsdmklfmlskdkf)
 + (id)getMacColorDirForPath:(id)path
 {
@@ -105,6 +174,31 @@ exit(1);
 }
 @end
 @implementation MacColorDesktop
+- (id)generateAppMenuArray
+{
+    id fileMenu = [[fileMenuCSV parseCSVFromString] asMenu];
+    [fileMenu setValue:@"File" forKey:@"title"];
+    [fileMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id editMenu = [[editMenuCSV parseCSVFromString] asMenu];
+    [editMenu setValue:@"Edit" forKey:@"title"];
+    [editMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id viewMenu = [[viewMenuCSV parseCSVFromString] asMenu];
+    [viewMenu setValue:@"View" forKey:@"title"];
+    [viewMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id labelMenu = [[labelMenuCSV parseCSVFromString] asMenu];
+    [labelMenu setValue:@"Label" forKey:@"title"];
+    [labelMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id specialMenu = [[specialMenuCSV parseCSVFromString] asMenu];
+    [specialMenu setValue:@"Special" forKey:@"title"];
+    [specialMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id results = nsarr();
+    [results addObject:fileMenu];
+    [results addObject:editMenu];
+    [results addObject:viewMenu];
+    [results addObject:labelMenu];
+    [results addObject:specialMenu];
+    return results;
+}
 - (int)fileDescriptor
 {
     if (_observer) {
