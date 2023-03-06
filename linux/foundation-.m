@@ -1284,6 +1284,10 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
 {
     return strtoll(_contents, NULL, 10);
 }
+- (unsigned long long)unsignedLongLongValue
+{
+    return strtoull(_contents, NULL, 10);
+}
 - (double)doubleValue
 {
     double result = strtod(_contents, NULL);
