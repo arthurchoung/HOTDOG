@@ -90,7 +90,7 @@ static char *menu_bar_middle =
 {
     id _configPath;
     time_t _configTimestamp;
-    int _closingIteration;
+    int _flashIteration;
     BOOL _buttonDown;
     id _selectedDict;
     id _menuDict;
@@ -99,6 +99,11 @@ static char *menu_bar_middle =
     int _pixelScaling;
     id _scaledFont;
     id _scaledMenuBarMiddlePixels;
+
+    unsigned long _appMenuWindow;
+    int _appMenuWindowX;
+    int _appMenuWindowY;
+    unsigned long _menuWindowWaitForUnmapNotify;
 }
 @end
 
@@ -106,7 +111,7 @@ static char *menu_bar_middle =
 
 - (void)flashIndex:(int)index duration:(int)duration
 {
-    if (_closingIteration > 0) {
+    if (_flashIteration > 0) {
         return;
     }
     if (_selectedDict) {
@@ -116,7 +121,7 @@ static char *menu_bar_middle =
     id dict = [_array nth:index];
     if (dict) {
         [self setValue:dict forKey:@"selectedDict"];
-        _closingIteration = duration;
+        _flashIteration = duration;
     }
 }
 - (id)init
@@ -153,7 +158,6 @@ static char *menu_bar_middle =
     if (!arr) {
         return;
     }
-    [self setValue:arr forKey:@"array"];
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
         id objectMessage = [elt valueForKey:@"objectMessage"];
@@ -162,6 +166,11 @@ static char *menu_bar_middle =
             [elt setValue:obj forKey:@"object"];
         }
     }
+    id windowManager = [@"windowManager" valueForKey];
+    if (windowManager) {
+        arr = [windowManager incorporateFocusAppMenu:arr];
+    }
+    [self setValue:arr forKey:@"array"];
 }
 - (void)dealloc
 {
@@ -171,21 +180,15 @@ NSLog(@"DEALLOC AquaMenuBar");
 
 - (BOOL)shouldAnimate
 {
-    if (_closingIteration > 0) {
+    if (_flashIteration > 0) {
         return YES;
     }
     return NO;
 }
 - (void)beginIteration:(id)event rect:(Int4)r
 {
-    if (_closingIteration > 0) {
-        _closingIteration--;
-        id x11dict = [event valueForKey:@"x11dict"];
-        if (_closingIteration == 0) {
-            _buttonDown = NO;
-            [self setValue:nil forKey:@"menuDict"];
-            [self setValue:nil forKey:@"selectedDict"];
-        }
+    if (_flashIteration > 0) {
+        _flashIteration--;
         return;
     }
     time_t timestamp = [_configPath fileModificationTimestamp];
@@ -295,12 +298,14 @@ NSLog(@"DEALLOC AquaMenuBar");
         return;
     }
 
+    id windowManager = [event valueForKey:@"windowManager"];
+
+    int mouseRootX = [event intValueForKey:@"mouseRootX"];
+    int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
     if (_menuDict) {
-        id windowManager = [event valueForKey:@"windowManager"];
         id object = [_menuDict valueForKey:@"object"];
         if ([object respondsToSelector:@selector(handleMouseUp:)]) {
-            int mouseRootX = [event intValueForKey:@"mouseRootX"];
-            int mouseRootY = [event intValueForKey:@"mouseRootY"];
             int x = [_menuDict intValueForKey:@"x"];
             int y = [_menuDict intValueForKey:@"y"];
             int w = [_menuDict intValueForKey:@"w"];
@@ -308,16 +313,22 @@ NSLog(@"DEALLOC AquaMenuBar");
             id newEvent = [windowManager generateEventDictRootX:mouseRootX rootY:mouseRootY x:mouseRootX-x y:mouseRootY-y w:w h:h x11dict:_menuDict];
             [object handleMouseUp:newEvent];
             [_menuDict setValue:@"1" forKey:@"needsRedraw"];
-            int closingIteration = [object intValueForKey:@"closingIteration"];
-            if (closingIteration) {
-                _closingIteration = closingIteration;
-                return;
-            }
+            _menuWindowWaitForUnmapNotify = [_menuDict unsignedLongValueForKey:@"window"];
         }
         [self setValue:nil forKey:@"menuDict"];
     }
     _buttonDown = NO;
     [self setValue:nil forKey:@"selectedDict"];
+
+    if (_appMenuWindow) {
+        unsigned long win = _appMenuWindow;
+        _appMenuWindow = 0;
+        _appMenuWindowX = 0;
+        _appMenuWindowY = 0;
+        _menuWindowWaitForUnmapNotify = win;
+NSLog(@"handleMouseUp %x XSendButtonReleaseEvent", win);
+        [windowManager XSendButtonReleaseEvent:win button:1];
+    }
 }
 
 - (void)handleMouseMoved:(id)event
@@ -330,6 +341,13 @@ NSLog(@"DEALLOC AquaMenuBar");
     }
     int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
     int mouseRootY = [event intValueForKey:@"mouseRootY"];
+
+    if (_appMenuWindow) {
+        int x = mouseRootX - _appMenuWindowX;
+        int y = mouseRootY - _appMenuWindowY;
+        [windowManager XSendMotionEvent:_appMenuWindow x:x y:y rootX:mouseRootX rootY:mouseRootY];
+    }
+
     if (mouseRootY < menuBarHeight) {
         id dict = [self dictForX:mouseRootX];
         if (dict && (dict != _selectedDict)) {
@@ -356,11 +374,65 @@ NSLog(@"DEALLOC AquaMenuBar");
 
 }
 
+- (void)mapAppMenu:(id)dict window:(unsigned long)win x:(int)mouseRootX
+{
+    id windowManager = [@"windowManager" valueForKey];
+{
+    if (_appMenuWindow) {
+        if (win == _appMenuWindow) {
+            return;
+        }
+        [windowManager XSendButtonReleaseEvent:_appMenuWindow button:1 x:-1 y:-1 rootX:-1 rootY:-1];
+        [windowManager XUnmapWindow:_appMenuWindow];
+    }
+}
+
+    id monitor = [Definitions monitorForX:mouseRootX y:0];
+    int monitorX = [monitor intValueForKey:@"x"];
+    int monitorWidth = [monitor intValueForKey:@"width"];
+    int x = [dict intValueForKey:@"x"];
+    if (x < 0) {
+        x += monitorX+monitorWidth;
+    } else {
+        x += monitorX;
+    }
+/*
+if (x+w+3 > monitorX+monitorWidth) {
+    int dictWidth = [dict intValueForKey:@"width"];
+    x = x+dictWidth-w-2;
+    if (x < monitorX) {
+        if (w > monitorWidth-3) {
+            x = monitorX;
+            w = monitorWidth-3;
+        } else {
+            x = monitorX+monitorWidth-w-3;
+        }
+    }
+}
+*/
+    [windowManager XMoveWindow:win :x :18];
+    [windowManager XMapWindow:win];
+    [windowManager XRaiseWindow:win];
+    _appMenuWindow = win;
+    _appMenuWindowX = x;
+    _appMenuWindowY = 18;
+    [windowManager XSendButtonPressEvent:win button:1];
+//    id menuDict = [windowManager openWindowForObject:obj x:x y:18*_pixelScaling w:w+3 h:h+3];
+//    [self setValue:menuDict forKey:@"menuDict"];
+//    [self setValue:dict forKey:@"selectedDict"];
+//[windowManager XSetInputFocus:[menuDict unsignedLongValueForKey:@"window"]];
+}
+
 - (void)openRootMenu:(id)dict x:(int)mouseRootX
 {
 
     id messageForClick = [dict valueForKey:@"messageForClick"];
     if (!messageForClick) {
+        id window = [dict valueForKey:@"window"];
+        if (window) {
+            [self mapAppMenu:dict window:[window unsignedLongValue] x:mouseRootX];
+            return;
+        }
         return;
     }
     id obj = [messageForClick evaluateAsMessage];
@@ -397,10 +469,24 @@ if (x+w+3 > monitorX+monitorWidth) {
         }
     }
 }
+
+{
+    if (_appMenuWindow) {
+        unsigned long appMenuWindow = _appMenuWindow;
+        _appMenuWindow = 0;
+        _appMenuWindowX = 0;
+        _appMenuWindowY = 0;
+        [windowManager XSendButtonReleaseEvent:appMenuWindow button:1 x:-1 y:-1 rootX:-1 rootY:-1];
+        [windowManager XUnmapWindow:appMenuWindow];
+    }
+}
+
     id menuDict = [windowManager openWindowForObject:obj x:x y:19*_pixelScaling w:w+3 h:h+3];
+    unsigned long win = [menuDict unsignedLongValueForKey:@"window"];
+    [dict setValue:nsfmt(@"%lu", win) forKey:@"menuWindow"];
     [self setValue:menuDict forKey:@"menuDict"];
     [self setValue:dict forKey:@"selectedDict"];
-[windowManager XSetInputFocus:[menuDict unsignedLongValueForKey:@"window"]];
+[windowManager XSetInputFocus:win];
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
@@ -572,7 +658,35 @@ r2.h -= 1*_pixelScaling;
         leftPadding *= _pixelScaling;
         int rightPadding = [elt intValueForKey:@"rightPadding"];
         rightPadding *= _pixelScaling;
-        if ((_buttonDown || (_closingIteration > 0)) && (_selectedDict == elt)) {
+
+        int flexible = [elt intValueForKey:@"flexible"];
+        unsigned long window = [elt unsignedLongValueForKey:@"window"];
+
+        BOOL highlight = NO;
+        if (_buttonDown) {
+            highlight = YES;
+        } else if (_flashIteration > 0) {
+            highlight = YES;
+        }
+        if (highlight) {
+            if (_selectedDict == elt) {
+            } else if (_appMenuWindow && (_appMenuWindow == window)) {
+            } else {
+                highlight = NO;
+            }
+        }
+        if (_menuWindowWaitForUnmapNotify) {
+            if (_menuWindowWaitForUnmapNotify == window) {
+                highlight = YES;
+            } else {
+                unsigned long menuWindow = [elt unsignedLongValueForKey:@"menuWindow"];
+                if (menuWindow == _menuWindowWaitForUnmapNotify) {
+                    highlight = YES;
+                }
+            }
+        }
+
+        if (highlight) {
             id text = nil;
             if ([obj respondsToSelector:@selector(text)]) {
                 text = [obj text];
@@ -588,7 +702,7 @@ r2.h -= 1*_pixelScaling;
                 Int4 r3 = r2;
                 r3.x += leftPadding;
                 r3.w -= leftPadding+rightPadding;
-                if (i == flexibleIndex) {
+                if (flexible) {
                     int textWidth = [bitmap bitmapWidthForText:text];
                     if (textWidth > r3.w) {
                         text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
@@ -625,12 +739,12 @@ r2.h -= 1*_pixelScaling;
             if (!text) {
                 text = [obj valueForKey:@"text"];
             }
-            if (text) {
+            if ([text length]) {
                 Int4 r3 = r2;
                 r3.x += leftPadding;
                 r3.w -= leftPadding+rightPadding;
                 [bitmap setColor:@"black"];
-                if (i == flexibleIndex) {
+                if (flexible) {
                     int textWidth = [bitmap bitmapWidthForText:text];
                     if (textWidth > r3.w) {
                         text = [[[bitmap fitBitmapString:text width:r3.w] split:@"\n"] nth:0];
