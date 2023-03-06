@@ -217,6 +217,9 @@ NSLog(@"setValue:forKey: unknown ivar '%s' self %@", ivarName, self);
         } else {
             *((_Bool *)ivarPtr) = 0;
         }
+    } else if (ivarType[0] == 'Q') {
+        unsigned long long unsignedlonglongval = [val unsignedLongLongValue];
+        *((unsigned long long *)ivarPtr) = unsignedlonglongval;
     } else {
 NSLog(@"setValue:'%@' forKey:'%@' unhandled ivar type '%s'", val, key, ivarType);
         exit(0);
