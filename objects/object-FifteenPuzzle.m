@@ -35,97 +35,116 @@
 @end
 
 static char *backgroundCString = 
-"    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
-"   b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b   \n"
-"  b bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb b  \n"
-" b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b \n"
-"b bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb b                                                                                 b bbb\n"
-"bb b                                                                                   b bb\n"
-"b bbb                                                                                 bbb b\n"
-"bb b                                                                                   b bb\n"
-"bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb\n"
-" bbb b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b bbb \n"
-"  bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb bbb  \n"
-"   bbb b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b bbb   \n"
-"    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb    \n"
+"     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
+"   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb   \n"
+"  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  \n"
+" bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
+" bbbbbbbbxxxxxxxxxxxbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
+"bbbbbbbbbxbbbbXbbbbxbbbbbbbbb.....bbbbbbbbbbbbbbbbbbbbbbbbbbb..bbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbxbXbbXbbXbxbbbbbbbbb..bb..bbbbbbbbbbbbbbbbbbbbbbbbbb..bbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbxbbXbXbXbbxbbbbbbbbb..bb..bb..bb..bb......bb......bb..bbb....bbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbxbbbbbbbbbxbbbbbbbbb..bb..bb..bb..bbbbbb..bbbbbb..bb..bb..bb..bbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbxbXXXbXXXbxbbbbbbbbb.....bbb..bb..bbbbb..bbbbbb..bbb..bb..bb..bbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbxbbbbbbbbbxbbbbbbbbb..bbbbbb..bb..bbbb..bbbbbb..bbbb..bb......bbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbxbbXbXbXbbxbbbbbbbbb..bbbbbb..bb..bbb..bbbbbb..bbbbb..bb..bbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbxbXbbXbbXbxbbbbbbbbb..bbbbbb..bb..bb..bbbbbb..bbbbbb..bb..bbb.bbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbxbbbbXbbbbxbbbbbbbbb..bbbbbbb.....bb......bb......bb..bbb....bbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbxxxxxxxxxxxbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bb.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.bb\n"
+"bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb\n"
+"bb.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.bb\n"
+"b.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+"bbb.b.................................................................................b.bbb\n"
+"bb.b...................................................................................b.bb\n"
+"b.bbb.................................................................................bbb.b\n"
+"bb.b...................................................................................b.bb\n"
+" bb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bb \n"
+" bbb.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.bbb \n"
+"  bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb.bbb  \n"
+"   bbb.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.b.bbb   \n"
+"     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb     \n"
 ;
 static char *gridCString = 
 "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
@@ -573,15 +592,28 @@ static char *puzzleCStrings[] = {
     int _y[16];
     int _flash;
     int _needsUpdate;
-    id _bitmap;
     int _piece[16];
     int _transition[16];
     int _transitionCurrentFrame;
     int _transitionMaxFrame;
     id _moves;
+    int _HOTDOGNOFRAME;
+    char _buttonDown;
+    char _buttonHover;
+    int _buttonDownX;
+    int _buttonDownY;
+    Int4 _closeButtonRect;
 }
 @end
 @implementation FifteenPuzzle
+- (char *)x11WindowMaskCString
+{
+    return backgroundCString;
+}
+- (char)x11WindowMaskChar
+{
+    return ' ';
+}
 
 - (id)contextualMenu
 {
@@ -598,11 +630,6 @@ static char *puzzleCStrings[] = {
     [dict setValue:@"solve" forKey:@"messageForClick"];
     [arr addObject:dict];
     return arr;
-}
-
-- (BOOL)glNearest
-{
-    return YES;
 }
 
 - (BOOL)shouldAnimate
@@ -629,18 +656,21 @@ static char *puzzleCStrings[] = {
     } else {
         [self automaticallyMovePiece];
     }
-    [self updateBitmap];
 }
 - (id)init
 {
     self = [super init];
     if (self) {
-        [self setValue:[Definitions bitmapWithWidth:[self bitmapWidth] height:[self bitmapHeight]] forKey:@"bitmap"];
+        _HOTDOGNOFRAME = 1;
+        _closeButtonRect.x = 9;
+        _closeButtonRect.y = 4;
+        _closeButtonRect.w = 11;
+        _closeButtonRect.h = 11;
         for (int i=0; i<16; i++) {
             int y = i/4;
             int x = i%4;
             _x[i] = 6+20*x;
-            _y[i] = 6+20*y;
+            _y[i] = 6+20*y+19;
             _piece[i] = i+1;
         }
         _piece[15] = 0;
@@ -649,25 +679,21 @@ static char *puzzleCStrings[] = {
 }
 - (int)preferredWidth
 {
-    return 91*3;
+    static int w = 0;
+    if (!w) {
+        w = [Definitions widthForCString:backgroundCString];
+    }
+    return w;
 }
 - (int)preferredHeight
 {
-    return 91*3;
+    static int h = 0;
+    if (!h) {
+        h = [Definitions heightForCString:backgroundCString];
+    }
+    return h;
 }
-- (int)bitmapWidth
-{
-    return 91;
-}
-- (int)bitmapHeight
-{
-    return 91;
-}
-- (unsigned char *)pixelBytesRGBA8888
-{
-    return [_bitmap pixelBytes];
-}
-- (void)updateBitmap
+- (void)drawInBitmap:(id)bitmap rect:(Int4)drawRect
 {
     char blackChar = 'b';
     char whiteChar = ' ';
@@ -675,13 +701,12 @@ static char *puzzleCStrings[] = {
         blackChar = ' ';
         whiteChar = 'b';
     }
-    id bitmap = _bitmap;
     [bitmap drawCString:backgroundCString x:0 y:0 c:'b' r:0 g:0 b:0 a:255];
-    [bitmap drawCString:backgroundCString x:0 y:0 c:' ' r:255 g:255 b:255 a:255];
+    [bitmap drawCString:backgroundCString x:0 y:0 c:'.' r:255 g:255 b:255 a:255];
 
     if (_transitionCurrentFrame < _transitionMaxFrame) {
-        [bitmap drawCString:gridCString x:5 y:5 c:blackChar r:0 g:0 b:0 a:255];
-        [bitmap drawCString:gridCString x:5 y:5 c:whiteChar r:255 g:255 b:255 a:255];
+        [bitmap drawCString:gridCString x:5 y:5+19 c:blackChar r:0 g:0 b:0 a:255];
+        [bitmap drawCString:gridCString x:5 y:5+19 c:whiteChar r:255 g:255 b:255 a:255];
 
         int fromTable[16];
         int toTable[16];
@@ -715,14 +740,21 @@ static char *puzzleCStrings[] = {
             }
         }
     } else {
-        [bitmap drawCString:gridCString x:5 y:5 c:blackChar r:0 g:0 b:0 a:255];
-        [bitmap drawCString:gridCString x:5 y:5 c:whiteChar r:255 g:255 b:255 a:255];
+        [bitmap drawCString:gridCString x:5 y:5+19 c:blackChar r:0 g:0 b:0 a:255];
+        [bitmap drawCString:gridCString x:5 y:5+19 c:whiteChar r:255 g:255 b:255 a:255];
 
         for (int i=0; i<16; i++) {
             char *cstr = puzzleCStrings[_piece[i]];
             [bitmap drawCString:cstr x:_x[i] y:_y[i] c:blackChar r:0 g:0 b:0 a:255];
         }
     }
+
+    if ((_buttonDown == _buttonHover) && (_buttonHover == 'c')) {
+        [bitmap drawCString:backgroundCString palette:"x #000000\nX #ffffff\n" x:0 y:0];
+    } else {
+        [bitmap drawCString:backgroundCString palette:"x #ffffff\nX #000000\n" x:0 y:0];
+    }
+
 }
 - (int)indexForEmptySpace
 {
@@ -782,6 +814,18 @@ static char *puzzleCStrings[] = {
 {
     int mouseX = [event intValueForKey:@"mouseX"];
     int mouseY = [event intValueForKey:@"mouseY"];
+    _buttonDown = 0;
+    if ([Definitions isX:mouseX y:mouseY insideRect:_closeButtonRect]) {
+        _buttonDown = 'c';
+        return;
+    }
+    if (mouseY < 20) {
+        _buttonDown = 't';
+        _buttonDownX = mouseX;
+        _buttonDownY = mouseY;
+        return;
+    }
+
     for (int i=0; i<16; i++) {
         Int4 r;
         r.x = _x[i];
@@ -796,6 +840,32 @@ static char *puzzleCStrings[] = {
     if ([self isWinner]) {
         _flash = 31;
     }
+}
+- (void)handleMouseMoved:(id)event
+{
+    int mouseX = [event intValueForKey:@"mouseX"];
+    int mouseY = [event intValueForKey:@"mouseY"];
+    _buttonHover = 0;
+    if (_buttonDown == 't') {
+        int mouseRootX = [event intValueForKey:@"mouseRootX"];
+        int mouseRootY = [event intValueForKey:@"mouseRootY"];
+        id x11dict = [event valueForKey:@"x11dict"];
+        int newX = mouseRootX - _buttonDownX;
+        int newY = mouseRootY - _buttonDownY;
+        [x11dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
+        return;
+    }
+    if ([Definitions isX:mouseX y:mouseY insideRect:_closeButtonRect]) {
+        _buttonHover = 'c';
+        return;
+    }
+}
+- (void)handleMouseUp:(id)event
+{
+    if ((_buttonDown == 'c') && (_buttonDown == _buttonHover)) {
+        exit(0);
+    }
+    _buttonDown = 0;
 }
 - (BOOL)isWinner
 {
