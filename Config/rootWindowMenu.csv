@@ -4,11 +4,9 @@ hotKey,displayName,messageForClick
 ,,
 ,Breakout,"['hotdog' 'show' 'Breakout']|runCommandInBackground"
 ,Calculator,"['hotdog' 'show' 'Calculator']|runCommandInBackground"
-,Camera,"['hotdog' 'show' 'VideoCamerasPanel']|runCommandInBackground"
 ,CentipedeClone,"['hotdog' 'show' 'CentipedeClone']|runCommandInBackground"
 ,ConnectFour,"['hotdog' 'show' 'ConnectFour']|runCommandInBackground"
 ,FifteenPuzzle,"['hotdog' 'show' 'FifteenPuzzle']|runCommandInBackground"
-,HomeScreen,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'HomeScreen')|runCommandInBackground"
 ,KaboomClone,"['hotdog' 'show' 'KaboomClone']|runCommandInBackground"
 ,Spider,"['hotdog' 'show' 'Spider']|runCommandInBackground"
 ,Stopwatch,"['hotdog' 'show' 'Stopwatch']|runCommandInBackground"
