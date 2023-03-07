@@ -9,15 +9,19 @@ hotKey,displayName,messageForClick
 ,,
 ,"Sync Time with NTP","['hotdog-syncTimeWithNTP.sh']|runCommandInBackground"
 ,"Audio Panel","['hotdog-openAudioPanel.sh']|runCommandInBackground"
+,Camera,"['hotdog' 'show' 'VideoCamerasPanel']|runCommandInBackground"
 ,,
 ,AmigaDesktop,"['hotdog' 'desktop' 'AmigaDesktop']|runCommandInBackground"
-,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
 ,AtariSTDesktop,"['hotdog' 'desktop' 'AtariSTDesktop']|runCommandInBackground"
 ,HotDogStandDesktop,"['hotdog' 'show' 'HotDogStandDesktop']|runCommandInBackground"
 ,MacClassicDesktop,"['hotdog' 'desktop' 'MacClassicDesktop']|runCommandInBackground"
 ,MacColorDesktop,"['hotdog' 'desktop' 'MacColorDesktop']|runCommandInBackground"
 ,MacPlatinumDesktop,"['hotdog' 'desktop' 'MacPlatinumDesktop']|runCommandInBackground"
 ,MiscDesktop,"['hotdog' 'show' 'MiscDesktop']|runCommandInBackground"
+,,
+,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
+,HomeScreen,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'HomeScreen')|runCommandInBackground"
+,LockScreen,"['hotdog' 'show' 'LockScreen']|runCommandInBackground"
 ,,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
