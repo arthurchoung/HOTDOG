@@ -566,7 +566,6 @@ static char *moveWindowWhitePixels =
     id _value;
     char _buttonDown;
     char _buttonHover;
-    id _bitmap;
     int _width;
     int _height;
     int _buttonDownX;
@@ -582,7 +581,6 @@ static char *moveWindowWhitePixels =
         _HOTDOGNOFRAME = 1;
         _width = [Definitions widthForCString:calculatorPixels];
         _height = [Definitions heightForCString:calculatorPixels];
-        [self setValue:[Definitions bitmapWithWidth:_width height:_height] forKey:@"bitmap"];
     }
     return self;
 }
@@ -593,10 +591,6 @@ static char *moveWindowWhitePixels =
 - (char)x11WindowMaskChar
 {
     return ' ';
-}
-- (BOOL)glNearest
-{
-    return YES;
 }
 - (int)preferredWidth
 {
@@ -612,21 +606,8 @@ static char *moveWindowWhitePixels =
 }
 - (void)beginIteration:(id)event rect:(Int4)r
 {
-    [self updateBitmap];
-}
-- (int)bitmapWidth
-{
-    return _width;
-}
-- (int)bitmapHeight
-{
-    return _height;
 }
 
-- (unsigned char *)pixelBytesRGBA8888
-{
-    return [_bitmap pixelBytes];
-}
 - (id)stripTrailingZeroes:(id)str
 {
     if ([str containsString:@"."]) {
@@ -838,11 +819,10 @@ NSLog(@"calculator touchesCancelled %@ %@", [event valueForKey:@"touchX"], [even
         exit(0);
     }
 }
-- (void)updateBitmap
+- (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
-    int width = [self bitmapWidth];
-    int height = [self bitmapHeight];
-    id bitmap = _bitmap;
+    int width = _width;
+    int height = _height;
     [bitmap setColor:@"white"];
     [bitmap fillRect:[Definitions rectWithX:0 y:0 w:width h:height]];
     [bitmap drawCString:calculatorPixels palette:"b #000000\n" x:0 y:0];
