@@ -3,7 +3,7 @@
 $date = `date "+%Y-%m-%d %H:%M"`;
 chomp $date;
 
-$base = "$ENV{'HOME'}/Screen Shot $date";
+$base = "$ENV{'HOME'}/Screenshot $date";
 $path = "$base.png";
 for ($i=0;;$i++) {
     if (-e $path) {
