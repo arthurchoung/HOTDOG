@@ -41,7 +41,11 @@
         id window = [windows nth:i];
         int x = [window intValueForKey:@"x"];
         int y = [window intValueForKey:@"y"];
-        [cmd addObject:nsfmt(@"id:%@", [window valueForKey:@"window"])];
+        if ([window intValueForKey:@"HOTDOGNOFRAME"]) {
+            [cmd addObject:nsfmt(@"id:%@", [window valueForKey:@"childWindow"])];
+        } else {
+            [cmd addObject:nsfmt(@"id:%@", [window valueForKey:@"window"])];
+        }
         [cmd addObject:nsfmt(@"x:%d", x - monitorX)];
         [cmd addObject:nsfmt(@"y:%d", y - monitorY)];
         [cmd addObject:nsfmt(@"w:%d", [window intValueForKey:@"w"])];
@@ -57,7 +61,10 @@
         }
         id dict = [windows objectWithValue:windowID forKey:@"window"];
         if (!dict) {
-            continue;
+            dict = [windows objectWithValue:windowID forKey:@"childWindow"];
+            if (!dict) {
+                continue;
+            }
         }
         [dict setValue:[dict valueForKey:@"x"] forKey:@"origX"];
         [dict setValue:[dict valueForKey:@"y"] forKey:@"origY"];
@@ -179,11 +186,15 @@
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
         if (![dict valueForKey:@"window"]) {
-            continue;
+            if (![dict intValueForKey:@"HOTDOGNOFRAME"]) {
+                continue;
+            }
         }
-        id object = [dict valueForKey:@"object"];
-        if (![object isKindOfClass:reparentClass]) {
-            continue;
+        if (![dict intValueForKey:@"HOTDOGNOFRAME"]) {
+            id object = [dict valueForKey:@"object"];
+            if (![object isKindOfClass:reparentClass]) {
+                continue;
+            }
         }
         int x = [dict intValueForKey:@"x"];
         int y = [dict intValueForKey:@"y"];
@@ -208,11 +219,15 @@
     for (int i=0; i<[objectWindows count]; i++) {
         id dict = [objectWindows nth:i];
         if (![dict valueForKey:@"window"]) {
-            continue;
+            if (![dict intValueForKey:@"HOTDOGNOFRAME"]) {
+                continue;
+            }
         }
-        id object = [dict valueForKey:@"object"];
-        if (![object isKindOfClass:reparentClass]) {
-            continue;
+        if ([!dict intValueForKey:@"HOTDOGNOFRAME"]) {
+            id object = [dict valueForKey:@"object"];
+            if (![object isKindOfClass:reparentClass]) {
+                continue;
+            }
         }
         int x = [dict intValueForKey:@"origX"];
         int y = [dict intValueForKey:@"origY"];
@@ -236,9 +251,11 @@
     if (!x11dict) {
         return;
     }
-    id object = [x11dict valueForKey:@"object"];
-    if (![object isKindOfClass:reparentClass]) {
-        return;
+    if (![x11dict intValueForKey:@"HOTDOGNOFRAME"]) {
+        id object = [x11dict valueForKey:@"object"];
+        if (![object isKindOfClass:reparentClass]) {
+            return;
+        }
     }
     int x = [x11dict intValueForKey:@"x"];
     int y = [x11dict intValueForKey:@"y"];
