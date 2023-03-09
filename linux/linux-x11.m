@@ -1119,10 +1119,18 @@ NSLog(@"unparent object %@", dict);
 - (void)raiseObjectWindow:(id)dict
 {
     id window = [dict valueForKey:@"window"];
-    if (!window) {
+    if (window) {
+        XRaiseWindow(_display, [window unsignedLongValue]);
         return;
     }
-    XRaiseWindow(_display, [window unsignedLongValue]);
+
+    if ([dict intValueForKey:@"HOTDOGNOFRAME"]) {
+        id childWindow = [dict valueForKey:@"childWindow"];
+        if (childWindow) {
+            XRaiseWindow(_display, [childWindow unsignedLongValue]);
+        }
+        return;
+    }
 }
 - (void)lowerObjectWindow:(id)dict
 {
@@ -1151,6 +1159,19 @@ NSLog(@"unparent object %@", dict);
 }
 - (void)moveResizeObjectWindow:(id)dict x:(int)x y:(int)y w:(int)w h:(int)h
 {
+    if ([dict intValueForKey:@"HOTDOGNOFRAME"]) {
+        id window = [dict valueForKey:@"childWindow"];
+        if (window) {
+            Window win = [window unsignedLongValue];
+            [dict setValue:nsfmt(@"%d", x) forKey:@"x"];
+            [dict setValue:nsfmt(@"%d", y) forKey:@"y"];
+            [dict setValue:nsfmt(@"%d", w) forKey:@"w"];
+            [dict setValue:nsfmt(@"%d", h) forKey:@"h"];
+            [self XMoveResizeWindow:win :x :y :w :h];
+        }
+        return;
+    }
+
     id window = [dict valueForKey:@"window"];
     if (!window) {
         return;
@@ -2328,6 +2349,7 @@ if ([self doesWindow:e->window haveProperty:"HOTDOGDESKTOP"]) {
         if (moveWindowIfNoFrame) {
             XMoveWindow(_display, e->window, attrs.x, attrs.y);
         }
+        XSelectInput(_display, e->window, EnterWindowMask|LeaveWindowMask);
         XMapWindow(_display, e->window);
         [self setFocusDict:dict];
         return;
