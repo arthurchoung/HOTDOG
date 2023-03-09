@@ -200,43 +200,6 @@
 //        [self tileWindows:elt monitor:[monitors nth:i]];
     }
 }
-- (void)tileWindows:(id)windows monitor:(id)monitor
-{
-    int count = [windows count];
-    if (count < 1) {
-        return;
-    }
-    double squareRoot = ceil(sqrt((double)count));
-    int nrows = squareRoot;
-    int ncols = squareRoot;
-    int monitorX = [monitor intValueForKey:@"x"];
-    int monitorY = [monitor intValueForKey:@"y"];
-    int monitorWidth = [monitor intValueForKey:@"width"];
-    int monitorHeight = [monitor intValueForKey:@"height"];
-    int cellWidth = monitorWidth / ncols;
-    int cellHeight = monitorHeight / nrows;
-    for (int i=0; i<count; i++) {
-        id dict = [windows nth:i];
-        id origWNumber = [dict valueForKey:@"w"];
-        id origHNumber = [dict valueForKey:@"h"];
-        int origW = [origWNumber intValue];
-        int origH = [origHNumber intValue];
-        [dict setValue:[dict valueForKey:@"x"] forKey:@"origX"];
-        [dict setValue:[dict valueForKey:@"y"] forKey:@"origY"];
-        [dict setValue:origWNumber forKey:@"origW"];
-        [dict setValue:origHNumber forKey:@"origH"];
-        int row = i/ncols;
-        int col = i%ncols; 
-        int x = monitorX + cellWidth*col + 5;
-        int y = cellHeight*row + 5;
-        int w = cellWidth - 10;
-        int h = cellHeight - 10;
-        Int2 proportionalSize = [Definitions proportionalSizeForWidth:w height:h origWidth:origW origHeight:origH];
-        Int4 r = [Definitions centerRectX:0 y:0 w:proportionalSize.w h:proportionalSize.h inW:w h:h];
-        [dict setValue:nsfmt(@"%d %d", x+r.x, y+r.y) forKey:@"moveWindow"];
-        [dict setValue:nsfmt(@"%d %d", r.w, r.h) forKey:@"resizeWindow"];
-    }
-}
 - (void)revertWindowPositions
 {
     id windowManager = [@"windowManager" valueForKey];
