@@ -27,6 +27,12 @@
 
 static id _text = @"Close window to remove icons\nFIXME: This window should not be displayed";
 
+static id desktopMenuCSV =
+@"hotKey,displayName,messageForClick\n"
+@",\"Quit MiscDesktop\",\"exit:0\"\n"
+;
+
+
 @implementation Definitions(fmekwlmfklsdmfklsmdklfmksldfjdksjfkfjsdkffjdksfjksdk)
 + (id)MiscDesktop
 {
@@ -41,6 +47,20 @@ static id _text = @"Close window to remove icons\nFIXME: This window should not 
 }
 @end
 @implementation MiscDesktop
+- (void)handleDestroyNotifyEvent:(id)event
+{
+NSLog(@"handleDestroyNotifyEvent:%@", event);
+    exit(0);
+}
+- (id)generateAppMenuArray
+{
+    id desktopMenu = [[desktopMenuCSV parseCSVFromString] asMenu];
+    [desktopMenu setValue:@"Desktop" forKey:@"title"];
+    [desktopMenu setValue:@"1" forKey:@"unmapInsteadOfClose"];
+    id results = nsarr();
+    [results addObject:desktopMenu];
+    return results;
+}
 
 - (void)beginIteration:(id)event rect:(Int4)r
 {
@@ -126,10 +146,18 @@ NSLog(@"windowManager %@", windowManager);
                 cursorX += maxWidth + 10;
                 maxWidth = 16;
             }
-            [windowManager openWindowForObject:obj x:cursorX y:cursorY w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+            dict = [windowManager openUnmappedWindowForObject:obj x:cursorX y:cursorY w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
             cursorY += h+10;
-            dict = [windowManager dictForObject:obj];
-            [dict setValue:mountpoint forKey:@"filePath"];
+            if (dict) {
+                [dict setValue:mountpoint forKey:@"filePath"];
+                unsigned long win = [dict unsignedLongValueForKey:@"window"];
+                if (win) {
+                    id appMenuHead = [@"HOTDOGAPPMENUHEAD" valueForKey];
+                    [windowManager XChangeProperty:win name:"HOTDOGAPPMENUHEAD" str:appMenuHead];
+                    [windowManager XMapWindow:win];
+                    [windowManager raiseObjectWindow:dict];
+                }
+            }
         }
         [dict setValue:@"1" forKey:@"needsRedraw"];
     }
