@@ -35,6 +35,8 @@ static id workbenchMenuCSV =
 @",\"Rename\",\"1\"\n"
 @",\"Info\",\"1\"\n"
 @",\"Discard\",\"1\"\n"
+@",,\n"
+@",\"Quit AmigaDesktop\",\"'desktopObject'|valueForKey|exit:0\"\n"
 ;
 
 static id diskMenuCSV =
@@ -76,9 +78,15 @@ static id specialMenuCSV =
     id object = [Definitions AmigaBuiltInDir:path];
     if (object) {
         [object setValue:path forKey:@"title"];
-        id dict = [windowManager openWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+        id dict = [windowManager openUnmappedWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
         if (dict) {
-            [windowManager raiseObjectWindow:dict];
+            unsigned long win = [dict unsignedLongValueForKey:@"window"];
+            if (win) {
+                id appMenuHead = [@"HOTDOGAPPMENUHEAD" valueForKey];
+                [windowManager XChangeProperty:win name:"HOTDOGAPPMENUHEAD" str:appMenuHead];
+                [windowManager XMapWindow:win];
+                [windowManager raiseObjectWindow:dict];
+            }
         }
     }
 }
@@ -111,9 +119,15 @@ NSLog(@"objectPath %@", objectPath);
     if ([realPath isDirectory]) {
         id object = [Definitions AmigaDir:realPath];
         if (object) {
-            id dict = [windowManager openWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+            id dict = [windowManager openUnmappedWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
             if (dict) {
-                [windowManager raiseObjectWindow:dict];
+                unsigned long win = [dict unsignedLongValueForKey:@"window"];
+                if (win) {
+                    id appMenuHead = [@"HOTDOGAPPMENUHEAD" valueForKey];
+                    [windowManager XChangeProperty:win name:"HOTDOGAPPMENUHEAD" str:appMenuHead];
+                    [windowManager XMapWindow:win];
+                    [windowManager raiseObjectWindow:dict];
+                }
             }
         }
     }
@@ -149,6 +163,18 @@ exit(1);
 }
 @end
 @implementation AmigaDesktop
+- (void)exit:(int)status
+{
+NSLog(@"AmigaDesktop exit:%d", status);
+    [_observer sendSignal:SIGTERM];
+    exit(status);
+}
+    
+- (void)handleDestroyNotifyEvent:(id)event
+{
+NSLog(@"handleDestroyNotifyEvent:%@", event);
+    [self exit:0];
+}
 - (id)generateAppMenuArray
 {
     id workbenchMenu = [[workbenchMenuCSV parseCSVFromString] asMenu];
@@ -278,10 +304,18 @@ NSLog(@"windowManager %@", windowManager);
                 cursorX += maxWidth + 10;
                 maxWidth = 16;
             }
-            [windowManager openWindowForObject:obj x:cursorX-(w/2) y:cursorY w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+            dict = [windowManager openUnmappedWindowForObject:obj x:cursorX-(w/2) y:cursorY w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
             cursorY += h+10;
-            dict = [windowManager dictForObject:obj];
-            [dict setValue:mountpoint forKey:@"filePath"];
+            if (dict) {
+                [dict setValue:mountpoint forKey:@"filePath"];
+                unsigned long win = [dict unsignedLongValueForKey:@"window"];
+                if (win) {
+                    id appMenuHead = [@"HOTDOGAPPMENUHEAD" valueForKey];
+                    [windowManager XChangeProperty:win name:"HOTDOGAPPMENUHEAD" str:appMenuHead];
+                    [windowManager XMapWindow:win];
+                    [windowManager raiseObjectWindow:dict];
+                }
+            }
         }
         [dict setValue:@"1" forKey:@"needsRedraw"];
     }
