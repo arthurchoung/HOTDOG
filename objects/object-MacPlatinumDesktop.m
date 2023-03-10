@@ -37,6 +37,8 @@ static id fileMenuCSV =
 @",,\n"
 @",\"Find...\",\"1\"\n"
 @",\"Search Internet...\",\"1\"\n"
+@",,\n"
+@",\"Quit MacPlatinumDesktop\",\"'desktopObject'|valueForKey|exit:0\"\n"
 ;
 
 static id editMenuCSV =
@@ -122,9 +124,15 @@ static id helpMenuCSV =
     if ([realPath isDirectory]) {
         id object = [Definitions MacPlatinumDir:realPath];
         if (object) {
-            id dict = [windowManager openWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+            id dict = [windowManager openUnmappedWindowForObject:object x:0 y:0 w:640 h:360 overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
             if (dict) {
-                [windowManager raiseObjectWindow:dict];
+                unsigned long win = [dict unsignedLongValueForKey:@"window"];
+                if (win) {
+                    id appMenuHead = [@"HOTDOGAPPMENUHEAD" valueForKey];
+                    [windowManager XChangeProperty:win name:"HOTDOGAPPMENUHEAD" str:appMenuHead];
+                    [windowManager XMapWindow:win];
+                    [windowManager raiseObjectWindow:dict];
+                }
             }
         }
     }
@@ -159,6 +167,17 @@ exit(1);
 }
 @end
 @implementation MacPlatinumDesktop
+- (void)exit:(int)status
+{
+    [_observer sendSignal:SIGTERM];
+    exit(status);
+}
+    
+- (void)handleDestroyNotifyEvent:(id)event
+{
+NSLog(@"handleDestroyNotifyEvent:%@", event);
+    [self exit:0];
+}
 - (id)generateAppMenuArray
 {
     id fileMenu = [[fileMenuCSV parseCSVFromString] asMenu];
@@ -295,10 +314,18 @@ NSLog(@"windowManager %@", windowManager);
                 cursorX += maxWidth + 10;
                 maxWidth = 16;
             }
-            [windowManager openWindowForObject:obj x:cursorX y:cursorY w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
+            dict = [windowManager openUnmappedWindowForObject:obj x:cursorX y:cursorY w:w h:h overrideRedirect:NO propertyName:"HOTDOGNOFRAME"];
             cursorY += h+10;
-            dict = [windowManager dictForObject:obj];
-            [dict setValue:mountpoint forKey:@"filePath"];
+            if (dict) {
+                [dict setValue:mountpoint forKey:@"filePath"];
+                unsigned long win = [dict unsignedLongValueForKey:@"window"];
+                if (win) {
+                    id appMenuHead = [@"HOTDOGAPPMENUHEAD" valueForKey];
+                    [windowManager XChangeProperty:win name:"HOTDOGAPPMENUHEAD" str:appMenuHead];
+                    [windowManager XMapWindow:win];
+                    [windowManager raiseObjectWindow:dict];
+                }
+            }
         }
         [dict setValue:@"1" forKey:@"needsRedraw"];
     }
