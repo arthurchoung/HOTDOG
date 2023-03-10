@@ -147,9 +147,47 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             id message = [args join:@" "];
 //NSLog(@"message %@", message);
             id object = [nsdict() evaluateMessage:message];
-            if (object) {
-                [Definitions runWindowManagerForObject:object propertyName:"HOTDOGDESKTOP"];
+            if (!object) {
+                exit(0);
             }
+
+            [object setAsValueForKey:@"desktopObject"];
+
+            char *propertyName = "HOTDOGDESKTOP";
+
+
+            id windowManager = [@"WindowManager" asInstance];
+            [windowManager setAsValueForKey:@"windowManager"];
+            if (![windowManager setupX11]) {
+NSLog(@"unable to setup window manager");
+exit(0);
+            }
+
+
+            unsigned long appMenuWindow = 0;
+            if ([object respondsToSelector:@selector(generateAppMenuArray)]) {
+                id appMenuArray = [object generateAppMenuArray];
+                if (appMenuArray) {
+                    appMenuWindow = [windowManager openAppMenuWindowsForArray:appMenuArray];
+                }
+            }
+
+            id dict = [windowManager openUnmappedWindowForObject:object x:0 y:0 w:10 h:10 overrideRedirect:NO propertyName:propertyName];
+NSLog(@"unmapped dict %@", dict);
+
+            if (dict && appMenuWindow) {
+                unsigned long win = [dict unsignedLongValueForKey:@"window"];
+                id str = nsfmt(@"%lu", appMenuWindow);
+                [str setAsValueForKey:@"HOTDOGAPPMENUHEAD"];
+                [windowManager XChangeProperty:win name:"HOTDOGAPPMENUHEAD" str:str];
+                [windowManager XRaiseWindow:win];
+            }
+                
+            [windowManager runLoop];
+
+
+            exit(0);
+
         } else if ((argc == 2) && !strcmp(argv[1], ".")) {
             id obj = [Definitions ObjectInterface];
             [Definitions runWindowManagerForObject:obj];
