@@ -86,5 +86,48 @@ if ($cmd =~ m/^xset\b/) {
     }
 }
 
+if ($cmd =~ m/^xinput\b/) {
+    $name = $line;
+    if ($name =~ s/\bid=(\d+)\[slave.*//) {
+        $id = $1;
+        $name =~ s/^\s*//;
+        $name =~ s/\s*$//;
+        $cmd = "xinput --list-props $id";
+        $output = `$cmd`;
+        if ($output =~ m/\n\t*Device Enabled[ \(\)0-9]*:\s+([01])/) {
+            $status = $1;
+            if ($status) {
+                $cmd = qq{hotdog confirm Disable Cancel "Disable $name (id=$id)?"};
+                $output = `$cmd`;
+                chomp $output;
+                if ($output eq 'Disable') {
+                    system('xinput', '--disable', $id);
+                }
+            } else {
+                $cmd = qq{hotdog confirm Enable Cancel "Enable $name (id=$id)?"};
+                $output = `$cmd`;
+                chomp $output;
+                if ($output eq 'Enable') {
+                    system('xinput', '--enable', $id);
+                }
+            }
+            exit 0;
+        }
+    }
+}
+
+if ($cmd =~ m/^iwconfig\b/) {
+    if ($line =~ m/^([a-z0-9]+)/) {
+        system('hotdog-selectWifiNetwork.pl', $1);
+        exit 0;
+    }
+    $text = <<EOF;
+Select a line that starts with the network interface name.
+EOF
+    system('hotdog', 'alert', $text);
+    exit 0;
+}
+
+
 system('hotdog', 'alert', $cmd, $line);
 
