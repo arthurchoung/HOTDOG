@@ -365,6 +365,13 @@ NSLog(@"Process dealloc pid %d getpid %d command %@", _pid, getpid(), _command);
     }
     [super dealloc];
 }
+- (void)sendSignal:(int)signal
+{
+    if (_pid) {
+NSLog(@"sendSignal:%d pid %d", signal, _pid);
+        kill(_pid, signal);
+    }
+}
 
 - (int)fileDescriptor
 {
