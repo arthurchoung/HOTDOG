@@ -111,6 +111,10 @@ BOOL isnsstr(id obj)//$;
     return (angle * 0.01745329252);
 }
 
++ (void)sendTerminationSignalToSelf
+{
+    kill(getpid(), SIGTERM);
+}
 + (void)exit:(int)code
 {
     exit(code);
