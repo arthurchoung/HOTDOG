@@ -65,19 +65,28 @@ foreach $line (@lines) {
         $output = `$cmd`;
         chomp $output;
         if ($output eq 'OK') {
-            $cmd = "sudo kill $dhcpcd";
+            $cmd = "sudo -A kill $dhcpcd";
             $output = `$cmd`;
             chomp $output;
         }
     } else {
-        $text = "Run dhcpcd for $interface?";
-        $cmd = qq{hotdog confirm OK Cancel "$text"};
-        $output = `$cmd`;
-        chomp $output;
-        if ($output eq 'OK') {
+        $text = "What to do with $interface?";
+        $text =~ s/\\/\\\\/g;
+        $text =~ s/"/\\"/g;
+        $cmd = sprintf('hotdog radio OK Cancel %s %s %s %s',
+            qq{"$text"},
+            'nothing 1 "Do Nothing"',
+            qq{dhcpcd 0 "dhcpcd $interface"},
+            qq{ifconfigup 0 "ifconfig $interface up"});
+        $result = `$cmd`;
+        chomp $result;
+        if ($result eq 'dhcpcd') {
             $cmd = "hotdog-connectNetworkInterface.pl $interface";
             $output = `$cmd`;
             chomp $output;
+        } elsif ($result eq 'ifconfigup') {
+            $cmd = "sudo -A ifconfig $interface up";
+            $output = `$cmd`;
         }
     }
 }
