@@ -13,11 +13,11 @@ hotKey,displayName,messageForClick
 ,,
 ,AmigaDesktop,"['hotdog' 'desktop' 'AmigaDesktop']|runCommandInBackground"
 ,AtariSTDesktop,"['hotdog' 'desktop' 'AtariSTDesktop']|runCommandInBackground"
-,HotDogStandDesktop,"['hotdog' 'show' 'HotDogStandDesktop']|runCommandInBackground"
+,HotDogStandDesktop,"['hotdog' 'desktop' 'HotDogStandDesktop']|runCommandInBackground"
 ,MacClassicDesktop,"['hotdog' 'desktop' 'MacClassicDesktop']|runCommandInBackground"
 ,MacColorDesktop,"['hotdog' 'desktop' 'MacColorDesktop']|runCommandInBackground"
 ,MacPlatinumDesktop,"['hotdog' 'desktop' 'MacPlatinumDesktop']|runCommandInBackground"
-,MiscDesktop,"['hotdog' 'show' 'MiscDesktop']|runCommandInBackground"
+,MiscDesktop,"['hotdog' 'desktop' 'MiscDesktop']|runCommandInBackground"
 ,,
 ,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
 ,HomeScreen,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'HomeScreen')|runCommandInBackground"
@@ -26,4 +26,4 @@ hotKey,displayName,messageForClick
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
 ,,
-,"Quit","exit:0"
+,"Quit","sendTerminationSignalToSelf"
