@@ -227,7 +227,7 @@ NSLog(@"dy %d", dy);
 }
 - (void)handleMouseMoved:(id)event
 {
-NSLog(@"Menu handleMouseMoved");
+//NSLog(@"Menu handleMouseMoved");
     _mouseX = [event intValueForKey:@"mouseX"];
     _mouseY = [event intValueForKey:@"mouseY"];
 }

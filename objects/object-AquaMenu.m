@@ -290,7 +290,7 @@ NSLog(@"dy %d", dy);
 
 - (void)handleMouseMoved:(id)event
 {
-NSLog(@"AquaMenu handleMouseMoved");
+//NSLog(@"AquaMenu handleMouseMoved");
     if (_closingIteration > 0) {
         return;
     }

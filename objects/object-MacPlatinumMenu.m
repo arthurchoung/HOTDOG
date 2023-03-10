@@ -397,7 +397,7 @@ NSLog(@"dy %d", dy);
 }
 - (void)handleMouseMoved:(id)event
 {
-NSLog(@"MacPlatinumMenu handleMouseMoved");
+//NSLog(@"MacPlatinumMenu handleMouseMoved");
     if (_closingIteration > 0) {
         return;
     }

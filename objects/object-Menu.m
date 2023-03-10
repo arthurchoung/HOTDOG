@@ -323,7 +323,7 @@ NSLog(@"dy %d", dy);
 }
 - (void)handleMouseMoved:(id)event
 {
-NSLog(@"Menu handleMouseMoved");
+//NSLog(@"Menu handleMouseMoved");
     if (_closingIteration > 0) {
         return;
     }
