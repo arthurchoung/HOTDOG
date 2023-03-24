@@ -401,16 +401,6 @@ exit(1);
     [obj updateArray];
     return obj;
 }
-+ (id)WifiNetworksPanel
-{
-    id generatecmd = nsarr();
-    [generatecmd addObject:@"hotdog-generateWifiNetworksPanel.pl"];
-
-    id obj = [@"Panel" asInstance];
-    [obj setValue:generatecmd forKey:@"generateCommand"];
-    [obj updateArray];
-    return obj;
-}
 + (id)NetworkPanel
 {
     id generatecmd = nsarr();
