@@ -5,15 +5,25 @@ if (not $interface) {
     die('specify interface');
 }
 
-$essid = `hotdog-generateWifiNetworksPanel.pl | hotdog show Panel`;
-#$essid = `sudo -A hotdog-scanNetworks.pl | hotdog choose '#{essid|percentDecode} #{quality}/70' 'Wireless Network' '\nChoose a network ESSID:\n\n' | hotdog-allValuesForKey:.pl essid | hotdog-percentDecode.pl | hotdog-quotedString.pl`;
-chomp $essid;
-if (not $essid) {
+$choice = `hotdog-generateWifiNetworksPanel.pl | hotdog show Panel`;
+chomp $choice;
+if (not $choice) {
 exit 0;
 }
 
-$essid =~ s/\\/\\\\/g;
-$essid =~ s/"/\\"/g;
+if ($choice !~ m/\bessid:(\S+)/) {
+    die('essid not found');
+}
+$essid = $1;
+$essid =~ s/%([0-9a-fA-F]{2})/chr(hex($1))/eg;
 
-`sudo -A iwconfig $interface essid "$essid"`;
+if ($choice =~ m/\bencryption:on/) {
+    $password = `hotdog input OK Cancel 'Enter wifi password:'`;
+    chomp $password;
+    if ($password) {
+        system('hotdog-runWPASupplicantForInterface:essid:password:.pl', $interface, $essid, $password);
+    }
+} else {
+    system('sudo', '-A', 'iwconfig', $interface, 'essid', $essid);
+}
 
