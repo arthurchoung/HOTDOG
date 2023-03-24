@@ -290,6 +290,8 @@ NSLog(@"lines %@", lines);
                     obj = [@"MacPlatinumAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                     obj = [@"HotDogStandAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"winmac"]) {
+                    obj = [@"MacPlatinumAlert" asInstance];
                 } else {
                     obj = [@"MacAlert" asInstance];
                 }
@@ -332,6 +334,8 @@ NSLog(@"lines %@", lines);
                     obj = [@"MacPlatinumAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                     obj = [@"HotDogStandAlert" asInstance];
+                } else if ([hotdogMode isEqual:@"winmac"]) {
+                    obj = [@"MacPlatinumAlert" asInstance];
                 } else {
                     obj = [@"MacAlert" asInstance];
                 }
@@ -375,6 +379,8 @@ NSLog(@"lines %@", lines);
                 obj = [@"MacPlatinumChecklist" asInstance];
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandChecklist" asInstance];
+            } else if ([hotdogMode isEqual:@"winmac"]) {
+                obj = [@"MacPlatinumChecklist" asInstance];
             } else {
                 obj = [@"MacChecklist" asInstance];
             }
@@ -425,6 +431,8 @@ NSLog(@"lines %@", lines);
                 obj = [@"MacPlatinumRadio" asInstance];
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandRadio" asInstance];
+            } else if ([hotdogMode isEqual:@"winmac"]) {
+                obj = [@"MacPlatinumRadio" asInstance];
             } else {
                 obj = [@"MacRadio" asInstance];
             }
@@ -476,6 +484,8 @@ NSLog(@"lines %@", lines);
                 obj = [@"MacPlatinumTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"winmac"]) {
+                obj = [@"MacPlatinumTextFields" asInstance];
             } else {
                 obj = [@"MacTextFields" asInstance];
             }
@@ -527,6 +537,8 @@ NSLog(@"lines %@", lines);
                 obj = [@"MacPlatinumTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandTextFields" asInstance];
+            } else if ([hotdogMode isEqual:@"winmac"]) {
+                obj = [@"MacPlatinumTextFields" asInstance];
             } else {
                 obj = [@"MacTextFields" asInstance];
             }
@@ -542,8 +554,20 @@ NSLog(@"lines %@", lines);
             [obj setValue:fields forKey:@"fields"];
 
             [Definitions runWindowManagerForObject:obj];
-        } else if ((argc > 1) && !strcmp(argv[1], "progress")) {
-            id obj = [@"Progress" asInstance];
+        } else if ((argc > 1) && !strcmp(argv[1], "prgbox")) {
+            id cmd = nsarr();
+            for (int i=2; i<argc; i++) {
+                [cmd addObject:nsfmt(@"%s", argv[i])];
+            }
+            id process = [cmd runCommandAndReturnProcessWithError];
+            if (!process) {
+NSLog(@"unable to run command %@", cmd);
+                exit(1);
+            }
+            id obj = [@"AmigaPrgBox" asInstance];
+            [obj setValue:process forKey:@"process"];
+            [obj setValue:nsfmt(@"%@", [cmd join:@" "]) forKey:@"text"];
+            [obj setValue:@"OK" forKey:@"okText"];
             [Definitions runWindowManagerForObject:obj];
         } else if ((argc > 1) && !strcmp(argv[1], "drives")) {
             id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
@@ -616,6 +640,8 @@ NSLog(@"lines %@", lines);
                     classPrefix = "HotDogStand";
                 } else if (!strcmp(argv[2], "atarist")) {
                     classPrefix = "AtariST";
+                } else if (!strcmp(argv[2], "winmac")) {
+                    classPrefix = "MacPlatinum";
                 }
                 [Definitions dialog:classPrefix :argc-3 :&argv[3]];
             }
