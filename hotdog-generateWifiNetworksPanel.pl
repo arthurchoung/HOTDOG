@@ -36,8 +36,10 @@ for ($i=0; $i<$count; $i++) {
 	} elsif ($i == $count-1) {
 		$button = 'panelBottomButton';
 	}
+    $outputline = $line;
+    $outputline =~ s/(['])/sprintf '%%%02x', ord $1/eg;
     print <<EOF;
-$button:'$essid [$quality/70] encryption:$encryption' message:['$essid'|writeToStandardOutput;exit:0]
+$button:'$essid [$quality/70] encryption:$encryption' message:['$outputline'|writeToStandardOutput;exit:0]
 EOF
 }
 
