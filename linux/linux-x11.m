@@ -1764,6 +1764,20 @@ NSLog(@"no object windows, exiting pid %d", getpid());
                             }
                         }
                     }
+                    if ([obj respondsToSelector:@selector(fileDescriptors)]) {
+                        int *objfds = [obj fileDescriptors];
+                        if (objfds) {
+                            for (int j=0;; j++) {
+                                if (objfds[j] < 0) {
+                                    break;
+                                }
+                                FD_SET(objfds[j], &rfds);
+                                if (objfds[j] > maxFD) {
+                                    maxFD = objfds[j];
+                                }
+                            }
+                        }
+                    }
                     if ([obj respondsToSelector:@selector(fileDescriptorObjects)]) {
                         id arr = [obj fileDescriptorObjects];
                         for (int j=0; j<[arr count]; j++) {
@@ -1946,6 +1960,22 @@ NSLog(@"received X event type %d", event.type);
                                 [obj handleFileDescriptor];
                             }
                             [elt setValue:@"1" forKey:@"needsRedraw"];
+                        }
+                    }
+                }
+                if ([obj respondsToSelector:@selector(fileDescriptors)]) {
+                    int *objfds = [obj fileDescriptors];
+                    if (objfds) {
+                        for (int j=0;; j++) {
+                            if (objfds[j] < 0) {
+                                break;
+                            }
+                            if (FD_ISSET(objfds[j], &rfds)) {
+                                if ([obj respondsToSelector:@selector(handleFileDescriptor:)]) {
+                                    [obj handleFileDescriptor:objfds[j]];
+                                }
+                                [elt setValue:@"1" forKey:@"needsRedraw"];
+                            }
                         }
                     }
                 }
