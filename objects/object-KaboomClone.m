@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <math.h>
-
 @implementation Definitions(jeklwjfkldmsklfmksdfmk)
 + (id)KaboomClone
 {
