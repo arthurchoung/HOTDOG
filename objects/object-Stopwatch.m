@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <time.h>
-
 #ifdef BUILD_FOR_OSX
 static uint64_t osx_clock()
 {
