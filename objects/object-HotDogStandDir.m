@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 static id builtinMain =
 @"class:HotDogStandFileManagerIcon name:File%20Manager x:20 y:20\n"
 @"class:HotDogStandControlPanelIcon name:Control%20Panel x:120 y:20 doubleClickCommand:hotdog%20hotdogstandbuiltindir%20ControlPanel\n"
@@ -389,9 +387,7 @@ static id builtinControlPanel =
             }
             _buttonDownOffsetX = mouseX - x;
             _buttonDownOffsetY = mouseY - y;
-            struct timeval tv;
-            gettimeofday(&tv, NULL);
-            id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
+            id timestamp = [Definitions gettimeofday];
             if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
                 id command = [elt valueForKey:@"doubleClickCommand"];
                 if (command) {

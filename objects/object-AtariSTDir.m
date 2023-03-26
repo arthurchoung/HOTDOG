@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 static char *horizontalKnobLeftPixels =
 "b\n"
 "b\n"
@@ -914,9 +912,7 @@ static char *activeVerticalScrollBarPixels =
             }
             _buttonDownOffsetX = mouseX - x;
             _buttonDownOffsetY = mouseY - y;
-            struct timeval tv;
-            gettimeofday(&tv, NULL);
-            id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
+            id timestamp = [Definitions gettimeofday];
             if (_buttonDownTimestamp && ([timestamp doubleValue] - [_buttonDownTimestamp doubleValue] <= 0.3)) {
                 if ([_path isDirectory]) {
                     chdir([_path UTF8String]);
