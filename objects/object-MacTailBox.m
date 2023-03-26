@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 @implementation Definitions(fjejfksdljfklsdjfkkwlfmkldsmfkldsjflkfjdskfjksd)
 + (id)testMacTailBox:(id)filePath
 {
