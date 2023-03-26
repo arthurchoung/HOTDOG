@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 // for compatibility
 // CommandOutputBitmap has been renamed to CommandBitmapMenuItem
 @implementation Definitions(fjkdlsjkfjkdfjlksdjdskfldsjkfjfkdlsmfkldsmkfljkf)
