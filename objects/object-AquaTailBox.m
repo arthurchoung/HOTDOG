@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 @implementation Definitions(jfeokwfmklsdmfldjflksdjkf)
 + (id)testAquaTailBox:(id)path
 {

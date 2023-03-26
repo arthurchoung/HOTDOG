@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 static char *borderPalette =
 "b #000000\n"
 ". #ffffff\n"

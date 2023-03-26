@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 @interface AmigaTailBox : IvarObject
 {
     id _path;
