@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 static char *topBorderPalette =
 "b #000000\n"
 "o #BBBBBB\n"
