@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 static char *iconPalette =
 "b #000000\n"
 "X #0000AA\n"
