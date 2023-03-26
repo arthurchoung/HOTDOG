@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 @implementation NSString(fekwlfmkdlsmfklsd)
 - (id)iconFromFile
 {
@@ -288,9 +286,7 @@ NSLog(@"CommandOutputBitmap handleMouseDown");
     id beforeDragYNumber = [x11dict valueForKey:@"beforeDragY"];
     if ([xNumber isEqual:beforeDragXNumber]) {
         if ([yNumber isEqual:beforeDragYNumber]) {
-            struct timeval tv;
-            gettimeofday(&tv, NULL);
-            id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
+            id timestamp = [Definitions gettimeofday];
 
             id selectedTimestamp = [x11dict valueForKey:@"selectedTimestamp"];
             if (selectedTimestamp) {

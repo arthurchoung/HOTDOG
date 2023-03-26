@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 static char *prefsPalette =
 "b #000000\n"
 ". #000022\n"
@@ -209,9 +207,7 @@ static char *openPrefsPixels =
     _buttonDownX = mouseX;
     _buttonDownY = mouseY;
 
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
+    id timestamp = [Definitions gettimeofday];
     if (_buttonDownTimestamp) {
         if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
             [self setValue:nil forKey:@"buttonDownTimestamp"];

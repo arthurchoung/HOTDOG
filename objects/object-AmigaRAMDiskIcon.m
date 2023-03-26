@@ -25,8 +25,6 @@
 
 #import "HOTDOG.h"
 
-#include <sys/time.h>
-
 static char *ramDiskPalette =
 "b #000000\n"
 ". #000022\n"
@@ -182,9 +180,7 @@ static char *ramDiskPixels =
         [x11dict setValue:@"1" forKey:@"needsRedraw"];
     }
 
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    id timestamp = nsfmt(@"%ld.%06ld", tv.tv_sec, tv.tv_usec);
+    id timestamp = [Definitions gettimeofday];
     if (_buttonDownTimestamp) {
         if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
             _buttonDown = NO;
