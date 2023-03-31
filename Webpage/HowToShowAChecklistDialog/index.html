@@ -13,7 +13,7 @@
 
 From the shell, run the command:
 
-<pre>
+<pre style="white-space:pre-wrap">
 $ hotdog checklist OK Cancel "This is a checklist." tag1 1 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
 </pre>
 
@@ -34,8 +34,6 @@ The first argument in the group is a tag name for the checkbox. This will be pri
 The second argument in the group indicates whether or not the checkbox is checked when the dialog first opens.
 <p>
 The third argument in the group is the text for the checkbox. This will be displayed next to the checkbox.
-<p>
-<img src="checklist.png">
 
 <hr>
 
@@ -45,13 +43,43 @@ The style of dialog will be determined by the environment variable HOTDOG_MODE.
 <p>
 To force a dialog to be in a specific style:
 
-<pre>
-$ HOTDOG_MODE="amiga" hotdog checklist OK Cancel "This is a checklist." tag1 1 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+<pre style="white-space:pre-wrap">
+$ HOTDOG_MODE="hotdogstand" hotdog checklist OK Cancel "This is a checklist." tag1 1 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="checklist-hotdogstand.png">
 
+<pre style="white-space:pre-wrap">
+$ HOTDOG_MODE="amiga" hotdog checklist OK Cancel "This is a checklist." tag1 1 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="checklist-amiga.png">
+
+<pre style="white-space:pre-wrap">
+$ HOTDOG_MODE="atarist" hotdog checklist OK Cancel "This is a checklist." tag1 1 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="checklist-atarist.png">
+
+<pre style="white-space:pre-wrap">
 $ HOTDOG_MODE="macclassic" hotdog checklist OK Cancel "This is a checklist." tag1 1 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
 
+$ HOTDOG_MODE="maccolor" hotdog checklist OK Cancel "This is a checklist." tag1 1 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="checklist-macclassic.png">
+
+<pre style="white-space:pre-wrap">
+$ HOTDOG_MODE="macplatinum" hotdog checklist OK Cancel "This is a checklist." tag1 1 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="checklist-macplatinum.png">
+
+<pre style="white-space:pre-wrap">
 $ HOTDOG_MODE="aqua" hotdog checklist OK Cancel "This is a checklist." tag1 1 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
 </pre>
+<p>
+<img src="checklist-aqua.png">
 
 <hr>
 
