@@ -13,7 +13,7 @@
 
 From the shell, run the command:
 
-<pre>
+<pre style="white-space:pre-wrap">
 $ hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
 </pre>
 
@@ -34,8 +34,6 @@ The first argument in the group is a tag name for the radio button. This will be
 The second argument in the group indicates whether or not the radio button is selected when the dialog first opens.
 <p>
 The third argument in the group is the text for the radio button. This will be displayed next to the radio button.
-<p>
-<img src="radio.png">
 
 <hr>
 
@@ -45,13 +43,43 @@ The style of dialog will be determined by the environment variable HOTDOG_MODE.
 <p>
 To force a dialog to be in a specific style:
 
-<pre>
-$ HOTDOG_MODE="amiga" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+<pre style="white-space:pre-wrap">
+$ HOTDOG_MODE="hotdogstand" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="radio-hotdogstand.png">
 
+<pre style="white-space:pre-wrap">
+$ HOTDOG_MODE="amiga" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="radio-amiga.png">
+
+<pre style="white-space:pre-wrap">
+$ HOTDOG_MODE="atarist" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="radio-atarist.png">
+
+<pre style="white-space:pre-wrap">
 $ HOTDOG_MODE="macclassic" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
 
+$ HOTDOG_MODE="maccolor" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="radio-macclassic.png">
+
+<pre style="white-space:pre-wrap">
+$ HOTDOG_MODE="macplatinum" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
+</pre>
+<p>
+<img src="radio-macplatinum.png">
+
+<pre style="white-space:pre-wrap">
 $ HOTDOG_MODE="aqua" hotdog radio OK Cancel "This is a radio button dialog." tag1 0 "Option 1" tag2 0 "Option 2" tag3 1 "Option 3"
 </pre>
+<p>
+<img src="radio-aqua.png">
 
 <hr>
 
