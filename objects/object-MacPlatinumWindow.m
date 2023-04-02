@@ -976,6 +976,8 @@ static char *resizeSelectionVerticalPixels =
     id _scaledCloseButtonDownPixels;
     id _scaledShadeButtonDownPixels;
     id _scaledMaximizeButtonDownPixels;
+
+    id _mouseDownTimestamp;
 }
 @end
 @implementation MacPlatinumWindow
@@ -1386,6 +1388,15 @@ if (!windowShade) {
         || [Definitions isX:mouseX y:mouseY insideRect:_rightBorderRect]
         || [Definitions isX:mouseX y:mouseY insideRect:_bottomBorderRect])
     {
+        id timestamp = [Definitions gettimeofday];
+        if (_mouseDownTimestamp) {
+            if ([timestamp doubleValue]-[_mouseDownTimestamp doubleValue] <= 0.3) {
+                [self x11ToggleWindowShade:x11dict];
+                [self setValue:nil forKey:@"mouseDownTimestamp"];
+                return;
+            }
+        }
+        [self setValue:timestamp forKey:@"mouseDownTimestamp"];
         _buttonDown = 't';
         _buttonDownX = mouseX;
         _buttonDownY = mouseY;
