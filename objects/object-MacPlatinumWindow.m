@@ -139,6 +139,81 @@ static char *inactiveTitleBarRightPixels =
 "XXXXXXXXXXXXXXXXXbb\n"
 "bbbbbbbbbbbbbXXXXbb\n"
 ;
+static char *inactiveWindowShadeTitleBarLeftPixels =
+"bbbbbb\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bXXXXX\n"
+"bbbbbb\n"
+"  bbbb\n"
+;
+static char *inactiveWindowShadeTitleBarMiddlePixels =
+"b\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"X\n"
+"b\n"
+"b\n"
+;
+static char *inactiveWindowShadeTitleBarRightPixels =
+"bbbbbbbbbbbbbbbbbb \n"
+"XXXXXXXXXXXXXXXXXb \n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"XXXXXXXXXXXXXXXXXbb\n"
+"bbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbb\n"
+;
 static char *inactiveLeftBorderPalette =
 "b #555555\n"
 "X #DDDDDD\n"
@@ -264,6 +339,31 @@ static char *activeTitleBarLeftPixels =
 "b=%%@@@@@@@@@@@@@@@@@@\n"
 "b=%%@bbbbbbbbbbbbbbbbb\n"
 ;
+static char *activeWindowShadeTitleBarLeftPixels =
+"bbbbbbbbbbbbbbbbbbbbbb\n"
+"b=====================\n"
+"b=%%%%%%%%%%%%%%%%%%%%\n"
+"b=%%%%%%%%%%%%%%%%%%%%\n"
+"b=%%++++++++++++%%%%%=\n"
+"b=%%+...........=%%%%%\n"
+"b=%%+.=%%%%%%%%.=%%%%=\n"
+"b=%%+.%@@##$$%+.=%%%%%\n"
+"b=%%+.%@##$$%%+.=%%%%=\n"
+"b=%%+.%##$$%%&+.=%%%%%\n"
+"b=%%+.%#$$%%&&+.=%%%%=\n"
+"b=%%+.%$$%%&&*+.=%%%%%\n"
+"b=%%+.%$%%&&**+.=%%%%=\n"
+"b=%%+.%%%&&**=+.=%%%%%\n"
+"b=%%+.%++++++++.=%%%%=\n"
+"b=%%+...........=%%%%%\n"
+"b=%%%============%%%%%\n"
+"b=%%%%%%%%%%%%%%%%%%%%\n"
+"b=%%%%%%%%%%%%%%%%%%%%\n"
+"b=%%%%%%%%%%%%%%%%%%%%\n"
+"b@@@@@@@@@@@@@@@@@@@@@\n"
+"bbbbbbbbbbbbbbbbbbbbbb\n"
+"  bbbbbbbbbbbbbbbbbbbb\n"
+;
 static char *activeTitleBarRightPalette =
 "b #000000\n"
 ". #222222\n"
@@ -302,6 +402,31 @@ static char *activeTitleBarMiddlePixels =
 "+\n"
 "b\n"
 ;
+static char *activeWindowShadeTitleBarMiddlePixels =
+"b\n"
+"*\n"
+"$\n"
+"$\n"
+"*\n"
+"X\n"
+"*\n"
+"X\n"
+"*\n"
+"X\n"
+"*\n"
+"X\n"
+"*\n"
+"X\n"
+"*\n"
+"X\n"
+"$\n"
+"$\n"
+"$\n"
+"$\n"
+"+\n"
+"b\n"
+"b\n"
+;
 static char *activeTitleBarRightPixels =
 "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
 "************************************$b \n"
@@ -325,6 +450,31 @@ static char *activeTitleBarRightPixels =
 "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$+bb\n"
 "+++++++++++++++++++++++++++++++++$$$+bb\n"
 "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb*$$+bb\n"
+;
+static char *activeWindowShadeTitleBarRightPixels =
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \n"
+"************************************$b \n"
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$+bb\n"
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$+bb\n"
+"$$$$$OOOOOOOOOOOO$$$$OOOOOOOOOOOO$$$+bb\n"
+"X$$$$O...........*$$$O...........*$$+bb\n"
+"$$$$$O.*$$$$.$$$.*$$$O.*$$$$$$$$.*$$+bb\n"
+"X$$$$O.$++@@.#$O.*$$$O.$++@@##$O.*$$+bb\n"
+"$$$$$O.$+@@#.$$O.*$$$O.$+@@##$$O.*$$+bb\n"
+"X$$$$O.$@@##.$%O.*$$$O...........*$$+bb\n"
+"$$$$$O.$@##$.%%O.*$$$O.$@##$$%%O.*$$+bb\n"
+"X$$$$O.......%&O.*$$$O...........*$$+bb\n"
+"$$$$$O.$#$$%%&&O.*$$$O.$#$$%%&&O.*$$+bb\n"
+"X$$$$O.$$$%%&&*O.*$$$O.$$$%%&&*O.*$$+bb\n"
+"$$$$$O.$OOOOOOOO.*$$$O.$OOOOOOOO.*$$+bb\n"
+"X$$$$O...........*$$$O...........*$$+bb\n"
+"$$$$$$************$$$$************$$+bb\n"
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$+bb\n"
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$+bb\n"
+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$+bb\n"
+"+++++++++++++++++++++++++++++++++++++bb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
 ;
 static char *activeTitleBarTextLeftPixels =
 "b\n"
@@ -795,16 +945,22 @@ static char *resizeSelectionVerticalPixels =
     id _scaledFont;
 
     id _scaledInactiveTitleBarLeftPixels;
+    id _scaledInactiveWindowShadeTitleBarLeftPixels;
     id _scaledInactiveTitleBarMiddlePixels;
+    id _scaledInactiveWindowShadeTitleBarMiddlePixels;
     id _scaledInactiveTitleBarRightPixels;
+    id _scaledInactiveWindowShadeTitleBarRightPixels;
     id _scaledInactiveBottomBorderLeftPixels;
     id _scaledInactiveBottomBorderMiddlePixels;
     id _scaledInactiveBottomBorderRightPixels;
     id _scaledActiveTitleBarLeftPixels;
+    id _scaledActiveWindowShadeTitleBarLeftPixels;
     int _scaledActiveTitleBarLeftWidth;
     id _scaledActiveTitleBarMiddlePixels;
+    id _scaledActiveWindowShadeTitleBarMiddlePixels;
     int _scaledActiveTitleBarHeight;
     id _scaledActiveTitleBarRightPixels;
+    id _scaledActiveWindowShadeTitleBarRightPixels;
     int _scaledActiveTitleBarRightWidth;
     id _scaledActiveTitleBarTextLeftPixels;
     id _scaledActiveTitleBarTextRightPixels;
@@ -873,11 +1029,20 @@ static char *resizeSelectionVerticalPixels =
     obj = [nsfmt(@"%s", inactiveTitleBarLeftPixels) asXYScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledInactiveTitleBarLeftPixels"];
 
+    obj = [nsfmt(@"%s", inactiveWindowShadeTitleBarLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveWindowShadeTitleBarLeftPixels"];
+
     obj = [nsfmt(@"%s", inactiveTitleBarMiddlePixels) asYScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledInactiveTitleBarMiddlePixels"];
 
+    obj = [nsfmt(@"%s", inactiveWindowShadeTitleBarMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveWindowShadeTitleBarMiddlePixels"];
+
     obj = [nsfmt(@"%s", inactiveTitleBarRightPixels) asXYScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledInactiveTitleBarRightPixels"];
+
+    obj = [nsfmt(@"%s", inactiveWindowShadeTitleBarRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledInactiveWindowShadeTitleBarRightPixels"];
 
     obj = [nsfmt(@"%s", inactiveBottomBorderLeftPixels) asXYScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledInactiveBottomBorderLeftPixels"];
@@ -892,13 +1057,21 @@ static char *resizeSelectionVerticalPixels =
     [self setValue:obj forKey:@"scaledActiveTitleBarLeftPixels"];
     _scaledActiveTitleBarLeftWidth = [Definitions widthForCString:[obj UTF8String]];
 
+    obj = [nsfmt(@"%s", activeWindowShadeTitleBarLeftPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveWindowShadeTitleBarLeftPixels"];
+
     obj = [nsfmt(@"%s", activeTitleBarMiddlePixels) asYScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledActiveTitleBarMiddlePixels"];
     _scaledActiveTitleBarHeight = [Definitions heightForCString:[obj UTF8String]];
+    obj = [nsfmt(@"%s", activeWindowShadeTitleBarMiddlePixels) asYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveWindowShadeTitleBarMiddlePixels"];
 
     obj = [nsfmt(@"%s", activeTitleBarRightPixels) asXYScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledActiveTitleBarRightPixels"];
     _scaledActiveTitleBarRightWidth = [Definitions widthForCString:[obj UTF8String]];
+
+    obj = [nsfmt(@"%s", activeWindowShadeTitleBarRightPixels) asXYScaledPixels:scaling];
+    [self setValue:obj forKey:@"scaledActiveWindowShadeTitleBarRightPixels"];
 
     obj = [nsfmt(@"%s", activeTitleBarTextLeftPixels) asXYScaledPixels:scaling];
     [self setValue:obj forKey:@"scaledActiveTitleBarTextLeftPixels"];
@@ -992,6 +1165,11 @@ static char *resizeSelectionVerticalPixels =
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    BOOL windowShade = NO;
+    if (r.h == 23*_pixelScaling) {
+        windowShade = YES;
+    }
+
     if (_scaledFont) {
         [bitmap useFont:[[_scaledFont nth:0] bytes]
                     :[[_scaledFont nth:1] bytes]
@@ -1002,22 +1180,36 @@ static char *resizeSelectionVerticalPixels =
     int hasFocus = [context intValueForKey:@"hasFocus"];
 
     [self calculateRects:r];
-    [bitmap setColor:@"black"];
-    [bitmap drawHorizontalLineAtX:r.x x:r.x+r.w-1 y:r.y+r.h-1];
-    [bitmap drawVerticalLineAtX:r.x+r.w-1 y:r.y y:r.y+r.h-1];
-    if (hasFocus) {
-        char *leftPalette = activeTitleBarLeftPalette;
-        char *rightPalette = activeTitleBarRightPalette;
-        char *left = [_scaledActiveTitleBarLeftPixels UTF8String];
-        char *middle = [_scaledActiveTitleBarMiddlePixels UTF8String];
-        char *right = [_scaledActiveTitleBarRightPixels UTF8String];
-        [Definitions drawInBitmap:bitmap left:left palette:leftPalette middle:middle palette:rightPalette right:right palette:rightPalette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+    if (windowShade) {
+        if (hasFocus) {
+            char *leftPalette = activeTitleBarLeftPalette;
+            char *rightPalette = activeTitleBarRightPalette;
+            char *left = [_scaledActiveWindowShadeTitleBarLeftPixels UTF8String];
+            char *middle = [_scaledActiveWindowShadeTitleBarMiddlePixels UTF8String];
+            char *right = [_scaledActiveWindowShadeTitleBarRightPixels UTF8String];
+            [Definitions drawInBitmap:bitmap left:left palette:leftPalette middle:middle palette:rightPalette right:right palette:rightPalette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        } else {
+            char *palette = inactiveTitleBarPalette;
+            char *left = [_scaledInactiveWindowShadeTitleBarLeftPixels UTF8String];
+            char *middle = [_scaledInactiveWindowShadeTitleBarMiddlePixels UTF8String];
+            char *right = [_scaledInactiveWindowShadeTitleBarRightPixels UTF8String];
+            [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        }
     } else {
-        char *palette = inactiveTitleBarPalette;
-        char *left = [_scaledInactiveTitleBarLeftPixels UTF8String];
-        char *middle = [_scaledInactiveTitleBarMiddlePixels UTF8String];
-        char *right = [_scaledInactiveTitleBarRightPixels UTF8String];
-        [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        if (hasFocus) {
+            char *leftPalette = activeTitleBarLeftPalette;
+            char *rightPalette = activeTitleBarRightPalette;
+            char *left = [_scaledActiveTitleBarLeftPixels UTF8String];
+            char *middle = [_scaledActiveTitleBarMiddlePixels UTF8String];
+            char *right = [_scaledActiveTitleBarRightPixels UTF8String];
+            [Definitions drawInBitmap:bitmap left:left palette:leftPalette middle:middle palette:rightPalette right:right palette:rightPalette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        } else {
+            char *palette = inactiveTitleBarPalette;
+            char *left = [_scaledInactiveTitleBarLeftPixels UTF8String];
+            char *middle = [_scaledInactiveTitleBarMiddlePixels UTF8String];
+            char *right = [_scaledInactiveTitleBarRightPixels UTF8String];
+            [Definitions drawInBitmap:bitmap left:left palette:palette middle:middle palette:palette right:right palette:palette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        }
     }
     if (_titleBarTextRect.w > 0) {
         id text = [context valueForKey:@"name"];
@@ -1048,6 +1240,7 @@ static char *resizeSelectionVerticalPixels =
         }
     }
 
+if (!windowShade) {
     {
         char *palette = (hasFocus) ? leftBorderPalette : inactiveLeftBorderPalette;
         char *middle = [_scaledLeftBorderMiddlePixels UTF8String];
@@ -1082,6 +1275,7 @@ static char *resizeSelectionVerticalPixels =
         char *right = [_scaledInactiveBottomBorderRightPixels UTF8String];
         [Definitions drawInBitmap:bitmap left:left middle:middle right:right x:r.x y:r.y-15*_pixelScaling w:r.w palette:palette];
     }
+}
 
     if (hasFocus) {
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
@@ -1142,14 +1336,22 @@ static char *resizeSelectionVerticalPixels =
     int mouseY = [event intValueForKey:@"mouseY"];
     int viewWidth = [event intValueForKey:@"viewWidth"];
     int viewHeight = [event intValueForKey:@"viewHeight"];
-    if (mouseX >= viewWidth-21*_pixelScaling) {
-        if (mouseY >= viewHeight-21*_pixelScaling) {
-            _buttonDown = 'r';
-            _buttonDownX = mouseX;
-            _buttonDownY = mouseY;
-            _buttonDownW = viewWidth;
-            _buttonDownH = viewHeight;
-            return;
+
+    BOOL windowShade = NO;
+    if (viewHeight == 23*_pixelScaling) {
+        windowShade = YES;
+    }
+
+    if (!windowShade) {
+        if (mouseX >= viewWidth-21*_pixelScaling) {
+            if (mouseY >= viewHeight-21*_pixelScaling) {
+                _buttonDown = 'r';
+                _buttonDownX = mouseX;
+                _buttonDownY = mouseY;
+                _buttonDownW = viewWidth;
+                _buttonDownH = viewHeight;
+                return;
+            }
         }
     }
     if ([Definitions isX:mouseX y:mouseY insideRect:_closeButtonRect]) {
@@ -1280,14 +1482,37 @@ static char *resizeSelectionVerticalPixels =
         [dict x11ToggleMaximizeWindow];
     }
     if ((_buttonDown == 's') && (_buttonHover == 's')) {
-        [dict x11ToggleMaximizeWindow];
+        [self x11ToggleWindowShade:dict];
     }
     if (_buttonDown == 't') {
-        /* this was added for Wine */
-        [dict x11MoveChildWindowBackAndForthForWine];
+        int h = [dict intValueForKey:@"h"];
+        if (h != 23) {
+            /* this was added for Wine */
+            [dict x11MoveChildWindowBackAndForthForWine];
+        }
     }
 
     _buttonDown = 0;
+}
+- (void)x11ToggleWindowShade:(id)dict
+{
+    unsigned long win = [dict unsignedLongValueForKey:@"window"];
+    int h = [dict intValueForKey:@"h"];
+    id revert = [dict valueForKey:@"revertWindowShade"];
+    if ((h == 23) && revert) {
+        int w = [dict intValueForKey:@"w"];
+        int newH = [revert intValue];
+        [dict setValue:nsfmt(@"%d %d", w, newH) forKey:@"resizeWindow"];
+        [dict setValue:nil forKey:@"revertWindowShade"];
+    } else {
+        int x = [dict intValueForKey:@"x"];
+        int y = [dict intValueForKey:@"y"];
+        int w = [dict intValueForKey:@"w"];
+        [dict setValue:nsfmt(@"%d", h) forKey:@"revertWindowShade"];
+        [dict setValue:nsfmt(@"%d %d", w, 23*_pixelScaling) forKey:@"resizeWindow"];
+        [dict setValue:nsfmt(@"%d %d %d %d", x, y, w, h) forKey:@"revertMaximize"];
+        [dict setValue:nsfmt(@"%d %d", _leftBorder*_pixelScaling, 23*_pixelScaling) forKey:@"moveChildWindow"];
+    }
 }
 @end
 
