@@ -1938,6 +1938,24 @@ NSLog(@"received X event type %d", event.type);
             }
             for (int i=0; i<[_objectWindows count]; i++) {
                 id dict = [_objectWindows nth:i];
+                id moveChildWindow = [dict valueForKey:@"moveChildWindow"];
+                if (!moveChildWindow) {
+                    continue;
+                }
+                id moveChildWindowTokens = [moveChildWindow split];
+                int moveChildWindowTokensCount = [moveChildWindowTokens count];
+                if (moveChildWindowTokensCount == 2) {
+                    int x = [[moveChildWindowTokens nth:0] intValue];
+                    int y = [[moveChildWindowTokens nth:1] intValue];
+                    id childWindow = [dict valueForKey:@"childWindow"];
+                    if (childWindow) {
+                        [self XMoveWindow:[childWindow unsignedLongValue] :x :y];
+                    }
+                }
+                [dict setValue:nil forKey:@"moveChildWindow"];
+            }
+            for (int i=0; i<[_objectWindows count]; i++) {
+                id dict = [_objectWindows nth:i];
                 id changeWindowName = [dict valueForKey:@"changeWindowName"];
                 if (changeWindowName) {
                     id window = [dict valueForKey:@"window"];
