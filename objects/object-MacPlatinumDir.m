@@ -1340,6 +1340,11 @@ static char *resizeSelectionVerticalPixels =
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r context:(id)context
 {
+    BOOL windowShade = NO;
+    if (r.h == 23) {
+        windowShade = YES;
+    }
+
     [bitmap useGenevaFont];
     [bitmap setColor:@"white"];
     [bitmap fillRect:r];
@@ -1386,12 +1391,19 @@ static char *resizeSelectionVerticalPixels =
 
     if (hasFocus) {
         char *leftPalette = [Definitions cStringForMacPlatinumActiveTitleBarLeftPalette];
-        char *leftPixels = [Definitions cStringForMacPlatinumActiveTitleBarLeftPixels];
         char *middlePalette = [Definitions cStringForMacPlatinumActiveTitleBarMiddlePalette];
-        char *middlePixels = [Definitions cStringForMacPlatinumActiveTitleBarMiddlePixels];
         char *rightPalette = [Definitions cStringForMacPlatinumActiveTitleBarRightPalette];
-        char *rightPixels = [Definitions cStringForMacPlatinumActiveTitleBarRightPixels];
-        [Definitions drawInBitmap:bitmap left:leftPixels palette:leftPalette middle:middlePixels palette:middlePalette right:rightPixels palette:rightPalette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        if (windowShade) {
+            char *leftPixels = [Definitions cStringForMacPlatinumActiveWindowShadeTitleBarLeftPixels];
+            char *middlePixels = [Definitions cStringForMacPlatinumActiveWindowShadeTitleBarMiddlePixels];
+            char *rightPixels = [Definitions cStringForMacPlatinumActiveWindowShadeTitleBarRightPixels];
+            [Definitions drawInBitmap:bitmap left:leftPixels palette:leftPalette middle:middlePixels palette:middlePalette right:rightPixels palette:rightPalette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        } else {
+            char *leftPixels = [Definitions cStringForMacPlatinumActiveTitleBarLeftPixels];
+            char *middlePixels = [Definitions cStringForMacPlatinumActiveTitleBarMiddlePixels];
+            char *rightPixels = [Definitions cStringForMacPlatinumActiveTitleBarRightPixels];
+            [Definitions drawInBitmap:bitmap left:leftPixels palette:leftPalette middle:middlePixels palette:middlePalette right:rightPixels palette:rightPalette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        }
 
         if ([_buttonDown isEqual:@"closeButton"] && [_buttonHover isEqual:@"closeButton"]) {
             char *palette = [Definitions cStringForMacPlatinumCloseButtonDownPalette];
@@ -1410,12 +1422,19 @@ static char *resizeSelectionVerticalPixels =
         }
     } else {
         char *leftPalette = [Definitions cStringForMacPlatinumInactiveTitleBarLeftPalette];
-        char *leftPixels = [Definitions cStringForMacPlatinumInactiveTitleBarLeftPixels];
         char *middlePalette = [Definitions cStringForMacPlatinumInactiveTitleBarMiddlePalette];
-        char *middlePixels = [Definitions cStringForMacPlatinumInactiveTitleBarMiddlePixels];
         char *rightPalette = [Definitions cStringForMacPlatinumInactiveTitleBarRightPalette];
-        char *rightPixels = [Definitions cStringForMacPlatinumInactiveTitleBarRightPixels];
-        [Definitions drawInBitmap:bitmap left:leftPixels palette:leftPalette middle:middlePixels palette:middlePalette right:rightPixels palette:rightPalette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        if (windowShade) {
+            char *leftPixels = [Definitions cStringForMacPlatinumInactiveWindowShadeTitleBarLeftPixels];
+            char *middlePixels = [Definitions cStringForMacPlatinumInactiveWindowShadeTitleBarMiddlePixels];
+            char *rightPixels = [Definitions cStringForMacPlatinumInactiveWindowShadeTitleBarRightPixels];
+            [Definitions drawInBitmap:bitmap left:leftPixels palette:leftPalette middle:middlePixels palette:middlePalette right:rightPixels palette:rightPalette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        } else {
+            char *leftPixels = [Definitions cStringForMacPlatinumInactiveTitleBarLeftPixels];
+            char *middlePixels = [Definitions cStringForMacPlatinumInactiveTitleBarMiddlePixels];
+            char *rightPixels = [Definitions cStringForMacPlatinumInactiveTitleBarRightPixels];
+            [Definitions drawInBitmap:bitmap left:leftPixels palette:leftPalette middle:middlePixels palette:middlePalette right:rightPixels palette:rightPalette x:_titleBarRect.x y:_titleBarRect.y w:_titleBarRect.w];
+        }
     }
 
     if (_titleBarTextRect.w > 0) {
@@ -1453,6 +1472,8 @@ static char *resizeSelectionVerticalPixels =
 
         [bitmap useGenevaFont];
     }
+
+if (!windowShade) {
 
     int infoBarHeight = 21;
     if (infoBarHeight) {
@@ -1584,6 +1605,7 @@ static char *resizeSelectionVerticalPixels =
         }
     }
 
+}
 
 
 
@@ -1644,6 +1666,12 @@ static char *resizeSelectionVerticalPixels =
     int viewWidth = [event intValueForKey:@"viewWidth"];
     int viewHeight = [event intValueForKey:@"viewHeight"];
 
+    BOOL windowShade = NO;
+    if (viewHeight == 23) {
+        windowShade = YES;
+    }
+
+if (!windowShade) {
     if ([Definitions isX:mouseX y:mouseY insideRect:_leftArrowRect]) {
         if (_disableHorizontalScrollBar) {
             return;
@@ -1703,6 +1731,7 @@ static char *resizeSelectionVerticalPixels =
             return;
         }
     }
+}
     if ([Definitions isX:mouseX y:mouseY insideRect:_closeButtonRect]) {
         [self setValue:@"closeButton" forKey:@"buttonDown"];
         [self setValue:@"closeButton" forKey:@"buttonHover"];
@@ -1731,6 +1760,17 @@ static char *resizeSelectionVerticalPixels =
         return;
     }
     if ([Definitions isX:mouseX y:mouseY insideRect:_titleBarRect]) {
+        id timestamp = [Definitions gettimeofday];
+        if (_buttonDownTimestamp) {
+            if ([timestamp doubleValue]-[_buttonDownTimestamp doubleValue] <= 0.3) {
+                id x11dict = [event valueForKey:@"x11dict"];
+                [self x11ToggleWindowShade:x11dict];
+                [self setValue:nil forKey:@"buttonDownTimestamp"];
+                return;
+            }
+        }
+        [self setValue:timestamp forKey:@"buttonDownTimestamp"];
+
         [self setValue:@"titleBar" forKey:@"buttonDown"];
         [self setValue:nil forKey:@"buttonHover"];
         _buttonDownX = mouseX;
@@ -1740,6 +1780,7 @@ static char *resizeSelectionVerticalPixels =
         return;
     }
 
+if (!windowShade) {
     if (mouseY > _leftArrowRect.y) {
         if (mouseY < _leftArrowRect.y+_leftArrowRect.h-1) {
             if (_disableHorizontalScrollBar) {
@@ -1850,6 +1891,7 @@ static char *resizeSelectionVerticalPixels =
     _selectionBoxRootX = [event intValueForKey:@"mouseRootX"];
     _selectionBoxRootY = [event intValueForKey:@"mouseRootY"];
     [self setValue:@"selectionBox" forKey:@"buttonDown"];
+}
 }
 
 - (void)handleMouseMoved:(id)event
@@ -2148,11 +2190,12 @@ static char *resizeSelectionVerticalPixels =
         return;
     }
     if ([_buttonDown isEqual:@"maximizeButton"] && [_buttonDown isEqual:_buttonHover]) {
-/*
         id x11dict = [event valueForKey:@"x11dict"];
-        id windowManager = [event valueForKey:@"windowManager"];
-        [windowManager raiseObjectWindow:x11dict];
-*/
+        [x11dict x11ToggleMaximizeWindow];
+    }
+    if ([_buttonDown isEqual:@"shadeButton"] && [_buttonDown isEqual:_buttonHover]) {
+        id x11dict = [event valueForKey:@"x11dict"];
+        [self x11ToggleWindowShade:x11dict];
     }
     if ([_buttonDown isEqual:@"selectionBox"]) {
         if (_selectionBox) {
@@ -2218,6 +2261,26 @@ NSLog(@"handleFocusInEvent");
     }
 }
 
+- (void)x11ToggleWindowShade:(id)dict
+{
+    unsigned long win = [dict unsignedLongValueForKey:@"window"];
+    int h = [dict intValueForKey:@"h"];
+    id revert = [dict valueForKey:@"revertWindowShade"];
+    if ((h == 23) && revert) {
+        int w = [dict intValueForKey:@"w"];
+        int newH = [revert intValue];
+        [dict setValue:nsfmt(@"%d %d", w, newH) forKey:@"resizeWindow"];
+        [dict setValue:nil forKey:@"revertWindowShade"];
+        [dict setValue:nil forKey:@"revertMaximize"];
+    } else {
+        int x = [dict intValueForKey:@"x"];
+        int y = [dict intValueForKey:@"y"];
+        int w = [dict intValueForKey:@"w"];
+        [dict setValue:nsfmt(@"%d", h) forKey:@"revertWindowShade"];
+        [dict setValue:nsfmt(@"%d %d", w, 23) forKey:@"resizeWindow"];
+        [dict setValue:nsfmt(@"%d %d %d %d", x, y, w, h) forKey:@"revertMaximize"];
+    }
+}
 
 @end
 
