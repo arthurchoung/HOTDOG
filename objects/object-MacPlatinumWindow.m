@@ -825,6 +825,10 @@ static char *resizeSelectionVerticalPixels =
 {
     return activeTitleBarLeftPixels;
 }
++ (char *)cStringForMacPlatinumActiveWindowShadeTitleBarLeftPixels
+{
+    return activeWindowShadeTitleBarLeftPixels;
+}
 + (char *)cStringForMacPlatinumActiveTitleBarMiddlePalette
 {
     return activeTitleBarRightPalette;
@@ -833,6 +837,10 @@ static char *resizeSelectionVerticalPixels =
 {
     return activeTitleBarMiddlePixels;
 }
++ (char *)cStringForMacPlatinumActiveWindowShadeTitleBarMiddlePixels
+{
+    return activeWindowShadeTitleBarMiddlePixels;
+}
 + (char *)cStringForMacPlatinumActiveTitleBarRightPalette
 {
     return activeTitleBarRightPalette;
@@ -840,6 +848,10 @@ static char *resizeSelectionVerticalPixels =
 + (char *)cStringForMacPlatinumActiveTitleBarRightPixels
 {
     return activeTitleBarRightPixels;
+}
++ (char *)cStringForMacPlatinumActiveWindowShadeTitleBarRightPixels
+{
+    return activeWindowShadeTitleBarRightPixels;
 }
 + (char *)cStringForMacPlatinumCloseButtonDownPalette
 {
@@ -873,6 +885,10 @@ static char *resizeSelectionVerticalPixels =
 {
     return inactiveTitleBarLeftPixels;
 }
++ (char *)cStringForMacPlatinumInactiveWindowShadeTitleBarLeftPixels
+{
+    return inactiveWindowShadeTitleBarLeftPixels;
+}
 + (char *)cStringForMacPlatinumInactiveTitleBarMiddlePalette
 {
     return inactiveTitleBarPalette;
@@ -881,6 +897,10 @@ static char *resizeSelectionVerticalPixels =
 {
     return inactiveTitleBarMiddlePixels;
 }
++ (char *)cStringForMacPlatinumInactiveWindowShadeTitleBarMiddlePixels
+{
+    return inactiveWindowShadeTitleBarMiddlePixels;
+}
 + (char *)cStringForMacPlatinumInactiveTitleBarRightPalette
 {
     return inactiveTitleBarPalette;
@@ -888,6 +908,10 @@ static char *resizeSelectionVerticalPixels =
 + (char *)cStringForMacPlatinumInactiveTitleBarRightPixels
 {
     return inactiveTitleBarRightPixels;
+}
++ (char *)cStringForMacPlatinumInactiveWindowShadeTitleBarRightPixels
+{
+    return inactiveWindowShadeTitleBarRightPixels;
 }
 + (char *)cStringForMacPlatinumActiveTitleBarTextLeftPixels
 {
@@ -1515,6 +1539,7 @@ if (!windowShade) {
         int newH = [revert intValue];
         [dict setValue:nsfmt(@"%d %d", w, newH) forKey:@"resizeWindow"];
         [dict setValue:nil forKey:@"revertWindowShade"];
+        [dict setValue:nil forKey:@"revertMaximize"];
     } else {
         int x = [dict intValueForKey:@"x"];
         int y = [dict intValueForKey:@"y"];
