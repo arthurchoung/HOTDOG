@@ -1711,11 +1711,8 @@ static char *disabledRightScrollBarBottomPixels =
         return;
     }
     if ([_buttonDown isEqual:@"maximizeButton"] && [_buttonDown isEqual:_buttonHover]) {
-/*
         id x11dict = [event valueForKey:@"x11dict"];
-        id windowManager = [event valueForKey:@"windowManager"];
-        [windowManager raiseObjectWindow:x11dict];
-*/
+        [x11dict x11ToggleMaximizeWindow];
     }
     if ([_buttonDown isEqual:@"horizontalKnob"]) {
         int contentWidth = _contentXMax - _contentXMin - _visibleW;
