@@ -19,6 +19,8 @@ elif [ "x$HOTDOG_MODE" = "xwinmac" ]; then
     xterm $FONT -geometry 80x50 -bg black -fg white -cr '#ffff00' +bc +uc
 elif [ "x$HOTDOG_MODE" = "xmacplatinum" ]; then
     xterm $FONT -geometry 80x50 -bg black -fg white -cr '#ffff00' +bc +uc
+elif [ "x$HOTDOG_MODE" = "xmacwin" ]; then
+    xterm $FONT -geometry 80x50 -bg black -fg white -cr '#ffff00' +bc +uc
 else
     xterm $FONT -geometry 80x50 -bg white -fg black +bc +uc
 fi
