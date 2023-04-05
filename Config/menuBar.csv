@@ -9,7 +9,7 @@ flexible,leftPadding,rightPadding,objectMessage,messageForClick
 ,4,4,"CommandTextMenuItem:['hotdog-printBatteryStatus.pl' ]",
 ,4,4,"CommandBitmapMenuItem:['hotdog-printCPUStats.pl' ]",
 ,4,4,"CommandTextMenuItem:['hotdog-printNetworkInfo.pl' ]","['hotdog-commandOutputMenu.pl' 'ifconfig' '-a']|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu|useFixedWidthFont"
-,4,4,"TextMenuItem:'iwconfig'","['hotdog-commandOutputMenu.pl' 'iwconfig']|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu|useFixedWidthFont"
+,4,4,"TextMenuItem:'iwconfig'","['hotdog-commandOutputMenu.pl' 'iwconfig 2>&1']|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu|useFixedWidthFont"
 ,4,4,"CommandTextMenuItem:['hotdog-printDateEverySecondForTimezone:text:.pl' 'Pacific/Auckland' 'AKL']","configDir:'Config/dateTimeMenu.csv'|parseCSVFile|asMenu"
 ,4,4,"MacHelpMenuItem","configDir:'Config/helpMenu.csv'|parseCSVFile|asMenu"
 ,4,4,"MacComputerMenuItem","configDir:'Config/computerMenu.csv'|parseCSVFile|asMenu"
