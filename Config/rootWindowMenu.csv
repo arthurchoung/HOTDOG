@@ -29,4 +29,4 @@ hotKey,displayName,messageForClick
 ,Enter Windows 3.1 Mode,"windowManager|setValue:'enterWin31Mode' forKey:'pendingMessage'"
 ,Enter Windows 3.1 Mode x2,"windowManager|setValue:'enterWin31Mode:2' forKey:'pendingMessage'"
 ,Enter WinMac Mode,"windowManager|setValue:'enterWinMacMode' forKey:'pendingMessage'"
-,Enter WinMac Mode x2,"windowManager|setValue:'enterWinMacMode:2' forKey:'pendingMessage'"
+,Enter MacWin Mode,"windowManager|setValue:'enterMacWinMode' forKey:'pendingMessage'"
