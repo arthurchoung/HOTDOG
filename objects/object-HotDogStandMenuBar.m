@@ -270,8 +270,10 @@ NSLog(@"DEALLOC HotDogStandMenuBar");
 - (void)handleMouseDown:(id)event
 {
     if (_buttonDown || _rightButtonDown) {
+NSLog(@"handleMouseDown ignore");
         return;
     }
+NSLog(@"handleMouseDown");
     int mouseRootX = [event intValueForKey:@"mouseRootX"];
     id windowManager = [event valueForKey:@"windowManager"];
     int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
@@ -478,8 +480,11 @@ if (x+w+3 > monitorX+monitorWidth) {
 }
 - (void)openRootMenu:(id)dict x:(int)mouseRootX
 {
+NSLog(@"openRootMenu x:%d", mouseRootX);
     id messageForClick = [dict valueForKey:@"messageForClick"];
+NSLog(@"openRootMenu messageForClick %@", messageForClick);
     if (!messageForClick) {
+NSLog(@"openRootMenu !messageForClick array nth:0 %@", [_array nth:0]);
         id window = [dict valueForKey:@"window"];
         if (window) {
             [self mapAppMenu:dict window:[window unsignedLongValue] x:mouseRootX];
@@ -488,6 +493,7 @@ if (x+w+3 > monitorX+monitorWidth) {
         return;
     }
     id obj = [messageForClick evaluateAsMessage];
+NSLog(@"openRootMenu obj %@", obj);
     if (!obj) {
         return;
     }
