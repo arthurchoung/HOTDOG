@@ -106,6 +106,7 @@ static char *titleBarRaiseButtonPixels =
     id _configPath;
     time_t _configTimestamp;
     int _flashIteration;
+    int _flashIndex;
     BOOL _buttonDown;
     BOOL _rightButtonDown;
     id _selectedDict;
@@ -130,18 +131,8 @@ static char *titleBarRaiseButtonPixels =
 
 - (void)flashIndex:(int)index duration:(int)duration
 {
-    if (_flashIteration > 0) {
-        return;
-    }
-    if (_selectedDict) {
-        return;
-    }
-
-    id dict = [_array nth:index];
-    if (dict) {
-        [self setValue:dict forKey:@"selectedDict"];
-        _flashIteration = duration;
-    }
+    _flashIndex = index;
+    _flashIteration = duration;
 }
 
 - (id)init
@@ -694,14 +685,16 @@ if (x+w+3 > monitorX+monitorWidth) {
             highlight = YES;
         } else if (_rightButtonDown) {
             highlight = YES;
-        } else if (_flashIteration > 0) {
-            highlight = YES;
         }
         if (highlight) {
             if (_selectedDict == elt) {
             } else if (_appMenuWindow && (_appMenuWindow == window)) {
             } else {
                 highlight = NO;
+            }
+        } else if (_flashIteration > 0) {
+            if (i == _flashIndex) {
+                highlight = YES;
             }
         }
 
