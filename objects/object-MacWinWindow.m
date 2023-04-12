@@ -1238,7 +1238,7 @@ if (!windowShade) {
         } else {
             return '8';
         }
-    } else if ((y >= h-4*_pixelScaling) && (y < h)) {
+    } else if ((y >= h-7*_pixelScaling) && (y < h)) {
         if ((x >= 0) && (x < 23*_pixelScaling)) {
             return '1';
         } else if ((x >= w-23*_pixelScaling) && (x < w)) {
@@ -1246,7 +1246,7 @@ if (!windowShade) {
         } else {
             return '2';
         }
-    } else if ((x >= 0) && (x < 4*_pixelScaling)) {
+    } else if ((x >= 0) && (x < 6*_pixelScaling)) {
         if ((y >= 0) && (y < 23*_pixelScaling)) {
             return '7';
         } else if ((y >= h-23*_pixelScaling) && (y < h)) {
@@ -1254,7 +1254,7 @@ if (!windowShade) {
         } else {
             return '4';
         }
-    } else if ((x >= w-4*_pixelScaling) && (x < w)) {
+    } else if ((x >= w-7*_pixelScaling) && (x < w)) {
         if ((y >= 0) && (y < 23*_pixelScaling)) {
             return '9';
         } else if ((y >= h-23*_pixelScaling) && (y < h)) {
