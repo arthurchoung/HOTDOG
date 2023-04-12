@@ -45,6 +45,7 @@ static char *upperRightMenuBarPixels =
     id _configPath;
     time_t _configTimestamp;
     int _flashIteration;
+    int _flashIndex;
     BOOL _buttonDown;
     id _selectedDict;
     id _menuDict;
@@ -64,18 +65,8 @@ static char *upperRightMenuBarPixels =
 
 - (void)flashIndex:(int)index duration:(int)duration
 {
-    if (_flashIteration > 0) {
-        return;
-    }
-    if (_selectedDict) {
-        return;
-    }
-
-    id dict = [_array nth:index];
-    if (dict) {
-        [self setValue:dict forKey:@"selectedDict"];
-        _flashIteration = duration;
-    }
+    _flashIndex = index;
+    _flashIteration = duration;
 }
 
 - (id)init
@@ -615,8 +606,6 @@ if (x+w+3 > monitorX+monitorWidth) {
         BOOL highlight = NO;
         if (_buttonDown) {
             highlight = YES;
-        } else if (_flashIteration > 0) {
-            highlight = YES;
         }
         if (highlight) {
             if (_selectedDict == elt) {
@@ -624,7 +613,12 @@ if (x+w+3 > monitorX+monitorWidth) {
             } else {
                 highlight = NO;
             }
+        } else if (_flashIteration > 0) {
+            if (i == _flashIndex) {
+                highlight = YES;
+            }
         }
+
         if (_menuWindowWaitForUnmapNotify) {
             if (_menuWindowWaitForUnmapNotify == window) {
                 highlight = YES;
