@@ -62,6 +62,7 @@ static char *menuBarButtonsPixels =
     id _configPath;
     time_t _configTimestamp;
     int _flashIteration;
+    int _flashIndex;
     BOOL _buttonDown;
     id _selectedDict;
     id _menuDict;
@@ -88,18 +89,8 @@ static char *menuBarButtonsPixels =
 
 - (void)flashIndex:(int)index duration:(int)duration
 {
-    if (_flashIteration > 0) {
-        return;
-    }
-    if (_selectedDict) {
-        return;
-    }
-
-    id dict = [_array nth:index];
-    if (dict) {
-        [self setValue:dict forKey:@"selectedDict"];
-        _flashIteration = duration;
-    }
+    _flashIndex = index;
+    _flashIteration = duration;
 }
 
 - (id)init
@@ -480,11 +471,8 @@ if (x+w+3 > monitorX+monitorWidth) {
 }
 - (void)openRootMenu:(id)dict x:(int)mouseRootX
 {
-NSLog(@"openRootMenu x:%d", mouseRootX);
     id messageForClick = [dict valueForKey:@"messageForClick"];
-NSLog(@"openRootMenu messageForClick %@", messageForClick);
     if (!messageForClick) {
-NSLog(@"openRootMenu !messageForClick array nth:0 %@", [_array nth:0]);
         id window = [dict valueForKey:@"window"];
         if (window) {
             [self mapAppMenu:dict window:[window unsignedLongValue] x:mouseRootX];
@@ -493,7 +481,6 @@ NSLog(@"openRootMenu !messageForClick array nth:0 %@", [_array nth:0]);
         return;
     }
     id obj = [messageForClick evaluateAsMessage];
-NSLog(@"openRootMenu obj %@", obj);
     if (!obj) {
         return;
     }
@@ -734,14 +721,16 @@ if (x+w+3 > monitorX+monitorWidth) {
             highlight = YES;
         } else if (_rightButtonDown) {
             highlight = YES;
-        } else if (_flashIteration > 0) {
-            highlight = YES;
         }
         if (highlight) {
             if (_selectedDict == elt) {
             } else if (_appMenuWindow && (_appMenuWindow == window)) {
             } else {
                 highlight = NO;
+            }
+        } else if (_flashIteration > 0) {
+            if (i == _flashIndex) {
+                highlight = YES;
             }
         }
         
