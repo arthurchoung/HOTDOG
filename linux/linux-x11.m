@@ -79,6 +79,26 @@ static XImage *CreateTrueColorImage(Display *display, Visual *visual, unsigned c
         }
     }
 }
++ (void)x11FixupEventForPixelScaling:(id)eventDict x11dict:(id)x11dict
+{
+    int scaling = [x11dict intValueForKey:@"pixelScaling"];
+    if (scaling < 2) {
+        return;
+    }
+    id object = [x11dict valueForKey:@"object"];
+    if ([object respondsToSelector:@selector(bitmapWidth)]) {
+        return;
+    }
+
+    int viewWidth = [eventDict intValueForKey:@"viewWidth"];
+    int viewHeight = [eventDict intValueForKey:@"viewHeight"];
+    int mouseX = [eventDict intValueForKey:@"mouseX"];
+    int mouseY = [eventDict intValueForKey:@"mouseY"];
+    [eventDict setValue:nsfmt(@"%d", mouseX / scaling) forKey:@"mouseX"];
+    [eventDict setValue:nsfmt(@"%d", mouseY / scaling) forKey:@"mouseY"];
+    [eventDict setValue:nsfmt(@"%d", viewWidth / scaling) forKey:@"viewWidth"];
+    [eventDict setValue:nsfmt(@"%d", viewHeight / scaling) forKey:@"viewHeight"];
+}
 @end
 
 static void setupKeyEvent(XKeyEvent *event, Display *display, Window win,
@@ -531,6 +551,10 @@ exit(0);
         }
     } else {
         dict = [windowManager openWindowForObject:object x:x y:y w:w h:h];
+        int scaling = [[Definitions valueForEnvironmentVariable:@"HOTDOG_SCALING"] intValue];
+        if (scaling >= 2) {
+            [dict setValue:nsfmt(@"%d", scaling) forKey:@"pixelScaling"];
+        }
     }
     if (dict && appMenuWindow) {
         unsigned long win = [dict unsignedLongValueForKey:@"window"];
@@ -1508,83 +1532,60 @@ if ([monitor intValueForKey:@"height"] == 768) {
         XDestroyImage(ximage);
     } else {
 //NSLog(@"drawObject:%@ drawInRect", object);
-        id bitmap = [Definitions bitmapWithWidth:w height:h];
-        if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
-            [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:w h:h] context:context];
-        } else if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
-            [bitmap setColorIntR:0 g:0 b:0 a:255];
-//            [bitmap fillRectangleAtX:0 y:0 w:w h:h];
-            [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:w h:h]];
-        } else {
-            [bitmap setColor:@"#ffff88"];
-            [bitmap fillRect:[Definitions rectWithX:0 y:0 w:w h:h]];
-            [bitmap setColor:@"black"];
-            id text = [object description];
-            text = [bitmap fitBitmapString:text width:w-10];
-            [bitmap drawBitmapText:text x:5 y:5];
-        }
         if (_openGLTexture && (win == _openGLWindow)) {
 //NSLog(@"openGLTexture texture %d", [_openGLTexture textureID]);
-            int drawUsingNearestFilter = 1;
-            [Definitions clearOpenGLForWidth:w height:h];
-            if (drawUsingNearestFilter) {
+            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+                int scaling = [context intValueForKey:@"pixelScaling"];
+                int scaledW = w;
+                int scaledH = h;
+                if (scaling >= 2) {
+                    scaledW /= scaling;
+                    scaledH /= scaling;
+                }
+                id bitmap = [Definitions bitmapWithWidth:scaledW height:scaledH];
+                [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:scaledW h:scaledH] context:context];
+
+                [Definitions clearOpenGLForWidth:w height:h];
                 [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
+//                [Definitions drawToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
+                [Definitions drawOpenGLTextureID:[_openGLTexture textureID]];
+            } else if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
+                int scaling = [context intValueForKey:@"pixelScaling"];
+                int scaledW = w;
+                int scaledH = h;
+                if (scaling >= 2) {
+                    scaledW /= scaling;
+                    scaledH /= scaling;
+                }
+                id bitmap = [Definitions bitmapWithWidth:scaledW height:scaledH];
+                [bitmap setColorIntR:0 g:0 b:0 a:255];
+//                    [bitmap fillRectangleAtX:0 y:0 w:w h:h];
+                [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:scaledW h:scaledH]];
+
+                [Definitions clearOpenGLForWidth:w height:h];
+                [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
+//                    [Definitions drawToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
+                [Definitions drawOpenGLTextureID:[_openGLTexture textureID]];
             } else {
-                [Definitions drawToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
-            }
-            [Definitions drawOpenGLTextureID:[_openGLTexture textureID]];
-            if ([object isKindOfClass:[@"NavigationStack" asClass]]) {
-                id obj = [[object valueForKey:@"context"] valueForKey:@"object"];
-                int draw_GL_NEAREST = 0;
-                if ([obj respondsToSelector:@selector(glNearest)]) {
-                    draw_GL_NEAREST = [obj glNearest];
-                }
-                if ([obj respondsToSelector:@selector(pixelBytesRGBA8888)]) {
-                    unsigned char *pixelBytes = [obj pixelBytesRGBA8888];
-                    if (pixelBytes) {
-                        int navigationBarHeight = [Definitions navigationBarHeight];
-                        int bitmapWidth = [obj bitmapWidth];
-                        int bitmapHeight = [obj bitmapHeight];
-                        int bitmapStride = bitmapWidth*4;
-                        if (draw_GL_NEAREST) {
-                            [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLObjectTexture textureID] bytes:pixelBytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight bitmapStride:bitmapStride];
-                        } else {
-                            [Definitions drawToOpenGLTextureID:[_openGLObjectTexture textureID] bytes:pixelBytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight bitmapStride:bitmapStride];
-                        }
-                        [Definitions drawOpenGLTextureID:[_openGLObjectTexture textureID] x:0 y:0 w:w h:h-navigationBarHeight inW:w h:h];
-                    }
-                }
-                if ([obj respondsToSelector:@selector(pixelBytesBGR565)]) {
-                    unsigned char *pixelBytes = [obj pixelBytesBGR565];
-                    if (pixelBytes) {
-                        int navigationBarHeight = [Definitions navigationBarHeight];
-                        int bitmapWidth = [obj bitmapWidth];
-                        int bitmapHeight = [obj bitmapHeight];
-                        if (draw_GL_NEAREST) {
-                            [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLObjectTexture textureID] pixels565:pixelBytes width:bitmapWidth height:bitmapHeight];
-                        } else {
-                            [Definitions drawToOpenGLTextureID:[_openGLObjectTexture textureID] pixels565:pixelBytes width:bitmapWidth height:bitmapHeight];
-                        }
-                        [Definitions drawOpenGLTextureID:[_openGLObjectTexture textureID] x:0 y:0 w:w h:h-navigationBarHeight inW:w h:h];
-                    }
-                }
-            } else {
-                int draw_GL_NEAREST = 0;
-                if ([object respondsToSelector:@selector(glNearest)]) {
-                    draw_GL_NEAREST = [object glNearest];
-                }
+                BOOL didDrawPixelBytes = NO;
                 if ([object respondsToSelector:@selector(pixelBytesRGBA8888)]) {
                     unsigned char *pixelBytes = [object pixelBytesRGBA8888];
                     if (pixelBytes) {
                         int bitmapWidth = [object bitmapWidth];
                         int bitmapHeight = [object bitmapHeight];
                         int bitmapStride = bitmapWidth*4;
+                        int draw_GL_NEAREST = 0;
+                        if ([object respondsToSelector:@selector(glNearest)]) {
+                            draw_GL_NEAREST = [object glNearest];
+                        }
+                        [Definitions clearOpenGLForWidth:w height:h];
                         if (draw_GL_NEAREST) {
                             [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLObjectTexture textureID] bytes:pixelBytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight bitmapStride:bitmapStride];
                         } else {
                             [Definitions drawToOpenGLTextureID:[_openGLObjectTexture textureID] bytes:pixelBytes bitmapWidth:bitmapWidth bitmapHeight:bitmapHeight bitmapStride:bitmapStride];
                         }
                         [Definitions drawOpenGLTextureID:[_openGLObjectTexture textureID] x:0 y:0 w:w h:h inW:w h:h];
+                        didDrawPixelBytes = YES;
                     }
                 }
                 if ([object respondsToSelector:@selector(pixelBytesBGR565)]) {
@@ -1592,17 +1593,57 @@ if ([monitor intValueForKey:@"height"] == 768) {
                     if (pixelBytes) {
                         int bitmapWidth = [object bitmapWidth];
                         int bitmapHeight = [object bitmapHeight];
+                        int draw_GL_NEAREST = 0;
+                        if ([object respondsToSelector:@selector(glNearest)]) {
+                            draw_GL_NEAREST = [object glNearest];
+                        }
+                        [Definitions clearOpenGLForWidth:w height:h];
                         if (draw_GL_NEAREST) {
                             [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLObjectTexture textureID] pixels565:pixelBytes width:bitmapWidth height:bitmapHeight];
                         } else {
                             [Definitions drawToOpenGLTextureID:[_openGLObjectTexture textureID] pixels565:pixelBytes width:bitmapWidth height:bitmapHeight];
                         }
                         [Definitions drawOpenGLTextureID:[_openGLObjectTexture textureID] x:0 y:0 w:w h:h inW:w h:h];
+                        didDrawPixelBytes = YES;
                     }
                 }
+                if (!didDrawPixelBytes) {
+                    id bitmap = [Definitions bitmapWithWidth:w height:h];
+                    [bitmap setColor:@"#ffff88"];
+                    [bitmap fillRect:[Definitions rectWithX:0 y:0 w:w h:h]];
+                    [bitmap setColor:@"black"];
+                    id text = [object description];
+                    text = [bitmap fitBitmapString:text width:w-10];
+                    [bitmap drawBitmapText:text x:5 y:5];
+
+                    [Definitions clearOpenGLForWidth:w height:h];
+                    [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
+    //                [Definitions drawToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
+                    [Definitions drawOpenGLTextureID:[_openGLTexture textureID]];
+                }
             }
+
+
+
+
+
             [Definitions openGLXSwapBuffersForDisplay:_display window:win];
         } else {
+            id bitmap = [Definitions bitmapWithWidth:w height:h];
+            if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
+                [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:w h:h] context:context];
+            } else if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
+                [bitmap setColorIntR:0 g:0 b:0 a:255];
+    //            [bitmap fillRectangleAtX:0 y:0 w:w h:h];
+                [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:w h:h]];
+            } else {
+                [bitmap setColor:@"#ffff88"];
+                [bitmap fillRect:[Definitions rectWithX:0 y:0 w:w h:h]];
+                [bitmap setColor:@"black"];
+                id text = [object description];
+                text = [bitmap fitBitmapString:text width:w-10];
+                [bitmap drawBitmapText:text x:5 y:5];
+            }
             GC gc = XCreateGC(_display, win, 0, 0);
             XImage *ximage = CreateTrueColorImage(_display, _visualInfo.visual, [bitmap pixelBytes], w, h, _visualInfo.depth);
             XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
@@ -2674,6 +2715,7 @@ NSLog(@"_desktopWindow %lu", _desktopWindow);
             id eventDict = [self dictForButtonEvent:e w:w h:h x11dict:dict];
 
             [Definitions x11FixupEvent:eventDict forBitmapObject:object];
+            [Definitions x11FixupEventForPixelScaling:eventDict x11dict:dict];
 
             if (e->button == 1) {
                 [self setValue:dict forKey:@"buttonDownDict"];
@@ -2805,12 +2847,14 @@ NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e-
         if ([object respondsToSelector:@selector(handleMouseUp:)]) {
             id event = [self dictForButtonEvent:e w:w h:h x11dict:dict];
             [Definitions x11FixupEvent:event forBitmapObject:object];
+            [Definitions x11FixupEventForPixelScaling:event x11dict:dict];
             [object handleMouseUp:event];
         }
     } else if (e->button == 3) {
         if ([object respondsToSelector:@selector(handleRightMouseUp:)]) {
             id event = [self dictForButtonEvent:e w:w h:h x11dict:dict];
             [Definitions x11FixupEvent:event forBitmapObject:object];
+            [Definitions x11FixupEventForPixelScaling:event x11dict:dict];
             [object handleRightMouseUp:event];
         }
     }
@@ -2886,6 +2930,7 @@ NSLog(@"ButtonRelease window %x e->button %d _buttonDownWhich %d", e->window, e-
                     eventDict = [self generateEventDictRootX:e->x_root rootY:e->y_root x:e->x y:e->y w:w h:h x11dict:x11dict];
                 }
                 [Definitions x11FixupEvent:eventDict forBitmapObject:object];
+                [Definitions x11FixupEventForPixelScaling:eventDict x11dict:x11dict];
                 [object handleMouseMoved:eventDict];
             }
             [x11dict setValue:@"1" forKey:@"needsRedraw"];
