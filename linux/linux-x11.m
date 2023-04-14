@@ -1221,7 +1221,11 @@ NSLog(@"unparent object %@", dict);
         int bottomBorder = [object intValueForKey:@"bottomBorder"];
         int childW = [dict intValueForKey:@"w"]-leftBorder-rightBorder;
         int childH = [dict intValueForKey:@"h"]-topBorder-bottomBorder;
-        [self XMoveResizeWindow:childWindow :leftBorder :topBorder :childW :childH];
+        if (childW < 1) {
+        } else if (childH < 1) {
+        } else {
+            [self XMoveResizeWindow:childWindow :leftBorder :topBorder :childW :childH];
+        }
     }
     [self addShadowMaskToObjectWindow:dict];
     [self addMaskToChildWindow:dict];
@@ -1531,7 +1535,7 @@ if ([monitor intValueForKey:@"height"] == 768) {
         XFreeGC(_display, gc);
         XDestroyImage(ximage);
     } else {
-//NSLog(@"drawObject:%@ drawInRect", object);
+//NSLog(@"drawObject:%@ drawInRect w %d h %d", object, w, h);
         if (_openGLTexture && (win == _openGLWindow)) {
 //NSLog(@"openGLTexture texture %d", [_openGLTexture textureID]);
             if ([object respondsToSelector:@selector(drawInBitmap:rect:context:)]) {
