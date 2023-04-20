@@ -113,13 +113,11 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                     [Definitions runWindowManagerForObject:obj];
                 }
             }
-        } else if ((argc > 1) && !strcmp(argv[1], "show")) {
-            id args = nsarr();
-            for (int i=2; i<argc; i++) {
-                id str = nscstr(argv[i]);
-                [args addObject:str];
+        } else if ((argc >= 3) && !strcmp(argv[1], "show")) {
+            for (int i=3; i<argc; i++) {
+                [nsfmt(@"%s", argv[i]) setAsValueForKey:nsfmt(@"arg%d", i-3)];
             }
-            id message = [args join:@" "];
+            id message = nsfmt(@"%s", argv[2]);
 //NSLog(@"message %@", message);
             id object = [nsdict() evaluateMessage:message];
             if (object) {
