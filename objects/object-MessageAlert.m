@@ -35,6 +35,20 @@
 
 #ifdef BUILD_FOR_LINUX
 
+#ifdef BUILD_FOR_ANDROID
+@implementation Definitions(fjkdlsjfkldsjfkldsjklfwejffjdkjfkdjlsdfjdsk)
++ (void)showAlert:(id)text
+{
+    NSLog(@"%@", text);
+}
+@end
+@implementation NSString(fmeklwmfklsdmfklsdmkflmsd)
+- (void)showAlert
+{
+    NSLog(@"%@", self);
+}
+@end
+#else
 @implementation Definitions(fjkdlsjfkldsjfkldsjklfwejffjdkjfkdjlsd)
 + (void)showAlert:(id)text
 {
@@ -66,6 +80,7 @@ NSLog(@"showAlert:'%@'", self);
 }
 
 @end
+#endif
 
 #endif
 
