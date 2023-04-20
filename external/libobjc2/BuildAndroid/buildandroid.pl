@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-$NDKROOT = $ENV{'HOME'} . '/android-ndk-r20b';
+$NDKROOT = $ENV{'HOME'} . '/Android/android-ndk-r20b';
 #$CC = "clang -target armv7a-linux-androideabi21";
 $CC = "$NDKROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi21-clang";
 
