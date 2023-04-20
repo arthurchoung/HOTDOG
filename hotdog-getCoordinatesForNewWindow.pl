@@ -2,11 +2,15 @@
 
 $w = 0;
 $h = 0;
+$mouseX = 0;
+$mouseY = 0;
 $monitorX = 0;
 $monitorWidth = 0;
 $monitorHeight = 0;
 $focusX = 0;
 $focusY = 0;
+$focusWidth = 0;
+$focusHeight = 0;
 $focusMonitorX = 0;
 $focusMonitorY = 0;
 $focusMonitorWidth = 0;
