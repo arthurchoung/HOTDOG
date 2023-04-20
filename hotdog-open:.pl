@@ -101,10 +101,7 @@ if ($path =~ m/\.d64$/i) {
 }
 
 if ($path =~ m/\.(nes|smc|sfc|md|smd|sms|gb|bin|a26)$/i) {
-    $path =~ s/"/\\"/g;
-    $path =~ s/'/\\'/g;
-    $cmd = qq{hotdog show "'$path'|emulatorFromFile"};
-    `$cmd`;
+    system('hotdog', 'show', 'arg0|emulatorFromFile', $path);
     exit 0;
 }
 
@@ -113,8 +110,5 @@ if ($path =~ m/\.webp$/i) {
     exit 0;
 }
 
-if (open FH, '| hotdog alert') {
-    print FH "Unknown file type for '$path'\n";
-    close FH;
-}
+system('hotdog', 'alert', "Unknown file type for '$path'");
 
