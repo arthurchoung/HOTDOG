@@ -8,7 +8,7 @@ if (not $device) {
 for(;;) {
 loop:
     # FIXME
-    @mountlist = `hotdog-listBlockDevices.pl | allValuesForKey: mountpoint | sed '/^\$/d'`;
+    @mountlist = `hotdog-listBlockDevices.pl | hotdog-allValuesForKey:.pl mountpoint | sed '/^\$/d'`;
     chomp @mountlist;
     $mountlist = join ' ', @mountlist;
 
