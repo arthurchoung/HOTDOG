@@ -43,28 +43,29 @@ EOF
 $numElts = scalar @arr;
 for ($i=0; $i<$numElts; $i++) {
     $elt = $arr[$i];
-    $elt =~ s/\'/\\\'/g;
+    print <<EOF;
+=elt$i:$elt
+EOF
     $type = 'panelMiddleButton';
     if ($i == 0) {
         $type = 'panelTopButton';
     } elsif ($i == $numElts-1) {
         $type = 'panelBottomButton';
     }
-    $message = '';
     if (-d $elt) {
         if ($elt =~ m/\.app$/) {
             print <<EOF;
-$type:'$elt' message:[['hotdog' 'open' '$elt']|runCommandInBackground]
+$type:(elt$i) message:[NSArray|addObject:'hotdog'|addObject:'open'|addObject:(elt$i)|runCommandInBackground]
 EOF
         } else {
             $elt = "$elt/";
             print <<EOF;
-$type:'$elt' message:['$elt'|changeDirectory;ObjectInterface|pushToNavigationStack]
+$type:(elt$i) message:[elt$i|changeDirectory;ObjectInterface|pushToNavigationStack]
 EOF
         }
     } else {
         print <<EOF;
-$type:'$elt' message:['$elt'|runFileHandler]
+$type:(elt$i) message:[elt$i|runFileHandler]
 EOF
     }
 }
