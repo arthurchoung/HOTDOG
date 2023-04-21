@@ -33,25 +33,22 @@ if ($region) {
     @timezones = grep { $_->{'TZ1'} eq $region } @timezones;
     @timezones = sort { $a->{'TZ2'} cmp $b->{'TZ2'} } @timezones;
     
-    $str = $region;
-    $str =~ s/\\/\\\\/g;
-    $str =~ s/'/\\'/g;
-
     print <<EOF;
+=region:$region
 panelHorizontalStripes
 panelText:''
-panelText:'World Clock: $str'
+panelText:(str:'World Clock: #{region}')
 panelText:''
 EOF
+    $index = 0;
     foreach $elt (@timezones) {
+        $index++;
         $tzstr = $elt->{'TZ'};
-        $tzstr =~ s/\\/\\\\/g;
-        $tzstr =~ s/'/\\'/g;
         $tz2str = $elt->{'TZ2'};
-        $tz2str =~ s/\\/\\\\/g;
-        $tz2str =~ s/'/\\'/g;
         print <<EOF;
-panelMiddleButton:('$tzstr'|currentDateTimeForTimeZoneWithFormat:'$tz2str \%I:\%M:\%S \%p') message:[]
+=tzstr$index:$tzstr
+=tz2str$index:$tz2str
+panelMiddleButton:(tzstr$index|currentDateTimeForTimeZoneWithFormat:(str:'#{tz2str$index} \%I:\%M:\%S \%p')) message:[]
 EOF
     }
 } else {
@@ -68,11 +65,12 @@ panelText:''
 panelText:'Choose a region:'
 panelText:''
 EOF
+    $index = 0;
     foreach $elt (@regions) {
-        $elt =~ s/\\/\\\\/g;
-        $elt =~ s/'/\\'/g;
+        $index++;
         print <<EOF;
-panelMiddleButton:'$elt' message:[['hotdog' 'show' "WorldClockPanel:'$elt'"]|runCommandInBackground]
+=elt$index:$elt
+panelMiddleButton:(elt$index) message:[NSArray|addObject:'hotdog'|addObject:'show'|addObject:'WorldClockPanel:(arg0)'|addObject:(elt$index)|runCommandInBackground]
 EOF
     }
 }
