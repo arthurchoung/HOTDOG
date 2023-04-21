@@ -284,7 +284,7 @@ static unsigned char *button_bottom_right_squared =
 + (id)VCFPanel:(id)path
 {
     id generatecmd = nsarr();
-    [generatecmd addObject:@"hotdog-generateVCFPanelForFile:.pl"];
+    [generatecmd addObject:@"hotdog-generateVCFPanelForFile:.py"];
     [generatecmd addObject:path];
 
     id obj = [@"Panel" asInstance];
@@ -617,7 +617,21 @@ NSLog(@"waiting for input");
             break;
         }
         id elt = [_array nth:i];
-        [self evaluateMessage:elt];
+        if ([elt hasPrefix:@"="]) {
+            char *p = [elt UTF8String];
+            p++;
+            char *q = strchr(p, ':');
+            if (q) {
+                int len = q - p;
+                if (len > 0) {
+                    id key = nsfmt(@"%.*s", len, p);
+                    id val = nsfmt(@"%s", q+1);
+                    [val setAsValueForKey:key];
+                }
+            }
+        } else {
+            [self evaluateMessage:elt];
+        }
     }
     [self setValue:nil forKey:@"bitmap"];
 }
