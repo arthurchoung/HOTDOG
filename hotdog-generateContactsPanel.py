@@ -4,14 +4,6 @@ import re
 import os
 import vobject
 
-def encodeQuotes(str):
-    if str == None:
-        return ""
-    str = re.sub(r'\s', r' ', str)
-    str = str.replace('\\', '\\\\');
-    str = str.replace("'", "\\'");
-    return str
-
 print('''\
 panelHorizontalStripes
 panelText:''
@@ -73,8 +65,10 @@ while i < count:
             buttonType = 'panelBottomButton'
     elt = arr[i]
     print('''\
-%s:'%s' message:[['hotdog' 'VCFPanel' '%s']|runCommandInBackground]
-''' % (buttonType, encodeQuotes(elt['fullName']), encodeQuotes(elt['path'])), end='')
+=fullName%d:%s
+=path%d:%s
+%s:(fullName%d) message:[NSArray|addObject:'hotdog'|addObject:'VCFPanel'|addObject:(path%d)|runCommandInBackground]
+''' % (i, elt['fullName'], i, elt['path'], buttonType, i, i), end='')
     i += 1
 
 if count == 0:
