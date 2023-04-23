@@ -101,7 +101,11 @@
         id text = nil;
         id stringFormat = [elt valueForKey:@"stringFormat"];
         if ([stringFormat length]) {
-            text = [self str:stringFormat];
+            if (_contextualObject) {
+                text = [_contextualObject str:stringFormat];
+            } else {
+                text = [elt str:stringFormat];
+            }
         }
         if (!text) {
             text = [elt valueForKey:@"displayName"];
@@ -182,7 +186,11 @@
         id text = nil;
         id stringFormat = [elt valueForKey:@"stringFormat"];
         if ([stringFormat length]) {
-            text = [self str:stringFormat];
+            if (_contextualObject) {
+                text = [_contextualObject str:stringFormat];
+            } else {
+                text = [elt str:stringFormat];
+            }
         }
         if (![text length]) {
             text = [elt valueForKey:@"displayName"];
@@ -269,7 +277,7 @@ NSLog(@"Menu handleMouseUp");
         if (message) {
             id context = _contextualObject;
             if (!context) {
-                context = [Definitions namespace];
+                context = _selectedObject;
             }
             [context  evaluateMessage:message];
         }
