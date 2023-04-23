@@ -1,4 +1,4 @@
 path,flashMessage
 Config/rootWindowMenu.csv,"menuBar|object|flashIndex:0 duration:20"
-Config/windowMenu.csv,"menuBar|object|flashIndex:1 duration:20"
-Config/computerMenu.csv,"menuBar|object|flashIndex:12 duration:20"
+Config/windowMenu.csv,"menuBar|object|flashIndex:-10 duration:20"
+Config/computerMenu.csv,"menuBar|object|flashIndex:-1 duration:20"
