@@ -65,7 +65,11 @@ static char *upperRightMenuBarPixels =
 
 - (void)flashIndex:(int)index duration:(int)duration
 {
-    _flashIndex = index;
+    if (index < 0) {
+        _flashIndex = [_array count] + index;
+    } else {
+        _flashIndex = index;
+    }
     _flashIteration = duration;
 }
 
