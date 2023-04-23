@@ -34,7 +34,7 @@ if ($region) {
     @timezones = sort { $a->{'TZ2'} cmp $b->{'TZ2'} } @timezones;
     
     print <<EOF;
-=region:$region
+=region=$region
 panelHorizontalStripes
 panelText:''
 panelText:(str:'World Clock: #{region}')
@@ -46,8 +46,8 @@ EOF
         $tzstr = $elt->{'TZ'};
         $tz2str = $elt->{'TZ2'};
         print <<EOF;
-=tzstr$index:$tzstr
-=tz2str$index:$tz2str
+=tzstr$index=$tzstr
+=tz2str$index=$tz2str
 panelMiddleButton:(tzstr$index|currentDateTimeForTimeZoneWithFormat:(str:'#{tz2str$index} \%I:\%M:\%S \%p')) message:[]
 EOF
     }
@@ -69,7 +69,7 @@ EOF
     foreach $elt (@regions) {
         $index++;
         print <<EOF;
-=elt$index:$elt
+=elt$index=$elt
 panelMiddleButton:(elt$index) message:[NSArray|addObject:'hotdog'|addObject:'show'|addObject:'WorldClockPanel:(arg0)'|addObject:(elt$index)|runCommandInBackground]
 EOF
     }
