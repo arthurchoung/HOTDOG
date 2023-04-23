@@ -1,20 +1,18 @@
 #!/usr/bin/perl
 
-print <<EOF;
-displayName,messageForClick
-EOF
-
 $output = `cat /proc/asound/cards`;
 @lines = split "\n", $output;
 $count = 0;
 foreach $line (@lines) {
     if ($line =~ m/^\s*(\d+)[^:]+: (.+)/) {
-        $name = "hw:$1";
-        $displayName = $2;
-        $displayName =~ s/\"//g;
-        $displayName =~ s/\\//g;
+        $id = "hw:$1";
+        $name = $2;
         print <<EOF;
-"$displayName ($name)","NSArray|addObject:'hotdog-openALSAPanel.sh'|addObject:'$name'|addObject:'$displayName'|runCommandInBackground"
+=id=$id
+=name=$name
+=stringFormat=#{name} (#{id})
+=messageForClick=NSArray|addObject:'hotdog-openALSAPanel.sh'|addObject:id|addObject:name|runCommandInBackground
+==
 EOF
         $count++;
     }
