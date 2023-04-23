@@ -485,7 +485,7 @@ NSLog(@"Out of memory!");
             for (int y=y1; y<=y2; y++) {
                 if ((y >= 0) && (y < _bitmapHeight)) {
                     int x = x1 + step*(y-y1);
-                    if ((x >= 0) && (x < _bitmapHeight)) {
+                    if ((x >= 0) && (x < _bitmapWidth)) {
                         unsigned char *q = _pixelBytes + _bitmapStride*y+(x*4);
 #ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                         q[0] = _b;
@@ -506,7 +506,7 @@ NSLog(@"Out of memory!");
             for (int y=y1; y<=y2; y++) {
                 if ((y >= 0) && (y < _bitmapHeight)) {
                     int x = x1 + step*(y-y1);
-                    if ((x >= 0) && (x < _bitmapHeight)) {
+                    if ((x >= 0) && (x < _bitmapWidth)) {
                         unsigned char *q = _pixelBytes + _bitmapStride*y+(x*4);
 #ifdef BUILD_WITH_BGRA_PIXEL_FORMAT
                         q[0] = _blueTimesAlpha + ((double)q[0]*_oneMinusAlphaDouble);
