@@ -620,7 +620,7 @@ NSLog(@"waiting for input");
         if ([elt hasPrefix:@"="]) {
             char *p = [elt UTF8String];
             p++;
-            char *q = strchr(p, ':');
+            char *q = strchr(p, '=');
             if (q) {
                 int len = q - p;
                 if (len > 0) {
