@@ -13,14 +13,16 @@ foreach $line (@output) {
     if ($line =~ m/^[^\s]/) {
         $name = $line;
         $name =~ s/:$//;
-        $name =~ s/\'//g;
     } else {
         if ($line =~ m/^\s+(\/dev\/[a-zA-Z0-9]+)/) {
             if ($name) {
                 $device = $1;
                 print <<EOF;
-
-"$name ($device)","NSArray|addObject:'ffplay'|addObject:'$device'|runCommandInBackground"
+=name=$name
+=device=$device
+=stringFormat=#{name} (#{device})
+=messageForClick=NSArray|addObject:'ffplay'|addObject:device|runCommandInBackground
+==
 EOF
                 $name = '';
                 $count++;
@@ -31,6 +33,8 @@ EOF
 
 if (not $count) {
     print <<EOF;
-"No cameras detected.","1"
+=displayName=No cameras detected.
+=messageForClick=1
+==
 EOF
 }
