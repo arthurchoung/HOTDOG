@@ -65,8 +65,8 @@ while i < count:
             buttonType = 'panelBottomButton'
     elt = arr[i]
     print('''\
-=fullName%d:%s
-=path%d:%s
+=fullName%d=%s
+=path%d=%s
 %s:(fullName%d) message:[NSArray|addObject:'hotdog'|addObject:'VCFPanel'|addObject:(path%d)|runCommandInBackground]
 ''' % (i, elt['fullName'], i, elt['path'], buttonType, i, i), end='')
     i += 1
