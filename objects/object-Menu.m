@@ -25,6 +25,44 @@
 
 #import "HOTDOG.h"
 
+@implementation NSString(fjekwlfmklwemfklsdmkflsd)
+- (id)parseGeneratedMenuFromString
+{
+    id lines = [self split:@"\n"];
+    id results = nsarr();
+    id dict = nil;
+    for (int i=0; i<[lines count]; i++) {
+        id line = [lines nth:i];
+        if ([line hasPrefix:@"="]) {
+            char *p = [line UTF8String];
+            p++;
+            if (*p) {
+                char *q = strchr(p, '=');
+                if (q) {
+                    int len = q - p;
+                    if (len > 0) {
+                        id key = nsfmt(@"%.*s", len, p);
+                        id val = nsfmt(@"%s", q+1);
+                        if (!dict) {
+                            dict = nsdict();
+                        }
+                        [dict setValue:val forKey:key];
+                    } else {
+                        if (!dict) {
+                            dict = nsdict();
+                        }
+                        [results addObject:dict];
+                        dict = nil;
+                    }
+                }
+            }
+        }
+    }
+    return results;
+}
+@end
+
+
 @implementation NSArray(jfkdlsjflksdjkf)
 - (id)asMenu
 {
@@ -47,7 +85,6 @@
     }
     id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
-    [menu setValue:[@"windowManager" valueForKey] forKey:@"contextualObject"];
     return menu;
 }
 @end
@@ -135,7 +172,11 @@ NSLog(@"dealloc Menu %@", self);
         id text = nil;
         id stringFormat = [elt valueForKey:@"stringFormat"];
         if (stringFormat) {
-            text = [self str:stringFormat];
+            if (_contextualObject) {
+                text = [_contextualObject str:stringFormat];
+            } else {
+                text = [elt str:stringFormat];
+            }
         }
         if (![text length]) {
             text = [elt valueForKey:@"displayName"];
@@ -195,7 +236,7 @@ NSLog(@"dealloc Menu %@", self);
         if (message) {
             id context = _contextualObject;
             if (!context) {
-                context = [Definitions namespace];
+                context = _selectedObject;
             }
             [context evaluateMessage:message];
         }
@@ -245,7 +286,11 @@ NSLog(@"dealloc Menu %@", self);
         id text = nil;
         id stringFormat = [elt valueForKey:@"stringFormat"];
         if ([stringFormat length]) {
-            text = [self str:stringFormat];
+            if (_contextualObject) {
+                text = [_contextualObject str:stringFormat];
+            } else {
+                text = [elt str:stringFormat];
+            }
         }
         if (![text length]) {
             text = [elt valueForKey:@"displayName"];
