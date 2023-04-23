@@ -13,12 +13,26 @@ if (not $path) {
 
 print <<EOF;
 displayName,messageForClick
-"$arg"
-"Portrait (left)","['hotdog-rotateMonitor:orientation:.pl' '$arg' 'left']|runCommandInBackground"
-"Portrait (right)","['hotdog-rotateMonitor:orientation:.pl' '$arg' 'right']|runCommandInBackground"
-"Landscape (normal)","['hotdog-rotateMonitor:orientation:.pl' '$arg' 'normal']|runCommandInBackground"
-"Landscape (inverted)","['hotdog-rotateMonitor:orientation:.pl' '$arg' 'inverted']|runCommandInBackground"
-,
+=arg=$arg
+=stringFormat=#{arg}
+==
+=arg=$arg
+=displayName=Portrait (left)
+=messageForClick=NSArray|addObject:'hotdog-rotateMonitor:orientation:.pl'|addObject:arg|addObject:'left'|runCommandInBackground
+==
+=arg=$arg
+=displayName=Portrait (right)
+=messageForClick=NSArray|addObject:'hotdog-rotateMonitor:orientation:.pl'|addObject:arg|addObject:'right'|runCommandInBackground
+==
+=arg=$arg
+=displayName=Landscape (normal)
+=messageForClick=NSArray|addObject:'hotdog-rotateMonitor:orientation:.pl'|addObject:arg|addObject:'normal'|runCommandInBackground
+==
+=arg=$arg
+=displayName=Landscape (inverted)
+=messageForClick=NSArray|addObject:'hotdog-rotateMonitor:orientation:.pl'|addObject:arg|addObject:'inverted'|runCommandInBackground
+==
+==
 EOF
 
 @monitors = `cat $path`;
@@ -34,17 +48,25 @@ foreach $line (@monitors) {
     $name = $1;
     if ($name eq $arg) {
         print <<EOF;
-"$i. $arg"
+=i=$i
+=arg=$arg
+=stringFormat=#{i}. #{arg}
+==
 EOF
     } else {
         print <<EOF;
-"$i. Swap Monitor with $name","['hotdog-swapMonitors::.pl' '$arg' '$name']|runCommandInBackground"
+=i=$i
+=arg=$arg
+=name=$name
+=stringFormat=#{i}. Swap Monitor with #{name}
+=messageForClick=NSArray|addObject:'hotdog-swapMonitors::.pl'|addObject:arg|addObject:name|runCommandInBackground
+==
 EOF
     }
 }
 
 print <<EOF;
-,
+==
 EOF
 
 $output = `xrandr`;
@@ -78,11 +100,17 @@ foreach $line (@lines) {
         if ($arg eq $name) {
             if ($current) {
                 print <<EOF;
-"${width}x${height}*"
+=width=$width
+=height=$height
+=stringFormat=#{width}x#{height}*
+==
 EOF
             } else {
                 print <<EOF;
-"${width}x${height}"
+=width=$width
+=height=$height
+=stringFormat=#{width}x#{height}
+==
 EOF
             }
         }
@@ -91,13 +119,15 @@ EOF
 }
 
 print <<EOF;
-,
+==
 EOF
 
 @refreshRates = split /\s+/, $refreshRates;
 foreach $refreshRate (@refreshRates) {
     print <<EOF;
-"$refreshRate"
+=refreshRate=$refreshRate
+=stringFormat=#{refreshRate}
+==
 EOF
 }
 
