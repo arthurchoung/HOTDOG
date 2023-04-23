@@ -31,7 +31,8 @@ EOF
 if ($arg) {
     $arg =~ s/'/\\'/g;
     print <<EOF;
-panelText:'grep: $arg'
+=arg=$arg
+panelText:(str:'grep: #{arg}')
 EOF
 }
 if ($lsflags || $arg) {
@@ -44,7 +45,7 @@ $numElts = scalar @arr;
 for ($i=0; $i<$numElts; $i++) {
     $elt = $arr[$i];
     print <<EOF;
-=elt$i:$elt
+=elt$i=$elt
 EOF
     $type = 'panelMiddleButton';
     if ($i == 0) {
