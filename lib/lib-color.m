@@ -96,6 +96,7 @@
     if ([str isEqual:@"darkgreen"]) { return @"#013220ff"; }
     if ([str isEqual:@"orange"]) { return @"#ffa500ff"; }
     if ([str isEqual:@"clear"]) { return @"#00000000"; }
+    if ([str isEqual:@"magenta"]) { return @"#ff00ffff"; }
     return @"#ffffffff";
 }
 - (double)redDouble
