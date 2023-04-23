@@ -2096,7 +2096,7 @@ NSLog(@"hotkey keyString %@", keyString);
                         if (flashMessage) {
                             [self evaluateMessage:flashMessage];
                         }
-                        [self evaluateMessage:message];
+                        [elt evaluateMessage:message];
                         XAllowEvents(_display, AsyncKeyboard, CurrentTime);
                         return;
                     }
