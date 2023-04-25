@@ -2,7 +2,7 @@
 
 ## Notes for Ubuntu and derivatives
 
-(Tested with Linux Mint 20.3)
+(.deb file tested with xubuntu-22.04.1 / glibc 2.35)
 
 Download the .deb file from http://hotdoglinux.com/download/
 
