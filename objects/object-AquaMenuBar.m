@@ -559,12 +559,17 @@ if (x+w+3 > monitorX+monitorWidth) {
                     text = [obj valueForKey:@"text"];
                 }
                 if (text) {
-                    w = [bitmap bitmapWidthForText:text];
-                    w += leftPadding+rightPadding;
-                    if (w > highestWidth) {
-                        [elt setValue:nsfmt(@"%d", w) forKey:@"highestWidth"];
+                    if ([text length]) {
+                        w = [bitmap bitmapWidthForText:text];
+                        w += leftPadding+rightPadding;
+                        if (w > highestWidth) {
+                            [elt setValue:nsfmt(@"%d", w) forKey:@"highestWidth"];
+                        } else {
+                            w = highestWidth;
+                        }
                     } else {
-                        w = highestWidth;
+                        w = 0;
+                        [elt setValue:nil forKey:@"highestWidth"];
                     }
                 } else {
                     id pixels = [obj valueForKey:@"pixels"];
