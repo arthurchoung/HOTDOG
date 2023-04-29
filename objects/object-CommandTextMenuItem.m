@@ -107,6 +107,7 @@
     int _maxWidth;
     id _lineMessage;
     id _stringFormat;
+    BOOL _didExit;
 }
 @end
 @implementation CommandTextMenuItem
@@ -133,10 +134,18 @@ NSLog(@"CommandOutputText command '%@' readLine '%@'", _command, line);
                 [line evaluateMessage:_lineMessage];
             }
         }
+        id status = [_fileDescriptor valueForKey:@"status"];
+        if (status) {
+            _didExit = YES;
+        }
     }
 }
 - (id)text
 {
+    if (_didExit) {
+        return @"";
+    }
+
     id str = @"No output";
     if (_stringFormat) {
         if (_lastLine) {
