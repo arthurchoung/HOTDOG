@@ -135,10 +135,15 @@ static char *menuBarButtonsPixels =
     }
     for (int i=0; i<[arr count]; i++) {
         id elt = [arr nth:i];
-        id objectMessage = [elt valueForKey:@"objectMessage"];
-        if ([objectMessage length]) {
-            id obj = [objectMessage evaluateMessage];
+        if ([elt intValueForKey:@"disable"]) {
+            id obj = [Definitions TextMenuItem:@""];
             [elt setValue:obj forKey:@"object"];
+        } else {
+            id objectMessage = [elt valueForKey:@"objectMessage"];
+            if ([objectMessage length]) {
+                id obj = [objectMessage evaluateMessage];
+                [elt setValue:obj forKey:@"object"];
+            }
         }
     }
     return arr;
