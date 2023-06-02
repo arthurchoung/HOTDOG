@@ -36,8 +36,16 @@ int main(int argc, char **argv)
 NSLog(@"unable to set signal handler for SIGPIPE");
     }
 
-#ifndef BUILD_FOR_OSX
+#ifdef BUILD_FOR_ANDROID
+    extern void HOTDOG_initialize_stdout(FILE *);
     extern void HOTDOG_initialize(FILE *);
+    HOTDOG_initialize_stdout(stdout);
+    HOTDOG_initialize(stderr);
+#elif BUILD_FOR_OSX
+#else
+    extern void HOTDOG_initialize_stdout(FILE *);
+    extern void HOTDOG_initialize(FILE *);
+    HOTDOG_initialize_stdout(stdout);
     if ((argc >= 2) && !strcmp(argv[1], "dialog")) {
         FILE *fp = fopen("/dev/null", "w");
         if (!fp) {
@@ -49,6 +57,7 @@ NSLog(@"unable to set signal handler for SIGPIPE");
         HOTDOG_initialize(stderr);
     }
 #endif
+
 
 
     id pool = [[NSAutoreleasePool alloc] init];
