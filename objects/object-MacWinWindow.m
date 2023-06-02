@@ -1381,12 +1381,14 @@ if (!windowShade) {
         int newX = mouseRootX - _buttonDownX;
         int newY = mouseRootY - _buttonDownY;
 
+/*
         if (newX < 0) {
             newX = 0;
         }
         if (newY < menuBarHeight) {
             newY = menuBarHeight;
         }
+*/
 
         [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
 
