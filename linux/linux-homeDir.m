@@ -26,6 +26,12 @@
 #import "HOTDOG.h"
 
 @implementation Definitions(fjkdsljfklsdjfueirwieofj)
+#ifdef BUILD_FOR_ANDROID
++ (id)homeDir
+{
+    return @"/sdcard";
+}
+#else
 + (id)homeDir
 {
     char *home = getenv("HOME");
@@ -34,6 +40,7 @@
     }
     return nsfmt(@"%s", home);
 }
+#endif
 
 + (id)homeDir:(id)path
 {
