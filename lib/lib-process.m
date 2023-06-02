@@ -93,6 +93,15 @@
     }
 }
 @end
+@implementation NSArray(jfklewmfklsdmlkfm)
+- (void)writeToStandardOutput
+{
+    for (int i=0; i<[self count]; i++) {
+        id elt = [self nth:i];
+        NSOut(@"%@\n", elt);
+    }
+}
+@end
 
 @implementation Definitions(jfkldsjfklsdjf)
 + (void)runCommandInBackground:(id)cmd
