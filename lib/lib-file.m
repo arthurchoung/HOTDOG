@@ -651,3 +651,14 @@ exit(0);
 
 @end
 
+@implementation NSString(fmekwlfmkldsmfklsdmlkmf)
+- (BOOL)unlinkFile
+{
+    int result = unlink([self UTF8String]);
+    if (result == 0) {
+        return YES;
+    }
+    return NO;
+}
+@end
+
