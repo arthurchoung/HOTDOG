@@ -5,6 +5,8 @@ if (not $interface) {
     die('specify interface');
 }
 
+system('sudo', '-A', 'ifconfig', $interface, 'up');
+
 $choice = `hotdog-generateWifiNetworksPanel.pl | hotdog show Panel`;
 chomp $choice;
 if (not $choice) {
