@@ -38,6 +38,10 @@
 #import "foundation-printf.h"
 #endif
 
+static FILE *HOTDOG_stdout = NULL;
+
+#define OUT(...) ((void)fprintf(HOTDOG_stdout, __VA_ARGS__))
+
 static FILE *HOTDOG_stderr = NULL;
 
 #define LOG(...) ((void)fprintf(HOTDOG_stderr, __VA_ARGS__))
@@ -66,6 +70,31 @@ exit(0);
     return &nil_slot;
 }
 #endif
+
+void NSOut(id formatString, ...)///$;
+{
+#ifdef BUILD_WITH_GNU_PRINTF
+    va_list args;
+    va_start(args, formatString);
+    vfprintf(HOTDOG_stdout, [formatString UTF8String], args);
+    va_end(args);
+#else
+    char *fmt = [formatString UTF8String];
+    char *strp = NULL;
+    va_list args;
+    va_start(args, formatString);
+    int result = foundation_vasprintf(&strp, fmt, args);
+    va_end(args);
+    if (result < 0) {
+LOG("OUT OF MEMORY! NSString +stringWithFormat:\n");
+        exit(0);
+    }
+    if (strp) {
+OUT("%s", strp);
+        free(strp);
+    }
+#endif
+}
 
 void NSLog(id formatString, ...)///$;
 {
@@ -2204,6 +2233,11 @@ NSLog(@"copyMethodsToNSConstantString class '%s' not found", className);
     }
     initialized = YES;
 
+}
+
+void HOTDOG_initialize_stdout(FILE *fp)
+{
+    HOTDOG_stdout = fp;
 }
 
 void HOTDOG_initialize(FILE *fp)
