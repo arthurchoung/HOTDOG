@@ -244,6 +244,17 @@ NSLog(@"Bad signature");
                             }
                         }
                     }
+                } else if (signature[6] == 'i') {
+                    if (signature[7] == '@') {
+                        if (signature[8] == '@') {
+                            if (signature[9] == 0) {
+                                if (signature[0] == '@') {
+                                    id (*func)(id, SEL, id, id, id, int, id, id) = imp;
+                                    return func(target, sel, [args nth:0], [args nth:1], [args nth:2], [[args nth:3] intValue], [args nth:4], [args nth:5]);
+                                }
+                            }
+                        }
+                    }
                 }
             } else if (signature[5] == 'i') {
                 if (signature[6] == 0) {
