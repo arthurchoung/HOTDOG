@@ -32,7 +32,13 @@
 }
 + (id)VolumeMenu:(id)cardName :(id)mixerName
 {
-    id obj = [@"VolumeMenu" asInstance];
+    id obj;
+    id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
+    if ([hotdogMode isEqual:@"amiga"]) {
+        obj = [@"AmigaVolumeMenu" asInstance];
+    } else {
+        obj = [@"VolumeMenu" asInstance];
+    }
     [obj setValue:cardName forKey:@"alsaCardName"];
     [obj setValue:mixerName forKey:@"alsaMixerName"];
     [obj setup];
