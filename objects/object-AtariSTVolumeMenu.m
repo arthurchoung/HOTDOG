@@ -25,22 +25,14 @@
 
 #import "HOTDOG.h"
 
-@implementation Definitions(fjkdlsjfklmnekwlvmlkdsjkvs)
-+ (id)VolumeMenu
+@implementation Definitions(fjkdlsjfklmnekwlvmlkdsjkvsfjdskfjsdkfjdksjfks)
++ (id)AtariSTVolumeMenu
 {
-    return [Definitions VolumeMenu:@"hw:0" :@"Master"];
+    return [Definitions AtariSTVolumeMenu:@"hw:0" :@"Master"];
 }
-+ (id)VolumeMenu:(id)cardName :(id)mixerName
++ (id)AtariSTVolumeMenu:(id)cardName :(id)mixerName
 {
-    id obj;
-    id hotdogMode = [Definitions valueForEnvironmentVariable:@"HOTDOG_MODE"];
-    if ([hotdogMode isEqual:@"amiga"]) {
-        obj = [@"AmigaVolumeMenu" asInstance];
-    } else if ([hotdogMode isEqual:@"atarist"]) {
-        obj = [@"AtariSTVolumeMenu" asInstance];
-    } else {
-        obj = [@"VolumeMenu" asInstance];
-    }
+    id obj = [@"AtariSTVolumeMenu" asInstance];
     [obj setValue:cardName forKey:@"alsaCardName"];
     [obj setValue:mixerName forKey:@"alsaMixerName"];
     [obj setup];
@@ -48,91 +40,42 @@
 }
 @end
 
-@interface TestVerticalSlider : IvarObject
-@end
-@implementation TestVerticalSlider
-- (void)drawInBitmap:(id)bitmap rect:(Int4)r
-{
-    [Definitions drawVerticalSliderInBitmap:bitmap rect:r pct:0.0];
-}
-@end
-
-@implementation Definitions(fjkdlsjfklsdjklfsdklfj)
-+ (char *)cStringForBitmapVerticalSliderTop
-{
-    return
-"         bbbbb         \n"
-"       bb.....bb       \n"
-"      b...bbb...b      \n"
-"     b..bb.b.bb..b     \n"
+static char *sliderPalette =
+". #000000\n"
+"X #ffffff\n"
 ;
-}
-
-+ (char *)cStringForBitmapVerticalSliderMiddle
-{
-    return
-"     b.bb.b.b.bb.b     \n"
-"     b.b.b.b.b.b.b     \n"
+static char *sliderTopPixels =
+".....................\n"
+".....................\n"
+"..XXXXXXXXXXXXXXXXX..\n"
+"..XXXXXXXXXXXXXXXXX..\n"
 ;
-}
-
-+ (char *)cStringForBitmapVerticalSliderBottom
-{
-    return
-"     b..b.b.b.b..b     \n"
-"      b...bbb...b      \n"
-"       bb.....bb       \n"
-"         bbbbb         \n"
+static char *sliderMiddlePixels =
+"..XXXXXXXXXXXXXXXXX..\n"
 ;
-}
-
-+ (char *)cStringForBitmapVerticalSliderKnob
-{
-    return
-"  bbbbbbbbbbbbbbbbbbb  \n"
-" b...................b \n"
-" bbbbbbbbbbbbbbbbbbbbb \n"
-"b.....................b\n"
-"b.....................b\n"
-"b.....................b\n"
-"b.....................b\n"
-"b.....................b\n"
-" bbbbbbbbbbbbbbbbbbbbb \n"
-" b...................b \n"
-"  bbbbbbbbbbbbbbbbbbb  \n"
+static char *sliderBottomPixels =
+"..XXXXXXXXXXXXXXXXX..\n"
+"..XXXXXXXXXXXXXXXXX..\n"
+".....................\n"
+".....................\n"
 ;
-}
+static char *sliderKnobPixels =
+"..XXXXX......XXXXXX..\n"
+"..XXXXX......XXXXXX..\n"
+"..XXX..........XXXX..\n"
+"..XXX..........XXXX..\n"
+"..XX............XXX..\n"
+"..XX............XXX..\n"
+"..XX............XXX..\n"
+"..XX............XXX..\n"
+"..XXX..........XXXX..\n"
+"..XXX..........XXXX..\n"
+"..XXXXX......XXXXXX..\n"
+"..XXXXX......XXXXXX..\n"
+;
 
-+ (void)drawVerticalSliderInBitmap:(id)bitmap rect:(Int4)r pct:(double)pct
-{
-    char *top = [Definitions cStringForBitmapVerticalSliderTop];
-    char *middle = [Definitions cStringForBitmapVerticalSliderMiddle];
-    char *bottom = [Definitions cStringForBitmapVerticalSliderBottom];
-    char *knob = [Definitions cStringForBitmapVerticalSliderKnob];
 
-    int heightForTop = [Definitions heightForCString:top];
-    int heightForMiddle = [Definitions heightForCString:middle];
-    int heightForBottom = [Definitions heightForCString:bottom];
-    int heightForKnob = [Definitions heightForCString:knob];
-
-    int widthForMiddle = [Definitions widthForCString:middle];
-    int widthForKnob = [Definitions widthForCString:knob];
-    int middleXOffset = (r.w - widthForMiddle)/2;
-    int knobXOffset = (r.w - widthForKnob)/2;
-
-    char *palette = "b #000000\n. #ffffff\n";
-    [bitmap drawCString:top palette:palette x:r.x+middleXOffset y:r.y];
-    int y;
-    for (y=r.y+heightForTop; y<r.y+r.h-heightForBottom; y+=heightForMiddle) {
-        [bitmap drawCString:middle palette:palette x:r.x+middleXOffset y:y];
-    }
-    [bitmap drawCString:bottom palette:palette x:r.x+middleXOffset y:r.y+r.h-heightForBottom];
-    int knobY = (int)(r.h-heightForTop-heightForBottom-heightForKnob) * pct;
-    [bitmap drawCString:knob palette:palette x:r.x+knobXOffset y:r.y+r.h-heightForBottom-knobY-heightForKnob];
-}
-@end
-
-@interface VolumeMenu : IvarObject
+@interface AtariSTVolumeMenu : IvarObject
 {
     id _alsaCardName;
     id _alsaMixerName;
@@ -148,19 +91,7 @@
     int _grabbedVolumeSliderY;
 }
 @end
-@implementation VolumeMenu
-- (int *)x11WindowMaskPointsForWidth:(int)w height:(int)h
-{
-    static int points[5];
-    points[0] = 5; // length of array including this number
-
-    points[1] = 0; // lower left corner
-    points[2] = h-1;
-
-    points[3] = w-1; // upper right corner
-    points[4] = 0;
-    return points;
-}
+@implementation AtariSTVolumeMenu
 
 - (void)setup
 {
@@ -191,13 +122,13 @@
 
 - (int)preferredWidth
 {
-    char *middle = [Definitions cStringForBitmapVerticalSliderMiddle];
+    char *middle = sliderMiddlePixels;
     int widthForMiddle = [Definitions widthForCString:middle];
-    return widthForMiddle+8;
+    return widthForMiddle-3;
 }
 - (int)preferredHeight
 {
-    return 200;
+    return 200-3;
 }
 - (int)fileDescriptor
 {
@@ -227,8 +158,6 @@ NSLog(@"alsaStatus '%@'", line);
         [self updateVolumeSlider];
     } else {
         Int4 r = _rectForVolumeSliderKnob;
-        r.y += 3;
-        r.h -= 6;
         if ([Definitions isX:_mouseX y:_mouseY insideRect:r]) {
             _grabbedSliderPct = _volume;
             _grabbedVolumeSliderY = _mouseY - _rectForVolumeSliderKnob.y;
@@ -283,45 +212,42 @@ NSLog(@"alsaStatus '%@'", line);
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
     id obj = self;
-    
-    Int4 rr = r;
-    r.x += 1;
-    r.y += 1;
-    r.w -= 3;
-    r.h -= 3;
-    [bitmap setColor:@"white"];
-    [bitmap fillRect:r];
-    [bitmap setColor:@"black"];
 
-    double sliderPct = _volume;
+    double pct = _volume;
     if (_grabbedVolumeSliderY) {
-        sliderPct = _grabbedSliderPct;
+        pct = _grabbedSliderPct;
     }
-    Int4 volumeSliderRect = r;
-    volumeSliderRect.y += 4;
-    volumeSliderRect.h -= 8;
-    [self drawVolumeSliderInBitmap:bitmap rect:volumeSliderRect pct:sliderPct];
 
-    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y];
-    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-1];
-    [bitmap drawHorizontalLineAtX:rr.x x:rr.x+rr.w-1 y:rr.y+rr.h-2];
-    [bitmap drawVerticalLineAtX:rr.x y:rr.y y:rr.y+rr.h-1];
-    [bitmap drawVerticalLineAtX:rr.x+rr.w-1 y:rr.y y:rr.y+rr.h-1];
-    [bitmap drawVerticalLineAtX:rr.x+rr.w-2 y:rr.y y:rr.y+rr.h-1];
-}
-
-- (void)drawVolumeSliderInBitmap:(id)bitmap rect:(Int4)r pct:(double)pct
-{
     _rectForVolumeSliderTrack = [Definitions rectWithX:r.x y:r.y+4 w:r.w h:r.h-8];
     double sliderPct = _volume;
     if (_grabbedVolumeSliderY) {
         sliderPct = _grabbedSliderPct;
     }
     int adjustedSliderY = [Definitions adjustedYForPct:1.0-sliderPct rect:_rectForVolumeSliderKnob insideRect:_rectForVolumeSliderTrack];
-    _rectForVolumeSliderKnob = [Definitions rectWithX:r.x y:adjustedSliderY w:r.w h:11];
+    _rectForVolumeSliderKnob = [Definitions rectWithX:r.x y:adjustedSliderY w:r.w h:12];
 
-    [Definitions drawVerticalSliderInBitmap:bitmap rect:r pct:pct];
+    char *top = sliderTopPixels;
+    char *middle = sliderMiddlePixels;
+    char *bottom = sliderBottomPixels;
+    char *knob = sliderKnobPixels;
 
+    int heightForTop = [Definitions heightForCString:top];
+    int heightForMiddle = [Definitions heightForCString:middle];
+    int heightForBottom = [Definitions heightForCString:bottom];
+    int heightForKnob = [Definitions heightForCString:knob];
+
+    int widthForMiddle = [Definitions widthForCString:middle];
+
+    char *palette = sliderPalette;
+    [bitmap drawCString:top palette:palette x:r.x y:r.y];
+    int y;
+    for (y=r.y+heightForTop; y<r.y+r.h-heightForBottom; y+=heightForMiddle) {
+        [bitmap drawCString:middle palette:palette x:r.x y:y];
+    }
+    [bitmap drawCString:bottom palette:palette x:r.x y:r.y+r.h-heightForBottom];
+    int knobY = (int)(r.h-heightForTop-heightForBottom-heightForKnob) * pct;
+    [bitmap drawCString:knob palette:palette x:r.x y:r.y+r.h-heightForBottom-knobY-heightForKnob];
 }
+
 @end
 
