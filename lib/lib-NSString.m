@@ -436,8 +436,7 @@
 
 
 
-
-- (id) lines
+- (id)lines
 {
     id a = [self componentsSeparatedByString:@"\n"];
     if ([[a lastObject] isEqual:@""]) {
