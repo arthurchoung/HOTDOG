@@ -482,6 +482,15 @@ exit(1);
     return obj;
 }
 @end
+@implementation NSArray(fkmnelwmfkldsmfkldsmf)
+- (id)asPanel
+{
+    id obj = [@"Panel" asInstance];
+    [obj setValue:self forKey:@"array"];
+    [obj setValue:[@"." asRealPath] forKey:@"currentDirectory"];
+    return obj;
+}
+@end
 
 
 @interface Panel : IvarObject
