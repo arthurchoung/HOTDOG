@@ -466,6 +466,12 @@ NSLog(@"pushToNavigationStack %@", self);
 NSLog(@"pushToNavigationStack %@", self);
     [[Definitions navigationStack] pushObject:self];
 }
+- (void)replaceTopOfNavigationStack
+{
+    id nav = [Definitions navigationStack];
+    id context = [nav valueForKey:@"context"];
+    [context setValue:self forKey:@"object"];
+}
 @end
 
 @interface NavigationStack : IvarObject
