@@ -11,12 +11,12 @@ if ($path =~ m/\.vcf$/i) {
 }
 
 if ($path =~ m/\.mp3$/i) {
-    system('hotdog-handleVideoFile:.pl', $path);
+    system('ffplay', $path);
     exit 0;
 }
 
 if ($path =~ m/\.m4a$/i) {
-    system('hotdog-handleVideoFile:.pl', $path);
+    system('ffplay', $path);
     exit 0;
 }
 
@@ -51,7 +51,7 @@ if ($path =~ m/\.webm$/i) {
 }
 
 if ($path =~ m/\.wav$/i) {
-    system('aplay', $path);
+    system('ffplay', $path);
     exit 0;
 }
 
