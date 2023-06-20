@@ -59,39 +59,29 @@ foreach $line (@lines) {
     }
     close(FH);
 
+    $text = "What to do with $interface?";
+    $text =~ s/\\/\\\\/g;
+    $text =~ s/"/\\"/g;
+    $dhcpcdcmd = qq{dhcpcd 0 "dhcpcd $interface"};
     if ($dhcpcd) {
-        $text = "Kill $dhcpcd (dhcpcd for $interface)?";
-        $cmd = qq{hotdog confirm OK Cancel "$text"};
-        $output = `$cmd`;
-        chomp $output;
-        if ($output eq 'OK') {
-            $cmd = "sudo -A kill $dhcpcd";
-            $output = `$cmd`;
-            chomp $output;
-        }
-    } else {
-        $text = "What to do with $interface?";
-        $text =~ s/\\/\\\\/g;
-        $text =~ s/"/\\"/g;
-        $cmd = sprintf('hotdog radio OK Cancel %s %s %s %s %s',
-            qq{"$text"},
-            'nothing 1 "Do Nothing"',
-            qq{dhcpcd 0 "dhcpcd $interface"},
-            qq{ifconfigup 0 "ifconfig $interface up"},
-            qq{ifconfigdown 0 "ifconfig $interface down"});
-        $result = `$cmd`;
-        chomp $result;
-        if ($result eq 'dhcpcd') {
-            $cmd = "hotdog-connectNetworkInterface.pl $interface";
-            $output = `$cmd`;
-            chomp $output;
-        } elsif ($result eq 'ifconfigup') {
-            $cmd = "sudo -A ifconfig $interface up";
-            $output = `$cmd`;
-        } elsif ($result eq 'ifconfigdown') {
-            $cmd = "sudo -A ifconfig $interface down";
-            $output = `$cmd`;
-        }
+        $dhcpcdcmd = qq{killdhcpcd 0 "kill dhcpcd (kill -9 $dhcpcd)"}
+    }
+    $cmd = sprintf('hotdog radio OK Cancel %s %s %s %s %s',
+        qq{"$text"},
+        'nothing 1 "Do Nothing"',
+        $dhcpcdcmd,
+        qq{ifconfigup 0 "ifconfig $interface up"},
+        qq{ifconfigdown 0 "ifconfig $interface down"});
+    $result = `$cmd`;
+    chomp $result;
+    if ($result eq 'dhcpcd') {
+        system('hotdog-connectNetworkInterface.pl', $interface);
+    } elsif ($result eq 'killdhcpcd') {
+        system('sudo', '-A', 'kill', '-9', $dhcpcd);
+    } elsif ($result eq 'ifconfigup') {
+        system('sudo', '-A', 'ifconfig', $interface, 'up');
+    } elsif ($result eq 'ifconfigdown') {
+        system('sudo', '-A', 'ifconfig', $interface, 'down');
     }
 }
 
