@@ -1373,3 +1373,54 @@ end:
 }
 @end
 
+@implementation Definitions(fjekwlmfkldsmfklsdfm)
++ (id)SelectWifiPanel
+{
+    id obj = [@"StandardInputPanel" asInstance];
+    [obj setValue:[@"." asRealPath] forKey:@"currentDirectory"];
+    id lines = nsarr();
+    [lines addObject:@"panelHorizontalStripes"];
+    [lines addObject:@"panelText:'Wireless Networks'"];
+    [lines addObject:@"panelText:''"];
+    [lines addObject:@"panelText:'Choose a network ESSID:'"];
+    [lines addObject:@"panelText:''"];
+    [lines addObject:@"panelText:'Scanning...'"];
+    [obj setValue:lines forKey:@"array"];
+    return obj;
+}
+@end
+
+@interface StandardInputPanel:Panel
+{
+    BOOL _standardInputEOF;
+    id _standardInputData;
+}
+@end
+@implementation StandardInputPanel
+- (int)fileDescriptor
+{
+    if (_standardInputEOF) {
+        return -1;
+    }
+    return 0;
+}
+- (void)handleFileDescriptor
+{
+    if (_standardInputEOF) {
+        return;
+    }
+    if (!_standardInputData) {
+        [self setValue:[NSMutableData data] forKey:@"standardInputData"];
+    }
+    char buf[4096];
+    int n = read(0, buf, 4096);
+    if (n <= 0) {
+        _standardInputEOF = YES;
+        id lines = [[_standardInputData asString] split:@"\n"];
+        [self setValue:lines forKey:@"array"];
+        return;
+    }
+    [_standardInputData appendBytes:buf length:n];
+}
+@end
+
