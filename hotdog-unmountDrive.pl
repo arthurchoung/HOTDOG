@@ -5,11 +5,12 @@ if (not $path) {
     die('specify path');
 }
 
-$output = `hotdog confirm Unmount Cancel 'Unmount $path?'`;
-chomp $output;
-if ($output ne 'Unmount') {
-    exit 1;
-}
+#$output = `hotdog confirm Unmount Cancel 'Unmount $path?'`;
+#chomp $output;
+#if ($output ne 'Unmount') {
+#    exit 1;
+#}
+
 system('sudo', '-A', 'umount', $path);
 if ($? != 0) {
     system('hotdog', 'alert', "Unable to unmount $path");
