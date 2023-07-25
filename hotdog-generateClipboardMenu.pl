@@ -15,6 +15,9 @@ if ($clip =~ m/([0-9\.\-\+]+)/) {
     $mileToKM = $num * 1.6;
     $lbToKG = $num * 0.45;
     $cmToInch = $num * 0.39;
+    $mToInch = int($num * 39.37);
+    $mToInch_feet = $mToInch / 12;
+    $mToInch_inch = $mToInch % 12;
     $kmToMile = $num * 0.6;
     $kgToPound = $num * 2.2;
     $celsiusToFahrenheit = (9.0/5.0)*$num + 32.0;
@@ -22,6 +25,7 @@ if ($clip =~ m/([0-9\.\-\+]+)/) {
     print <<EOF;
 ,"$num in =~ $inchToCM cm",
 ,"$num cm =~ $cmToInch in",
+,"$num m =~ $mToInch_feet ft $mToInch_inch in",
 ,"$num mile =~ $mileToKM km",
 ,"$num km =~ $kmToMile mile",
 ,"$num lb =~ $lbToKG kg",
