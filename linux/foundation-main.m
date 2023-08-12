@@ -132,6 +132,14 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             if (object) {
                 [Definitions runWindowManagerForObject:object];
             }
+        } else if ((argc >= 3) && !strcmp(argv[1], "output")) {
+            for (int i=3; i<argc; i++) {
+                [nsfmt(@"%s", argv[i]) setAsValueForKey:nsfmt(@"arg%d", i-3)];
+            }
+            id message = nsfmt(@"%s", argv[2]);
+//NSLog(@"message %@", message);
+            [[Definitions globalContext] evaluateMessage:message];
+            exit(0);
         } else if ((argc > 2) && !strcmp(argv[1], "windowproperty")) {
             char *propertyName = argv[2];
             id args = nsarr();
