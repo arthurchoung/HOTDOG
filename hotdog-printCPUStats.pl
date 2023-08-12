@@ -56,7 +56,7 @@ sub print_bar_chart
 
     my $barHeight = 16;
     my $spacing = 1;
-    my $barWidth = 10;
+    my $barWidth = 5;
 
     my @heights = map { int ($_ * $barHeight) + 1 } @pcts;
 
@@ -68,9 +68,9 @@ sub print_bar_chart
         my $height;
         foreach $height (@heights) {
             if ($height >= $y) {
-                push @arr, "x" x 10;
+                push @arr, "x" x $barWidth;
             } else {
-                push @arr, " " x 10;
+                push @arr, " " x $barWidth;
             }
         }
         my $str = join " " x $spacing, @arr;
