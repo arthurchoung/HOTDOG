@@ -23,8 +23,8 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=HOTDOG
-VERSION=${VERSION:-20230414}	# replace with version of program
-BUILD=${BUILD:-4}
+VERSION=${VERSION:-20230813}	# replace with version of program
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}		# the "_SBo" is required
 
 # Automatically determine the architecture we're building on:
