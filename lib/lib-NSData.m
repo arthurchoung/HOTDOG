@@ -26,6 +26,37 @@
 #import "HOTDOG.h"
 
 @implementation NSData(fiewojfidsojfkdsjfkdsj)
+- (id)blocksFromData
+{
+    id results = nsarr();
+    id dict = nsdict();
+    for(;;) {
+        id line = [self readLine];
+        if (!line) {
+            break;
+        }
+        int len = [line length];
+        if (!len) {
+            // empty line
+            if ([dict count]) {
+                [results addObject:dict];
+                dict = nsdict();
+            }
+        } else {
+            char *buf = [line UTF8String];
+            char *p = strchr(buf, ':');
+            if (p) {
+                *p = 0;
+                p++;
+                [dict setValue:nsfmt(@"%s", p) forKey:nsfmt(@"%s", buf)];
+            }
+        }
+    }
+    if ([dict count]) {
+        [results addObject:dict];
+    }
+    return results;
+}
 
 - (id)asStringOfByteValues
 {
