@@ -65,6 +65,11 @@ if ($path =~ m/\.html$/i) {
     exit 0;
 }
 
+if ($path =~ m/\.mhtml$/i) {
+    system('chromium', $path);
+    exit 0;
+}
+
 if ($path =~ m/\.txt$/i) {
     system('hotdog', 'stringFromFile', $path);
     exit 0;
