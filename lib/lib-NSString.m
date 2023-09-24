@@ -595,5 +595,32 @@ loop:
     }
     return strtol(p, NULL, 10);
 }
+- (id)removeKey:(id)key
+{
+    int keylen = [key length];
+    char *cstr = [self UTF8String];
+    char *p = find_key_in_string(key, self);
+    if (!p) {
+        return nil;
+    }
+    // look for whitespace
+    char *q = p;
+    for(;;) {
+        if (!*q) {
+            break;
+        }
+        if (isspace(*q)) {
+            break;
+        }
+        q++;
+    }
+    char *startkey = p - keylen - 1;
+    if (startkey > cstr) {
+        startkey--;
+    } else {
+        q++;
+    }
+    return nsfmt(@"%.*s%s", startkey-cstr, cstr, q);
+}
 @end
 
