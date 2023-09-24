@@ -1546,13 +1546,17 @@ if ([monitor intValueForKey:@"height"] == 768) {
                     scaledW /= scaling;
                     scaledH /= scaling;
                 }
+                Int4 rect = [Definitions rectWithX:0 y:0 w:scaledW h:scaledH];
                 id bitmap = [Definitions bitmapWithWidth:scaledW height:scaledH];
-                [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:scaledW h:scaledH] context:context];
+                [object drawInBitmap:bitmap rect:rect context:context];
 
                 [Definitions clearOpenGLForWidth:w height:h];
                 [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
 //                [Definitions drawToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
                 [Definitions drawOpenGLTextureID:[_openGLTexture textureID]];
+                if ([object respondsToSelector:@selector(drawAdditionalInRect:context:)]) {
+                    [object drawAdditionalInRect:rect context:context];
+                }
             } else if ([object respondsToSelector:@selector(drawInBitmap:rect:)]) {
                 int scaling = [context intValueForKey:@"pixelScaling"];
                 int scaledW = w;
@@ -1561,15 +1565,19 @@ if ([monitor intValueForKey:@"height"] == 768) {
                     scaledW /= scaling;
                     scaledH /= scaling;
                 }
+                Int4 rect = [Definitions rectWithX:0 y:0 w:scaledW h:scaledH];
                 id bitmap = [Definitions bitmapWithWidth:scaledW height:scaledH];
                 [bitmap setColorIntR:0 g:0 b:0 a:255];
 //                    [bitmap fillRectangleAtX:0 y:0 w:w h:h];
-                [object drawInBitmap:bitmap rect:[Definitions rectWithX:0 y:0 w:scaledW h:scaledH]];
+                [object drawInBitmap:bitmap rect:rect];
 
                 [Definitions clearOpenGLForWidth:w height:h];
                 [Definitions drawUsingNearestFilterToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
 //                    [Definitions drawToOpenGLTextureID:[_openGLTexture textureID] bytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] bitmapStride:[bitmap bitmapStride]];
                 [Definitions drawOpenGLTextureID:[_openGLTexture textureID]];
+                if ([object respondsToSelector:@selector(drawAdditionalInRect:)]) {
+                    [object drawAdditionalInRect:rect];
+                }
             } else {
                 BOOL didDrawPixelBytes = NO;
                 if ([object respondsToSelector:@selector(pixelBytesRGBA8888)]) {

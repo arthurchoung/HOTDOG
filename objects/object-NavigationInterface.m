@@ -1013,5 +1013,17 @@ shadowRect.y -= 1;
 {
     [self popObject];
 }
+
+- (void)drawAdditionalInRect:(Int4)r
+{
+    id obj = [_context valueForKey:@"object"];
+    if ([obj respondsToSelector:@selector(drawAdditionalInRect:)]) {
+        int navigationBarHeight = [Definitions navigationBarHeight];
+        Int4 r1 = r;
+        r1.y += navigationBarHeight;
+        r1.h -= navigationBarHeight;
+        [obj drawAdditionalInRect:r1];
+    }
+}
 @end
 

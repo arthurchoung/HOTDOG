@@ -206,6 +206,39 @@ NSLog(@"unmapped dict %@", dict);
         } else if ((argc == 2) && !strcmp(argv[1], ".")) {
             id obj = [Definitions ObjectInterface];
             [Definitions runWindowManagerForObject:obj];
+        } else if ((argc > 1) && !strcmp(argv[1], "keyval")) {
+            id lines = nil;
+            if (argc > 2) {
+                lines = [nscstr(argv[2]) linesFromFile];
+                if (!lines) {
+NSLog(@"unable to read file '%s'", argv[2]);
+exit(1);
+                }
+            } else {
+                lines = [Definitions linesFromStandardInput];
+NSLog(@"lines %@", lines);
+            }
+            if (lines) {
+                id arr = nsarr();
+                for (int i=0; i<[lines count]; i++) {
+                    id line = [lines nth:i];
+                    id dict = nsdict();
+                    char *linecstr = [line UTF8String];
+                    char *colon = strchr(linecstr, ':');
+                    if (colon) {
+                        [dict setValue:nscstrn(linecstr, colon-linecstr) forKey:@"key"];
+                        [dict setValue:nsfmt(@"%s", colon+1) forKey:@"val"];
+                    } else {
+                        [dict setValue:@"" forKey:@"key"];
+                        [dict setValue:line forKey:@"val"];
+                    }
+                    [arr addObject:dict];
+                }
+                id nav = [Definitions navigationStack];
+                id obj = [arr asTableInterface];
+                [nav pushObject:obj];
+                [Definitions runWindowManagerForObject:nav];
+            }
         } else if ((argc > 1) && !strcmp(argv[1], "lines")) {
             id lines = nil;
             if (argc > 2) {
@@ -227,7 +260,7 @@ NSLog(@"lines %@", lines);
                     [arr addObject:dict];
                 }
                 id nav = [Definitions navigationStack];
-                id obj = [lines asTableInterface];
+                id obj = [arr asTableInterface];
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
             }
