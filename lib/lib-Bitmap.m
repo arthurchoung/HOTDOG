@@ -742,6 +742,29 @@ NSLog(@"Out of memory!");
         }
     }
 }
+- (void)drawBytes:(uint8_t *)src bitmapWidth:(int)bitmapWidth bitmapHeight:(int)bitmapHeight x:(int)x y:(int)y
+{
+    uint8_t *dst = _pixelBytes;
+    for (int j=0; j<bitmapHeight; j++) {
+        int srcy = j;
+        int dsty = y+j;
+        if ((dsty >= 0) && (dsty < _bitmapHeight)) {
+            for (int i=0; i<bitmapWidth; i++) {
+                int srcx = i;
+                int dstx = x+i;
+                
+                if ((dstx >= 0) && (dstx < _bitmapWidth)) {
+                    int dstidx = dsty*_bitmapStride+dstx*4;
+                    int srcidx = srcy*bitmapWidth*4+srcx*4;
+                    dst[dstidx] = src[srcidx];
+                    dst[dstidx+1] = src[srcidx+1];
+                    dst[dstidx+2] = src[srcidx+2];
+                    dst[dstidx+3] = src[srcidx+3];
+                }
+            }
+        }
+    }
+}
 - (void)drawBitmap:(id)bitmap x:(int)x y:(int)y w:(int)w h:(int)h
 {
     [self drawBytes:[bitmap pixelBytes] bitmapWidth:[bitmap bitmapWidth] bitmapHeight:[bitmap bitmapHeight] x:x y:y w:w h:h];
