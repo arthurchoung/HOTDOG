@@ -166,5 +166,53 @@ BOOL isnsstr(id obj)//$;
 
 #endif
 
++ (id)decodeBase64Bytes:(unsigned char *)bytes length:(int)len
+{
+    if (!len) {
+        return nil;
+    }
+    id result = [NSData dataWithCapacity:len];
+
+    unsigned char *base64chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    int base64numchars = strlen(base64chars);
+    unsigned char base64table[256];
+
+    for (int i=0; i<256; i++) {
+        base64table[i] = base64numchars;
+    }
+    for (int i=0; i<base64numchars; i++) {
+        unsigned char c = base64chars[i];
+        base64table[c] = i;
+    }
+
+    uint16_t bits = 0;
+    int numbits = 0;
+
+    unsigned char *dst = [result bytes];
+    unsigned char *q = dst;
+    for (int i=0; i<len; i++) {
+        if (base64table[bytes[i]] >= base64numchars) {
+            continue;
+        }
+        if (numbits) {
+            bits <<= 6;
+        }
+        bits &= 0xffc0;
+        bits |= base64table[bytes[i]];
+        numbits += 6;
+        if (numbits >= 8) {
+            uint16_t val = bits;
+            if (numbits > 8) {
+                val >>= (numbits % 8);
+            }
+            numbits -= 8;
+            *q = (unsigned char)val;
+            q++;
+        }
+    }
+    [result setLength:q-dst];
+    return result;
+}
+
 @end
 
