@@ -1044,6 +1044,21 @@ NSLog(@"Out of memory!");
     Int4 textRect = [Definitions centerRect:[Definitions rectWithX:0 y:0 w:textWidth h:textHeight] inRect:rect];
     [self drawBitmapText:text x:rect.x+rect.w-textRect.w-8 y:textRect.y+2];
 }
+- (void)drawBitmapText:(id)text rightAlignedAtX:(int)x y:(int)y
+{
+    if (![text length]) {
+        return;
+    }
+    int cursorY = y;
+    int textHeight = _fontHeights['A'];
+    id arr = [text split:@"\n"];
+    for (int i=0; i<[arr count]; i++) {
+        id elt = [arr nth:i];
+        int textWidth = [self bitmapWidthForText:elt];
+        [self drawBitmapText:elt x:x-textWidth y:cursorY];
+        cursorY += textHeight;
+    }
+}
 
 - (void)drawBitmapText:(id)text centeredAtX:(int)x y:(int)y
 {
