@@ -148,6 +148,110 @@
     [data deleteBytesFromIndex:0 length:p-bytes+1];
     return result;
 }
+- (id)bitmapFromPPMP6
+{
+    id data = self;
+    unsigned char *a = [data bytes];
+    int len = [data length];
+    unsigned char *end = a + len;
+
+    if ((len >= 2) && (a[0] == 'P') && (a[1] == '6')) {
+    } else {
+NSLog(@"unsupported, expecting P6");
+        return nil;
+    }
+
+    if ((len >= 3) && (a[2] == '\n')) {
+    } else {
+NSLog(@"expecting newline");
+        return nil;
+    }
+
+    if (len-3 <= 1) {
+NSLog(@"not enough data");
+        return nil;
+    }
+    unsigned char *b = memchr(a+3, ' ', len-3);
+    if (!b) {
+NSLog(@"expecting space");
+        return nil;
+    }
+    *b = 0;
+    b++;
+    int w = strtol(a+3, NULL, 10);
+
+    if (len-(b-a) <= 1) {
+NSLog(@"not enough data");
+        return nil;
+    }
+    unsigned char *c = memchr(b, '\n', len-(b-a));
+    if (!c) {
+NSLog(@"expecting newline");
+        return nil;
+    }
+    *c = 0;
+    c++;
+    int h = strtol(b, NULL, 10);
+
+    if (len-(c-a) <= 1) {
+NSLog(@"not enough data");
+        return nil;
+    }
+    unsigned char *d = memchr(c, '\n', len-(c-a));
+    if (!d) {
+NSLog(@"expecting newline");
+        return nil;
+    }
+    *d = 0;
+    d++;
+    int maxval = strtol(c, NULL, 10);
+
+    int index = d - a;
+//NSLog(@"index %d w %d h %d maxval %d len %d", index, w, h, maxval, len);
+
+    if (maxval == 255) {
+        if (index+(w*h*3) == len) {
+        } else {
+NSLog(@"invalid length %d index %d w %d h %d", len, index, w, h);
+            return nil;
+        }
+        id bitmap = [Definitions bitmapWithWidth:w height:h];
+        unsigned char *pixels = [bitmap pixelBytes];
+        for (int y=0; y<h; y++) {
+            for (int x=0; x<w; x++) {
+                pixels[0] = d[2];
+                pixels[1] = d[1];
+                pixels[2] = d[0];
+                pixels[3] = 255;
+                pixels += 4;
+                d += 3;
+            }
+        }
+        return bitmap;
+    } else if (maxval == 65535) {
+        if (index+(w*h*6) == len) {
+        } else {
+NSLog(@"invalid length");
+            return nil;
+        }
+        id bitmap = [Definitions bitmapWithWidth:w height:h];
+        unsigned char *pixels = [bitmap pixelBytes];
+        for (int y=0; y<h; y++) {
+            for (int x=0; x<w; x++) {
+                pixels[0] = d[4];
+                pixels[1] = d[2];
+                pixels[2] = d[0];
+                pixels[3] = 255;
+                pixels += 4;
+                d += 6;
+            }
+        }
+        return bitmap;
+    } else {
+NSLog(@"unsupported maxval %d", maxval);
+        return nil;
+    }
+}
 @end
 
 
