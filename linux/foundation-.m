@@ -1900,6 +1900,14 @@ NSLog(@"alloc %d", _alloc);
 {
     return _length;
 }
+- (void)setLength:(int)length
+{
+    if (length > _alloc) {
+        _length = _alloc;
+    } else {
+        _length = length;
+    }
+}
 - (void)deleteBytesFromIndex:(int)index length:(int)length
 {
     if (length <= 0) {
