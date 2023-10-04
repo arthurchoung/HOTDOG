@@ -622,5 +622,28 @@ loop:
     }
     return nsfmt(@"%.*s%s", startkey-cstr, cstr, q);
 }
+- (id)decodeBase64ForKey:(id)key
+{
+    char *p = find_key_in_string(key, self);
+    if (!p) {
+        return nil;
+    }
+    // look for whitespace
+    char *q = p;
+    for(;;) {
+        if (!*q) {
+            break;
+        }
+        if (isspace(*q)) {
+            break;
+        }
+        q++;
+    }
+    int len = q-p;
+    if (len > 0) {
+        return [Definitions decodeBase64Bytes:p length:len];
+    }
+    return nil;
+}
 @end
 
