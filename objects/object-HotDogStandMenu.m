@@ -39,6 +39,8 @@
 
     int _unmapInsteadOfClose;
     id _title;
+
+    unsigned long _contextualWindow;
 }
 @end
 
@@ -280,6 +282,11 @@ NSLog(@"Menu handleMouseUp");
                 context = _selectedObject;
             }
             [context  evaluateMessage:message];
+            if (_contextualWindow) {
+                id windowManager = [@"windowManager" valueForKey];
+                id contextualDict = [windowManager dictForObjectWindow:_contextualWindow];
+                [contextualDict setValue:@"1" forKey:@"needsRedraw"];
+            }
         }
     }
     id x11dict = [event valueForKey:@"x11dict"];

@@ -2758,6 +2758,7 @@ NSLog(@"_desktopWindow %lu", _desktopWindow);
                     if (isnsarr(menu)) {
                         menu = [menu asMenu];
                         [menu setValue:object forKey:@"contextualObject"];
+                        [menu setValue:nsfmt(@"%lu", e->window) forKey:@"contextualWindow"];
                     }
                     if (menu) {
                         [self openButtonDownMenuForObject:menu x:e->x_root y:e->y_root w:0 h:0];

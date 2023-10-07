@@ -130,6 +130,8 @@ static char *rightHighlightedPixels =
 
     int _unmapInsteadOfClose;
     id _title;
+
+    unsigned long _contextualWindow;
 }
 @end
 
@@ -271,6 +273,11 @@ NSLog(@"dealloc Menu %@", self);
                 context = _selectedObject;
             }
             [context evaluateMessage:message];
+            if (_contextualWindow) {
+                id windowManager = [@"windowManager" valueForKey];
+                id contextualDict = [windowManager dictForObjectWindow:_contextualWindow];
+                [contextualDict setValue:@"1" forKey:@"needsRedraw"];
+            }
         }
         if (_unmapInsteadOfClose) {
             id windowManager = [@"windowManager" valueForKey];
