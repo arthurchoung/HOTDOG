@@ -100,6 +100,12 @@
     struct tm *t = localtime(&timestamp);
     return t->tm_mon+1;
 }
++ (int)currentDay
+{
+    time_t timestamp = time(0);
+    struct tm *t = localtime(&timestamp);
+    return t->tm_mday;
+}
 + (id)currentDateTime
 {
     time_t timestamp = time(0);
