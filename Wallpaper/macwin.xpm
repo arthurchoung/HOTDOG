@@ -1,0 +1,9 @@
+/* XPM */
+static char *macwin[] = {
+/* columns rows colors chars-per-pixel */
+"1 1 1 1 ",
+". c #63639c",
+/* pixels */
+".",
+};
+
