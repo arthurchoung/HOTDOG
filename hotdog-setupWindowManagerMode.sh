@@ -23,5 +23,9 @@ elif [ "x${HOTDOG_MODE}" = "xmaccolor" ]; then
 elif [ "x${HOTDOG_MODE}" = "xmacplatinum" ]; then
     BASEDIR=`hotdog configDir`
     feh --bg-tile "$BASEDIR/Wallpaper/macplatinum.xpm"
+elif [ "x${HOTDOG_MODE}" = "xmacwin" ]; then
+    BASEDIR=`hotdog configDir`
+#    compton -c -b --backend glx
+    feh --bg-tile "$BASEDIR/Wallpaper/macwin.xpm"
 fi
 
