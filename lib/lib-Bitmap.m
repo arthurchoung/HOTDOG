@@ -775,13 +775,11 @@ NSLog(@"Out of memory!");
     int bitmapWidth = [bitmap bitmapWidth];
     int bitmapHeight = [bitmap bitmapHeight];
     uint8_t *dst = _pixelBytes;
-    int w = _bitmapWidth;
-    int h = _bitmapHeight;
-    for (int j=0; j<h; j++) {
+    for (int j=0; j<bitmapHeight; j++) {
         int srcy = j;
         int dsty = y+j;
         if ((dsty >= 0) && (dsty < _bitmapHeight)) {
-            for (int i=0; i<w; i++) {
+            for (int i=0; i<bitmapWidth; i++) {
                 int srcx = i;
                 int dstx = x+i;
                 
