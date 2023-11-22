@@ -174,6 +174,26 @@
 }
 @end
 
+@implementation NSData(fjdkslfjklsdjf)
+- (id)pipeToCommandAndReturnOutput:(id)command
+{
+    id process = [command runCommandAndReturnProcess];
+    pid_t childpid = fork();
+    if (childpid == -1) {
+        perror("fork");
+        return nil;
+    } else if (childpid == 0) {
+        [process writeData:self];
+        [process closeInput];
+        _exit(0);
+        return nil;
+    } else {
+        [process closeInput];
+        return [process readAllDataFromOutputThenCloseAndWait];
+    }
+}
+@end
+
 @implementation NSArray(jfklsdjkf)
 - (id)runAsArgumentsForCommandAndReturnOutput:(id)command
 {
