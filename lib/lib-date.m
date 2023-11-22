@@ -112,6 +112,12 @@
     struct tm *t = localtime(&timestamp);
     return [Definitions year:t->tm_year+1900 month:t->tm_mon+1 day:t->tm_mday hour:t->tm_hour minute:t->tm_min second:t->tm_sec];
 }
++ (id)dateTimeForTimestamp:(time_t)arg
+{
+    time_t timestamp = arg;
+    struct tm *t = localtime(&timestamp);
+    return [Definitions year:t->tm_year+1900 month:t->tm_mon+1 day:t->tm_mday hour:t->tm_hour minute:t->tm_min second:t->tm_sec];
+}
 @end
 
 @implementation NSString(fjkdlsjkflsdjkf)
