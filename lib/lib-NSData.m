@@ -151,85 +151,89 @@
 - (id)bitmapFromPPMP6
 {
     id data = self;
-    unsigned char *a = [data bytes];
+    unsigned char *start = [data bytes];
     int len = [data length];
-    unsigned char *end = a + len;
+    unsigned char *end = start + len;
 
-    if ((len >= 2) && (a[0] == 'P') && (a[1] == '6')) {
-    } else {
-NSLog(@"unsupported, expecting P6");
-        return nil;
+    unsigned char *p = start;
+    unsigned char *q = start;
+
+    int newline = 0;
+    unsigned char *comment = 0;
+    int values[3];
+    values[0] = 0;
+    values[1] = 0;
+    values[2] = 0;
+    int index = 0;
+    for(;;) {
+        if (q >= end) {
+NSLog(@"premature end");
+            return nil;
+        }
+        if (comment) {
+            if (*q == '\n') {
+NSLog(@"comment '%.*s'", q-comment, comment);
+                comment = 0;
+                p = q+1;
+            }
+        } else if (newline && (*q == '#')) {
+            comment = q;
+        } else if ((*q == ' ') || (*q == '\t') || (*q == '\r') || (*q == '\n')) {
+            if (q == p) {
+                p = q+1;
+            } else {
+                if (p == start) {
+                    if ((q - p == 2) && (p[0] == 'P') && (p[1] == '6')) {
+                        p = q+1;
+                    } else {
+NSLog(@"no magic (P6)");
+                        return nil;
+                    }
+                } else {
+                    values[index] = strtol(p, 0, 10);
+NSLog(@"index %d val '%d'", index, values[index]);
+                    index++;
+                    p = q+1;
+                    if (index == 3) {
+NSLog(@"bytes remaining %d", end-p);
+                        break;
+                    }
+                }
+            }
+        }
+        if (*q == '\n') {
+            newline = 1;
+        } else {
+            newline = 0;
+        }
+        q++;
     }
 
-    if ((len >= 3) && (a[2] == '\n')) {
-    } else {
-NSLog(@"expecting newline");
-        return nil;
-    }
-
-    if (len-3 <= 1) {
-NSLog(@"not enough data");
-        return nil;
-    }
-    unsigned char *b = memchr(a+3, ' ', len-3);
-    if (!b) {
-NSLog(@"expecting space");
-        return nil;
-    }
-    *b = 0;
-    b++;
-    int w = strtol(a+3, NULL, 10);
-
-    if (len-(b-a) <= 1) {
-NSLog(@"not enough data");
-        return nil;
-    }
-    unsigned char *c = memchr(b, '\n', len-(b-a));
-    if (!c) {
-NSLog(@"expecting newline");
-        return nil;
-    }
-    *c = 0;
-    c++;
-    int h = strtol(b, NULL, 10);
-
-    if (len-(c-a) <= 1) {
-NSLog(@"not enough data");
-        return nil;
-    }
-    unsigned char *d = memchr(c, '\n', len-(c-a));
-    if (!d) {
-NSLog(@"expecting newline");
-        return nil;
-    }
-    *d = 0;
-    d++;
-    int maxval = strtol(c, NULL, 10);
-
-    int index = d - a;
-//NSLog(@"index %d w %d h %d maxval %d len %d", index, w, h, maxval, len);
+    int w = values[0];
+    int h = values[1];
+    int maxval = values[2];
 
     if (maxval == 255) {
-        if (index+(w*h*3) == len) {
+        if ((w*h*3) == end-p) {
         } else {
-NSLog(@"invalid length %d index %d w %d h %d", len, index, w, h);
+NSLog(@"invalid length end-p %d w %d h %d", end-p, w, h);
             return nil;
         }
         id bitmap = [Definitions bitmapWithWidth:w height:h];
         unsigned char *pixels = [bitmap pixelBytes];
         for (int y=0; y<h; y++) {
             for (int x=0; x<w; x++) {
-                pixels[0] = d[2];
-                pixels[1] = d[1];
-                pixels[2] = d[0];
+                pixels[0] = p[2];
+                pixels[1] = p[1];
+                pixels[2] = p[0];
                 pixels[3] = 255;
                 pixels += 4;
-                d += 3;
+                p += 3;
             }
         }
         return bitmap;
     } else if (maxval == 65535) {
-        if (index+(w*h*6) == len) {
+        if ((w*h*6) == end-p) {
         } else {
 NSLog(@"invalid length");
             return nil;
@@ -238,12 +242,12 @@ NSLog(@"invalid length");
         unsigned char *pixels = [bitmap pixelBytes];
         for (int y=0; y<h; y++) {
             for (int x=0; x<w; x++) {
-                pixels[0] = d[4];
-                pixels[1] = d[2];
-                pixels[2] = d[0];
+                pixels[0] = p[4];
+                pixels[1] = p[2];
+                pixels[2] = p[0];
                 pixels[3] = 255;
                 pixels += 4;
-                d += 6;
+                p += 6;
             }
         }
         return bitmap;
