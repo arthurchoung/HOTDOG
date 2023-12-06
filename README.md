@@ -108,6 +108,12 @@ HOTDOG can be run on Ubuntu and its derivatives.
 
 See the NOTES-Ubuntu file for more information.
 
+## Related Project
+
+PUCKO Web Browser
+
+http://puckoweb.com
+
 ## Legal
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
