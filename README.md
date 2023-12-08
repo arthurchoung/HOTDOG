@@ -110,9 +110,9 @@ See the NOTES-Ubuntu file for more information.
 
 ## Related Project
 
-PUCKO Web Browser
+PUCKO Linux Web Browser
 
-http://puckoweb.com
+http://puckolinux.com
 
 ## Legal
 
