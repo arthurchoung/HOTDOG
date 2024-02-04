@@ -832,7 +832,7 @@ NSLog(@"Out of memory!");
     unsigned char *p = _pixelBytes;
     for (int i=0; i<_bitmapHeight; i++) {
         for (int j=0; j<_bitmapWidth; j++) {
-            fprintf(fp, "%d %d %d\n", p[0], p[1], p[2]);
+            fprintf(fp, "%d %d %d\n", p[2], p[1], p[0]);
             p += 4;
         }
         fprintf(fp, "\n");
