@@ -339,7 +339,7 @@ NSLog(@"lines %@", lines);
                 } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                     obj = [@"HotDogStandAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"winmac"]) {
-                    obj = [@"MacPlatinumAlert" asInstance];
+                    obj = [@"MacAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"macwin"]) {
                     obj = [@"MacPlatinumAlert" asInstance];
                 } else {
@@ -385,7 +385,7 @@ NSLog(@"lines %@", lines);
                 } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                     obj = [@"HotDogStandAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"winmac"]) {
-                    obj = [@"MacPlatinumAlert" asInstance];
+                    obj = [@"MacAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"macwin"]) {
                     obj = [@"MacPlatinumAlert" asInstance];
                 } else {
@@ -432,7 +432,7 @@ NSLog(@"lines %@", lines);
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandChecklist" asInstance];
             } else if ([hotdogMode isEqual:@"winmac"]) {
-                obj = [@"MacPlatinumChecklist" asInstance];
+                obj = [@"MacChecklist" asInstance];
             } else if ([hotdogMode isEqual:@"macwin"]) {
                 obj = [@"MacPlatinumChecklist" asInstance];
             } else {
@@ -486,7 +486,7 @@ NSLog(@"lines %@", lines);
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandRadio" asInstance];
             } else if ([hotdogMode isEqual:@"winmac"]) {
-                obj = [@"MacPlatinumRadio" asInstance];
+                obj = [@"MacRadio" asInstance];
             } else if ([hotdogMode isEqual:@"macwin"]) {
                 obj = [@"MacPlatinumRadio" asInstance];
             } else {
@@ -541,7 +541,7 @@ NSLog(@"lines %@", lines);
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"winmac"]) {
-                obj = [@"MacPlatinumTextFields" asInstance];
+                obj = [@"MacTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"macwin"]) {
                 obj = [@"MacPlatinumTextFields" asInstance];
             } else {
@@ -596,7 +596,7 @@ NSLog(@"lines %@", lines);
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"winmac"]) {
-                obj = [@"MacPlatinumTextFields" asInstance];
+                obj = [@"MacTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"macwin"]) {
                 obj = [@"MacPlatinumTextFields" asInstance];
             } else {
@@ -701,7 +701,7 @@ NSLog(@"unable to run command %@", cmd);
                 } else if (!strcmp(argv[2], "atarist")) {
                     classPrefix = "AtariST";
                 } else if (!strcmp(argv[2], "winmac")) {
-                    classPrefix = "MacPlatinum";
+                    classPrefix = "Mac";
                 } else if (!strcmp(argv[2], "macwin")) {
                     classPrefix = "MacPlatinum";
                 }
