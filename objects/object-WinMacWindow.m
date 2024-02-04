@@ -95,7 +95,7 @@
     [Definitions setValue:@"red" forEnvironmentVariable:@"HOTDOG_WINDOWBACKGROUNDCOLOR"];
     [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_WINDOWTEXTCOLOR"];
     [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_DESKTOPTEXTCOLOR"];
-    [Definitions setValue:@"#0055aa" forEnvironmentVariable:@"HOTDOG_XTERMBG"];
+    [Definitions setValue:@"#0000aa" forEnvironmentVariable:@"HOTDOG_XTERMBG"];
     [Definitions setValue:@"hotdogstand" forEnvironmentVariable:@"HOTDOG_MODE"];
     [windowManager setBackgroundForCString:"b\n" palette:"b #ffff00\n"];
     id rootWindowObject = [@"MacRootWindow" asInstance];
@@ -127,19 +127,20 @@
     [windowManager setFocusDict:nil];
     [windowManager unparentAllWindows];
 
-    [Definitions setValue:@"#ff8800" forEnvironmentVariable:@"HOTDOG_HASFOCUSBORDERCOLOR"];
-    [Definitions setValue:@"#ff8800" forEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
+    [Definitions setValue:@"#0088ff" forEnvironmentVariable:@"HOTDOG_HASFOCUSBORDERCOLOR"];
+    [Definitions setValue:@"#0088ff" forEnvironmentVariable:@"HOTDOG_HASFOCUSTITLEBARCOLOR"];
     [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_NOFOCUSBORDERCOLOR"];
     [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_NOFOCUSTITLEBARCOLOR"];
     [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_INACTIVETITLEBARTEXTCOLOR"];
     [Definitions setValue:@"#0000aa" forEnvironmentVariable:@"HOTDOG_HIGHLIGHTCOLOR"];
     [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_HIGHLIGHTEDTEXTCOLOR"];
-    [Definitions setValue:@"#0055aa" forEnvironmentVariable:@"HOTDOG_DESKTOPCOLOR"];
-    [Definitions setValue:@"#0055aa" forEnvironmentVariable:@"HOTDOG_WINDOWBACKGROUNDCOLOR"];
-    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_WINDOWTEXTCOLOR"];
-    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_DESKTOPTEXTCOLOR"];
+    [Definitions setValue:@"#c3c7cb" forEnvironmentVariable:@"HOTDOG_DESKTOPCOLOR"];
+    [Definitions setValue:@"white" forEnvironmentVariable:@"HOTDOG_WINDOWBACKGROUNDCOLOR"];
+    [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_WINDOWTEXTCOLOR"];
+    [Definitions setValue:@"black" forEnvironmentVariable:@"HOTDOG_DESKTOPTEXTCOLOR"];
+    [Definitions setValue:@"#000000" forEnvironmentVariable:@"HOTDOG_XTERMBG"];
     [Definitions setValue:@"winmac" forEnvironmentVariable:@"HOTDOG_MODE"];
-    [windowManager setBackgroundForCString:"b\n" palette:"b #0055aa\n"];
+    [windowManager setBackgroundForCString:"b\n" palette:"b #c3c7cb\n"];
     id rootWindowObject = [@"MacRootWindow" asInstance];
     [windowManager setValue:rootWindowObject forKey:@"rootWindowObject"];
     [windowManager reparentAllWindows:@"WinMacWindow"];
