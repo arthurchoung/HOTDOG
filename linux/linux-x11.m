@@ -3615,6 +3615,12 @@ NSLog(@"property %s prop_return '%s'", propertyName, prop_return);
     id windowManager = [@"windowManager" valueForKey];
     [dict setValue:nsfmt(@"%d %d", newX, newY) forKey:@"moveWindow"];
 }
+- (void)x11ResizeWindowToWidth:(int)newW height:(int)newH
+{
+    id dict = self;
+    id windowManager = [@"windowManager" valueForKey];
+    [dict setValue:nsfmt(@"%d %d", newW, newH) forKey:@"resizeWindow"];
+}
 - (void)x11ChangeWindowWidthTo:(int)newW
 {
     id dict = self;
