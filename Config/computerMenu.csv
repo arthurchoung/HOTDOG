@@ -8,8 +8,6 @@ hotKey,displayName,messageForClick
 ,"Take Screenshot with Selection Box","NSArray|addObject:'hotdog-takeScreenshotSelectionBox.pl'|runCommandInBackground"
 ,,
 ,"Sync Time with NTP","['hotdog-syncTimeWithNTP.sh']|runCommandInBackground"
-,"Audio Panel","['hotdog-openAudioPanel.sh']|runCommandInBackground"
-,Camera,"['hotdog' 'show' 'VideoCamerasPanel']|runCommandInBackground"
 ,,
 ,AmigaDesktop,"['hotdog' 'desktop' 'AmigaDesktop']|runCommandInBackground"
 ,AtariSTDesktop,"['hotdog' 'desktop' 'AtariSTDesktop']|runCommandInBackground"
