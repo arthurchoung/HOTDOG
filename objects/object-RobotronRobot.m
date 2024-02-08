@@ -343,7 +343,7 @@ static char *robotPixels =
     line = [line find:@"-" replace:@" "];
 
     id cmd = nsarr();
-    [cmd addObject:@"SAM"];
+    [cmd addObject:@"AmigaSay"];
     [cmd addObject:line];
     [cmd runCommandInBackground];
 
