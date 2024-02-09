@@ -116,17 +116,17 @@ The goal is to have a graphical Unix style workstation, something both Mac OS X 
 
 The first graphical Unix workstations seem to have been machines like the Sun-2 built with a 68010 and a custom MMU, and Apollo's crazy dual-68000 computer. The 68020 seems to have been one of the first viable CPU's for running Unix when paired with a 68851 MMU, with the 68030 being a better all-in-one design. The first versions of NeXTStep ran on a 68030.
 
-In the same time period, the 386 became available and was also an excellent CPU for running Unix. The first versions of Linux were written for this CPU. Although it was possible to run a Unix-like OS on a 80286 (such as QNX, Minix and Xenix) and a multitasking and memory-protected OS like OS/2, the 16-bit segmented design of the 80286 made it awkward, compared to using a fully 32-bit processor.
+In the same time period, the 386 became available and was also an excellent CPU for running Unix. The first versions of Linux were written for this CPU. Although it was possible to run a Unix-like OS on a 286 (such as QNX, Minix and Xenix) and a multitasking and memory-protected OS like OS/2, the 16-bit segmented design of the 286 makes it awkward, compared to using a fully 32-bit processor.
 
 It was even possible to run a Unix-like OS on the 8-bit 6809 (OS/9), so being able to run Unix is more a function of having features like an MMU and relocatable code, as opposed to raw processing power.
 
-So the focus is on having a GUI that does not waste too many CPU cycles or use too much RAM. The first GUI's for personal computers were mostly in the 16-bit era (such as Mac System 6, Amiga Workbench, Atari ST GEM, Windows 3.1). These are capable of running on a 68000 or 80286 with a minimal amount of RAM.
+So the focus is on having a GUI that does not waste too many CPU cycles or use too much RAM. The first GUI's for personal computers were mostly in the 16-bit era (such as Mac System 6, Amiga Workbench, Atari ST GEM, Windows 3.1). These are capable of running on a 68000 or 286 with a minimal amount of RAM.
 
 Windows 95 officially requires a 386DX, which is a 32-bit CPU. The colorized version of Mac System 7 requires a 68020, which is a 32-bit CPU. Both will be considered to be bloated.
 
-So the focus will be on the computers which were still part of the 8-bit and 16-bit era. Although the 68000/68010 has a 32-bit instruction set, it has a 16-bit data bus and a 24-bit address bus, so the 68000/68010 will be included, but the 68020 has a 32-bit data bus, so it will not be included. The 68EC020 has a 24-bit address bus, so it will not be included either. The 386SX has a 16-bit data bus, so it will be included, even though it is otherwise a 32-bit processor. It is possible for a 80286 to run faster than a 386SX. The 386DX was fully 32-bit, so it will not be included. This means the FM Towns Marty will be considered to be part of the 16-bit era since it has a 386SX. 
+So the focus will be on the computers which were still part of the 8-bit and 16-bit era. Although the 68000/68010 has a 32-bit instruction set, it has a 16-bit data bus and a 24-bit address bus, so the 68000/68010 will be included, but the 68020 has a 32-bit data bus, so it will not be included. The 68EC020 has a 24-bit address bus, so it will not be included either. The 386SX has a 16-bit data bus, so it will be included, even though it is otherwise a 32-bit processor. It is possible for a 286 to run faster than a 386SX. The 386DX was fully 32-bit, so it will not be included. This means a computer like the FM Towns Marty will be considered to be part of the 16-bit era since it has a 386SX. 
 
-The graphical elements from the 16-bit computers will be used, while anything after is considered to be bloated. This means Windows 95 is off-limits, as well as the colorized version of Mac System 7. The monochrome version of System 7 runs on a 68000 so it is included. This is only referring to the actual graphics, ideas from the later GUI's can be used, but adapted to fit the 16-bit era graphics.
+The graphical elements from the 16-bit computers can be used, while anything after is considered to be bloated. This means Windows 95 is off-limits, as well as the colorized version of Mac System 7. The monochrome version of System 7 runs on a 68000 so it is included. This is only referring to the actual graphics, ideas from the later GUI's can be used, but adapted to fit the 16-bit era graphics.
 
 NeXTStep started out on the 68030, but pivoted to support multiple architectures including the 486. I used to think that the x86 was not a good architecture because it seemed to be the prevailing opinion at the time, all the while dreaming of an alternate reality where the 680x0 and/or PowerPC architectures won. Having taken a closer look, I no longer think that, I believe the x86 is the better chip and that the better chip won. I see the x86 as being more practical and efficient, while having an orthogonal instruction set is impractical and inefficient. From a hardware perspective, the x86 makes more sense to me intuitively, although admittedly I do not have too much knowledge of how hardware works. The 680x0 does sound nice in theory, but I get the impression it only makes sense if you disregard the laws of physics. I think NeXTStep/OpenStep was correct for switching over to the 486, and I think Apple made a mistake by switching over to PowerPC. After Apple bought NeXT, that set in motion the porting of OpenStep over to PowerPC, which I see as a mistake.
 
@@ -165,7 +165,6 @@ Other ideas
 
   - Eliminate dependency on libc (shouldn't be too hard)
   - How hard would it be to rewrite X server in Objective-C?
-  - A MacPorts like repository for OpenStep (I wonder how different Tiger is from OpenStep)
 
 ## Related Project
 
