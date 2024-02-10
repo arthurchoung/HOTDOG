@@ -166,6 +166,8 @@ Other ideas
   - Eliminate dependency on libc (shouldn't be too hard)
   - How hard would it be to rewrite X server in Objective-C?
 
+This should be moved to a separate file somewhere.
+
 ## Related Project
 
 PUCKO Linux
