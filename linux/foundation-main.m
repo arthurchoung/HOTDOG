@@ -180,8 +180,8 @@ exit(0);
 
 
             unsigned long appMenuWindow = 0;
-            if ([object respondsToSelector:@selector(generateAppMenuArray)]) {
-                id appMenuArray = [object generateAppMenuArray];
+            if ([object respondsToSelector:@selector(appMenuArray)]) {
+                id appMenuArray = [object appMenuArray];
                 if (appMenuArray) {
                     appMenuWindow = [windowManager openAppMenuWindowsForArray:appMenuArray];
                 }
