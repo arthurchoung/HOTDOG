@@ -527,8 +527,8 @@ exit(0);
     }
 
     unsigned long appMenuWindow = 0;
-    if ([object respondsToSelector:@selector(generateAppMenuArray)]) {
-        id appMenuArray = [object generateAppMenuArray];
+    if ([object respondsToSelector:@selector(appMenuArray)]) {
+        id appMenuArray = [object appMenuArray];
         if (appMenuArray) {
             appMenuWindow = [windowManager openAppMenuWindowsForArray:appMenuArray];
         }
@@ -591,8 +591,8 @@ exit(0);
     }
 
     unsigned long appMenuWindow = 0;
-    if ([object respondsToSelector:@selector(generateAppMenuArray)]) {
-        id appMenuArray = [object generateAppMenuArray];
+    if ([object respondsToSelector:@selector(appMenuArray)]) {
+        id appMenuArray = [object appMenuArray];
         if (appMenuArray) {
             appMenuWindow = [windowManager openAppMenuWindowsForArray:appMenuArray];
         }
@@ -1678,6 +1678,9 @@ NSLog(@"setFocusDict:%@", dict);
         if (!dict || (dict == _menuBar)) {
             arr = [self getAppMenuForWindow:_desktopWindow];
         } else if ([dict intValueForKey:@"HOTDOGNOFRAME"]) {
+            id childWindow = [dict valueForKey:@"childWindow"];
+            arr = [self getAppMenuForWindow:[childWindow unsignedLongValue]];
+        } else {
             id childWindow = [dict valueForKey:@"childWindow"];
             arr = [self getAppMenuForWindow:[childWindow unsignedLongValue]];
         }
