@@ -130,7 +130,7 @@ exit(1);
 NSLog(@"handleDestroyNotifyEvent:%@", event);
     [self exit:0];
 }
-- (id)generateAppMenuArray
+- (id)appMenuArray
 {
     id deskMenu = [[deskMenuCSV parseCSVFromString] asMenu];
     [deskMenu setValue:@"Desk" forKey:@"title"];
