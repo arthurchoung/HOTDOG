@@ -23,6 +23,41 @@ static id oldManPixels =
 @"    ........    \n"
 @"   ..XX..XX..   \n"
 ;
+static id oldManMenuItemPixels =
+@"                  \n"
+@"      bbbbbb      \n"
+@"     bXXXXXXb     \n"
+@"    boXoXXoXob    \n"
+@"    bXXbXXbXXb    \n"
+@"    bXXbXXbXXb    \n"
+@"    b.oXXXXo.b    \n"
+@"   b.oooooooo.b   \n"
+@"  b..oobbbboo..b  \n"
+@" b..oo.oooo.oo..b \n"
+@"bX..o..oooo..o..Xb\n"
+@"bX.....oooo.....Xb\n"
+@"bX...b..oo..b...Xb\n"
+@" b...b......b...b \n"
+@" b...b......b...b \n"
+@"  b.b........b.b  \n"
+@"   bb........bb   \n"
+@"   b..XX..XX..b   \n"
+@"    bbbbbbbbbb    \n"
+;
+@implementation Definitions(fkelwmfklsdmklfmklsdmf)
++ (id)OldManMenuItem
+{
+    id pixels = oldManMenuItemPixels;
+    id palette = nsfmt(@"%sb #000000\n", oldManPalette);
+    id highlightedPalette = palette;
+
+    id obj = [@"BitmapMenuItem" asInstance];
+    [obj setValue:pixels forKey:@"pixels"];
+    [obj setValue:palette forKey:@"palette"];
+    [obj setValue:highlightedPalette forKey:@"highlightedPalette"];
+    return obj;
+}
+@end
 
 @implementation Definitions(fjeklwjfklsdmklfmklsd)
 + (id)OldMan
