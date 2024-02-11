@@ -52,7 +52,7 @@ static id desktopMenuCSV =
 NSLog(@"handleDestroyNotifyEvent:%@", event);
     exit(0);
 }
-- (id)generateAppMenuArray
+- (id)appMenuArray
 {
     id desktopMenu = [[desktopMenuCSV parseCSVFromString] asMenu];
     [desktopMenu setValue:@"Desktop" forKey:@"title"];
