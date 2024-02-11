@@ -175,7 +175,7 @@ NSLog(@"AmigaDesktop exit:%d", status);
 NSLog(@"handleDestroyNotifyEvent:%@", event);
     [self exit:0];
 }
-- (id)generateAppMenuArray
+- (id)appMenuArray
 {
     id workbenchMenu = [[workbenchMenuCSV parseCSVFromString] asMenu];
     [workbenchMenu setValue:@"Workbench" forKey:@"title"];
