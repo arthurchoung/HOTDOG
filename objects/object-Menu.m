@@ -82,6 +82,8 @@
         className = @"MacPlatinumMenu";
     } else if ([hotdogMode isEqual:@"macwin"]) {
         className = @"HotDogStandMenu";
+    } else if ([hotdogMode isEqual:@"openstep"]) {
+        className = @"HotDogStandMenu";
     }
     id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
