@@ -422,6 +422,7 @@ static char *macComputerIconPixels =
     int _mouseDownY;
     id _iconMode;
     int _numberOfColumns;
+    id _command;
 }
 @end
 @implementation OpenStepWorkspace
@@ -459,6 +460,16 @@ static char *macComputerIconPixels =
     [dict setValue:@"setNilValueForKey:'iconMode'" forKey:@"messageForClick"];
     [dict setValue:@"Use default icons" forKey:@"displayName"];
     [arr addObject:dict];
+    dict = nsdict();
+    [arr addObject:dict];
+    dict = nsdict();
+    [dict setValue:@"setValue:['hotdog-testListObjC.pl'] forKey:'command';updateColumns" forKey:@"messageForClick"];
+    [dict setValue:@"Use hotdog-testListObjC.pl command" forKey:@"displayName"];
+    [arr addObject:dict];
+    dict = nsdict();
+    [dict setValue:@"setNilValueForKey:'command';updateColumns" forKey:@"messageForClick"];
+    [dict setValue:@"Use default command" forKey:@"displayName"];
+    [arr addObject:dict];
     return arr;
 }
 - (void)addColumn
@@ -472,13 +483,34 @@ static char *macComputerIconPixels =
         _numberOfColumns = 1;
     }
 }
+- (id)runCommandForPath:(id)path
+{
+    id cmd = nsarr();
+//    [cmd addObject:@"hotdog-testListObjC.pl"];
+    if ([_command count]) {
+        [cmd addObjectsFromArray:_command];
+    } else {
+        [cmd addObject:@"ls"];
+        [cmd addObject:@"-p"];
+        [cmd addObject:@"-L"];
+    }
+    [cmd addObject:path];
+    return [[[cmd runCommandAndReturnOutput] asString] split:@"\n"];
+}
 - (void)updateColumns
 {
-    id filePath = @"/";
+    id pathName = @"/";
+    id results = [self runCommandForPath:pathName];
+    id arr = nsarr();
+    for (int i=0; i<[results count]; i++) {
+        id elt = [results nth:i];
+        id dict = nsdict();
+        [dict setValue:elt forKey:@"displayName"];
+        [arr addObject:dict];
+    }
     id columns = nsarr();
     id dict = nsdict();
-    id arr = [[[filePath contentsOfDirectoryWithFullPaths] asFileArray] asArraySortedWithKey:@"displayName"];
-    [dict setValue:filePath forKey:@"filePath"];
+    [dict setValue:pathName forKey:@"filePath"];
     [dict setValue:arr forKey:@"array"];
     [columns addObject:dict];
 
@@ -581,7 +613,9 @@ static char *macComputerIconPixels =
             int textWidth = [bitmap bitmapWidthForText:text];
             [bitmap drawBitmapText:text x:x+(w-textWidth)/2 y:y+iconHeight+2];
 
-            [bitmap drawCString:chevronPixels palette:chevronPalette x:x+w-2-chevronWidth y:middleBoxY+26];
+            if (i+1 < [_columns count]) {
+                [bitmap drawCString:chevronPixels palette:chevronPalette x:x+w-2-chevronWidth y:middleBoxY+26];
+            }
         }
 
 
@@ -589,7 +623,7 @@ static char *macComputerIconPixels =
         for (int j=0; j<[arr count]; j++) {
             id elt = [arr nth:j];
             id displayName = [elt valueForKey:@"displayName"];
-            displayName = [[[bitmap fitBitmapString:displayName width:w] split:@"\n"] nth:0];
+            displayName = [[[bitmap fitBitmapString:displayName width:w-2-chevronWidth-4] split:@"\n"] nth:0];
             int y = columnY+2+textHeight*j;
             int isSelected = [elt intValueForKey:@"isSelected"];
             if (isSelected) {
@@ -599,7 +633,9 @@ static char *macComputerIconPixels =
             [bitmap setColor:@"black"];
             [bitmap drawBitmapText:displayName x:x y:y];
 
-            [bitmap drawCString:chevronPixels palette:chevronPalette x:x+w-2-chevronWidth y:y+(textHeight-chevronHeight)/2];
+            if ([displayName hasSuffix:@"/"]) {
+                [bitmap drawCString:chevronPixels palette:chevronPalette x:x+w-2-chevronWidth y:y+(textHeight-chevronHeight)/2];
+            }
 
             [elt setValue:nsfmt(@"%d", x) forKey:@"x"];
             [elt setValue:nsfmt(@"%d", y) forKey:@"y"];
@@ -682,12 +718,21 @@ static char *macComputerIconPixels =
                             for (int l=[_columns count]-1; l>i; l--) {
                                 [_columns removeObjectAtIndex:l];
                             }
-                            id filePath = [kelt valueForKey:@"filePath"];
-                            id fileArray = [[[filePath contentsOfDirectoryWithFullPaths] asFileArray] asArraySortedWithKey:@"displayName"];
+
+                            id pathName = nsfmt(@"%@/%@", [column valueForKey:@"filePath"], [kelt valueForKey:@"displayName"]);
+                            id results = [self runCommandForPath:pathName];
+                            id arr = nsarr();
+                            for (int i=0; i<[results count]; i++) {
+                                id elt = [results nth:i];
+                                id dict = nsdict();
+                                [dict setValue:elt forKey:@"displayName"];
+                                [arr addObject:dict];
+                            }
                             id dict = nsdict();
-                            [dict setValue:filePath forKey:@"filePath"];
-                            [dict setValue:fileArray forKey:@"array"];
+                            [dict setValue:pathName forKey:@"filePath"];
+                            [dict setValue:arr forKey:@"array"];
                             [_columns addObject:dict];
+
                         }
                     }
                     return;
