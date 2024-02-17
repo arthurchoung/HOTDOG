@@ -403,6 +403,209 @@ static char *macComputerIconPixels =
 " bbbbbbbbbbbbbbbbbbbbbbb \n"
 ;
 
+static char *win30FileManagerIconPalette =
+"w #ffffff\n"
+". #000000\n"
+"X #C3C7CB\n"
+"o #868A8E\n"
+"O #5555AA\n"
+;
+static char *win30FileManagerIconPixels =
+"....................  \n"
+".XXXXXXXXXXXXXXXXXX.  \n"
+".X................X.oo\n"
+".X.XwXwXwXwXwXwXw.X.oo\n"
+".X.wXwXwXwXwXwXwX.X.oo\n"
+".X.XwXw......XwXw.X.oo\n"
+".X.wXwX.wwww.wXwX.X.oo\n"
+".X.XwXw.OOOO.XwXw.X.oo\n"
+".X.wXwX......wXwX.X.oo\n"
+".X.XwXwXwXwXwXwXw.X.oo\n"
+".X.wXwXwXwXwXwXwX.X.oo\n"
+".X.XwXwXwXwXwXwXw.X.oo\n"
+".X.wXwXwXwXwXwXwX.X.oo\n"
+".X................X.oo\n"
+".XXXXXXXXXXXXXXXXXX.oo\n"
+".X................X.oo\n"
+".X.wXwXwXwXwXwXwX.X.oo\n"
+".X.XwXwXwXwXwXwXw.X.oo\n"
+".X.wXwX......wXwX.X.oo\n"
+".X.XwXw.wwww.XwXw.X.oo\n"
+".X.wXwX.OOOO.wXwX.X.oo\n"
+".X.XwXw......XwXw.X.oo\n"
+".X.wXwXwXwXwXwXwX.X.oo\n"
+".X.XwXwXwXwXwXwXw.X.oo\n"
+".X.wXwXwXwXwXwXwX.X.oo\n"
+".X.XwXwXwXwXwXwXw.X.oo\n"
+".X................X.oo\n"
+".XXXXXXXXXXXXXXXXXX.oo\n"
+"....................oo\n"
+"  oooooooooooooooooooo\n"
+"  oooooooooooooooooooo\n"
+;
+static char *win30ControlPanelIconPalette =
+"w #ffffff\n"
+". #000000\n"
+"X #C3C7CB\n"
+"o #868A8E\n"
+;
+static char *win30ControlPanelIconPixels =
+"                     ....       \n"
+"                   ..wwww..     \n"
+"                  .www.wwww.    \n"
+"                  .www.wwww.    \n"
+"                 .wwww.wwwww.   \n"
+"                 .wwww.wwwww.   \n"
+"   ...............www....www.   \n"
+"  .XXXXXXXXXXXXXX.wwww.wwwww.   \n"
+"  .X...............wwwwwwww.    \n"
+"  .X.wwwwwwwwwwwww.wwwwwwww.    \n"
+"  .X.wwwwwwwww.wwww..wwww..     \n"
+"  .X.wwwwwwww..wwww.X....       \n"
+"  .X.wwwwwww.w.wwww.X.oo        \n"
+"  .X.wwwwww.ww.wwww.X.oo   ...  \n"
+"  .X.wwwww.....wwww.X.oo .    . \n"
+"  .X.wwww.wwww.wwww.X.oo       .\n"
+"  .X.ww....ww...www.X.o.       .\n"
+"  .X.wwwwwwwwwwwwww.X.oo       .\n"
+"  .X................X.oo   .. . \n"
+"  .XXXXXXXXXXXXXXXXXX.oo  .ww.  \n"
+"   ..................ooo .ww.w. \n"
+".......................X.ww.w.w.\n"
+".XXXXXXXXXXXXXXXXXXXXXX.wwww.ww.\n"
+".XX.X.X.X.X.X.X.X.X.XX.wwwwwww..\n"
+".XXX.X.X.X.X.X.X.X.X.X.wwwwww..o\n"
+".XXXXXX.X.X.X.X.X.XXXX..wwww..oo\n"
+".XXXXXXXXXXXXXXXXXXXXXX..ww..oo \n"
+".XXXXXXXXXXXXXXXXXXXXXX.....oo  \n"
+"........................ooooo   \n"
+"  oooooooooooooooooooooooooo    \n"
+"  ooooooooooooooooooooooooo     \n"
+;
+
+static char *win30ProgramManagerIconPalette =
+". #000000\n"
+"X #00ffff\n"
+"o #868A8E\n"
+"O #ffffff\n"
+;
+static char *win30ProgramManagerIconPixels =
+"    ......................      \n"
+"    .XXXXXXXXXXXXXXXXXXXX.      \n"
+"    ......................oo    \n"
+"    .oooooooooooooooooooo.oo    \n"
+"    .ooOOoooooooooooooooo.oo    \n"
+"    .oOooOooOoooooooooooo.oo    \n"
+"    .oOoooooooooooooooooo.oo    \n"
+"    .oOooOooOo................  \n"
+"    .ooOOooooo.XXXXXXXXXXXXXX.  \n"
+"    .ooooooooo................oo\n"
+"    .ooooooooo.OOOOOOOOOOOOOO.oo\n"
+"    .ooooooooo.OOOOOOOOO....O.oo\n"
+".......................OOOOOO.oo\n"
+".XXXXXXXXXXXXXXXXXXXXX.O....O.oo\n"
+".......................OOOOOO.oo\n"
+".OOOOOOOOOOOOOOOOOOOOO.O....O.oo\n"
+".OOOOOOOOOOOOOOOOOOOOO.OOOOOO.oo\n"
+".OO...OOOO...OOOO...OO.O....O.oo\n"
+".OO.O.OOOO.O.OOOO.O.OO.OOOOOO.oo\n"
+".OO...OOOO...OOOO...OO.O....O.oo\n"
+".OOOOOOOOOOOOOOOOOOOOO.OOOOOO.oo\n"
+".O.....OO.....OO.....O.O....O.oo\n"
+".OOOOOOOOOOOOOOOOOOOOO.OOOOOO.oo\n"
+".OO...OOOO...OOOO...OO........oo\n"
+".OO.O.OOOO.O.OOOO.O.OO.ooooooooo\n"
+".OO...OOOO...OOOO...OO.ooooooooo\n"
+".OOOOOOOOOOOOOOOOOOOOO.oo       \n"
+".O.....OO.....OO.....O.oo       \n"
+".OOOOOOOOOOOOOOOOOOOOO.oo       \n"
+".......................oo       \n"
+"  ooooooooooooooooooooooo       \n"
+"  ooooooooooooooooooooooo       \n"
+;
+static char *win31FileManagerIconPalette =
+"b #000000\n"
+"X #ffff00\n"
+"o #AAAA55\n"
+"O #C3C7CB\n"
+"+ #ffffff\n"
+;
+static char *win31FileManagerIconPixels =
+"    bbbbbbbbbbbbbbbbbb\n"
+"   bOXOXOXOXOXOXOXOX+b\n"
+"  bOXOXOXOXOXOXOXOX+ob\n"
+" bOXOXOXOXOXOXOXOX+oob\n"
+"b+++++++++++++++++ooob\n"
+"bXOXOXOXOXOXOXOXOOooob\n"
+"bOooooooooooooobXOooob\n"
+"bXo++++++++++++bOOooob\n"
+"bOo+XOXOXOXOXOXbXOooob\n"
+"bXo+OXbbbbbbOXObOOooob\n"
+"bOo+XOboooobXOXbXOooob\n"
+"bXo+OXboooobOXObOOooob\n"
+"bOo+XO++++++XOXbXOooob\n"
+"bXo+OXOXOXOXOXObOOooob\n"
+"bOo+XOXOXOXOXOXbXOooob\n"
+"bXbbbbbbbbbbbbbbOOooob\n"
+"bOXOXOXOXOXOXOXOXOooob\n"
+"bXooooooooooooobOOooob\n"
+"bOo++++++++++++bXOooob\n"
+"bXo+OXOXOXOXOXObOOooob\n"
+"bOo+XObbbbbbXOXbXOooob\n"
+"bXo+OXboooobOXObOOooob\n"
+"bOo+XOboooobXOXbXOooob\n"
+"bXo+OX++++++OXObOOooob\n"
+"bOo+XOXOXOXOXOXbXOooob\n"
+"bXo+OXOXOXOXOXObOOoob \n"
+"bObbbbbbbbbbbbbbXOob  \n"
+"bXOXOXOXOXOXOXOXOOb   \n"
+"bbbbbbbbbbbbbbbbbb    \n"
+;
+static char *win31ProgramManagerIconPalette =
+"b #000000\n"
+"y #ffff00\n"
+"X #0000AA\n"
+"o #0000ff\n"
+"O #AA55AA\n"
+"+ #55AAAA\n"
+"@ #00ffff\n"
+"# #868A8E\n"
+"$ #C3C7CB\n"
+"% #ffffff\n"
+;
+static char *win31ProgramManagerIconPixels =
+"    bbbbbbbbbbbbbbbbbbbbbb     \n"
+"    b@@@@@@@@@@@@@@@@@@@@b#    \n"
+"    bbbbbbbbbbbbbbbbbbbbbb#    \n"
+"    bXoXoXoXoXoXoXoXoXoXob#    \n"
+"    boX%%oXoXoXoXoXoXoXoXb#    \n"
+"    bX%Xo%o%oXoXoXoXoXoXob#    \n"
+"    bo%oXoXoXoXoXoXoXoXoXb#    \n"
+"    bX%Xo%o%oXbbbbbbbbbbbbbbbb \n"
+"    boX%%oXoXob@@@@@@@@@@@@@@b \n"
+"    bXoXoXoXoXbbbbbbbbbbbbbbbb#\n"
+"    boXoXoXoXob%%%%%%%%%%%%%%b#\n"
+"    bXoXoXoXoXb%%%%%%%%%bbbb%b#\n"
+"bbbbbbbbbbbbbbbbbbbbbbb%%%%%%b#\n"
+"b@@@@@@@@@@@@@@@@@@@@@b$bbbb%b#\n"
+"bbbbbbbbbbbbbbbbbbbbbbb$%%%%%b#\n"
+"b%%%%%%%%%%%%%%%%%%%%%b$bbbb%b#\n"
+"b%%%bbb%%%bbb%%%##b%%%b$%%%%%b#\n"
+"b%%%b%b%%%b+b%%%#ob%%%b$bbbb%b#\n"
+"b%%bbbb%%bbbb%%b##bb%%b$%%%%%b#\n"
+"b%%#bbb%%%bbb%%bbbbb%%b$bbbb%b#\n"
+"b%%%%%%%%%%%%%%%%%%%%%b$%%%%%b#\n"
+"b%%bbbb%%bbbbb%%bbbb%%b$bbbb%b#\n"
+"b%%%%%%%%%%%%%%%%%%%%%b$%%%%%b#\n"
+"b%%%%Ob%%bbbbb%%bbbb%%bbbbbbbb#\n"
+"b%%%b%O%%bbyb%%%b@ob%%b########\n"
+"b%%OOOb%%%bb%%%%bbbb%%b#       \n"
+"b%%%%%%%%%%%%%%%%%%%%%b#       \n"
+"b%%bbbb%%bbbbb%%bbbb%%b#       \n"
+"b%%%%%%%%%%%%%%%%%%%%%b#       \n"
+"bbbbbbbbbbbbbbbbbbbbbbb#       \n"
+" #######################       \n"
+;
 
 
 @implementation Definitions(fmeklwfmklsdmklfmsdkfl)
@@ -455,6 +658,10 @@ static char *macComputerIconPixels =
     dict = nsdict();
     [dict setValue:@"setValue:'amiga' forKey:'iconMode'" forKey:@"messageForClick"];
     [dict setValue:@"Use Amiga icons" forKey:@"displayName"];
+    [arr addObject:dict];
+    dict = nsdict();
+    [dict setValue:@"setValue:'win' forKey:'iconMode'" forKey:@"messageForClick"];
+    [dict setValue:@"Use Windows icons" forKey:@"displayName"];
     [arr addObject:dict];
     dict = nsdict();
     [dict setValue:@"setNilValueForKey:'iconMode'" forKey:@"messageForClick"];
@@ -593,13 +800,21 @@ static char *macComputerIconPixels =
                     pixels = macFolderIconPixels;
                     palette = macFolderIconPalette;
                 }
-            } else {
+            } else if ([_iconMode isEqual:@"amiga"]) {
                 if ([filePath isEqual:@"/"]) {
                     pixels = amigaComputerIconPixels;
                     palette = amigaComputerIconPalette;
                 } else {
                     pixels = amigaOpenDrawerIconPixels;
                     palette = amigaOpenDrawerIconPalette;
+                }
+            } else {
+                if ([filePath isEqual:@"/"]) {
+                    pixels = win30ProgramManagerIconPixels;
+                    palette = win30ProgramManagerIconPalette;
+                } else {
+                    pixels = win31FileManagerIconPixels;
+                    palette = win31FileManagerIconPalette;
                 }
             }
             iconWidth = [Definitions widthForCString:pixels];
