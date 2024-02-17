@@ -80,9 +80,9 @@ static int numberOfColumns = 4;
 
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
-    [bitmap setColor:@"black"];
+    [bitmap setColor:@"#c3c7cb"];
     [bitmap fillRect:r];
-    [bitmap setColor:@"white"];
+    [bitmap setColor:@"black"];
     for (int j=0; j<numberOfRows; j++) {
         for (int i=0; i<numberOfColumns; i++) {
             int index = j*numberOfColumns+i;
@@ -92,7 +92,13 @@ static int numberOfColumns = 4;
             }
             id pixels = [elt valueForKey:@"pixels"];
             id palette = [elt valueForKey:@"palette"];
-            [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:_rects[index].x y:_rects[index].y];
+            int iconWidth = 60;
+            int iconHeight = 60;
+            if (pixels) {
+                iconWidth = [Definitions widthForCString:[pixels UTF8String]];
+                iconHeight = [Definitions heightForCString:[pixels UTF8String]];
+            }
+            [bitmap drawCString:[pixels UTF8String] palette:[palette UTF8String] x:_rects[index].x+(_rects[index].w-iconWidth)/2 y:_rects[index].y+_rects[index].h-iconHeight];
             id text = [elt valueForKey:@"name"];
             int textWidth = [bitmap bitmapWidthForText:text];
             [bitmap drawBitmapText:text x:_rects[index].x+_rects[index].w/2-textWidth/2 y:_rects[index].y+_rects[index].h/2+40];
