@@ -178,9 +178,9 @@ This should be moved to a separate file somewhere.
 
 ## Related Project
 
-PUCKO Linux
+HOTDOG PUCKO
 
-http://puckolinux.com
+http://hotdogpucko.com
 
 ## Legal
 
