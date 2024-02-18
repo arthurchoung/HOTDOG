@@ -615,6 +615,12 @@ static char *win31ProgramManagerIconPixels =
     [obj updateColumns];
     return obj;
 }
++ (id)OpenStepWorkspace:(id)path
+{
+    id obj = [@"OpenStepWorkspace" asInstance];
+    [obj setupColumnsForPath:path];
+    return obj;
+}
 @end
 
 @interface OpenStepWorkspace : IvarObject
@@ -706,7 +712,10 @@ static char *win31ProgramManagerIconPixels =
 }
 - (void)updateColumns
 {
-    id pathName = @"/";
+    [self updateColumnsForPath:@"/"];
+}
+- (void)updateColumnsForPath:(id)pathName
+{
     id results = [self runCommandForPath:pathName];
     id arr = nsarr();
     for (int i=0; i<[results count]; i++) {
@@ -715,13 +724,31 @@ static char *win31ProgramManagerIconPixels =
         [dict setValue:elt forKey:@"displayName"];
         [arr addObject:dict];
     }
-    id columns = nsarr();
+    if (!_columns) {
+        [self setValue:nsarr() forKey:@"columns"];
+    }
+    id columns = _columns;
     id dict = nsdict();
     [dict setValue:pathName forKey:@"filePath"];
     [dict setValue:arr forKey:@"array"];
     [columns addObject:dict];
 
     [self setValue:columns forKey:@"columns"];
+}
+- (void)setupColumnsForPath:(id)path
+{
+    [self setValue:nsarr() forKey:@"columns"];
+    id currentPath = @"";
+    [self updateColumnsForPath:@"/"];
+    if (![path hasPrefix:@"/"]) {
+        return;
+    }
+    id arr = [path split:@"/"];
+    for (int i=0; i<[arr count]; i++) {
+        id elt = [arr nth:i];
+        currentPath = nsfmt(@"%@/%@", currentPath, elt);
+        [self updateColumnsForPath:currentPath];
+    }
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
