@@ -128,7 +128,7 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
             }
             id message = nsfmt(@"%s", argv[2]);
 //NSLog(@"message %@", message);
-            id object = [nsdict() evaluateMessage:message];
+            id object = [[Definitions globalContext] evaluateMessage:message];
             if (object) {
                 [Definitions runWindowManagerForObject:object];
             }
