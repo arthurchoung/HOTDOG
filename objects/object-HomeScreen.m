@@ -25,7 +25,7 @@
 
 #import "HOTDOG.h"
 
-static int numberOfRows = 5;
+static int numberOfRows = 6;
 static int numberOfColumns = 4;
 
 @implementation Definitions(iewofkdslmvkcxvbapdwppqppowdsdkskskskaj)
@@ -56,12 +56,20 @@ static int numberOfColumns = 4;
 @interface HomeScreen : IvarObject
 {
     id _array;
-    Int4 _rects[20];
+    Int4 _rects[6*4];
     int _mouseDownX;
     int _mouseDownY;
 }
 @end
 @implementation HomeScreen
+- (int)preferredWidth
+{
+    return 320;
+}
+- (int)preferredHeight
+{
+    return 480;
+}
 
 - (void)beginIteration:(id)event rect:(Int4)r
 {
@@ -92,8 +100,8 @@ static int numberOfColumns = 4;
             }
             id pixels = [elt valueForKey:@"pixels"];
             id palette = [elt valueForKey:@"palette"];
-            int iconWidth = 60;
-            int iconHeight = 60;
+            int iconWidth = 40;
+            int iconHeight = 40;
             if (pixels) {
                 iconWidth = [Definitions widthForCString:[pixels UTF8String]];
                 iconHeight = [Definitions heightForCString:[pixels UTF8String]];
