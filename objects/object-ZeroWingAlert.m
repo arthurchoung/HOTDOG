@@ -1,9 +1,206 @@
 #import "HOTDOG.h"
-/*
-": c #E8ECE8",
-"< c #C8CC88",
-", c #888840",
-*/
+
+static void destructiveColorize(unsigned char *cstr, unsigned char oldc, unsigned char newc, int from, int to)
+{
+    int newlinecount = 0;
+    unsigned char *p = cstr;
+    for(;;) {
+        if (!*p) {
+            break;
+        }
+        if (*p == '\n') {
+            newlinecount++;
+            if (newlinecount == to) {
+                return;
+            }
+        } else {
+            if (newlinecount >= from) {
+                if (*p == oldc) {
+                    *p = newc;
+                }
+            }
+        }
+        p++;
+    }
+}
+static void destructiveColorizeButton(unsigned char *cstr)
+{
+    destructiveColorize(cstr, 'o', '1', 0, 10);
+    destructiveColorize(cstr, 'o', '2', 10, 14);
+    destructiveColorize(cstr, 'o', '3', 14, 99);
+    destructiveColorize(cstr, '.', '4', 0, 10);
+    destructiveColorize(cstr, '.', '5', 10, 14);
+    destructiveColorize(cstr, '.', '6', 14, 99);
+    destructiveColorize(cstr, 'b', '7', 0, 10);
+    destructiveColorize(cstr, 'b', '8', 10, 14);
+    destructiveColorize(cstr, 'b', '9', 14, 99);
+}
+
+static void destructiveColorizeFont(id font)
+{
+    id fontCStrings = [font nth:0];
+    if (!fontCStrings) {
+        return;
+    }
+
+    unsigned char **bytes = [fontCStrings bytes];
+    for (int i=0; i<256; i++) {
+        destructiveColorize(bytes[i], 'b', '1', 0, 2);
+        destructiveColorize(bytes[i], 'b', '2', 2, 6);
+        destructiveColorize(bytes[i], 'b', '3', 6, 99);
+    }
+}
+
+@implementation Definitions(fmeklwfmklsdmfklsdkmf)
++ (void)testColorize
+{
+    id obj;
+    obj = [Definitions scaleFont:1
+                    :[Definitions arrayOfCStringsForChicagoFont]
+                    :[Definitions arrayOfWidthsForChicagoFont]
+                    :[Definitions arrayOfHeightsForChicagoFont]
+                    :[Definitions arrayOfXSpacingsForChicagoFont]];
+    destructiveColorizeFont(obj);
+    unsigned char **cstrs = [[obj nth:0] bytes];
+    for (int i='A'; i<='Z'; i++) {
+        unsigned char *p = cstrs[i];
+        NSOut(@"i %d '%s'\n", i, p);
+    }
+    exit(0);
+}
+@end
+
+static id _textPalette = 
+@"1 #E8ECE8\n"
+@"2 #C8CC88\n"
+@"3 #888840\n"
+;
+static id _textBlackPalette = 
+@"1 #000000\n"
+@"2 #000000\n"
+@"3 #000000\n"
+;
+static id _buttonDownPalette = 
+@"1 #E8ECE8\n"
+@"2 #C8CC88\n"
+@"3 #888840\n"
+@"4 #E8ECE8\n"
+@"5 #C8CC88\n"
+@"6 #888840\n"
+;
+static id _defaultButtonPalette = 
+@"1 #E8ECE8\n"
+@"2 #C8CC88\n"
+@"3 #888840\n"
+@"7 #E8ECE8\n"
+@"8 #C8CC88\n"
+@"9 #888840\n"
+;
+static id _defaultButtonDownPalette = 
+@"1 #E8ECE8\n"
+@"2 #C8CC88\n"
+@"3 #888840\n"
+@"4 #E8ECE8\n"
+@"5 #C8CC88\n"
+@"6 #888840\n"
+@"7 #E8ECE8\n"
+@"8 #C8CC88\n"
+@"9 #888840\n"
+;
+static unsigned char *defaultButtonLeftPixels =
+"     bbb\n"
+"   bbbbb\n"
+"  bbbbbb\n"
+" bbbb   \n"
+" bbb   o\n"
+"bbb  oo.\n"
+"bbb  o..\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb o...\n"
+"bbb  o..\n"
+"bbb  oo.\n"
+" bbb   o\n"
+" bbbb   \n"
+"  bbbbbb\n"
+"   bbbbb\n"
+"     bbb\n"
+;
+static unsigned char *defaultButtonMiddlePixels =
+"b\n"
+"b\n"
+"b\n"
+" \n"
+"o\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+"o\n"
+" \n"
+"b\n"
+"b\n"
+"b\n"
+;
+static unsigned char *defaultButtonRightPixels =
+"bbb     \n"
+"bbbbb   \n"
+"bbbbbb  \n"
+"   bbbb \n"
+"o   bbb \n"
+".oo  bbb\n"
+"..o  bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"...o bbb\n"
+"..o  bbb\n"
+".oo  bbb\n"
+"o   bbb \n"
+"   bbbb \n"
+"bbbbbb  \n"
+"bbbbb   \n"
+"bbb     \n"
+;
+
 
 static char *zeroWingPalette1 =
 "  #000000\n"
@@ -437,45 +634,6 @@ static char *zeroWingPixels3 =
 "=====        ===============***           ==                                         X             XXX      XXX      XXX  XX                  X     ;;&&;;;    XXXX      XXXXX               =============  =*  =***=        **--**    **---*==\n"
 ;
 
-static char *testOKCancelPalette =
-"  #000000\n"
-". #0088FF\n"
-"X #ffffff\n"
-"1 #E8ECE8\n"
-"2 #C8CC88\n"
-"3 #888840\n"
-;
-static char *testOKCancelPixels =
-"                                                                                                              11111111111111111111111111111111111111111111111111111111     \n"
-"                                                                                                            111111111111111111111111111111111111111111111111111111111111   \n"
-"                                                                                                           11111111111111111111111111111111111111111111111111111111111111  \n"
-"                                                                                                          1111                                                        1111 \n"
-"   111111111111111111111111111111111111111111111111111111111111                                           111   1111111111111111111111111111111111111111111111111111   111 \n"
-" 11                                                            11                                        111  11                                                    11  111\n"
-" 1                                                              1                                        111  1                                                      1  111\n"
-"1                                                                1                                       111 1                                                        1 111\n"
-"1                                                                1                                       111 1                                                        1 111\n"
-"1            1111                                  11            1                                       111 1                                                        1 111\n"
-"2           22   2                                 22            2                                       222 2                     2222   22   22                     2 222\n"
-"2           22       2222   22222    222    2222   22            2                                       222 2                    22  22  22  22                      2 222\n"
-"2           22      2   22  22  22  22  2  22  22  22            2                                       222 2                    22  22  22 22                       2 222\n"
-"2           22       22222  22  22  22     22  22  22            2                                       222 2                    22  22  2222                        2 222\n"
-"3           33      33  33  33  33  33     333333  33            3                                       333 3                    33  33  333                         3 333\n"
-"3           33      33  33  33  33  33     33      33            3                                       333 3                    33  33  3333                        3 333\n"
-"3           33   3  33  33  33  33  33  3  33   3  33            3                                       333 3                    33  33  33 33                       3 333\n"
-"3            3333    33333  33  33   333    3333   33            3                                       333 3                    33  33  33  33                      3 333\n"
-"3                                                                3                                       333 3                     3333   33   33                     3 333\n"
-"3                                                                3                                       333 3                                                        3 333\n"
-"3                                                                3                                       333 3                                                        3 333\n"
-" 3                                                              3                                        333 3                                                        3 333\n"
-" 33                                                            33                                        333  3                                                      3  333\n"
-"   333333333333333333333333333333333333333333333333333333333333                                          333  33                                                    33  333\n"
-"                                                                                                          333   3333333333333333333333333333333333333333333333333333   333 \n"
-"                                                                                                          3333                                                        3333 \n"
-"                                                                                                           33333333333333333333333333333333333333333333333333333333333333  \n"
-"                                                                                                            333333333333333333333333333333333333333333333333333333333333   \n"
-"                                                                                                              33333333333333333333333333333333333333333333333333333333     \n"
-;
 
 @implementation Definitions(Fjewilfmlkdsmvlksdkjffjdksljfkldsjkffjdskfjkfjdskfjsdkfjdksjfks)
 + (id)testZeroWingAlert
@@ -505,6 +663,11 @@ static char *testOKCancelPixels =
 
 @interface ZeroWingAlert : IvarObject
 {
+    id _colorizedFont;
+    id _defaultButtonLeftPixels;
+    id _defaultButtonMiddlePixels;
+    id _defaultButtonRightPixels;
+
     int _iteration;
     id _text;
     Int4 _okRect;
@@ -518,13 +681,38 @@ static char *testOKCancelPixels =
     int _returnKey;
     int _didFocusOut;
     int _backgroundCount;
-    int _HOTDOGNOFRAME;
     int _buttonDownX;
     int _buttonDownY;
+
+    int _scrollY;
 }
 @end
 
 @implementation ZeroWingAlert
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        id obj = [Definitions scaleFont:1
+                        :[Definitions arrayOfCStringsForChicagoFont]
+                        :[Definitions arrayOfWidthsForChicagoFont]
+                        :[Definitions arrayOfHeightsForChicagoFont]
+                        :[Definitions arrayOfXSpacingsForChicagoFont]];
+        [self setValue:obj forKey:@"colorizedFont"];
+        destructiveColorizeFont(obj);
+        id pixels;
+        pixels = nsfmt(@"%s", defaultButtonLeftPixels);
+        destructiveColorizeButton([pixels UTF8String]);
+        [self setValue:pixels forKey:@"defaultButtonLeftPixels"];
+        pixels = nsfmt(@"%s", defaultButtonMiddlePixels);
+        destructiveColorizeButton([pixels UTF8String]);
+        [self setValue:pixels forKey:@"defaultButtonMiddlePixels"];
+        pixels = nsfmt(@"%s", defaultButtonRightPixels);
+        destructiveColorizeButton([pixels UTF8String]);
+        [self setValue:pixels forKey:@"defaultButtonRightPixels"];
+    }
+    return self;
+}
 - (BOOL)shouldAnimate
 {
     return YES;
@@ -545,10 +733,12 @@ static char *testOKCancelPixels =
     }
     id bitmap = [Definitions bitmapWithWidth:1 height:1];
 
-    int textWidth = 480 - 89 - 18;
+    int zeroWingHeight = [Definitions heightForCString:zeroWingPixels1];
+
+    int textWidth = 480 - 18*4;
     id text = [bitmap fitBitmapString:_text width:textWidth];
     int textHeight = [bitmap bitmapHeightForText:text];
-    int h = 24 + textHeight + 21 + 21 + 28;
+    int h = 28 + zeroWingHeight + 24 + textHeight + 21 + 21 + 28;
     if (h > 288) {
         return h;
     }
@@ -567,9 +757,30 @@ static char *testOKCancelPixels =
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
+    if (_colorizedFont) {
+        [bitmap useFont:[[_colorizedFont nth:0] bytes]
+                    :[[_colorizedFont nth:1] bytes]
+                    :[[_colorizedFont nth:2] bytes]
+                    :[[_colorizedFont nth:3] bytes]];
+    }
+
+    int zeroWingWidth = [Definitions widthForCString:zeroWingPixels1];
+    int zeroWingHeight = [Definitions heightForCString:zeroWingPixels1];
+    int topH = 28+zeroWingHeight;
+    int bottomH = 21+28+21;
+
+    // text
+
     [bitmap setColor:@"black"];
-    [bitmap fillRect:r];
-    char *palette = "b #000000\n. #ffffff\n";
+    [bitmap fillRectangleAtX:r.x y:r.y+topH w:r.w h:r.h-topH-bottomH];
+
+    int textWidth = r.w - 18*4;
+    id text = [bitmap fitBitmapString:_text width:textWidth];
+    [bitmap drawBitmapText:text x:18*2 y:28+zeroWingHeight+24+_scrollY palette:_textPalette];
+
+    //
+
+    [bitmap fillRectangleAtX:r.x y:r.y w:r.w h:topH];
     {
         int frame = _iteration / 10;
         frame = frame % 4;
@@ -588,21 +799,13 @@ static char *testOKCancelPixels =
             palette = zeroWingPalette3;
             pixels = zeroWingPixels3;
         }
-        int zeroWingWidth = [Definitions widthForCString:pixels];
-        int zeroWingHeight = [Definitions heightForCString:pixels];
         [bitmap drawCString:pixels palette:palette x:/*28*/(r.w-zeroWingWidth)/2 y:28];
     }
 
-    // text
-
-    int textWidth = (int)r.w - 89 - 18;
-    id text = [bitmap fitBitmapString:_text width:textWidth];
-    [bitmap setColorIntR:0 g:0 b:0 a:255];
-    [bitmap drawBitmapText:text x:89 y:24];
-
     // ok button
 
-/*
+    [bitmap fillRectangleAtX:r.x y:r.y+r.h-bottomH w:r.w h:bottomH];
+
     if (_okText) {
         _okRect = [Definitions rectWithX:r.w-88 y:r.h-21-28 w:70 h:28];
         Int4 innerRect = _okRect;
@@ -614,16 +817,19 @@ static char *testOKCancelPixels =
             okButtonDown = YES;
         }
         if (okButtonDown) {
-            char *palette = ". #ffffff\nw #000000\nb #ffffff\n";
-            [Definitions drawDefaultButtonInBitmap:bitmap rect:_okRect palette:palette];
-            [bitmap setColor:@"black"];
-            [bitmap drawBitmapText:_okText centeredInRect:innerRect];
+            unsigned char *left = [_defaultButtonLeftPixels UTF8String];
+            unsigned char *middle = [_defaultButtonMiddlePixels UTF8String];
+            unsigned char *right = [_defaultButtonRightPixels UTF8String];
+            unsigned char *palette = [_defaultButtonDownPalette UTF8String];
+            [Definitions drawInBitmap:bitmap left:left middle:middle right:right centeredInRect:_okRect palette:palette];
+            [bitmap drawBitmapText:_okText centeredInRect:innerRect palette:_textBlackPalette];
         } else {
-//            char *palette = ". #000000\nw #000000\nb #ffffff\n";
-            char *palette = ". #000000\nw #000000\nb #0088ff\n";
-            [Definitions drawDefaultButtonInBitmap:bitmap rect:_okRect palette:palette];
-            [bitmap setColor:@"#0088ff"];
-            [bitmap drawBitmapText:_okText centeredInRect:innerRect];
+            unsigned char *left = [_defaultButtonLeftPixels UTF8String];
+            unsigned char *middle = [_defaultButtonMiddlePixels UTF8String];
+            unsigned char *right = [_defaultButtonRightPixels UTF8String];
+            unsigned char *palette = [_defaultButtonPalette UTF8String];
+            [Definitions drawInBitmap:bitmap left:left middle:middle right:right centeredInRect:_okRect palette:palette];
+            [bitmap drawBitmapText:_okText centeredInRect:innerRect palette:_textPalette];
         }
     } else {
         _okRect.x = 0;
@@ -631,27 +837,26 @@ static char *testOKCancelPixels =
         _okRect.w = 0;
         _okRect.h = 0;
     }
-*/
 
     // cancel button
 
     if (_cancelText) {
         _cancelRect = [Definitions rectWithX:_okRect.x-70-35 y:r.h-21-28 w:70 h:28];
-[bitmap drawCString:testOKCancelPixels palette:testOKCancelPalette x:r.w-88-70-35 y:r.h-21-28];
-/*
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
-            char *palette = ". #ffffff\nw #000000\nb #ffffff\n";
-            [Definitions drawButtonInBitmap:bitmap rect:_cancelRect palette:palette];
-            [bitmap setColor:@"black"];
-            [bitmap drawBitmapText:_cancelText centeredInRect:_cancelRect];
+            unsigned char *left = [_defaultButtonLeftPixels UTF8String];
+            unsigned char *middle = [_defaultButtonMiddlePixels UTF8String];
+            unsigned char *right = [_defaultButtonRightPixels UTF8String];
+            unsigned char *palette = [_buttonDownPalette UTF8String];
+            [Definitions drawInBitmap:bitmap left:left middle:middle right:right centeredInRect:_cancelRect palette:palette];
+            [bitmap drawBitmapText:_cancelText centeredInRect:_cancelRect palette:_textBlackPalette];
         } else {
-//            char *palette = ". #000000\nw #000000\nb #ffffff\n";
-            char *palette = ". #000000\nw #000000\nb #0088ff\n";
-            [Definitions drawButtonInBitmap:bitmap rect:_cancelRect palette:palette];
-            [bitmap setColor:@"#0088ff"];
-            [bitmap drawBitmapText:_cancelText centeredInRect:_cancelRect];
+            unsigned char *left = [_defaultButtonLeftPixels UTF8String];
+            unsigned char *middle = [_defaultButtonMiddlePixels UTF8String];
+            unsigned char *right = [_defaultButtonRightPixels UTF8String];
+            unsigned char *palette = [_textPalette UTF8String];
+            [Definitions drawInBitmap:bitmap left:left middle:middle right:right centeredInRect:_cancelRect palette:palette];
+            [bitmap drawBitmapText:_cancelText centeredInRect:_cancelRect palette:_textPalette];
         }
-*/
     } else {
         _cancelRect.x = 0;
         _cancelRect.y = 0;
@@ -762,6 +967,15 @@ static char *testOKCancelPixels =
         }
     }
     _didFocusOut = 1;
+}
+- (void)handleScrollWheel:(id)event
+{
+    int dy = [event intValueForKey:@"scrollingDeltaY"];
+    if (dy > 0) {
+        _scrollY -= 10;
+    } else {
+        _scrollY -= -10;
+    }
 }
 @end
 
