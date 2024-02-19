@@ -18,7 +18,6 @@ hotKey,displayName,messageForClick
 ,MiscDesktop,"['hotdog' 'desktop' 'MiscDesktop']|runCommandInBackground"
 ,,
 ,HomeScreen,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'HomeScreen')|runCommandInBackground"
-,LockScreen,"['hotdog' 'show' 'LockScreen']|runCommandInBackground"
 ,,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
