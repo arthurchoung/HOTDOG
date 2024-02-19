@@ -46,6 +46,14 @@
 }
 @end
 @implementation LockScreen
+- (int)preferredWidth
+{
+    return 320;
+}
+- (int)preferredHeight
+{
+    return 480;
+}
 
 - (void)handleTouchesBegan:(id)event
 {
