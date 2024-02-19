@@ -113,7 +113,13 @@
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
-    [Definitions drawAlertBorderInBitmap:bitmap rect:r];
+    if (_HOTDOGNOFRAME) {
+        [Definitions drawAlertBorderInBitmap:bitmap rect:r];
+    } else {
+        [bitmap setColor:@"white"];
+        [bitmap fillRect:r];
+    }
+
     char *palette = "b #000000\n. #ffffff\n";
     [bitmap drawCString:[Definitions cStringForBitmapMessageIcon] palette:palette x:28 y:28];
 
