@@ -17,7 +17,6 @@ hotKey,displayName,messageForClick
 ,MacPlatinumDesktop,"['hotdog' 'desktop' 'MacPlatinumDesktop']|runCommandInBackground"
 ,MiscDesktop,"['hotdog' 'desktop' 'MiscDesktop']|runCommandInBackground"
 ,,
-,AmigaGuruMeditation,"['hotdog' 'show' 'AmigaGuruMeditation']|runCommandInBackground"
 ,HomeScreen,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(configDir:'HomeScreen')|runCommandInBackground"
 ,LockScreen,"['hotdog' 'show' 'LockScreen']|runCommandInBackground"
 ,,
