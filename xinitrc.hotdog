@@ -42,6 +42,12 @@ elif cat /proc/cmdline | grep hotdog=win31 ; then
 	exec /usr/bin/hotdog "runWindowManager:'enterWin31Mode'"
 elif cat /proc/cmdline | grep hotdog=hotdogstand ; then
 	exec /usr/bin/hotdog "runWindowManager:'enterHotDogStandMode'"
+elif cat /proc/cmdline | grep hotdog=winmac ; then
+	exec /usr/bin/hotdog "runWindowManager:'enterWinMacMode'"
+elif cat /proc/cmdline | grep hotdog=macwin ; then
+	exec /usr/bin/hotdog "runWindowManager:'enterMacWinMode'"
+elif cat /proc/cmdline | grep hotdog=openstep ; then
+	exec /usr/bin/hotdog "runWindowManager:'enterOpenStepMode'"
 else
 	exec /usr/bin/hotdog "runWindowManager:'enterAmigaMode'"
 fi
