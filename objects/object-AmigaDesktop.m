@@ -29,29 +29,29 @@ static id _text = @"Close window to remove icons\nFIXME: This window should not 
 
 static id workbenchMenuCSV =
 @"hotKey,displayName,messageForClick\n"
-@",\"Open\",\"1\"\n"
-@",\"Close\",\"1\"\n"
-@",\"Duplicate\",\"1\"\n"
-@",\"Rename\",\"1\"\n"
-@",\"Info\",\"1\"\n"
-@",\"Discard\",\"1\"\n"
+@",\"Open\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Close\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Duplicate\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Rename\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Info\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Discard\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
 @",,\n"
 @",\"Quit AmigaDesktop\",\"'desktopObject'|valueForKey|exit:0\"\n"
 ;
 
 static id diskMenuCSV =
 @"hotKey,displayName,messageForClick\n"
-@",\"Empty Trash\",\"1\"\n"
-@",\"Initialize\",\"1\"\n"
+@",\"Empty Trash\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Initialize\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
 ;
 
 static id specialMenuCSV =
 @"hotKey,displayName,messageForClick\n"
-@",\"Clean Up\",\"1\"\n"
-@",\"Last Error\",\"1\"\n"
-@",\"Redraw\",\"1\"\n"
-@",\"Snapshot\",\"1\"\n"
-@",\"Version\",\"1\"\n"
+@",\"Clean Up\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Last Error\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Redraw\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Snapshot\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
+@",\"Version\",\"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'AmigaGuruMeditation'|runCommandInBackground\"\n"
 ;
 
 
