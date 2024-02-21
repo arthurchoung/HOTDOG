@@ -780,6 +780,9 @@ NSLog(@"okButtonWidth %d okTextWidth %d", okButtonWidth, okTextWidth);
     id str = [event valueForKey:@"keyString"];
     if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
         if (_eof) {
+            if (_dialogMode) {
+                exit(0);
+            }
             id x11dict = [event valueForKey:@"x11dict"];
             [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
         }
