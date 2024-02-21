@@ -75,17 +75,9 @@ Some of the Perl scripts use the JSON module.
 
 ## Screenshots
 
-Mac Platinum 1280x1024
+Hot Dog Stand 1280x1024
 
-![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
-
-Mac Color 1280x1024
-
-![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
-
-Mac Classic 1280x1024
-
-![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
+![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
 Atari ST GEM 1280x1024
 
@@ -95,13 +87,21 @@ Amiga Screenshot 1280x1024
 
 ![Amiga Screenshot](Screenshots/hotdog-screenshot-amiga.png)
 
+Mac Classic 1280x1024
+
+![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
+
+Mac Color 1280x1024
+
+![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
+
+Mac Platinum 1280x1024
+
+![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
+
 Aqua 1280x1024
 
 ![Aqua Screenshot](Screenshots/hotdog-screenshot-aqua.png)
-
-Hot Dog Stand 1280x1024
-
-![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
 
 ## HOTDOGbuntu -- Ubuntu compatibility
