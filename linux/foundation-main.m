@@ -282,13 +282,6 @@ NSLog(@"lines %@", lines);
                 [nav pushObject:obj];
                 [Definitions runWindowManagerForObject:nav];
             }
-        } else if ((argc > 1) && !strcmp(argv[1], "ipod")) {
-            id ipod = [@"IpodInterface" asInstance];
-            [ipod setAsValueForKey:@"IpodInterface"];
-            id home = [@"HomeScreen" asInstance];
-            [ipod setValue:home forKey:@"object"];
-            [ipod goToLockScreen];
-            [Definitions runWindowManagerForObject:ipod];
         } else if ((argc > 1) && !strcmp(argv[1], "nav")) {
             if ((argc == 3) && !strcmp(argv[2], ".")) {
                 id obj = [Definitions ObjectInterface];
@@ -339,7 +332,9 @@ NSLog(@"lines %@", lines);
                 } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                     obj = [@"HotDogStandAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"winmac"]) {
-                    obj = [@"MacAlert" asInstance];
+                    obj = [@"ZeroWingAlert" asInstance];
+//                    obj = [@"MacAlert" asInstance];
+//                    [obj setValue:@"0" forKey:@"HOTDOGNOFRAME"];
                 } else if ([hotdogMode isEqual:@"macwin"]) {
                     obj = [@"MacPlatinumAlert" asInstance];
                 } else {
@@ -385,7 +380,7 @@ NSLog(@"lines %@", lines);
                 } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                     obj = [@"HotDogStandAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"winmac"]) {
-                    obj = [@"MacAlert" asInstance];
+                    obj = [@"ZeroWingAlert" asInstance];
                 } else if ([hotdogMode isEqual:@"macwin"]) {
                     obj = [@"MacPlatinumAlert" asInstance];
                 } else {
@@ -432,7 +427,7 @@ NSLog(@"lines %@", lines);
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandChecklist" asInstance];
             } else if ([hotdogMode isEqual:@"winmac"]) {
-                obj = [@"MacChecklist" asInstance];
+                obj = [@"ZeroWingChecklist" asInstance];
             } else if ([hotdogMode isEqual:@"macwin"]) {
                 obj = [@"MacPlatinumChecklist" asInstance];
             } else {
@@ -486,7 +481,7 @@ NSLog(@"lines %@", lines);
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandRadio" asInstance];
             } else if ([hotdogMode isEqual:@"winmac"]) {
-                obj = [@"MacRadio" asInstance];
+                obj = [@"ZeroWingRadio" asInstance];
             } else if ([hotdogMode isEqual:@"macwin"]) {
                 obj = [@"MacPlatinumRadio" asInstance];
             } else {
@@ -541,7 +536,7 @@ NSLog(@"lines %@", lines);
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"winmac"]) {
-                obj = [@"MacTextFields" asInstance];
+                obj = [@"ZeroWingTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"macwin"]) {
                 obj = [@"MacPlatinumTextFields" asInstance];
             } else {
@@ -596,7 +591,7 @@ NSLog(@"lines %@", lines);
             } else if ([hotdogMode isEqual:@"hotdogstand"]) {
                 obj = [@"HotDogStandTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"winmac"]) {
-                obj = [@"MacTextFields" asInstance];
+                obj = [@"ZeroWingTextFields" asInstance];
             } else if ([hotdogMode isEqual:@"macwin"]) {
                 obj = [@"MacPlatinumTextFields" asInstance];
             } else {
@@ -700,10 +695,8 @@ NSLog(@"unable to run command %@", cmd);
                     classPrefix = "HotDogStand";
                 } else if (!strcmp(argv[2], "atarist")) {
                     classPrefix = "AtariST";
-                } else if (!strcmp(argv[2], "winmac")) {
-                    classPrefix = "Mac";
-                } else if (!strcmp(argv[2], "macwin")) {
-                    classPrefix = "MacPlatinum";
+                } else if (!strcmp(argv[2], "zerowing")) {
+                    classPrefix = "ZeroWing";
                 }
                 [Definitions dialog:classPrefix :argc-3 :&argv[3]];
             }
