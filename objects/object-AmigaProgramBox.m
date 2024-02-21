@@ -272,6 +272,9 @@
     if ([keyString isEqual:@"return"]) {
         if (_returnKeyDown) {
             if (_eof) {
+                if (_dialogMode) {
+                    exit(0);
+                }
                 id x11dict = [event valueForKey:@"x11dict"];
                 [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
             }
