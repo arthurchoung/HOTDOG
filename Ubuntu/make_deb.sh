@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PRGNAM="HOTDOGbuntu"
-VERSION="20230813"
+VERSION="20240222"
 SRC=".."
 PKG="${PRGNAM}_${VERSION}_amd64"
 
