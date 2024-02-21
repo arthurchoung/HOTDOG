@@ -75,6 +75,12 @@ Some of the Perl scripts use the JSON module.
 
 ## Screenshots
 
+WinMac 1280x1024
+
+WinMac is a combination of the Windows 3.1 window borders and font, the classic Mac menu bar, and dialogs featuring CATS from Zero Wing (All your base are belong to us).
+
+![WinMac Screenshot](Screenshots/hotdog-screenshot-winmac.png)
+
 Hot Dog Stand 1280x1024
 
 ![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
