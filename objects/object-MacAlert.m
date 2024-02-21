@@ -30,7 +30,7 @@
 {
     id obj = [@"MacAlert" asInstance];
     [obj setValue:@"HJKLJDKLSFJDSKLF" forKey:@"text"];
-    [obj setValue:@"OK" forKey:@"okText"];
+    [obj setValue:@"ContinueContinue" forKey:@"okText"];
     [obj setValue:@"Cancel" forKey:@"cancelText"];
     return obj;
 }
@@ -134,6 +134,13 @@
 
     if (_okText) {
         _okRect = [Definitions rectWithX:r.w-88 y:r.h-21-28 w:70 h:28];
+
+        int okTextWidth = [bitmap bitmapWidthForText:_okText] + 16 + 8;
+        if (okTextWidth > _okRect.w) {
+            _okRect.x -= okTextWidth-_okRect.w;
+            _okRect.w = okTextWidth;
+        }
+
         Int4 innerRect = _okRect;
         innerRect.y += 1;
         BOOL okButtonDown = NO;        
