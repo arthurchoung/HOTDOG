@@ -1,7 +1,7 @@
 Package: HOTDOGbuntu
 Version: 20230225
 Architecture: amd64
-Depends: libjson-perl, feh, compton
+Depends: libjson-perl, feh, compton, ncal
 Maintainer: Arthur Choung <arthur@hotdoglinux.com>
 Description: HOTDOG + Ubuntu = HOTDOGbuntu
  Horrible Obsolete Typeface and Dreadful Onscreen Graphics
