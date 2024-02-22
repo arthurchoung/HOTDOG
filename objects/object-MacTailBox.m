@@ -25,6 +25,251 @@
 
 #import "HOTDOG.h"
 
+static unsigned char *bitmapButtonLeftPixels =
+"   b\n"
+" bb.\n"
+" b..\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+" b..\n"
+" bb.\n"
+"   b\n"
+;
+static unsigned char *bitmapButtonMiddlePixels =
+"b\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+"b\n"
+;
+static unsigned char *bitmapButtonRightPixels =
+"b   \n"
+".bb \n"
+"..b \n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"..b \n"
+".bb \n"
+"b   \n"
+;
+
+static void drawButtonInBitmap_rect_palette_(id bitmap, Int4 r, unsigned char *palette)
+{
+    unsigned char *left = bitmapButtonLeftPixels;
+    unsigned char *middle = bitmapButtonMiddlePixels;
+    unsigned char *right = bitmapButtonRightPixels;
+
+    [Definitions drawInBitmap:bitmap left:left middle:middle right:right centeredInRect:r palette:palette];
+}
+
+
+
+static unsigned char *bitmapDefaultButtonLeftPixels =
+"     bbb\n"
+"   bbbbb\n"
+"  bbbbbb\n"
+" bbbbwww\n"
+" bbbwwwb\n"
+"bbbwwbb.\n"
+"bbbwwb..\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwwb..\n"
+"bbbwwbb.\n"
+" bbbwwwb\n"
+" bbbbwww\n"
+"  bbbbbb\n"
+"   bbbbb\n"
+"     bbb\n"
+;
+static unsigned char *bitmapDefaultButtonMiddlePixels =
+"b\n"
+"b\n"
+"b\n"
+"w\n"
+"b\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+"b\n"
+"w\n"
+"b\n"
+"b\n"
+"b\n"
+;
+static unsigned char *bitmapDefaultButtonRightPixels =
+"bbb     \n"
+"bbbbb   \n"
+"bbbbbb  \n"
+"wwwbbbb \n"
+"bwwwbbb \n"
+".bbwwbbb\n"
+"..bwwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"..bwwbbb\n"
+".bbwwbbb\n"
+"bwwwbbb \n"
+"wwwbbbb \n"
+"bbbbbb  \n"
+"bbbbb   \n"
+"bbb     \n"
+;
+static void drawDefaultButtonInBitmap_rect_palette_(id bitmap, Int4 r, unsigned char *palette)
+{
+    unsigned char *left = bitmapDefaultButtonLeftPixels;
+    unsigned char *middle = bitmapDefaultButtonMiddlePixels;
+    unsigned char *right = bitmapDefaultButtonRightPixels;
+
+    [Definitions drawInBitmap:bitmap left:left middle:middle right:right centeredInRect:r palette:palette];
+}
+
+
+static void drawAlertBorderInBitmap_rect_(id bitmap, Int4 r)
+{
+    [bitmap setColor:@"white"];
+    [bitmap fillRect:r];
+    unsigned char *pixels = [bitmap pixelBytes];
+    if (!pixels) {
+        return;
+    }
+    int bitmapWidth = [bitmap bitmapWidth];
+    int bitmapHeight = [bitmap bitmapHeight];
+    int bitmapStride = [bitmap bitmapStride];
+    for (int i=0; i<bitmapWidth; i++) {
+        unsigned char *p = pixels + i*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+    for (int i=3; i<bitmapWidth-3; i++) {
+        unsigned char *p = pixels + bitmapStride*3 + i*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+    for (int i=4; i<bitmapWidth-4; i++) {
+        unsigned char *p = pixels + bitmapStride*4 + i*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+
+    for (int i=0; i<bitmapWidth; i++) {
+        unsigned char *p = pixels + bitmapStride*(bitmapHeight-1) + i*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+    for (int i=3; i<bitmapWidth-3; i++) {
+        unsigned char *p = pixels + bitmapStride*(bitmapHeight-1-3) + i*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+    for (int i=4; i<bitmapWidth-4; i++) {
+        unsigned char *p = pixels + bitmapStride*(bitmapHeight-1-4) + i*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+
+    for (int i=1; i<bitmapHeight-1; i++) {
+        unsigned char *p = pixels + bitmapStride*i + 0;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+    for (int i=1; i<bitmapHeight-1; i++) {
+        unsigned char *p = pixels + bitmapStride*i + (bitmapWidth-1)*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+    for (int i=4; i<bitmapHeight-4; i++) {
+        unsigned char *p = pixels + bitmapStride*i + 3*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+    for (int i=4; i<bitmapHeight-4; i++) {
+        unsigned char *p = pixels + bitmapStride*i + (bitmapWidth-1-3)*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+    for (int i=5; i<bitmapHeight-5; i++) {
+        unsigned char *p = pixels + bitmapStride*i + 4*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+    for (int i=5; i<bitmapHeight-5; i++) {
+        unsigned char *p = pixels + bitmapStride*i + (bitmapWidth-1-4)*4;
+        p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    }
+
+}
+
 @implementation Definitions(fjejfksdljfklsdjfkkwlfmkldsmfkldsjflkfjdskfjksd)
 + (id)testMacTailBox:(id)filePath
 {
@@ -99,7 +344,7 @@
 }
 - (void)drawInBitmap:(id)bitmap rect:(Int4)r
 {
-    [Definitions drawAlertBorderInBitmap:bitmap rect:r];
+    drawAlertBorderInBitmap_rect_(bitmap, r);
     char *palette = "b #000000\n. #ffffff\n";
     [bitmap drawCString:[Definitions cStringForBitmapMessageIcon] palette:palette x:28 y:28];
 
@@ -133,12 +378,12 @@
         innerRect.y += 1;
         if ((_buttonDown == 'o') && (_buttonHover == 'o')) {
             char *palette = ". #000000\nb #000000\nw #ffffff\n";
-            [Definitions drawDefaultButtonInBitmap:bitmap rect:_okRect palette:palette];
+            drawDefaultButtonInBitmap_rect_palette_(bitmap, _okRect, palette);
             [bitmap setColorIntR:255 g:255 b:255 a:255];
             [bitmap drawBitmapText:@"OK" centeredInRect:innerRect];
         } else {
             char *palette = ". #ffffff\nb #000000\nw #ffffff\n";
-            [Definitions drawDefaultButtonInBitmap:bitmap rect:_okRect palette:palette];
+            drawDefaultButtonInBitmap_rect_palette_(bitmap, _okRect, palette);
             [bitmap setColorIntR:0 g:0 b:0 a:255];
             [bitmap drawBitmapText:@"OK" centeredInRect:innerRect];
         }
@@ -155,12 +400,12 @@
         _cancelRect = [Definitions rectWithX:_okRect.x-70-35 y:r.h-21-28 w:70 h:28];
         if ((_buttonDown == 'c') && (_buttonHover == 'c')) {
             char *palette = ". #000000\nb #000000\nw #ffffff\n";
-            [Definitions drawButtonInBitmap:bitmap rect:_cancelRect palette:palette];
+            drawButtonInBitmap_rect_palette_(bitmap, _cancelRect, palette);
             [bitmap setColorIntR:255 g:255 b:255 a:255];
             [bitmap drawBitmapText:_cancelText centeredInRect:_cancelRect];
         } else {
             char *palette = ". #ffffff\nb #000000\nw #ffffff\n";
-            [Definitions drawButtonInBitmap:bitmap rect:_cancelRect palette:palette];
+            drawButtonInBitmap_rect_palette_(bitmap, _cancelRect, palette);
             [bitmap setColorIntR:0 g:0 b:0 a:255];
             [bitmap drawBitmapText:_cancelText centeredInRect:_cancelRect];
         }
