@@ -27,6 +27,17 @@
 
 #define MAX_RECT 640
 
+static void drawStripedBackgroundInBitmap_rect_(id bitmap, Int4 r)
+{
+    [bitmap setColorIntR:205 g:212 b:222 a:255];
+    [bitmap fillRectangleAtX:r.x y:r.y w:r.w h:r.h];
+    [bitmap setColorIntR:201 g:206 b:209 a:255];
+    for (int i=6; i<r.w; i+=10) {
+        [bitmap fillRectangleAtX:r.x+i y:r.y w:4 h:r.h];
+    }
+}
+
+
 static unsigned char *checkmark_pixels =
 "        bb\n"
 "        bb\n"
@@ -603,7 +614,6 @@ NSLog(@"Panel updateArrayAndTimestamp path %@", _currentDirectory);
 {
     [bitmap setColor:@"#aaaaaa"];
     [bitmap fillRect:r];
-//    [Definitions drawStripedBackgroundInBitmap:bitmap rect:r];
 
     [self setValue:nsarr() forKey:@"buttons"];
     [self setValue:nsarr() forKey:@"buttonDicts"];
@@ -655,7 +665,7 @@ NSLog(@"waiting for input");
 }
 - (void)panelStripedBackground
 {
-    [Definitions drawStripedBackgroundInBitmap:_bitmap rect:_r];
+    drawStripedBackgroundInBitmap_rect_(_bitmap, _r);
 }
 
 - (void)panelColor:(id)color
