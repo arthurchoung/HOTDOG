@@ -25,6 +25,83 @@
 
 #import "HOTDOG.h"
 
+static unsigned char *bitmapButtonLeftPixels =
+"   b\n"
+" bb.\n"
+" b..\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+"b...\n"
+" b..\n"
+" bb.\n"
+"   b\n"
+;
+static unsigned char *bitmapButtonMiddlePixels =
+"b\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+"b\n"
+;
+static unsigned char *bitmapButtonRightPixels =
+"b   \n"
+".bb \n"
+"..b \n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"...b\n"
+"..b \n"
+".bb \n"
+"b   \n"
+;
+
+static void drawButtonInBitmap_rect_palette_(id bitmap, Int4 r, unsigned char *palette)
+{
+    unsigned char *left = bitmapButtonLeftPixels;
+    unsigned char *middle = bitmapButtonMiddlePixels;
+    unsigned char *right = bitmapButtonRightPixels;
+
+    [Definitions drawInBitmap:bitmap left:left middle:middle right:right centeredInRect:r palette:palette];
+}
+
+
 #ifdef BUILD_FOR_OSX
 static uint64_t osx_clock()
 {
@@ -428,11 +505,11 @@ static uint64_t osx_clock()
         Int4 buttonRect = _startButtonRect;
         if (0) {
             char *palette = ". #ffffff\nb #ffffff\n";
-            [Definitions drawButtonInBitmap:bitmap rect:buttonRect palette:palette];
+            drawButtonInBitmap_rect_palette_(bitmap, buttonRect, palette);
             [bitmap setColorIntR:0 g:0 b:0 a:255];
             [bitmap drawBitmapText:leftButton centeredInRect:buttonRect];
         } else {
-            [Definitions drawButtonInBitmap:bitmap rect:buttonRect palette:leftPalette];
+            drawButtonInBitmap_rect_palette_(bitmap, buttonRect, leftPalette);
             [bitmap setColorIntR:255 g:255 b:255 a:255];
             [bitmap drawBitmapText:leftButton centeredInRect:buttonRect];
         }
@@ -474,12 +551,12 @@ static uint64_t osx_clock()
     if (rightButton) {
         if (_resetButtonDown) {
             char *palette = ". #444444\nb #ffffff\n";
-            [Definitions drawButtonInBitmap:bitmap rect:buttonRect palette:palette];
+            drawButtonInBitmap_rect_palette_(bitmap, buttonRect, palette);
             [bitmap setColorIntR:255 g:255 b:255 a:255];
             [bitmap drawBitmapText:rightButton centeredInRect:buttonRect];
         } else {
             char *palette = ". #888888\nb #ffffff\n";
-            [Definitions drawButtonInBitmap:bitmap rect:buttonRect palette:palette];
+            drawButtonInBitmap_rect_palette_(bitmap, buttonRect, palette);
             [bitmap setColorIntR:255 g:255 b:255 a:255];
             [bitmap drawBitmapText:rightButton centeredInRect:buttonRect];
         }
