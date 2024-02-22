@@ -1,5 +1,15 @@
 #import "HOTDOG.h"
 
+static Int4 rectWithPadding_w_h_(Int4 r, int paddingWidth, int paddingHeight)
+{
+    Int4 result = r;
+    result.x -= paddingWidth;
+    result.y -= paddingHeight;
+    result.w += paddingWidth*2;
+    result.h += paddingHeight*2;
+    return result;
+}
+
 @implementation Definitions(fmeiowmvkdsvijewi)
 + (id)AmigaGuruMeditation
 {
@@ -49,7 +59,7 @@
     if (_iteration % 2 == 0) {
         [bitmap setColor:@"red"];
         [bitmap fillRect:r];
-        Int4 r1 = [Definitions rectWithPadding:r w:-8 h:-8];
+        Int4 r1 = rectWithPadding_w_h_(r, -8, -8);
         [bitmap setColor:@"black"];
         [bitmap fillRect:r1];
     } else {
