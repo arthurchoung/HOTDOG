@@ -1,5 +1,45 @@
 #import "HOTDOG.h"
 
+static Int2 proportionalSizeForWidth_height_origWidth_origHeight_(int w, int h, int origw, int origh)
+{
+    int tmp_width = w;
+    int tmp_height = ((((tmp_width * origh) / origw)+7)&~7);
+    if(tmp_height > h)
+    {
+        tmp_height = h;
+        tmp_width = ((((tmp_height * origw) / origh)+7)&~7);
+    }
+    Int2 size;
+    size.w = tmp_width;
+    size.h = tmp_height;
+    return size;
+}
+
+
+static Int4 centerRectX_y_w_h_inW_h_(int smX, int smY, int smW, int smH, int lgW, int lgH)
+{
+    
+    Int2 boundsSize;
+    boundsSize.w = lgW;
+    boundsSize.h = lgH;
+    Int4 frameToCenter = [Definitions rectWithX:smX y:smY w:smW h:smH];
+    
+    if (frameToCenter.w < boundsSize.w) {
+        frameToCenter.x = (boundsSize.w - frameToCenter.w) / 2;
+    } else {
+        frameToCenter.x = 0;
+    }
+    
+    if (frameToCenter.h < boundsSize.h) {
+        int diff = boundsSize.h - frameToCenter.h;
+        frameToCenter.y = diff / 2;
+    } else {
+        frameToCenter.y = 0;
+    }
+    
+    return frameToCenter;
+}
+
 @implementation Definitions(jfklewfklmdklsfmklsdmkfcvijiowe)
 + (id)VIBitmap
 {
@@ -240,8 +280,8 @@ NSLog(@"unsupported maxval %d", maxval);
 }
 - (id)drawBlackRectangle
 {
-    Int2 proportionalSize = [Definitions proportionalSizeForWidth:_rect.w height:_rect.h origWidth:_width origHeight:_height];
-    Int4 centeredRect = [Definitions centerRectX:0 y:0 w:proportionalSize.w h:proportionalSize.h inW:_rect.w h:_rect.h];
+    Int2 proportionalSize = proportionalSizeForWidth_height_origWidth_origHeight_(_rect.w, _rect.h, _width, _height);
+    Int4 centeredRect = centerRectX_y_w_h_inW_h_(0, 0, proportionalSize.w, proportionalSize.h, _rect.w, _rect.h);
 
     double x1pct = (_mouseDownX-centeredRect.x)/centeredRect.w;
     double y1pct = 1.0-((_mouseDownY-centeredRect.y)/centeredRect.h);
