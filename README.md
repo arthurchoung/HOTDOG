@@ -79,35 +79,35 @@ WinMac 1280x1024
 
 WinMac is a combination of the Windows 3.1 window borders and font, the classic Mac menu bar, and dialogs featuring CATS from Zero Wing (All your base are belong to us).
 
-![WinMac Screenshot](Screenshots/hotdog-screenshot-winmac.png)
+![WinMac Screenshot](Webpage/hotdog-screenshot-winmac.png)
 
 Hot Dog Stand 1280x1024
 
-![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
+![Hot Dog Stand Screenshot](Webpage/hotdog-screenshot-win31.png)
 
 Atari ST GEM 1280x1024
 
-![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
+![Atari ST Screenshot](Webpage/hotdog-screenshot-atarist.png)
 
 Amiga Screenshot 1280x1024
 
-![Amiga Screenshot](Screenshots/hotdog-screenshot-amiga.png)
+![Amiga Screenshot](Webpage/hotdog-screenshot-amiga.png)
 
 Mac Classic 1280x1024
 
-![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
+![Mac Classic Screenshot](Webpage/hotdog-screenshot-macclassic.png)
 
 Mac Color 1280x1024
 
-![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
+![Mac Color Screenshot](Webpage/hotdog-screenshot-maccolor.png)
 
 Mac Platinum 1280x1024
 
-![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
+![Mac Platinum Screenshot](Webpage/hotdog-screenshot-macplatinum.png)
 
 Aqua 1280x1024
 
-![Aqua Screenshot](Screenshots/hotdog-screenshot-aqua.png)
+![Aqua Screenshot](Webpage/hotdog-screenshot-aqua.png)
 
 
 ## HOTDOGbuntu -- Ubuntu compatibility
