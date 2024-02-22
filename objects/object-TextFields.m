@@ -25,6 +25,110 @@
 
 #import "HOTDOG.h"
 
+static unsigned char *bitmapDefaultButtonLeftPixels =
+"     bbb\n"
+"   bbbbb\n"
+"  bbbbbb\n"
+" bbbbwww\n"
+" bbbwwwb\n"
+"bbbwwbb.\n"
+"bbbwwb..\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwb...\n"
+"bbbwwb..\n"
+"bbbwwbb.\n"
+" bbbwwwb\n"
+" bbbbwww\n"
+"  bbbbbb\n"
+"   bbbbb\n"
+"     bbb\n"
+;
+static unsigned char *bitmapDefaultButtonMiddlePixels =
+"b\n"
+"b\n"
+"b\n"
+"w\n"
+"b\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+".\n"
+"b\n"
+"w\n"
+"b\n"
+"b\n"
+"b\n"
+;
+static unsigned char *bitmapDefaultButtonRightPixels =
+"bbb     \n"
+"bbbbb   \n"
+"bbbbbb  \n"
+"wwwbbbb \n"
+"bwwwbbb \n"
+".bbwwbbb\n"
+"..bwwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"...bwbbb\n"
+"..bwwbbb\n"
+".bbwwbbb\n"
+"bwwwbbb \n"
+"wwwbbbb \n"
+"bbbbbb  \n"
+"bbbbb   \n"
+"bbb     \n"
+;
+static void drawDefaultButtonInBitmap_rect_palette_(id bitmap, Int4 r, unsigned char *palette)
+{
+    unsigned char *left = bitmapDefaultButtonLeftPixels;
+    unsigned char *middle = bitmapDefaultButtonMiddlePixels;
+    unsigned char *right = bitmapDefaultButtonRightPixels;
+
+    [Definitions drawInBitmap:bitmap left:left middle:middle right:right centeredInRect:r palette:palette];
+}
+
+
+
 @implementation NSObject(jfkldsjflksdjf)
 - (id)valuesForAllIvars
 {
@@ -172,12 +276,12 @@
     Int4 buttonRect = [Definitions rectWithX:r.w-88 y:y w:70 h:28];
     if (_okButtonDown) {
         char *palette = ". #000000\nb #000000\nw #ffffff\n";
-        [Definitions drawDefaultButtonInBitmap:bitmap rect:buttonRect palette:palette];
+        drawDefaultButtonInBitmap_rect_palette_(bitmap, buttonRect, palette);
         [bitmap setColorIntR:255 g:255 b:255 a:255];
         [bitmap drawBitmapText:@"OK" centeredInRect:buttonRect];
     } else {
         char *palette = ". #ffffff\nb #000000\nw #ffffff\n";
-        [Definitions drawDefaultButtonInBitmap:bitmap rect:buttonRect palette:palette];
+        drawDefaultButtonInBitmap_rect_palette_(bitmap, buttonRect, palette);
         [bitmap setColorIntR:0 g:0 b:0 a:255];
         [bitmap drawBitmapText:@"OK" centeredInRect:buttonRect];
     }
