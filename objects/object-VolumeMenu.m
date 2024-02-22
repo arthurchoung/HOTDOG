@@ -25,6 +25,17 @@
 
 #import "HOTDOG.h"
 
+static int adjustedYForPct_rect_insideRect_(double pct, Int4 innerRect, Int4 outerRect)
+{
+    int val = outerRect.y+pct*(outerRect.h-innerRect.h);
+    return val;
+}
+
+static double normalizedYForRect_insideRect_(Int4 innerRect, Int4 outerRect)
+{
+    return (double)(innerRect.y - outerRect.y) / (double)(outerRect.h-innerRect.h);
+}
+
 @implementation Definitions(fjkdlsjfklmnekwlvmlkdsjkvs)
 + (id)VolumeMenu
 {
@@ -244,7 +255,7 @@ NSLog(@"alsaStatus '%@'", line);
 - (void)updateVolumeSlider
 {
     double sliderPct = _grabbedSliderPct;
-    int adjustedSliderY = [Definitions adjustedYForPct:sliderPct rect:_rectForVolumeSliderKnob insideRect:_rectForVolumeSliderTrack];
+    int adjustedSliderY = adjustedYForPct_rect_insideRect_(sliderPct, _rectForVolumeSliderKnob, _rectForVolumeSliderTrack);
     if (_grabbedVolumeSliderY) {
         adjustedSliderY = _mouseY - _grabbedVolumeSliderY;
     }
@@ -256,7 +267,7 @@ NSLog(@"alsaStatus '%@'", line);
     }
     Int4 newRectForSlider = _rectForVolumeSliderKnob;
     newRectForSlider.y = adjustedSliderY;
-    double newSliderPct = [Definitions normalizedYForRect:newRectForSlider insideRect:_rectForVolumeSliderTrack];
+    double newSliderPct = normalizedYForRect_insideRect_(newRectForSlider, _rectForVolumeSliderTrack);
     newSliderPct = 1.0-newSliderPct;
     if (sliderPct != newSliderPct) {
         if (!_playbackSwitch) {
@@ -317,7 +328,7 @@ NSLog(@"alsaStatus '%@'", line);
     if (_grabbedVolumeSliderY) {
         sliderPct = _grabbedSliderPct;
     }
-    int adjustedSliderY = [Definitions adjustedYForPct:1.0-sliderPct rect:_rectForVolumeSliderKnob insideRect:_rectForVolumeSliderTrack];
+    int adjustedSliderY = adjustedYForPct_rect_insideRect_(1.0-sliderPct, _rectForVolumeSliderKnob, _rectForVolumeSliderTrack);
     _rectForVolumeSliderKnob = [Definitions rectWithX:r.x y:adjustedSliderY w:r.w h:11];
 
     [Definitions drawVerticalSliderInBitmap:bitmap rect:r pct:pct];
