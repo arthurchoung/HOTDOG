@@ -694,13 +694,6 @@ NSLog(@"cancelButtonWidth %d cancelTextWidth %d", cancelButtonWidth, cancelTextW
 
             [bitmap setColorIntR:0 g:0 b:0 a:255];
             [bitmap drawBitmapText:_okText x:okTextX y:okTextY];
-/*
-    id left = [Definitions cStringForBitmapDefaultButtonLeft];
-    id middle = [Definitions cStringForBitmapDefaultButtonMiddle];
-    id right = [Definitions cStringForBitmapDefaultButtonRight];
-
-    [Definitions drawInBitmap:bitmap left:left middle:middle right:right centeredInRect:r palette:palette];
-*/
 [Definitions drawInBitmap:bitmap left:textBorderLeftPixels middle:textBorderMiddlePixels right:textBorderRightPixels x:okTextX-2 y:okTextY-3 w:okTextWidth+4 palette:buttonPalette];
         } else {
             int okTextX = _okRect.x+(_okRect.w-okTextWidth)/2-1;
