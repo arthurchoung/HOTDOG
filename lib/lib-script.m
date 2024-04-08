@@ -506,6 +506,10 @@ NSLog(@"Bad signature");
                 unsigned char (*func)(id, SEL, double) = imp;
                 unsigned char val = func(target, sel, [[args nth:0] doubleValue]);
                 return nsfmt(@"%u", val);
+            } else if (signature[0] == 'v') {
+                void (*func)(id, SEL, double) = imp;
+                func(target, sel, [[args nth:0] doubleValue]);
+                return target;
             }
         } else if (signature[4] == 'd') {
             if (signature[5] == 0) {
@@ -1079,5 +1083,18 @@ NSLog(@"%@", err);
     return nil;
 }
 
+@end
+
+@implementation NSObject(fmeklwfmkldsmfkmsdklfm)
++ (id)callMethodName:(id)methodName args:(id)args
+{
+    SEL sel = sel_registerName([methodName UTF8String]);
+    struct objc_method *m = class_getClassMethod(self, sel);
+    if (m) {
+        return callMethod(self, m, args);
+    }
+NSLog(@"method not found '%@'", methodName);
+    return nil;
+}
 @end
 
