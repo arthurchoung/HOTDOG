@@ -180,6 +180,152 @@ HOTDOG can be run on Ubuntu and its derivatives.
 <p>
 See the NOTES-Ubuntu file for more information.
 
+<h2>iOS 4/5/6</h2>
+<p>
+This is an attempt to recreate iOS 4/5/6 with simplified graphics that would be suitable for the 8-bit or 16-bit era.
+
+<h3>Home Screen</h3>
+<p>
+This is a preliminary version of the home screen with Windows 3 icons.
+
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-homescreen.png"></div>
+
+<h2>Music</h2>
+
+<p>
+A music browser in the style of the old versions of iOS.
+
+<p>
+Displays a list based on the files in the current directory, using the output of the following scripts:
+
+<ul>
+<li>hotdog-music-listAlbumsForArtist:.py
+<li>hotdog-music-listArtists.py
+<li>hotdog-music-listSongsForArtist:.py
+<li>hotdog-music-listTracksForAlbum:.py
+</ul>
+
+<p>
+These scripts can be modified as desired.
+
+<p>
+Currently requires Python modules mutagen and pillow.
+
+<p>
+To show albums:
+
+<pre>
+$ hotdog show AlbumListNavigation
+</pre>
+
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-music-screenshot-album.png"></div>
+
+<p>
+Click on an album to list the tracks:
+
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-music-screenshot-track.png"></div>
+
+<p>
+To show songs:
+
+<pre>
+$ hotdog show SongListNavigation
+</pre>
+
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-music-screenshot-song.png"></div>
+
+<p>
+To show artists:
+
+<pre>
+$ hotdog show ArtistListNavigation
+</pre>
+
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-music-screenshot-artist.png"></div>
+
+<p>
+<hr style="clear:both">
+
+<h2>Contacts</h2>
+
+<p>
+A vcf/vcard browser in the style of the old versions of iOS.
+
+<p>
+Displays a list based on the files in the current directory, using the output of the following scripts:
+
+<ul>
+<li>hotdog-contacts-list.py
+<li>hotdog-contacts-printFile:.py
+</ul>
+
+<p>
+These scripts can be modified as desired.
+
+<p>
+Currently requires Python modules vobject and pillow.
+
+<p>
+To show list:
+
+<pre>
+$ hotdog show ContactListNavigation
+</pre>
+
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-contacts-screenshot-list.png"></div>
+
+<p>
+Click on a row to show details:
+
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-contacts-screenshot-detail.png"></div>
+
+<p>
+<hr style="clear:both">
+
+<h2>Calendar</h2>
+
+<p>
+Displays a calendar using the output of 'cal' for the actual calendar.
+
+<p>
+The script 'hotdog-calendar-listEvents.py' reads .ics files in the current directory and lists the event dates, which are highlighted in yellow.
+
+<p>
+These scripts can be modified as desired.
+
+<p>
+Currently requires Python module vobject.
+
+<p>
+To show a yearly calendar:
+
+<pre>
+$ hotdog show CalendarInterface
+</pre>
+
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-calendar-screenshot-year.png"></div>
+
+<p>
+<hr style="clear:both">
+
+<h2>Lock Screen</h2>
+
+<pre>
+$ hotdog show LockScreen
+</pre>
+
+<p>
+<div style="width:100%;overflow-x:scroll;white-space:nowrap"><img src="hotdog-lockscreen.png"></div>
+
+
 <h2>Related Project</h2>
 
 <p>
@@ -203,21 +349,6 @@ For details on the license, refer to the LICENSE file.
 </div>
 </div>
 </div>
-
-<!--
-Key Concepts
-
-States and Transitions
-Regular Expressions
-Pushdown Automata
-Turing Machines
-
--
-
-Human readable and editable text files
-Executable programs are preferred with communication using stdio
-Network should not be accessed directly, but through executable program
--->
 
 </body>
 </html>
