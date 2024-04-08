@@ -1661,6 +1661,12 @@ if ([monitor intValueForKey:@"height"] == 768) {
             XPutImage(_display, win, gc, ximage, 0, 0, 0, 0, w, h);
             XDestroyImage(ximage);
             XFreeGC(_display, gc);
+
+//temporary hack
+struct timespec ts;
+ts.tv_sec = 0;
+ts.tv_nsec = 16666666;
+nanosleep(&ts, 0);
         }
     }
 }
@@ -2194,7 +2200,7 @@ NSLog(@"choice '%@'", choice);
                 id message = [choice valueForKey:@"messageForClick"];
                 if (message) {
 NSLog(@"message '%@'", message);
-                    [object evaluateMessage:message];
+                    [contextualObject evaluateMessage:message];
                     [dict setValue:@"1" forKey:@"needsRedraw"];
                 }
             }
