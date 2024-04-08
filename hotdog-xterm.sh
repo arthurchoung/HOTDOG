@@ -11,7 +11,7 @@ elif [ "x$HOTDOG_MODE" = "xhotdogstand" ]; then
     if [ "x$HOTDOG_XTERMBG" != "x" ]; then
         xterm $FONT -geometry 80x50 -bg $HOTDOG_XTERMBG -fg white -cr '#ffff00' +bc +uc
     else
-        xterm $FONT -geometry 80x50 -bg '#0055aa' -fg white -cr '#ffff00' +bc +uc
+        xterm $FONT -geometry 80x50 -bg black -fg white -cr '#ffff00' +bc +uc
     fi
 elif [ "x$HOTDOG_MODE" = "xaqua" ]; then
     xterm $FONT -geometry 80x50 -bg black -fg white -cr '#ffff00' +bc +uc
