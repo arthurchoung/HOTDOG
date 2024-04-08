@@ -394,6 +394,7 @@ static int hexchartoint(char c)
     int *_fontHeights;
     int *_fontXSpacings;
     int _glNearest;
+    BOOL _freePixelBytesDuringDealloc;
 }
 @end
 
@@ -404,6 +405,11 @@ static int hexchartoint(char c)
     return bitmap;
     
 }
++ (id)bitmapWithPixelBytes:(unsigned char *)pixelBytes width:(int)width height:(int)height stride:(int)stride
+{
+    id bitmap = [[[Bitmap alloc] initWithPixelBytes:pixelBytes width:width height:height stride:stride] autorelease];
+    return bitmap;
+}
 @end
 
 
@@ -412,7 +418,9 @@ static int hexchartoint(char c)
 - (void)dealloc
 {
     if (_pixelBytes) {
-        free(_pixelBytes);
+        if (_freePixelBytesDuringDealloc) {
+            free(_pixelBytes);
+        }
         _pixelBytes = NULL;
     }
     [super dealloc];
@@ -432,9 +440,24 @@ NSLog(@"Out of memory!");
         _bitmapWidth = width;
         _bitmapHeight = height;
         _bitmapStride = width*4;
+        _freePixelBytesDuringDealloc = YES;
 
         [self useChicagoFont];
 
+    }
+    return self;
+}
+- (id)initWithPixelBytes:(unsigned char *)pixelBytes width:(int)width height:(int)height stride:(int)stride
+{
+    self = [super init];
+    if (self) {
+        _pixelBytes = pixelBytes;
+        _bitmapWidth = width;
+        _bitmapHeight = height;
+        _bitmapStride = stride;
+        _freePixelBytesDuringDealloc = NO;
+
+        [self useChicagoFont];
     }
     return self;
 }
@@ -1114,6 +1137,36 @@ NSLog(@"Out of memory!");
                     dst[dstidx+1] = src[srcidx+1];
                     dst[dstidx+2] = src[srcidx+2];
                     dst[dstidx+3] = src[srcidx+3];
+                }
+            }
+        }
+    }
+}
+- (void)drawBitmap:(id)bitmap x:(int)x y:(int)y w:(int)w h:(int)h atX:(int)atX y:(int)atY
+{
+    uint8_t *src = [bitmap pixelBytes];
+    int srcBitmapWidth = [bitmap bitmapWidth];
+    int srcBitmapHeight = [bitmap bitmapHeight];
+    int srcBitmapStride = [bitmap bitmapStride];
+    uint8_t *dst = _pixelBytes;
+    for (int j=0; j<h; j++) {
+        int srcy = y+j;
+        int dsty = atY+j;
+        if ((srcy >= 0) && (srcy < srcBitmapHeight)) {
+            if ((dsty >= 0) && (dsty < _bitmapHeight)) {
+                for (int i=0; i<w; i++) {
+                    int srcx = x+i;
+                    int dstx = atX+i;
+                    if ((srcx >= 0) && (srcx < srcBitmapWidth)) {
+                        if ((dstx >= 0) && (dstx < _bitmapWidth)) {
+                            int dstidx = dsty*_bitmapStride+dstx*4;
+                            int srcidx = srcy*srcBitmapStride+srcx*4;
+                            dst[dstidx] = src[srcidx];
+                            dst[dstidx+1] = src[srcidx+1];
+                            dst[dstidx+2] = src[srcidx+2];
+                            dst[dstidx+3] = src[srcidx+3];
+                        }
+                    }
                 }
             }
         }
