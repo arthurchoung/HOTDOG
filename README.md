@@ -116,6 +116,110 @@ HOTDOG can be run on Ubuntu and its derivatives.
 
 See the NOTES-Ubuntu file for more information.
 
+## iOS 4/5/6
+
+This is an attempt to recreate iOS 4/5/6 with simplified graphics that would be suitable for the 8-bit or 16-bit era.
+
+### Home Screen
+
+This is a preliminary version of the home screen with Windows 3 icons.
+
+![Home Screen](Webpage/hotdog-homescreen.png)
+
+### Music
+
+A music browser in the style of the old versions of iOS.
+
+Displays a list based on the files in the current directory, using the output of the following scripts:
+
+  * hotdog-music-listAlbumsForArtist:.py
+  * hotdog-music-listArtists.py
+  * hotdog-music-listSongsForArtist:.py
+  * hotdog-music-listTracksForAlbum:.py
+
+These scripts can be modified as desired.
+
+Currently requires Python modules mutagen and pillow.
+
+To show albums:
+
+```
+$ hotdog show AlbumListNavigation
+```
+
+![Music Screenshot Album](Webpage/hotdog-music-screenshot-album.png)
+
+Click on an album to list the tracks:
+
+![Music Screenshot Track](Webpage/hotdog-music-screenshot-track.png)
+
+To show songs:
+
+```
+$ hotdog show SongListNavigation
+```
+
+![Music Screenshot Song](Webpage/hotdog-music-screenshot-song.png)
+
+To show artists:
+
+```
+$ hotdog show ArtistListNavigation
+```
+
+![Music Screenshot Artist](Webpage/hotdog-music-screenshot-artist.png)
+
+### Contacts
+
+A vcf/vcard browser in the style of the old versions of iOS.
+
+Displays a list based on the files in the current directory, using the output of the following scripts:
+
+  * hotdog-contacts-list.py
+  * hotdog-contacts-printFile:.py
+
+These scripts can be modified as desired.
+
+Currently requires Python modules vobject and pillow.
+
+To show list:
+
+```
+$ hotdog show ContactListNavigation
+```
+
+![Contacts Screenshot List](Webpage/hotdog-contacts-screenshot-list.png)
+
+Click on a row to show details:
+
+![Contacts Screenshot Detail](Webpage/hotdog-contacts-screenshot-detail.png)
+
+### Calendar
+
+Displays a calendar using the output of 'cal' for the actual calendar.
+
+The script 'hotdog-calendar-listEvents.py' reads .ics files in the current directory and lists the event dates, which are highlighted in yellow.
+
+These scripts can be modified as desired.
+
+Currently requires Python module vobject.
+
+To show a yearly calendar:
+
+```
+$ hotdog show CalendarInterface
+```
+
+![Calendar Screenshot Year](Webpage/hotdog-calendar-screenshot-year.png)
+
+### Lock Screen
+
+```
+$ hotdog show LockScreen
+```
+
+![Lock Screen](Webpage/hotdog-lockscreen.png)
+
 ## What I have learned from this project...
 
 The goal is to have a graphical Unix style workstation, something both Mac OS X and Linux seem to have moved away from. It is not important to have a simplified interface that is easy to use for the average person. It is not important to convert users from another OS.
