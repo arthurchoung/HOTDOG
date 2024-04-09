@@ -286,11 +286,11 @@ Other ideas
 
 This should be moved to a separate file somewhere.
 
-## Related Project
+## Related
 
-HOTDOG PUCKO
+Hotdog Pucko
 
-http://hotdogpucko.com
+https://hotdogpucko.com
 
 ## Legal
 
