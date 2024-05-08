@@ -221,5 +221,34 @@ NSLog(@"Class not found '%@'", self);
     }
     return results;
 }
++ (void)printAllClassNames
+{
+    int count = objc_getClassList(NULL, 0);
+    Class classList[count];
+    count = objc_getClassList(classList, count);
+    for (int i=0; i<count; i++) {
+        char *cstr = class_getName(classList[i]);
+        printf("%s\n", cstr);
+    }
+    exit(0);
+}
++ (void)printAllSelectors
+{
+    id allClassNames = [Definitions allClassNames];
+    for (int i=0; i<[allClassNames count]; i++) {
+        id name = [allClassNames nth:i];
+        id arr = [name selectorsForClass];
+        for (int i=0; i<[arr count]; i++) {
+            id elt = [arr nth:i];
+            printf("%@\n", elt);
+        }
+        arr = [name selectorsForInstanceOfClass];
+        for (int i=0; i<[arr count]; i++) {
+            id elt = [arr nth:i];
+            printf("%@\n", elt);
+        }
+    }
+    exit(0);
+}
 
 @end
