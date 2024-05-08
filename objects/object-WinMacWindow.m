@@ -1028,7 +1028,6 @@ static char *revertButtonDownPixels =
         int menuBarHeight = [windowManager intValueForKey:@"menuBarHeight"];
         int mouseRootX = [event intValueForKey:@"mouseRootX"];
         int mouseRootY = [event intValueForKey:@"mouseRootY"];
-        int viewHeight = [event intValueForKey:@"viewHeight"];
 
         id dict = [event valueForKey:@"x11dict"];
 
