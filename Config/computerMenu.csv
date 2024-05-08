@@ -17,8 +17,8 @@ hotKey,displayName,messageForClick
 ,MacPlatinumDesktop,"['hotdog' 'desktop' 'MacPlatinumDesktop']|runCommandInBackground"
 ,MiscDesktop,"['hotdog' 'desktop' 'MiscDesktop']|runCommandInBackground"
 ,,
-,HomeScreen,"NSArray|addObject:'pucko'|addObject:'HomeScreen'|runCommandInBackground"
-,LockScreen,"NSArray|addObject:'pucko'|addObject:'LockScreen'|runCommandInBackground"
+,HomeScreen,"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'HomeScreen'|runCommandInBackground"
+,LockScreen,"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'LockScreen'|runCommandInBackground"
 ,,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
