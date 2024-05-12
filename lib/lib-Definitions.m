@@ -28,6 +28,11 @@
 #include <stdarg.h>
 #include <sys/time.h>
 
+#ifdef BUILD_FOR_FREEBSD
+#include <sys/types.h>
+#include <signal.h>
+#endif
+
 id nsarr()//$;
 {
     return [NSMutableArray array];
@@ -95,13 +100,11 @@ BOOL isnsstr(id obj)//$;
     setenv([key UTF8String], [val UTF8String], 1);
 }
 
-#ifdef BUILD_FOR_MEDMOS
-#else
 + (id)processID
 {
     return nsfmt(@"%d", getpid());
 }
-#endif
+
 + (double)percentageChangeFrom:(double)from to:(double)to
 {
     return ((to - from) / from) * 100.0;
@@ -120,8 +123,6 @@ BOOL isnsstr(id obj)//$;
     exit(code);
 }
 
-#ifdef BUILD_FOR_MEDMOS
-#else
 
 + (id)arrayOfRandomDoubles:(int)count
 {
@@ -151,6 +152,9 @@ BOOL isnsstr(id obj)//$;
 #ifdef BUILD_FOR_IOS
     int n = arc4random_uniform(maximum);
 #endif
+#ifdef BUILD_FOR_FREEBSD
+    int n = arc4random_uniform(maximum);
+#endif
 #ifdef BUILD_FOR_LINUX
     static BOOL first = YES;
     if (first) {
@@ -164,7 +168,6 @@ BOOL isnsstr(id obj)//$;
     return n;
 }
 
-#endif
 
 + (id)decodeBase64Bytes:(unsigned char *)bytes length:(int)len
 {
