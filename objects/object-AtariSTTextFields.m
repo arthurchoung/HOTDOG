@@ -673,13 +673,16 @@ NSLog(@"cancelButtonWidth %d cancelTextWidth %d", cancelButtonWidth, cancelTextW
 }
 - (void)exitWithDialogMode
 {
-    FILE *fp = (_dialogMode == 1) ? stdout : stderr;
     for (int i=0; i<[_fields count]; i++) {
         id readonly = [_readonly nth:i];
         if (![readonly intValue]) {
             id field = [_fields nth:i];
             id buffer = [_buffers nth:i];
-            fprintf(fp, "%@\n", buffer);
+            if (_dialogMode == 1) {
+                NSOut(@"%@\n", buffer);
+            } else {
+                NSErr(@"%@\n", buffer);
+            }
         }
     }
     exit(0);
