@@ -1,4 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
+
+$|=1;
 
 $timezone = shift @ARGV;
 $text = shift @ARGV;
