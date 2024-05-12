@@ -269,7 +269,7 @@ static void drawAlertBorderInBitmap_rect_(id bitmap, Int4 r)
 
 }
 
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
 @implementation Definitions(fjkdlsjfklsdjkf)
 + (BOOL)confirmWithAlert:(id)text
 {
