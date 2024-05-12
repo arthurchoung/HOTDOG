@@ -1,12 +1,8 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 use strict;
 
-my $LIBOBJC = '/usr/lib/libobjc.a';
-my $uname = `uname -a`;
-if ($uname =~ m/x86_64/) {
-    $LIBOBJC = '/usr/lib64/libobjc.a';
-}
+my $LIBOBJC = 'external/libobjc2/BuildFreeBSD/*.o';
 
 sub getExecPath
 {
@@ -43,7 +39,7 @@ my $logsPath = "$buildPath/Logs";
 sub cflagsForFile
 {
     my ($path) = @_;
-    my $objcflags = '-std=c99 -fconstant-string-class=NSConstantString';
+    my $objcflags = "-I$execPath/external/libobjc2 -I/usr/local/include -std=c99 -fconstant-string-class=NSConstantString";
     if ($path =~ m/\/external\/tidy-html5-5.6.0\//) {
         return "-I$execPath/external/tidy-html5-5.6.0/include -I$execPath/external/tidy-html5-5.6.0/src";
     }
@@ -57,8 +53,11 @@ sub cflagsForFile
     if ($path eq "$execPath/misc/misc-chipmunk.m") {
         return "$objcflags -I$execPath/external/chipmunk/include";
     }
+    if ($path eq "$execPath/lib/lib-script.m") {
+        return "$objcflags -Wno-incompatible-function-pointer-types";
+    }
     if ($path =~ m/\.m$/) {
-        return '-std=c99 -fconstant-string-class=NSConstantString';
+        return $objcflags;
     }
     return '';
 }
@@ -127,7 +126,7 @@ sub compileSourcePath
 #    -Werror=objc-method-access
 #clang -c -O0 -g -pg
 	my $cmd = <<EOF;
-gcc -c -O3 
+clang -c -O3 
     -Werror=implicit-function-declaration
     -Werror=return-type
     -I$execPath
@@ -137,9 +136,8 @@ gcc -c -O3
     -I$execPath/misc
     $cflags
     -DBUILD_FOUNDATION
-    -DBUILD_FOR_LINUX
-    -DBUILD_WITH_GNU_PRINTF
-    -DBUILD_WITH_GNU_QSORT_R
+    -DBUILD_FOR_FREEBSD
+    -DBUILD_WITH_GNUSTEP_RUNTIME
     -DBUILD_WITH_BGRA_PIXEL_FORMAT
     -o $objectPath $sourcePath 2>>$logPath
 EOF
@@ -158,10 +156,11 @@ sub linkSourcePaths
     my $objectFiles = join ' ', @arr;
 #    -pg
     my $cmd = <<EOF;
-gcc -o $execPath/hotdog
+clang -o $execPath/hotdog
     $objectFiles
     $LIBOBJC
     -lm
+    -L/usr/local/lib
     $ldflags
 EOF
     writeTextToFile($cmd, "$logsPath/LINK");
