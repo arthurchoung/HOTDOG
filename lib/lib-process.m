@@ -284,7 +284,7 @@ NSLog(@"unable to open /dev/null");
 {
     NSLog(@"runCommandInBackgroundAndWriteStringToStandardInput: %@", self);
     if ([self count] < 1) {
-        return nil;
+        return 0;
     }
     
     int fdzero[2];
@@ -295,7 +295,7 @@ NSLog(@"unable to open /dev/null");
     if((childpid = fork()) == -1)
     {
         perror("fork");
-        return nil;
+        return 0;
     }
     
     if(childpid == 0)
