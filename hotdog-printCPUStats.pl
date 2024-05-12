@@ -1,54 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $|=1;
-
-use strict;
-
-my %savedCPUStats = ();
-
-sub get_stats
-{
-    my $output = `cat /proc/stat`;
-    my @lines = split '\n', $output;
-
-    my @results = ();
-
-    my $line;
-    foreach $line (@lines) {
-        if ($line =~ m/^cpu\d/) {
-            my @tokens = split /\s/, $line;
-            my $key = $tokens[0];
-            my %curr = ();
-            $curr{'user'} = $tokens[1];
-            $curr{'nice'} = $tokens[2];
-            $curr{'system'} = $tokens[3];
-            $curr{'idle'} = $tokens[4];
-            $curr{'iowait'} = $tokens[5];
-            $curr{'irq'} = $tokens[6];
-            $curr{'softirq'} = $tokens[7];
-            $curr{'steal'} = $tokens[8];
-            $curr{'guest'} = $tokens[9];
-            $curr{'guestNice'} = $tokens[10];
-            if (not $savedCPUStats{$key}) {
-                $savedCPUStats{$key} = {};
-            }
-            my %prev = %{ $savedCPUStats{$key} };
-
-            my $prevIdle = $prev{'idle'} + $prev{'iowait'};
-            my $idle = $curr{'idle'} + $curr{'iowait'};
-            my $prevNonIdle = $prev{'user'} + $prev{'nice'} + $prev{'system'} + $prev{'irq'} + $prev{'softirq'} + $prev{'steal'};
-            my $nonIdle = $curr{'user'} + $curr{'nice'} + $curr{'system'} + $curr{'irq'} + $curr{'softirq'} + $curr{'steal'};
-            my $prevTotal = $prevIdle + $prevNonIdle;
-            my $total = $idle + $nonIdle;
-            my $deltaTotal = $total - $prevTotal;
-            my $deltaIdle = $idle - $prevIdle;
-            my $pct = ($deltaTotal - $deltaIdle) / $deltaTotal;
-            push @results, $pct;
-            $savedCPUStats{$key} = \%curr;
-        }
-    }
-    return @results;
-}
 
 sub print_bar_chart
 {
@@ -89,9 +41,27 @@ x #ffffff
 
 EOF
 
-for(;;) {
-    my @pcts = get_stats();
+open(FH, 'vmstat -P -w 1 -p proc |') || die('unable to run vmstat');
+
+$line = <FH>;
+$line =~ s/^\s+//;
+$line =~ s/\s+$//;
+@headers = split /\s+/, $line;
+$numberOfCPUs = scalar @headers;
+$numberOfCPUs -= 4;
+$line = <FH>;
+
+while ($line = <FH>) {
+    chomp $line;
+    $line =~ s/^\s+//;
+    $line =~ s/\s+$//;
+    @arr = split /\s+/, $line;
+    @pcts = ();
+    for ($i=16; $i<scalar @arr; $i+=3) {
+        $val = 100 - int($arr[$i]);
+        $val = $val / 100.0;
+        push @pcts, $val;
+    }
     print_bar_chart(@pcts);
-    sleep 1;
 }
 
