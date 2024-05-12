@@ -340,7 +340,7 @@ NSLog(@"ListInterface");
     return [Definitions rootViewController];
 }
 #endif
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
 + (id)navigationStack
 {
     id obj = [@"navigationStack" valueForKey];
@@ -911,7 +911,7 @@ NSLog(@"context %@", _context);
                 [obj drawInBitmap:bitmap rect:r1];
                 goto end;
             }
-#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_OSX)
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD) || defined(BUILD_FOR_OSX)
 #ifdef BUILD_FOR_ANDROID
 #else
             if ([obj respondsToSelector:@selector(pixelBytesRGBA8888)]) {
