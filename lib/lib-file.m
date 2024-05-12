@@ -174,7 +174,7 @@ exit(0);
 - (BOOL)writeString:(id)str
 {
     if (!_fp) {
-        return nil;
+        return NO;
     }
     char *cstr = [str UTF8String];
     int len = strlen(cstr);
@@ -602,13 +602,13 @@ exit(0);
 #ifdef BUILD_FOR_LINUX
     struct stat buf;
     if (stat([self UTF8String], &buf) != 0) {
-        return nil;
+        return 0;
     }
     return buf.st_mtim.tv_sec;
 #else
     struct stat buf;
     if (stat([self UTF8String], &buf) != 0) {
-        return nil;
+        return 0;
     }
     return buf.st_mtimespec.tv_sec;
 #endif
@@ -634,13 +634,13 @@ exit(0);
 #ifdef BUILD_FOR_LINUX
     struct stat buf;
     if (stat([self UTF8String], &buf) != 0) {
-        return nil;
+        return 0;
     }
     return buf.st_mtim.tv_sec + buf.st_size;
 #else
     struct stat buf;
     if (stat([self UTF8String], &buf) != 0) {
-        return nil;
+        return 0;
     }
     return buf.st_mtimespec.tv_sec + buf.st_size;
 #endif
