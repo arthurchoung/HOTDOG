@@ -139,7 +139,7 @@ NSLog(@"objectPath %@", objectPath);
 + (id)AmigaDesktop
 {
     id observercmd = nsarr();
-    [observercmd addObject:@"hotdog-monitorMountChanges"];
+    [observercmd addObject:@"hotdog-monitorMountChanges.pl"];
     id observer = [observercmd runCommandAndReturnProcess];
     if (!observer) {
 NSLog(@"unable to run observer command %@", observercmd);
@@ -237,7 +237,7 @@ NSLog(@"windowManager %@", windowManager);
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
 
     id cmd = nsarr();
-    [cmd addObject:@"hotdog-listBlockDevices.pl"];
+    [cmd addObject:@"hotdog-listDisks.pl"];
     id blockDevicesLines = [[[cmd runCommandAndReturnOutput] asString] split:@"\n"];
     id lines = nsarr();
     [lines addObject:@"builtin:AmigaRAMDiskIcon mountpoint:RAM%20Disk"];
