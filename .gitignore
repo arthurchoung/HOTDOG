@@ -1,15 +1,7 @@
 Build
 Temp
 hotdog
-hotdog-printALSAStatus
-hotdog-setALSAMute:
-hotdog-setALSAVolume
-hotdog-monitorBlockDevices
-hotdog-monitorNetworkInterfaces
-hotdog-monitorMonitors
-hotdog-monitorMountChanges
-hotdog-generateALSAPanel
-hotdog-printALSAUpdates
-hotdog-setALSAValues
+hotdog-printMixerVolume
+hotdog-setMixerVolume
 hotdog-solveFifteenPuzzle
 hotdog-packRectanglesIntoWidth:height:...
