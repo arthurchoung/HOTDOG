@@ -42,10 +42,6 @@
 
 #include "foundation-printf.h"
 
-#ifdef BUILD_FOR_MEDMOS
-#include "MEDMOS.h"
-#endif
-
 struct simple_buffer {
     char *bytes;
     int alloc;
