@@ -363,7 +363,7 @@ static void drawDefaultButtonInBitmap_rect_palette_(id bitmap, Int4 r, unsigned 
                 if ([editable intValue]) {
                     id field = [_fields nth:i];
                     id buffer = [_buffers nth:i];
-                    printf("%@\n", buffer);
+                    NSOut(@"%@\n", buffer);
                 }
             }
             id x11Dict = [event valueForKey:@"x11dict"];
