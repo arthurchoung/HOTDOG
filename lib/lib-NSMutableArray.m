@@ -38,7 +38,7 @@
     [self addObject:object];
 }
 
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
 - (void)removeLastObject
 {
     int count = [self count];
