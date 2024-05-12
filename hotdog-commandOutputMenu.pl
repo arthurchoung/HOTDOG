@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 if (not scalar @ARGV) {
     die('specify command');

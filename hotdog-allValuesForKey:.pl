@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 my $matchKey = shift @ARGV;
 if (not $matchKey) {
