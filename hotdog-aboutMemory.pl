@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $output = `dmidecode --type 17`;
 @lines = split "\n", $output;
