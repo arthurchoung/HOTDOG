@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 # If you are tired of entering your password over and over, and do not care
 # too much about security, and don't mind storing your password in plain text,
