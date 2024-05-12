@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $|=1;
 
@@ -6,8 +6,8 @@ use strict;
 
 sub get_monitors
 {
-    my $output = `xrandr`;
-    my @lines = split "\n", $output;
+    my @lines = `xrandr --verbose`;
+    chomp @lines;
 
     my @results = ();
 
@@ -16,7 +16,8 @@ sub get_monitors
             $line =~ s/ connected / /;
             $line =~ s/ primary / /;
             my %elt = ();
-            if ($line =~ m/^([^\s]+)\s+(\d+)x(\d+)\+(\d+)\+(\d+)\s([^\(]*)\(/) {
+#            if ($line =~ m/^([^\s]+)\s+(\d+)x(\d+)\+(\d+)\+(\d+)\s([^\(]*)\(/) {
+            if ($line =~ m/^([^\s]+)\s+(\d+)x(\d+)\+(\d+)\+(\d+)\s+\([^\)]*\)\s+([a-z]+)/) {
                 $elt{'output'} = $1;
                 $elt{'width'} = $2;
                 $elt{'height'} = $3;
