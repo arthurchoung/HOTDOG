@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 FONT=""
 if [ $HOTDOG_SCALING -gt 1 ]; then
