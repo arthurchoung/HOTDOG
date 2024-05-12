@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $pid = `pidof transmission-daemon`;
 chomp $pid;
