@@ -44,6 +44,7 @@ static FILE *HOTDOG_stdout = NULL;
 
 static FILE *HOTDOG_stderr = NULL;
 
+#define ERR(...) ((void)fprintf(HOTDOG_stderr, __VA_ARGS__))
 #define LOG(...) ((void)fprintf(HOTDOG_stderr, __VA_ARGS__))
 
 
@@ -91,6 +92,31 @@ LOG("OUT OF MEMORY! NSString +stringWithFormat:\n");
     }
     if (strp) {
 OUT("%s", strp);
+        free(strp);
+    }
+#endif
+}
+
+void NSErr(id formatString, ...)///$;
+{
+#ifdef BUILD_WITH_GNU_PRINTF
+    va_list args;
+    va_start(args, formatString);
+    vfprintf(HOTDOG_stderr, [formatString UTF8String], args);
+    va_end(args);
+#else
+    char *fmt = [formatString UTF8String];
+    char *strp = NULL;
+    va_list args;
+    va_start(args, formatString);
+    int result = foundation_vasprintf(&strp, fmt, args);
+    va_end(args);
+    if (result < 0) {
+LOG("OUT OF MEMORY! NSString +stringWithFormat:\n");
+        exit(0);
+    }
+    if (strp) {
+ERR("%s", strp);
         free(strp);
     }
 #endif
@@ -819,11 +845,11 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
             if ((q == lastChar) && (q == p)) {
                 break;
             }
-            *q = NULL;
+            *q = 0;
             break;
         }
         if (q == p) {
-            *q = NULL;
+            *q = 0;
             break;
         }
         q--;
@@ -853,7 +879,7 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
             break;
         }
         if (*q == '.') {
-            *q = NULL;
+            *q = 0;
             break;
         }
         if (q == p) {
@@ -874,7 +900,7 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
     BOOL capitalize = NO;
     for(;;) {
         if (!*q) {
-            *p = NULL;
+            *p = 0;
             break;
         }
         if (isspace(*q)) {
@@ -912,7 +938,7 @@ NSLog(@"OUT OF MEMORY! NSString +stringWithFormat:");
     char *q = _contents;
     for(;;) {
         if (!*q) {
-            *p = NULL;
+            *p = 0;
             break;
         }
         if (isprint(*q)) {
