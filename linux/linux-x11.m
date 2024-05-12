@@ -712,7 +712,7 @@ exit(0);
         XCloseDisplay(_display);
         _display = NULL;
     }
-    _rootWindow = NULL;
+    _rootWindow = 0;
 }
 - (BOOL)setupX11
 {
