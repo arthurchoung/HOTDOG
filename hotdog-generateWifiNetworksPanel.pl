@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 @lines = `sudo -A hotdog-scanNetworks.pl | hotdog-reverseNumericSortForKey:.pl quality`;
 chomp @lines;
