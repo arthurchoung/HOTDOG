@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $realpath = `realpath .`;
 chomp $realpath;
