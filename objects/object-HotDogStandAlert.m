@@ -780,7 +780,7 @@ NSLog(@"cancelButtonWidth %d cancelTextWidth %d", cancelButtonWidth, cancelTextW
             if (_dialogMode) {
                 exit(0);
             }
-            printf("%@\n", _okText);
+            NSOut(@"%@\n", _okText);
             id x11dict = [event valueForKey:@"x11dict"];
             [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
         } else if (_buttonDown == 'c') {
@@ -820,9 +820,9 @@ NSLog(@"cancelButtonWidth %d cancelTextWidth %d", cancelButtonWidth, cancelTextW
                 exit(_focusIndex);
             }
             if (_focusIndex == 0) {
-                printf("%@\n", _okText);
+                NSOut(@"%@\n", _okText);
             } else {
-                printf("%@\n", _cancelText);
+                NSOut(@"%@\n", _cancelText);
             }
             id x11dict = [event valueForKey:@"x11dict"];
             [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
