@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 @lines = `ps auxw`;
 chomp @lines;
