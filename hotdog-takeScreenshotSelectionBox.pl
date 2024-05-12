@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $date = `date "+%Y-%m-%d %H:%M"`;
 chomp $date;

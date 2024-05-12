@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $arg = shift @ARGV;
 if (not $arg) {
