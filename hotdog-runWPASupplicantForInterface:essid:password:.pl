@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $interface = shift @ARGV;
 $essid = shift @ARGV;
