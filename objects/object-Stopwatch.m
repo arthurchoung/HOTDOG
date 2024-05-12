@@ -124,7 +124,7 @@ static uint64_t osx_clock()
     Int4 _lapTextRect;
     Int4 _startButtonRect;
     Int4 _resetButtonRect;
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
     struct timespec _startTime;
     struct timespec _endTime;
     struct timespec _lapTime;
@@ -157,7 +157,7 @@ static uint64_t osx_clock()
 
 - (BOOL)shouldAnimate
 {
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
     if (_startTime.tv_sec) {
         if (!_endTime.tv_sec) {
             return YES;
@@ -199,7 +199,7 @@ static uint64_t osx_clock()
 {
 }
 
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
 - (double)timeDifference:(struct timespec)time1 :(struct timespec)time2
 {
     double diff_time = ((double)time2.tv_sec + 1.0e-9*time2.tv_nsec) - ((double)time1.tv_sec + 1.0e-9*time1.tv_nsec);
@@ -228,7 +228,7 @@ static uint64_t osx_clock()
 
 - (void)handleStartButton
 {
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
     if (_startTime.tv_sec) {
         if (_endTime.tv_sec) {
             /* Start */
@@ -289,7 +289,7 @@ static uint64_t osx_clock()
 
 - (void)handleResetButton
 {
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
     if (_startTime.tv_sec) {
         if (_endTime.tv_sec) {
             /* Reset */
@@ -380,7 +380,7 @@ static uint64_t osx_clock()
     [bitmap fillRect:topRect];
 */
 
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
     struct timespec timeNow;
     if (_endTime.tv_sec) {
         timeNow = _endTime;
@@ -458,7 +458,7 @@ static uint64_t osx_clock()
         [bitmap drawBitmap:textBitmap x:textRect.x y:textRect.y w:textRect.w h:textRect.h];
     }
 
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
     id leftButton = @"";
     char *leftPalette = ". #00ff00\nb #ffffff\n";
     if (_startTime.tv_sec) {
@@ -515,7 +515,7 @@ static uint64_t osx_clock()
         }
     }
 
-#ifdef BUILD_FOR_LINUX
+#if defined(BUILD_FOR_LINUX) || defined(BUILD_FOR_FREEBSD)
     id rightButton = @"Reset";
     if (_startTime.tv_sec) {
         if (_endTime.tv_sec) {
