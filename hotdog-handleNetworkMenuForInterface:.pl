@@ -1,11 +1,11 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $arg = shift @ARGV;
 if (not $arg) {
     die('specify interface');
 }
 
-if ($arg eq 'lo') {
+if ($arg =~ m/^lo/) {
     exit 0;
 }
 
@@ -42,42 +42,41 @@ foreach $line (@lines) {
         $address = $1;
         $address =~ s/\'//g;
     }
-    $dhcpcd = `pgrep -f 'dhcpcd.*$interface'`;
-    chomp $dhcpcd;
-    if ($dhcpcd =~ m/^(\d+)/) {
-        $dhcpcd = $1;
+    if ($line =~ m/\bdhclientIsRunning:([0-9]+)/) {
+        $dhclient = $1;
     }
 
     $wireless = 0;
-    open(FH, "iwconfig $interface |") or die('unable to run iwconfig');
-    while ($line = <FH>) {
-        if ($line =~ m/^$interface/) {
-            if ($line =~ m/ESSID:/) {
-                $wireless = 1;
+    if (open(FH, "iwconfig $interface |")) {
+        while ($line = <FH>) {
+            if ($line =~ m/^$interface/) {
+                if ($line =~ m/ESSID:/) {
+                    $wireless = 1;
+                }
             }
         }
+        close(FH);
     }
-    close(FH);
 
     $text = "What to do with $interface?";
     $text =~ s/\\/\\\\/g;
     $text =~ s/"/\\"/g;
-    $dhcpcdcmd = qq{dhcpcd 0 "dhcpcd $interface"};
-    if ($dhcpcd) {
-        $dhcpcdcmd = qq{killdhcpcd 0 "kill dhcpcd (kill -9 $dhcpcd)"}
+    $dhclientcmd = qq{dhclient 0 "dhclient $interface"};
+    if ($dhclient) {
+        $dhclientcmd = qq{killdhclient 0 "kill dhclient (kill -9 $dhclient)"}
     }
     $cmd = sprintf('hotdog radio OK Cancel %s %s %s %s %s',
         qq{"$text"},
         'nothing 1 "Do Nothing"',
-        $dhcpcdcmd,
+        $dhclientcmd,
         qq{ifconfigup 0 "ifconfig $interface up"},
         qq{ifconfigdown 0 "ifconfig $interface down"});
     $result = `$cmd`;
     chomp $result;
-    if ($result eq 'dhcpcd') {
+    if ($result eq 'dhclient') {
         system('hotdog-connectNetworkInterface.pl', $interface);
-    } elsif ($result eq 'killdhcpcd') {
-        system('sudo', '-A', 'kill', '-9', $dhcpcd);
+    } elsif ($result eq 'killdhclient') {
+        system('sudo', '-A', 'kill', '-9', $dhclient);
     } elsif ($result eq 'ifconfigup') {
         system('sudo', '-A', 'ifconfig', $interface, 'up');
     } elsif ($result eq 'ifconfigdown') {
