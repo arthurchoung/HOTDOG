@@ -1,6 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
-use JSON;
+$|=1;
 
 sub asQuotedString
 {
@@ -10,38 +10,65 @@ sub asQuotedString
     return '"' . $str . '"';
 }
 
-sub dhcpcdIsRunning
+
+@lines = `ifconfig`;
+chomp @lines;
+
+$name = undef;
+$type = undef;
+$addr = undef;
+$status = undef;
+%flags = ();
+
+sub dhclientIsRunning
 {
-    my ($arg) = @_;
-    return `pgrep -f 'dhcpcd.*$arg'`;
+    my @output = `pgrep -f 'dhclient.*$name'`;
+    chomp @output;
+    return pop @output;
 }
 
-$output = `ip -j -p address`;
-$result = decode_json($output);
-foreach $elt (@$result) {
-    if (grep /^UP$/, @{$elt->{'flags'}}) {
-        $elt->{'up'} = '1';
-    } else {
-        $elt->{'up'} = '0';
+sub print_elt
+{
+    if ($name !~ m/^lo/) {
+        $dhclientIsRunning = dhclientIsRunning();
+        print "interface:$name type: up:$flags{'UP'} lowerUp:$flags{'LOWER_UP'} operstate:$status address:$addr dhclientIsRunning:$dhclientIsRunning\n";
     }
-    if (grep /^LOWER_UP$/, @{$elt->{'flags'}}) {
-        $elt->{'lowerUp'} = '1';
-    } else {
-        $elt->{'lowerUp'} = '0';
-    }
-    $address = '';
-    foreach $addrelt (@{$elt->{'addr_info'}}) {
-        if ($addrelt->{'family'} eq 'inet') {
-            $address = $addrelt->{'local'};
-            last;
-        }
-    }
-    $elt->{'dhcpcdIsRunning'} = '0';
-    if ($elt->{'ifname'}) {
-        if (dhcpcdIsRunning($elt->{'ifname'})) {
-            $elt->{'dhcpcdIsRunning'} = '1';
-        }
-    }
-    print "interface:$elt->{'ifname'} type:$elt->{'link_type'} up:$elt->{'up'} lowerUp:$elt->{'lowerUp'} operstate:$elt->{'operstate'} address:$address dhcpIsRunning:$elt->{'dhcpcdIsRunning'}\n";
+    $name = undef;
+    $type = undef;
+    $addr = undef;
+    $status = undef;
+    %flags = ();
 }
+
+foreach $line (@lines) {
+    if ($line =~ m/^\s/) {
+        if ($line =~ m/^\s+inet\s/) {
+            @tokens = split /\s+/, $line;
+            $addr = $name . ' ' . $tokens[2];
+        }
+        if ($line =~ m/^\s+ether\s/) {
+            $type = 'ether';
+        }
+        if ($line =~ m/^\s+status:\s+([a-zA-Z0-9]+)/) {
+            $status = $1;
+        }
+    } else {
+        if ($name) {
+            print_elt();
+        }
+        if ($line =~ m/^([a-zA-Z0-9]+):/) {
+            $name = $1;
+        }
+        if ($line =~ m/flags=\d+<([^>]+)>/) {
+            @arr = split ',', $1;
+            foreach $elt (@arr) {
+                $flags{$elt} = 1;
+            }
+        }
+    }
+
+}
+
+print_elt();
+
 
