@@ -240,12 +240,12 @@ NSLog(@"Class not found '%@'", self);
         id arr = [name selectorsForClass];
         for (int i=0; i<[arr count]; i++) {
             id elt = [arr nth:i];
-            printf("%@\n", elt);
+            NSOut(@"%@\n", elt);
         }
         arr = [name selectorsForInstanceOfClass];
         for (int i=0; i<[arr count]; i++) {
             id elt = [arr nth:i];
-            printf("%@\n", elt);
+            NSOut(@"%@\n", elt);
         }
     }
     exit(0);
