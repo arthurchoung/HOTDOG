@@ -903,10 +903,13 @@ NSLog(@"cancelButtonWidth %d cancelTextWidth %d", cancelButtonWidth, cancelTextW
     if (_down && (_down == _hover)) {
         if (_down == 'o') {
             if (_dialogMode) {
-                FILE *fp = (_dialogMode == 1) ? stdout : stderr;
                 id elt = [_array nth:_selectedIndex];
                 id tag = [elt valueForKey:@"tag"];
-                fprintf(fp, "%@", (tag) ? tag : elt);
+                if (_dialogMode == 1) {
+                    NSOut(@"%@", (tag) ? tag : elt);
+                } else {
+                    NSErr(@"%@", (tag) ? tag : elt);
+                }
                 exit(0);
             }
         } else if (_down == 'c') {
@@ -926,10 +929,13 @@ NSLog(@"cancelButtonWidth %d cancelTextWidth %d", cancelButtonWidth, cancelTextW
     id str = [event valueForKey:@"keyString"];
     if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
         if (_dialogMode) {
-            FILE *fp = (_dialogMode == 1) ? stdout : stderr;
             id elt = [_array nth:_selectedIndex];
             id tag = [elt valueForKey:@"tag"];
-            fprintf(fp, "%@", (tag) ? tag : elt);
+            if (_dialogMode == 1) {
+                NSOut(@"%@", (tag) ? tag : elt);
+            } else {
+                NSErr(@"%@", (tag) ? tag : elt);
+            }
             exit(0);
         }
     } else if ([str isEqual:@"tab"]) {

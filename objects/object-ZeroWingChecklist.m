@@ -1079,7 +1079,6 @@ static char *zeroWingPixels3 =
 - (void)exitWithDialogMode
 {
     BOOL first = YES;
-    FILE *fp = (_dialogMode == 1) ? stdout : stderr;
     for (int i=0; i<[_array count]; i++) {
         if ([self getCheckedForIndex:i]) {
             id elt = [_array nth:i];
@@ -1087,9 +1086,17 @@ static char *zeroWingPixels3 =
             if (first) {
                 first = NO;
             } else {
-                fprintf(fp, " ");
+                if (_dialogMode == 1) {
+                    NSOut(@" ");
+                } else {
+                    NSErr(@" ");
+                }
             }
-            fprintf(fp, "%@", (tag) ? tag : elt);
+            if (_dialogMode == 1) {
+                NSOut(@"%@", (tag) ? tag : elt);
+            } else {
+                NSErr(@"%@", (tag) ? tag : elt);
+            }
         }
     }
     exit(0);

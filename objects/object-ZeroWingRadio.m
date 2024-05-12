@@ -1019,10 +1019,13 @@ static char *zeroWingPixels3 =
     if (_down && (_down == _hover)) {
         if (_down == 'o') {
             if (_dialogMode) {
-                FILE *fp = (_dialogMode == 1) ? stdout : stderr;
                 id elt = [_array nth:_selectedIndex];
                 id tag = [elt valueForKey:@"tag"];
-                fprintf(fp, "%@", (tag) ? tag : elt);
+                if (_dialogMode == 1) {
+                    NSOut(@"%@", (tag) ? tag : elt);
+                } else {
+                    NSErr(@"%@", (tag) ? tag : elt);
+                }
                 exit(0);
             }
         } else if (_down == 'c') {
@@ -1048,10 +1051,13 @@ static char *zeroWingPixels3 =
     if ([str isEqual:@"return"] || [str isEqual:@"shift-return"]) {
         if (_returnKey) {
             if (_dialogMode) {
-                FILE *fp = (_dialogMode == 1) ? stdout : stderr;
                 id elt = [_array nth:_selectedIndex];
                 id tag = [elt valueForKey:@"tag"];
-                fprintf(fp, "%@", (tag) ? tag : elt);
+                if (_dialogMode == 1) {
+                    NSOut(@"%@", (tag) ? tag : elt);
+                } else {
+                    NSErr(@"%@", (tag) ? tag : elt);
+                }
                 exit(0);
             }
             _returnKey = 0;

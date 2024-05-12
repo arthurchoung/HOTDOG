@@ -1001,9 +1001,17 @@ static char *cancelButtonDownRightPixels =
             if (first) {
                 first = NO;
             } else {
-                fprintf(fp, " ");
+                if (_dialogMode == 1) {
+                    NSOut(@" ");
+                } else {
+                    NSErr(@" ");
+                }
             }
-            fprintf(fp, "%@", (tag) ? tag : elt);
+            if (_dialogMode == 1) {
+                NSOut(@"%@", (tag) ? tag : elt);
+            } else {
+                NSErr(@"%@", (tag) ? tag : elt);
+            }
         }
     }
     exit(0);
