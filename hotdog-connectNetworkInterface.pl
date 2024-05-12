@@ -1,20 +1,21 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $interface = shift @ARGV;
 if (not $interface) {
     die('specify interface');
 }
 
-$dhcpcd = `pgrep -f 'dhcpcd.*$interface'`;
-chomp $dhcpcd;
-if ($dhcpcd) {
-    system('hotdog', 'alert', "dhcpcd for $interface already running", '', "pid $dhcpcd");
+@dhclient = `pgrep -f 'dhclient.*$interface'`;
+chomp @dhclient;
+$dhclient = pop @dhclient;
+if ($dhclient) {
+    system('hotdog', 'alert', "dhclient for $interface already running", '', "pid $dhclient");
     exit 1;
 }
 
 system('sudo', '-A', 'ifconfig', $interface, 'up');
 
-system('hotdog', 'prgbox', 'sudo', '-A', 'dhcpcd', '-4', $interface);
+system('hotdog', 'prgbox', 'sudo', '-A', 'dhclient', $interface);
 
 #if (open FH, "sudo -A dhcpcd -4 $interface 2>&1 | hotdog progress |") {
 #    $addr = undef;
