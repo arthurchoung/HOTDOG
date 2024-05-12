@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $matchName1 = shift @ARGV;
 $matchName2 = shift @ARGV;
