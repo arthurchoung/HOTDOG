@@ -1,18 +1,19 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $baseDir = `hotdog configDir`;
 chomp $baseDir;
 chdir $baseDir;
 
 $device = shift @ARGV;
-if (not $device) {
-    die('specify device');
+$fstype = shift @ARGV;
+if (not $device or not $fstype) {
+    die('specify device and fstype');
 }
 
 for(;;) {
 loop:
     # FIXME
-    @mountlist = `hotdog-listBlockDevices.pl | hotdog-allValuesForKey:.pl mountpoint | sed '/^\$/d'`;
+    @mountlist = `hotdog-listDisks.pl | hotdog-allValuesForKey:.pl mountpoint | sed '/^\$/d'`;
     chomp @mountlist;
     $mountlist = join ' ', @mountlist;
 
@@ -48,7 +49,13 @@ loop:
                 if ($result eq 'new') {
                 } elsif ($result > 0) {
                     $mountpoint = $lines[$result-1];
-                    system('sudo', '-A', 'mount', $device, $mountpoint);
+                    @mountcmd = ();
+                    if ($fstype eq 'ntfs') {
+                        @mountcmd = ('sudo', '-A', 'ntfs-3g', $device, $mountpoint);
+                    } else {
+                        @mountcmd = ('sudo', '-A', 'mount', '-t', $fstype, $device, $mountpoint);
+                    }
+                    system(@mountcmd);
                     if ($? != 0) {
                         system('hotdog', 'alert', "Unable to mount $device at $mountpoint");
                         exit 1;
@@ -76,7 +83,7 @@ EOF
     if (not $mountpoint) {
         exit 0;
     }
-    $output = `hotdog-listBlockDevices.pl`;
+    $output = `hotdog-listDisks.pl`;
     @lines = split "\n", $output;
     foreach $line (@lines) {
         if ($line =~ m/\bmountpoint:([^\s]+)/) {
@@ -95,7 +102,13 @@ EOF
         close(FH);
     }
 
-    system('sudo', '-A', 'mount', $device, $mountpoint);
+    @mountcmd = ();
+    if ($fstype eq 'ntfs') {
+        @mountcmd = ('sudo', '-A', 'ntfs-3g', $device, $mountpoint);
+    } else {
+        @mountcmd = ('sudo', '-A', 'mount', '-t', $fstype, $device, $mountpoint);
+    }
+    system(@mountcmd);
     if ($? != 0) {
         system('hotdog', 'alert', "Unable to mount $device at $mountpoint");
         exit 1;
