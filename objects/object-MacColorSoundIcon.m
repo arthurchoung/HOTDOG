@@ -73,7 +73,7 @@ static char *soundPixels =
 @interface MacColorSoundIcon : IvarObject
 {
     id _path;
-    id _buttonDown;
+    BOOL _buttonDown;
     int _buttonDownX;
     int _buttonDownY;
     id _buttonDownTimestamp;

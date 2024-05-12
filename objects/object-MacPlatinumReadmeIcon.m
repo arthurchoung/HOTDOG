@@ -107,7 +107,7 @@ static char *selectedReadmePixels =
 @interface MacPlatinumReadmeIcon : IvarObject
 {
     id _path;
-    id _buttonDown;
+    BOOL _buttonDown;
     int _buttonDownX;
     int _buttonDownY;
     id _buttonDownTimestamp;

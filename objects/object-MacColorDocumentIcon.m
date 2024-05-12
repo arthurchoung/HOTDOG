@@ -77,7 +77,7 @@ static char *documentPixels =
 @interface MacColorDocumentIcon : IvarObject
 {
     id _path;
-    id _buttonDown;
+    BOOL _buttonDown;
     int _buttonDownX;
     int _buttonDownY;
     id _buttonDownTimestamp;
