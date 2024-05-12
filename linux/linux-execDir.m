@@ -25,12 +25,17 @@
 
 #import "HOTDOG.h"
 
+#ifdef BUILD_FOR_FREEBSD
+#include <sys/sysctl.h>
+#endif
+
 @implementation Definitions(jfkldsjklfjdsklfjlksdklfj)
 
 + (id)execDir:(id)str
 {
     return nsfmt(@"%@/%@", [Definitions execDir], str);
 }
+#ifdef BUILD_FOR_LINUX
 + (id)execDir
 {
     static id execDir = nil;
@@ -45,6 +50,33 @@
     }
     return execDir;
 }
+#endif
+
+#ifdef BUILD_FOR_FREEBSD
++ (id)execDir
+{
+    static char *path = 0;
+
+    if (!path) {
+        int mib[4];
+        mib[0] = CTL_KERN;
+        mib[1] = KERN_PROC;
+        mib[2] = KERN_PROC_PATHNAME;
+        mib[3] = -1;
+
+        size_t len = 0;
+        sysctl(mib, 4, 0, &len, 0, 0);
+        path = malloc(len);
+        if (!path) {
+NSLog(@"out of memory!");
+            exit(1);
+        }
+        sysctl(mib, 4, path, &len, 0, 0);
+    }
+
+	return [nsfmt(@"%s", path) stringByDeletingLastPathComponent];
+}
+#endif
 
 @end
 
