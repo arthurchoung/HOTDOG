@@ -124,7 +124,7 @@ static unsigned char *button_right =
 {
     if (!_result) {
         id message = [[_array nth:_selected] valueForKey:@"message"];
-        int fixedWidth = [[_array nth:_selected] valueForKey:@"fixedWidth"];
+        int fixedWidth = [[_array nth:_selected] intValueForKey:@"fixedWidth"];
         id result = [nsdict() evaluateMessage:message];
         if (!result) {
             result = nsfmt(@"Unable to evaluate message: %@", message);
