@@ -95,7 +95,7 @@ static id optionsMenuCSV =
 + (id)AtariSTDesktop
 {
     id observercmd = nsarr();
-    [observercmd addObject:@"hotdog-monitorMountChanges"];
+    [observercmd addObject:@"hotdog-monitorMountChanges.pl"];
     id observer = [observercmd runCommandAndReturnProcess];
     if (!observer) {
 NSLog(@"unable to run observer command %@", observercmd);
@@ -195,7 +195,7 @@ NSLog(@"windowManager %@", windowManager);
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
 
     id cmd = nsarr();
-    [cmd addObject:@"hotdog-listBlockDevices.pl"];
+    [cmd addObject:@"hotdog-listDisks.pl"];
     id lines = [[[cmd runCommandAndReturnOutput] asString] split:@"\n"];
     [lines addObject:@"builtin:AtariSTTrashIcon mountpoint:Trash"];
 
