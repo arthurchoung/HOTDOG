@@ -339,7 +339,7 @@ NSLog(@"valueForIvar:'%@' unhandled ivar type '%s'", key, ivarType);
 {
     if ([key length] > 254) {
 NSLog(@"key name '%@' too long", key);
-        return nil;
+        return NO;
     }
     char ivarName[256];
     sprintf(ivarName, "_%s", [key UTF8String]);
