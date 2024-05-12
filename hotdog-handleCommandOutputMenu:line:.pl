@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $cmd = shift @ARGV;
 if (not $cmd) {
@@ -10,9 +10,9 @@ if (not $line) {
     die('specify line');
 }
 
-if ($cmd =~ m/^lsblk\b/) {
-    if ($line =~ m/^[\|\`]\-([a-z0-9]+)/) {
-        system('hotdog-handleDriveMenuForDevice:.pl', '/dev/'.$1);
+if ($cmd =~ m/^hotdog-generateDiskMenu/) {
+    if ($line =~ m/^  ([a-z0-9]+)/) {
+        system('hotdog-handleDiskMenuForDevice:.pl', '/dev/'.$1);
         exit 0;
     }
 }
