@@ -2,14 +2,13 @@ disable,flexible,leftPadding,rightPadding,objectMessage,messageForClick
 ,,4,4,"HotDog","configDir:'Config/rootWindowMenu.csv'|parseCSVFile|asMenu"
 ,1,0,0,"TextMenuItem:''",
 ,,4,4,"TextMenuItem:'xset'","['hotdog-commandOutputMenu.pl' 'xset' 'q']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu|useFixedWidthFont"
-,,4,4,"TextMenuItem:'ps'","['hotdog-commandOutputMenu.pl' 'ps' 'auxk' '-pcpu']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu|useFixedWidthFont"
-,,4,4,"TextMenuItem:'lsblk'","['hotdog-commandOutputMenu.pl' 'lsblk' '-i' '-o' 'NAME,FSTYPE,FSVER,LABEL,FSAVAIL,FSUSE%,MOUNTPOINTS']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu|useFixedWidthFont"
+,,4,4,"TextMenuItem:'ps'","['hotdog-commandOutputMenu.pl' 'ps' 'aux']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu|useFixedWidthFont"
+,,4,4,"TextMenuItem:'disk'","['hotdog-commandOutputMenu.pl' 'hotdog-generateDiskMenu.pl']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu|useFixedWidthFont"
 ,,4,4,"TextMenuItem:'Window'","configDir:'Config/windowMenu.csv'|parseCSVFile|asMenu"
-1,,4,4,"TextMenuItem:'Camera'","['hotdog-generateVideoCamerasMenu.pl']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu"
 ,,4,4,"TextMenuItem:'Audio'","['hotdog-generateAudioMenu.pl']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu"
-,,4,4,"CommandTextMenuItem:['hotdog-monitorMonitors'] lineMessage:[setupMonitors] stringFormat:'Mon #{currentMonitorIndexName}'","NSArray|addObject:'hotdog-generateMenuForMonitor:path:.pl'|addObject:(currentMonitorName)|addObject:(configDir:'Temp/listMonitors.txt')|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu"
+,,4,4,"CommandTextMenuItem:['hotdog-monitorMonitors.pl'] lineMessage:[setupMonitors] stringFormat:'Mon #{currentMonitorIndexName}'","NSArray|addObject:'hotdog-generateMenuForMonitor:path:.pl'|addObject:(currentMonitorName)|addObject:(configDir:'Temp/listMonitors.txt')|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu"
 ,,4,4,"TextMenuItem:'Clipboard'","['hotdog-generateClipboardMenu.pl']|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu"
-,,4,4,"CommandTextMenuItem:['hotdog-printALSAStatus' 'hw:0'] stringFormat:'Volume: #{ifTrue:[playbackSwitch] then:[PercentString:(volume|times:100|intValue)] else:[MuteString]}'","VolumeMenu:'hw:0' :'Master'"
+,,4,4,"CommandTextMenuItem:['hotdog-printMixerVolume'] stringFormat:'Volume: #{PercentString:(volume|times:100|intValue)}'","VolumeMenu:'hw:0' :'Master'"
 ,,4,4,"CommandTextMenuItem:['hotdog-printBatteryStatus.pl' ]",
 ,,4,4,"CommandBitmapMenuItem:['hotdog-printCPUStats.pl' ]",
 ,,4,4,"CommandTextMenuItem:['hotdog-printNetworkInfo.pl' ]","['hotdog-commandOutputMenu.pl' 'ifconfig' '-a']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu|useFixedWidthFont"
