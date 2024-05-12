@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $result = `hotdog confirm Shutdown Cancel 'Shutdown?'`;
 chomp $result;

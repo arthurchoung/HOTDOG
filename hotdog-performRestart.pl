@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 $result = `hotdog confirm Restart Cancel 'Restart?'`;
 chomp $result;
