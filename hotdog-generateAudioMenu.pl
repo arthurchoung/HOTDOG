@@ -1,17 +1,28 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
-$output = `cat /proc/asound/cards`;
-@lines = split "\n", $output;
+@lines = `cat /dev/sndstat`;
+chomp @lines;
+
 $count = 0;
 foreach $line (@lines) {
-    if ($line =~ m/^\s*(\d+)[^:]+: (.+)/) {
-        $id = "hw:$1";
+    if ($line =~ m/^pcm(\d+): <([^>]+)>/) {
+        $id = $1;
         $name = $2;
+        $default = 0;
+        if ($line =~ m/default$/) {
+            $default = 1;
+        }
         print <<EOF;
 =id=$id
 =name=$name
 =stringFormat=#{name} (#{id})
-=messageForClick=NSArray|addObject:'hotdog-openALSAPanel.sh'|addObject:id|addObject:name|runCommandInBackground
+EOF
+        if ($id != $default) {
+            print <<EOF;
+=messageForClick=NSArray|addObject:'hotdog-selectAudioDevice:.pl'|addObject:id|runCommandInBackground
+EOF
+        }
+        print <<EOF;
 ==
 EOF
         $count++;
