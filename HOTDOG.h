@@ -104,20 +104,6 @@ typedef struct Int4 Int4;
 
 #ifdef BUILD_FOUNDATION
 
-#ifdef BUILD_FOR_MEDMOS
-
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdarg.h>
-
-#import <objc/runtime.h>
-#import <objc/Object.h>
-
-#import "MEDMOS.h"
-
-#else
-
 #define _GNU_SOURCE
 #include <sys/param.h>
 #import <objc/runtime.h>
@@ -133,8 +119,6 @@ typedef struct Int4 Int4;
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdint.h>
-
-#endif
 
 id object_copy(id obj, size_t size);
 
@@ -202,6 +186,10 @@ typedef struct {
 #import "HOTDOG-objects.h"
 
 #ifdef BUILD_FOR_MEDMOS
+#import "HOTDOG-linux.h"
+#endif
+
+#ifdef BUILD_FOR_FREEBSD
 #import "HOTDOG-linux.h"
 #endif
 
