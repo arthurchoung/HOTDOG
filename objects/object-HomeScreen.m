@@ -677,7 +677,7 @@ static void handleClick(id name)
         id cmd = nsarr();
         [cmd addObject:@"hotdog"];
         [cmd addObject:@"show"];
-        [cmd addObject:@"WorldClockPanel"];
+        [cmd addObject:@"WorldClock"];
         [cmd runCommandInBackground];
         return;
     } else if ([name isEqual:@"GameCenter"]) {
