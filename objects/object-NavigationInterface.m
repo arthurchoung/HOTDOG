@@ -28,23 +28,7 @@
 @implementation Definitions(jfkdlsjfklsdjfklsf)
 + (id)ObjectInterface
 {
-    if ([@"00panel" stringFromFile]) {
-        id cmd = nsarr();
-        [cmd addObject:@"./00panel"];
-        return [Definitions Panel:cmd];
-    }
-
-    // FIXME: Somehow fileExists does not work unless it's a variable
-    id loadMessage = @"00loadMessage";
-    if ([loadMessage fileExists]) {
-        id message = [loadMessage stringFromFile];
-        id obj = [nsdict() evaluateMessage:message];
-        return obj;
-    } else {
-        id cmd = nsarr();
-        [cmd addObject:@"hotdog-generateDirPanel.pl"];
-        return [Definitions Panel:cmd];
-    }
+    return [Definitions Dir];
 }
 #ifdef BUILD_FOR_IOS
 + (id)ListInterface
