@@ -1,14 +1,14 @@
 /*
 
- HOT DOG Linux
+ HOTDOG
 
  Copyright (c) 2024 Arthur Choung. All rights reserved.
 
- Email: arthur -at- hotdoglinux.com
+ Email: arthur -at- hotdogpucko.com
 
- This file is part of HOT DOG Linux.
+ This file is part of HOTDOG.
 
- HOT DOG Linux is free software: you can redistribute it and/or modify
+ HOTDOG is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
