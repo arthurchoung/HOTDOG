@@ -112,6 +112,40 @@ static unsigned char *button_bottom_right_squared =
 "bbbb\n"
 ;
 
+@implementation NSString(jfksldjflksdjkfljskf)
+- (id)currentDateTimeForTimeZoneWithFormat:(id)format
+{
+    id results = nsarr(); 
+
+    char *oldTZ = getenv("TZ");
+    if (oldTZ) {
+        oldTZ = strdup(oldTZ);
+        setenv("TZ", [self UTF8String], 1);
+    } else {
+        setenv("TZ", [self UTF8String], 0);
+    }
+    
+    time_t timestamp = time(NULL);
+    struct tm *tmptr;
+    tmptr = localtime(&timestamp);
+    if (tmptr) {
+        char buf[256];
+        if (strftime(buf, 255, [format UTF8String], tmptr)) {
+            [results addObject:nscstr(buf)];
+        }
+    }
+
+    if (oldTZ) {
+        setenv("TZ", oldTZ, 1);
+        free(oldTZ);
+    } else {
+        unsetenv("TZ");
+    }
+    return [results join:@"\n"];
+}
+@end
+
+
 @implementation Definitions(fjkdlsjfklsdjfklsdfjdksjfkdsfjdskfjksdljfj)
 + (id)WorldClock
 {
