@@ -13,7 +13,7 @@ hotKey,displayName,messageForClick
 ,KaboomClone,"['hotdog' 'show' 'KaboomClone']|runCommandInBackground"
 ,Spider,"['hotdog' 'show' 'Spider']|runCommandInBackground"
 ,Stopwatch,"['hotdog' 'show' 'Stopwatch']|runCommandInBackground"
-,WorldClock,"['hotdog' 'show' 'WorldClockPanel']|runCommandInBackground"
+,WorldClock,"['hotdog' 'show' 'WorldClock']|runCommandInBackground"
 ,,
 ,Enter WinMac Mode,"windowManager|setValue:'enterWinMacMode' forKey:'pendingMessage'"
 ,Enter Hot Dog Stand Mode,"windowManager|setValue:'enterHotDogStandMode' forKey:'pendingMessage'"
