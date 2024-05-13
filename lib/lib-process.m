@@ -120,7 +120,7 @@
 
 @implementation NSArray(jfkdlsjfkldsjflksdjf)
 
-// SUDO_ASKPASS environment variable is set in linux/foundation-main.m
+// SUDO_ASKPASS environment variable is set in freebsd/foundation-main.m
 
 - (void)runCommandWithSudoInBackground
 {
