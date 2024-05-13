@@ -261,7 +261,9 @@ static int monthNameAsInt(id str)
 
 
     [self setValue:bitmap forKey:@"bitmap"];
-start:
+//start:
+BOOL gotoStart = NO;
+for(;;) {
     int rowCursorY = -_scrollY + r.y + 5;
     int nextCursorY = rowCursorY;
 
@@ -277,7 +279,8 @@ start:
             _pendingScrollToIndex = 0;
             _scrollY = rowCursorY;
             drawStripedBackgroundInBitmap_rect_(bitmap, r);
-            goto start;
+            gotoStart = YES;
+            break;
         }
 
         _cursorY = rowCursorY;
@@ -302,6 +305,10 @@ start:
             rowCursorY = nextCursorY;
         }
     }
+    if (!gotoStart) {
+        break;
+    }
+}
 
     [self setValue:nil forKey:@"bitmap"];
 
