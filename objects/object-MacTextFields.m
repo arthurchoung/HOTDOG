@@ -25,6 +25,41 @@
 
 #import "HOTDOG.h"
 
+static unsigned char *bitmapMessageIconPixels =
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"b........bbbbbbbbbbbbbbbbbbbbbbb\n"
+"b........bbbbbbbbbbbbbbbbbbbbbbb\n"
+"b........bbbbbbbbbbbbbbbbbbbbbbb\n"
+"b........bbbbbbbbbbbbbbbbbbbbbbb\n"
+"b........bbbbbbbbb......bbbbbbbb\n"
+"b...b....bbbbbbb..........bbbbbb\n"
+"b...b....bbbbbb............bbbbb\n"
+"b...b....bbbbb..............bbbb\n"
+"b........bbbb................bbb\n"
+"b........bbbb................bbb\n"
+"b........bbb..................bb\n"
+"b........bbb...bbb.bbb.bbb....bb\n"
+"b........bbb..................bb\n"
+"b........bbb..................bb\n"
+"b........bbb...bbb.bbb.b.b....bb\n"
+"b........bbb..................bb\n"
+"b........bbb..................bb\n"
+"b........bbb...bbb.b.bbb......bb\n"
+"b........bbb..................bb\n"
+"b....bbbbbbb..................bb\n"
+"b......bbbbb...bbbb.bbb.bb....bb\n"
+"b......bbbbb.................bbb\n"
+"b......bbbbb.................bbb\n"
+"b......bbbbb................bbbb\n"
+"b......bbbb................bbbbb\n"
+"b...bbbbb................bbbbbbb\n"
+"b......bbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"b......bbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"b......bbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"b......bbbbbbbbbbbbbbbbbbbbbbbbb\n"
+"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
+;
+
 static unsigned char *bitmapButtonLeftPixels =
 "   b\n"
 " bb.\n"
@@ -348,7 +383,7 @@ static void drawAlertBorderInBitmap_rect_(id bitmap, Int4 r)
 {
     drawAlertBorderInBitmap_rect_(bitmap, r);
     char *palette = "b #000000\n. #ffffff\n";
-    [bitmap drawCString:[Definitions cStringForBitmapMessageIcon] palette:palette x:28 y:28];
+    [bitmap drawCString:bitmapMessageIconPixels palette:palette x:28 y:28];
 
     int lineHeight = [bitmap bitmapHeightForText:@"X"];
 
