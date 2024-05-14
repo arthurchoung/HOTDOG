@@ -9,10 +9,9 @@ disable,flexible,leftPadding,rightPadding,objectMessage,messageForClick
 ,,4,4,"CommandTextMenuItem:['hotdog-monitorMonitors.pl'] lineMessage:[setupMonitors] stringFormat:'Mon #{currentMonitorIndexName}'","NSArray|addObject:'hotdog-generateMenuForMonitor:path:.pl'|addObject:(currentMonitorName)|addObject:(configDir:'Temp/listMonitors.txt')|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu"
 ,,4,4,"TextMenuItem:'Clipboard'","['hotdog-generateClipboardMenu.pl']|runCommandAndReturnOutput|asString|parseCSVFromString|asMenu"
 ,,4,4,"CommandTextMenuItem:['hotdog-printMixerVolume'] stringFormat:'Volume: #{PercentString:(volume|times:100|intValue)}'","VolumeMenu:'hw:0' :'Master'"
-,,4,4,"CommandTextMenuItem:['hotdog-printBatteryStatus.pl' ]",
+1,,4,4,"CommandTextMenuItem:['hotdog-printBatteryStatus.pl' ]",
 ,,4,4,"CommandBitmapMenuItem:['hotdog-printCPUStats.pl' ]",
 ,,4,4,"CommandTextMenuItem:['hotdog-printNetworkInfo.pl' ]","['hotdog-commandOutputMenu.pl' 'ifconfig' '-a']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu|useFixedWidthFont"
-,,4,4,"TextMenuItem:'iwconfig'","['hotdog-commandOutputMenu.pl' 'iwconfig 2>&1']|runCommandAndReturnOutput|asString|parseGeneratedMenuFromString|asMenu|useFixedWidthFont"
 ,,4,4,"CommandTextMenuItem:['hotdog-printDateEverySecondForTimezone:text:.pl' 'Pacific/Auckland' 'AKL']","configDir:'Config/dateTimeMenu.csv'|parseCSVFile|asMenu"
 ,,4,4,"OldManMenuItem","configDir:'Config/helpMenu.csv'|parseCSVFile|asMenu"
 ,,4,4,"BrownPotionMenuItem","configDir:'Config/computerMenu.csv'|parseCSVFile|asMenu"
