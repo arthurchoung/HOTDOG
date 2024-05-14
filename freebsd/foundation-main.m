@@ -105,13 +105,6 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                     [Definitions runWindowManagerForObject:obj];
                 }
             }
-        } else if ((argc > 1) && !strcmp(argv[1], "panelFromCSVFile")) {
-            if (argc > 2) {
-                id obj = [nsfmt(@"%s", argv[2]) panelFromCSVFile];
-                if (obj) {
-                    [Definitions runWindowManagerForObject:obj];
-                }
-            }
         } else if ((argc >= 3) && !strcmp(argv[1], "show")) {
             for (int i=3; i<argc; i++) {
                 [nsfmt(@"%s", argv[i]) setAsValueForKey:nsfmt(@"arg%d", i-3)];
