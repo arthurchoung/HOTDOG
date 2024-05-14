@@ -665,12 +665,21 @@ static void unescape_newlines(char *str)
     }
 
 error:
-    NSLog(@"invalid usage");
+    NSOut(@"invalid usage\n");
     for (; i<argc; i++) {
-        NSLog(@"argv[%d] %s", i, argv[i]);
-if (![Definitions confirmWithAlert:nsfmt(@"argv[%d] %s", i, argv[i])]) {
+        NSOut(@"argv[%d] %s\n", i, argv[i]);
+
+id cmd = nsarr();
+[cmd addObject:@"hotdog"];
+[cmd addObject:@"confirm"];
+[cmd addObject:@"OK"];
+[cmd addObject:@"Cancel"];
+[cmd addObject:nsfmt(@"invalid usage\n\nargv[%d] %s", i, argv[i])];
+id output = [cmd runCommandAndReturnOutput];
+if (output && ![output length]) {
     break;
 }
+
     }
     exit(-1);
 }
