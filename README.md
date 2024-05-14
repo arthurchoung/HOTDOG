@@ -112,12 +112,6 @@ Aqua 1280x1024
 ![Aqua Screenshot](Webpage/hotdog-screenshot-aqua.png)
 
 
-## HOTDOGbuntu -- Ubuntu compatibility
-
-HOTDOG can be run on Ubuntu and its derivatives.
-
-See the NOTES-Ubuntu file for more information.
-
 ## iOS 4/5/6
 
 This is an attempt to recreate iOS 4/5/6 with simplified graphics that would be suitable for the 8-bit or 16-bit era.
