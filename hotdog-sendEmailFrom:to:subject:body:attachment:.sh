@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ "$#" -lt 4 ]; then
     echo "specify from, to, subject, body, attachment"
