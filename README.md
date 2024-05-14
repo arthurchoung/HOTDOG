@@ -4,7 +4,7 @@ For more information, please visit http://hotdoglinux.com
 
 ## Note: FreeBSD is now the development platform. Linux is no longer supported.
 
-## Download (deprecated)
+## Download (deprecated Linux version)
 
 Installer ISO based on Slackware64 (1.28 GB)
 
@@ -22,7 +22,7 @@ It is a stripped down system that does not include systemd, wayland, elogind, po
 
 http://hotdoglinux.com/download/
 
-## Hotdog on a (USB) stick (deprecated)
+## Hotdog on a (USB) stick (deprecated Linux version)
 
 To write the image to a USB drive:
 
@@ -81,35 +81,35 @@ WinMac 1280x1024
 
 WinMac is a combination of the Windows 3.1 window borders and font, the classic Mac menu bar, and dialogs featuring CATS from Zero Wing (All your base are belong to us).
 
-![WinMac Screenshot](Webpage/hotdog-screenshot-winmac.png)
+![WinMac Screenshot](Screenshots/hotdog-screenshot-winmac.png)
 
 Hot Dog Stand 1280x1024
 
-![Hot Dog Stand Screenshot](Webpage/hotdog-screenshot-win31.png)
+![Hot Dog Stand Screenshot](Screenshots/hotdog-screenshot-win31.png)
 
 Atari ST GEM 1280x1024
 
-![Atari ST Screenshot](Webpage/hotdog-screenshot-atarist.png)
+![Atari ST Screenshot](Screenshots/hotdog-screenshot-atarist.png)
 
 Amiga Screenshot 1280x1024
 
-![Amiga Screenshot](Webpage/hotdog-screenshot-amiga.png)
+![Amiga Screenshot](Screenshots/hotdog-screenshot-amiga.png)
 
 Mac Classic 1280x1024
 
-![Mac Classic Screenshot](Webpage/hotdog-screenshot-macclassic.png)
+![Mac Classic Screenshot](Screenshots/hotdog-screenshot-macclassic.png)
 
 Mac Color 1280x1024
 
-![Mac Color Screenshot](Webpage/hotdog-screenshot-maccolor.png)
+![Mac Color Screenshot](Screenshots/hotdog-screenshot-maccolor.png)
 
 Mac Platinum 1280x1024
 
-![Mac Platinum Screenshot](Webpage/hotdog-screenshot-macplatinum.png)
+![Mac Platinum Screenshot](Screenshots/hotdog-screenshot-macplatinum.png)
 
 Aqua 1280x1024
 
-![Aqua Screenshot](Webpage/hotdog-screenshot-aqua.png)
+![Aqua Screenshot](Screenshots/hotdog-screenshot-aqua.png)
 
 
 ## iOS 4/5/6
@@ -120,7 +120,7 @@ This is an attempt to recreate iOS 4/5/6 with simplified graphics that would be 
 
 This is a preliminary version of the home screen with Windows 3 icons.
 
-![Home Screen](Webpage/hotdog-homescreen.png)
+![Home Screen](Screenshots/hotdog-homescreen.png)
 
 ### Music
 
@@ -143,11 +143,11 @@ To show albums:
 $ hotdog show AlbumListNavigation
 ```
 
-![Music Screenshot Album](Webpage/hotdog-music-screenshot-album.png)
+![Music Screenshot Album](Screenshots/hotdog-music-screenshot-album.png)
 
 Click on an album to list the tracks:
 
-![Music Screenshot Track](Webpage/hotdog-music-screenshot-track.png)
+![Music Screenshot Track](Screenshots/hotdog-music-screenshot-track.png)
 
 To show songs:
 
@@ -155,7 +155,7 @@ To show songs:
 $ hotdog show SongListNavigation
 ```
 
-![Music Screenshot Song](Webpage/hotdog-music-screenshot-song.png)
+![Music Screenshot Song](Screenshots/hotdog-music-screenshot-song.png)
 
 To show artists:
 
@@ -163,7 +163,7 @@ To show artists:
 $ hotdog show ArtistListNavigation
 ```
 
-![Music Screenshot Artist](Webpage/hotdog-music-screenshot-artist.png)
+![Music Screenshot Artist](Screenshots/hotdog-music-screenshot-artist.png)
 
 ### Contacts
 
@@ -184,11 +184,11 @@ To show list:
 $ hotdog show ContactListNavigation
 ```
 
-![Contacts Screenshot List](Webpage/hotdog-contacts-screenshot-list.png)
+![Contacts Screenshot List](Screenshots/hotdog-contacts-screenshot-list.png)
 
 Click on a row to show details:
 
-![Contacts Screenshot Detail](Webpage/hotdog-contacts-screenshot-detail.png)
+![Contacts Screenshot Detail](Screenshots/hotdog-contacts-screenshot-detail.png)
 
 ### Calendar
 
@@ -206,7 +206,7 @@ To show a yearly calendar:
 $ hotdog show CalendarInterface
 ```
 
-![Calendar Screenshot Year](Webpage/hotdog-calendar-screenshot-year.png)
+![Calendar Screenshot Year](Screenshots/hotdog-calendar-screenshot-year.png)
 
 ### Lock Screen
 
@@ -214,7 +214,7 @@ $ hotdog show CalendarInterface
 $ hotdog show LockScreen
 ```
 
-![Lock Screen](Webpage/hotdog-lockscreen.png)
+![Lock Screen](Screenshots/hotdog-lockscreen.png)
 
 ## Related
 
