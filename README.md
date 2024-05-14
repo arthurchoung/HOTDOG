@@ -1,8 +1,10 @@
-# HOT DOG Linux
+# HOTDOG
 
 For more information, please visit http://hotdoglinux.com
 
-## Download
+## Note: FreeBSD is now the development platform. Linux is no longer supported.
+
+## Download (deprecated)
 
 Installer ISO based on Slackware64 (1.28 GB)
 
@@ -20,7 +22,7 @@ It is a stripped down system that does not include systemd, wayland, elogind, po
 
 http://hotdoglinux.com/download/
 
-## Hot Dog (Linux) on a (USB) stick
+## Hotdog on a (USB) stick (deprecated)
 
 To write the image to a USB drive:
 
@@ -34,14 +36,14 @@ Run as root. Be careful not to write to the wrong drive.
 
 ## Overview
 
-The design goals of HOT DOG Linux include:
+The design goals of HOTDOG include:
 
   * Graphical user interface based on retro computer systems including Hot Dog Stand (Windows 3.1), Amiga Workbench, Atari ST GEM, Mac Classic and Aqua
   * Custom lightweight Objective-C foundation
   * Bitmapped graphics, low DPI displays
   * No Unicode support by design
 
-HOT DOG Linux uses a custom lightweight Objective-C foundation on top of the GCC Objective-C runtime. The style of Objective-C is completely different from the one Apple uses, everything is basically **id**.
+HOTDOG uses a custom lightweight Objective-C foundation on top of the GCC Objective-C runtime. The style of Objective-C is completely different from the one Apple uses, everything is basically **id**.
 
 Alternatively, it is possible to use an older version of the GNUstep Objective-C runtime that uses the old object struct layout (located in external/libobjc2). This requires everything to be compiled with clang, and allows for the use of Objective-C 2.0 features such as NSFastEnumeration and NSArray/NSDictionary literals, as well as blocks and libdispatch (with the appropriate libs). However, the GCC runtime has better performance, so it is the default.
 
@@ -49,9 +51,9 @@ By design, Unicode is not supported.
 
 Low DPI displays are preferred, since the graphics are bitmapped and fixed in size.
 
-HOT DOG Linux does not use Automatic Reference Counting. It causes problems with type-checking during compilation (it is too strict).
+HOTDOG does not use Automatic Reference Counting. It causes problems with type-checking during compilation (it is too strict).
 
-HOT DOG Linux is an acronym that stands for **H**orrible **O**bsolete **T**ypeface and **D**readful **O**nscreen **G**raphics for Linux.
+HOTDOG is an acronym that stands for **H**orrible **O**bsolete **T**ypeface and **D**readful **O**nscreen **G**raphics.
 
 ## How to compile and run
 
@@ -296,7 +298,7 @@ https://hotdogpucko.com
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
 
-Email: arthur -at- hotdoglinux.com
+Email: arthur -at- hotdogpucko.com
 
 Released under the GNU General Public License, version 3.
 
