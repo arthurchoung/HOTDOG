@@ -1,6 +1,6 @@
 hotKey,displayName,messageForClick
 "F1",XTerm,"[ 'hotdog-xterm.sh' ] | runCommandInBackground"
-,Chromium,"[ 'chromium' ] | runCommandInBackground"
+,Chrome,"[ 'chrome' ] | runCommandInBackground"
 ,,
 "F2",Home,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(homeDir)|runCommandInBackground"
 "F3",OpenStep Workspace,"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'OpenStepWorkspace:arg0'|addObject:(homeDir)|runCommandInBackground"
