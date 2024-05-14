@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
-sudo ntpdate pool.ntp.org | hotdog alert
+sudo -A hotdog prgbox ntpdate pool.ntp.org
 
