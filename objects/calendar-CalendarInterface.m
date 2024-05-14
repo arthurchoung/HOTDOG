@@ -116,6 +116,45 @@ static int monthNameAsInt(id str)
 
     return obj;
 }
++ (id)CalendarInterfaceSingleColumnNoEvents
+{
+    int currentYear = [Definitions currentYear];
+    int currentMonth = [Definitions currentMonth];
+    int currentDay = [Definitions currentDay];
+
+    id obj = [@"CalendarInterface" asInstance];
+    [obj setValue:@"1" forKey:@"disableEvents"];
+    [obj setValue:nsfmt(@"%d", currentYear) forKey:@"year"];
+    [obj setValue:@"1" forKey:@"numberOfColumns"];
+    [obj setValue:nsfmt(@"%d", currentMonth) forKey:@"pendingScrollToIndex"];
+
+    [obj setValue:nsfmt(@"%d", currentYear) forKey:@"currentYear"];
+    [obj setValue:nsfmt(@"%d", currentMonth) forKey:@"currentMonth"];
+    [obj setValue:nsfmt(@"%d", currentDay) forKey:@"currentDay"];
+
+    [obj updateCalendarArray];
+
+    return obj;
+}
++ (id)CalendarInterfaceNoEvents
+{
+    int currentYear = [Definitions currentYear];
+    int currentMonth = [Definitions currentMonth];
+    int currentDay = [Definitions currentDay];
+
+    id obj = [@"CalendarInterface" asInstance];
+    [obj setValue:@"1" forKey:@"disableEvents"];
+    [obj setValue:nsfmt(@"%d", currentYear) forKey:@"year"];
+    [obj setValue:@"3" forKey:@"numberOfColumns"];
+
+    [obj setValue:nsfmt(@"%d", currentYear) forKey:@"currentYear"];
+    [obj setValue:nsfmt(@"%d", currentMonth) forKey:@"currentMonth"];
+    [obj setValue:nsfmt(@"%d", currentDay) forKey:@"currentDay"];
+
+    [obj updateCalendarArray];
+
+    return obj;
+}
 @end
 
 
@@ -130,6 +169,7 @@ static int monthNameAsInt(id str)
     int _buttonHover;
     int _scrollY;
 
+    BOOL _disableEvents;
     id _eventsArray;
     id _calendarArray;
 
@@ -194,6 +234,10 @@ static int monthNameAsInt(id str)
 }
 - (void)handleBackgroundUpdate:(id)event
 {
+    if (_disableEvents) {
+        return;
+    }
+
     time_t timestamp = [@"." fileModificationTimestamp];
     if (timestamp == _timestamp) {
         _seconds++;
@@ -205,6 +249,10 @@ static int monthNameAsInt(id str)
 }
 - (void)updateEventsArray
 {
+    if (_disableEvents) {
+        return;
+    }
+
     id cmd = nsarr();
     [cmd addObject:@"hotdog-calendar-listEvents.py"];
     id output = [[[cmd runCommandAndReturnOutput] asString] split:@"\n"];
@@ -262,8 +310,8 @@ static int monthNameAsInt(id str)
 
     [self setValue:bitmap forKey:@"bitmap"];
 //start:
-BOOL gotoStart = NO;
 for(;;) {
+BOOL gotoStart = NO;
     int rowCursorY = -_scrollY + r.y + 5;
     int nextCursorY = rowCursorY;
 
