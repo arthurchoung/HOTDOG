@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <iomanip>
 
 // Solve Random 15 Puzzles : Nigel Galloway - October 18th., 2017
