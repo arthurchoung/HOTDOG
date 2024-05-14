@@ -94,17 +94,9 @@ NSLog(@"Unable to setenv SUDO_ASKPASS");
                     chdir(argv[2]);
                 }
             }
-            id obj = [Definitions ObjectInterface];
-            if (obj) {
-                if ([obj isKindOfClass:[@"Panel" asClass]]) {
-                    id nav = [Definitions navigationStack];
-                    [nav pushObject:obj];
-                    [Definitions runWindowManagerForObject:nav];
-                    [[Definitions navigationStack] setValue:nil forKey:@"context"];
-                } else {
-                    [Definitions runWindowManagerForObject:obj];
-                }
-            }
+            id obj = [Definitions Dir];
+            [Definitions runWindowManagerForObject:obj];
+            [[Definitions navigationStack] setValue:nil forKey:@"context"];
         } else if ((argc > 1) && !strcmp(argv[1], "stringFromFile")) {
             if (argc > 2) {
                 id obj = [nsfmt(@"%s", argv[2]) stringFromFile];
