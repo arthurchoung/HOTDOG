@@ -649,7 +649,7 @@ int _y[MAX_RECTS];
 int _w[MAX_RECTS];
 int _h[MAX_RECTS];
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     if (argc < 8) {
         goto error;
@@ -741,5 +741,7 @@ void main(int argc, char **argv)
 error:
     fprintf(stderr, "parse error\n");
     exit(1);
+
+    return 0;
 }
 
