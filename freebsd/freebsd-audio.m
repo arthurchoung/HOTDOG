@@ -25,45 +25,90 @@
 
 #import "HOTDOG.h"
 
+#include <fcntl.h>
+#include <sys/soundcard.h>
+
+#define DEFAULT_AUDIO_DEVICE "/dev/dsp"
+
 @interface AudioOutput : IvarObject
 {
-    id _aplay;
+    int _fd;
+
     int _sampleRate;
     int _numberOfChannels;
     int _bitsPerChannel;
 }
 @end
 @implementation AudioOutput
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _fd = -1;
+    }
+    return self;
+}
 
 - (void)openAudioWithSampleRate:(int)sampleRate frameCount:(int)frameCount channels:(int)channels bitsPerChannel:(int)bitsPerChannel
 {
+    if (bitsPerChannel != 16) {
+NSLog(@"error, %d bits per channel not supported", bitsPerChannel);
+        exit(1);
+    }
+
     _sampleRate = sampleRate;
     _numberOfChannels = channels;
     _bitsPerChannel = bitsPerChannel;
     
-    id cmd = nsarr();
-    [cmd addObject:@"aplay"];
-    [cmd addObject:@"-t"];
-    [cmd addObject:@"raw"];
-    [cmd addObject:@"-r"];
-    [cmd addObject:nsfmt(@"%d", sampleRate)];
-    [cmd addObject:@"-c"];
-    [cmd addObject:nsfmt(@"%d", channels)];
-    [cmd addObject:@"-f"];
-    [cmd addObject:@"S16_LE"];
-    [cmd addObject:@"-"];
-    id aplay = [cmd runCommandAndReturnProcess];
-    [self setValue:aplay forKey:@"aplay"];
+    _fd = open(DEFAULT_AUDIO_DEVICE, O_WRONLY, 0);
+    if (_fd < 0) {
+NSLog(@"unable to open audio device '%s", DEFAULT_AUDIO_DEVICE);
+        exit(1);
+    }
+
+    int fmt = AFMT_S16_LE;
+    if (ioctl(_fd, SNDCTL_DSP_SETFMT, &fmt) == -1) {
+NSLog(@"unable to set audio format");
+        exit(1);
+    }
+    if (fmt != AFMT_S16_LE) {
+NSLog(@"error, audio device does not support s16 le");
+        exit(1);
+    }
+
+    if (ioctl(_fd, SNDCTL_DSP_CHANNELS, &_numberOfChannels) == -1) {
+NSLog(@"unable to set audio channels");
+        exit(1);
+    }
+    if (_numberOfChannels != channels) {
+NSLog(@"error, audio device does not support %d channels", channels);
+        exit(1);
+    }
+
+    if (ioctl(_fd, SNDCTL_DSP_SPEED, &_sampleRate) == -1) {
+NSLog(@"unable to set audio sample rate");
+        exit(1);
+    }
 }   
 
-- (void)writeAudio:(uint16_t *)buffer frameCount:(int)frameCount
+- (void)writeAudio:(uint16_t *)buf frameCount:(int)frameCount
 {
-    [_aplay writeBytes:buffer length:_numberOfChannels*(_bitsPerChannel/8)*frameCount];
+    if (_fd < 0) {
+        return;
+    }
+    int len = frameCount * 2 * _numberOfChannels;
+    int n = write(_fd, buf, len);
+    if (n != len) {
+NSLog(@"unable to write to audio device, frameCount %d result %d", frameCount, n);
+    }
 }
 
 - (void)closeAudio
 {
-    [self setValue:nil forKey:@"aplay"];
+    if (_fd >= 0) {
+        close(_fd);
+        _fd = -1;
+    }
 }
 @end
 
