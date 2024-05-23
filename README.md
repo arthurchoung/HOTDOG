@@ -218,15 +218,15 @@ $ hotdog show LockScreen
 
 ## Related
 
-Hotdog Pucko
+FM AMP
 
-https://hotdogpucko.com
+https://fmamp.com
 
 ## Legal
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
 
-Email: arthur -at- hotdogpucko.com
+Email: arthur -at- hotdoglinux.com
 
 Released under the GNU General Public License, version 3.
 
