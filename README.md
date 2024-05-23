@@ -1,8 +1,8 @@
 # HOTDOG
 
-For more information, please visit http://hotdoglinux.com
-
 ## Note: FreeBSD is now the development platform. Linux is no longer supported.
+
+For more information, please visit http://hotdoglinux.com (deprecated)
 
 ## Download (deprecated Linux version)
 
