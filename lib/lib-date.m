@@ -88,6 +88,11 @@
     return results;
 }
 
++ (time_t)currentTimestamp
+{
+    time_t timestamp = time(0);
+    return timestamp;
+}
 + (int)currentYear
 {
     time_t timestamp = time(0);
