@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=HOTDOGbuntu Mac Classic
+Comment=HOTDOGbuntu Mac Classic
+Exec=hotdogbuntu-macclassic.sh
+Icon=
+Type=Application
+DesktopNames=HOTDOGbuntu Mac Classic
+

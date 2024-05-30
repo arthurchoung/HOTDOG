@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=HOTDOGbuntu Amiga
+Comment=HOTDOGbuntu Amiga
+Exec=hotdogbuntu-amiga.sh
+Icon=
+Type=Application
+DesktopNames=HOTDOGbuntu Amiga
+

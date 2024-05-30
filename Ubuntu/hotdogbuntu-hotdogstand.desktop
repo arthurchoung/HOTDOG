@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=HOTDOGbuntu Hot Dog Stand
+Comment=HOTDOGbuntu Hot Dog Stand
+Exec=hotdogbuntu-hotdogstand.sh
+Icon=
+Type=Application
+DesktopNames=HOTDOGbuntu Hot Dog Stand
+
