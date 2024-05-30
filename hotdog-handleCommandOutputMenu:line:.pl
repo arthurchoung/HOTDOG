@@ -10,6 +10,15 @@ if (not $line) {
     die('specify line');
 }
 
+#linux
+if ($cmd =~ m/^lsblk\b/) {
+    if ($line =~ m/^[\|\`]\-([a-z0-9]+)/) {
+        system('hotdog-handleDriveMenuForDevice:.pl', '/dev/'.$1);
+        exit 0;
+    }
+}
+
+#freebsd
 if ($cmd =~ m/^hotdog-generateDiskMenu/) {
     if ($line =~ m/^  ([a-z0-9]+)/) {
         system('hotdog-handleDiskMenuForDevice:.pl', '/dev/'.$1);
