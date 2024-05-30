@@ -176,7 +176,7 @@ static double normalizedYForRect_insideRect_(Int4 innerRect, Int4 outerRect)
 - (void)setup
 {
     id cmd = nsarr();
-    [cmd addObject:@"hotdog-printMixerVolume"];
+    [cmd addObject:@"hotdog-printALSAStatus"];
     if (_alsaCardName) {
         [cmd addObject:_alsaCardName];
         if (_alsaMixerName) {
@@ -187,7 +187,7 @@ static double normalizedYForRect_insideRect_(Int4 innerRect, Int4 outerRect)
     [self setValue:alsaStatus forKey:@"alsaStatus"];
 
     cmd = nsarr();
-    [cmd addObject:@"hotdog-setMixerVolume"];
+    [cmd addObject:@"hotdog-setALSAVolume"];
     if (_alsaCardName) {
         [cmd addObject:_alsaCardName];
         if (_alsaMixerName) {
@@ -273,9 +273,8 @@ NSLog(@"alsaStatus '%@'", line);
         if (!_playbackSwitch) {
             static BOOL alreadyRun = NO;
             if (!alreadyRun) {
-/*
                 id cmd = nsarr();
-                [cmd addObject:@"hotdog-setALSAMute"];
+                [cmd addObject:@"hotdog-setALSAMute:"];
                 [cmd addObject:@"0"];
                 if (_alsaCardName) {
                     [cmd addObject:_alsaCardName];
@@ -284,7 +283,6 @@ NSLog(@"alsaStatus '%@'", line);
                     }
                 }
                 [cmd runCommandInBackground];
-*/
                 alreadyRun = YES;
             }
         }
