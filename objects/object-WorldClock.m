@@ -146,7 +146,7 @@ static unsigned char *button_bottom_right_squared =
 @end
 
 
-@implementation Definitions(fjkdlsjfklsdjfklsdfjdksjfkdsfjdskfjksdljfj)
+@implementation Definitions(fjkdlsjfklsdjfklsdfjdksjfkdsfjdskfjksdljfjjfdksjfksd)
 + (id)WorldClock
 {
     return [Definitions WorldClock:nil];
