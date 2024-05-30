@@ -370,9 +370,12 @@ exit(0);
     return NO;
 }
 
-- (void)changeDirectory
+- (BOOL)changeDirectory
 {
-    chdir([self UTF8String]);
+    if (chdir([self UTF8String]) == 0) {
+        return YES;
+    }
+    return NO;
 }
 
 - (id)linesFromFile
