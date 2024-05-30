@@ -1,10 +1,8 @@
 # HOTDOG
 
-## Note: FreeBSD is now the development platform. Linux is no longer supported.
+For more information, please visit http://hotdoglinux.com
 
-For more information, please visit http://hotdoglinux.com (deprecated)
-
-## Download (deprecated Linux version)
+## Download
 
 Installer ISO based on Slackware64 (1.28 GB)
 
@@ -22,7 +20,7 @@ It is a stripped down system that does not include systemd, wayland, elogind, po
 
 http://hotdoglinux.com/download/
 
-## Hotdog on a (USB) stick (deprecated Linux version)
+## Hotdog on a (USB) stick
 
 To write the image to a USB drive:
 
