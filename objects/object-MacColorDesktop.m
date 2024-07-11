@@ -158,7 +158,7 @@ static id specialMenuCSV =
 + (id)MacColorDesktop
 {
     id observercmd = nsarr();
-    [observercmd addObject:@"hotdog-monitorMountChanges.pl"];
+    [observercmd addObject:@"hotdog-monitorMountChanges"];
     id observer = [observercmd runCommandAndReturnProcess];
     if (!observer) {
 NSLog(@"unable to run observer command %@", observercmd);
@@ -261,7 +261,7 @@ NSLog(@"windowManager %@", windowManager);
     id objectWindows = [windowManager valueForKey:@"objectWindows"];
 
     id cmd = nsarr();
-    [cmd addObject:@"hotdog-listDisks.pl"];
+    [cmd addObject:@"hotdog-listBlockDevices.pl"];
     id lines = [[[cmd runCommandAndReturnOutput] asString] split:@"\n"];
     [lines addObject:@"builtin:MacColorTrashIcon mountpoint:Trash"];
 
