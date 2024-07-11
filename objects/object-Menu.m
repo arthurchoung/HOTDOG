@@ -84,6 +84,8 @@
         className = @"HotDogStandMenu";
     } else if ([hotdogMode isEqual:@"openstep"]) {
         className = @"HotDogStandMenu";
+    } else if ([hotdogMode isEqual:@"workbench"]) {
+        className = @"WorkbenchMenu";
     }
     id menu = [className asInstance];
     [menu setValue:self forKey:@"array"];
