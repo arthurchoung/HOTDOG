@@ -5,8 +5,8 @@ if (not $path) {
     die('specify path');
 }
 
-if ($path =~ m/\.vcf$/i) {
-    system('hotdog', 'VCFPanel', $path);
+if ($path =~ m/\.(vgm|vgz)$/i) {
+    system('vgmplay', $path);
     exit 0;
 }
 
