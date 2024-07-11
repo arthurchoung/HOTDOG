@@ -3654,6 +3654,11 @@ NSLog(@"property %s prop_return '%s'", propertyName, prop_return);
         [x11dict setValue:@"1" forKey:@"shouldCloseWindow"];
     }
 }
+- (void)x11LowerWindow
+{
+    id windowManager = [@"windowManager" valueForKey];
+    [windowManager lowerObjectWindow:self];
+}
 - (void)x11ToggleMaximizeWindow
 {
     id dict = self;
