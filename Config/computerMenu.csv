@@ -6,6 +6,7 @@ hotKey,displayName,messageForClick
 ,"Take Screenshot of Root Window","['hotdog-takeScreenshotRootWindow.pl']|runCommandInBackground"
 ,"Take Screenshot of Focus Window","NSArray|addObject:'hotdog-takeScreenshotForWindow:.pl'|addObject:(currentWindow|window)|runCommandInBackground"
 ,"Take Screenshot with Selection Box","NSArray|addObject:'hotdog-takeScreenshotSelectionBox.pl'|runCommandInBackground"
+,"Take Screenshot of Focus Window Content","NSArray|addObject:'hotdog-takeScreenshotForContentOfWindow:.pl'|addObject:(currentWindow|window)|runCommandInBackground"
 ,,
 ,"Sync Time with NTP","['hotdog-syncTimeWithNTP.sh']|runCommandInBackground"
 ,,
@@ -19,6 +20,8 @@ hotKey,displayName,messageForClick
 ,,
 ,HomeScreen,"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'HomeScreen'|runCommandInBackground"
 ,LockScreen,"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'LockScreen'|runCommandInBackground"
+,,
+,OpenStep Workspace,"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'OpenStepWorkspace:arg0'|addObject:(homeDir)|runCommandInBackground"
 ,,
 ,"Restart","[ 'hotdog-performRestart.pl' ]|runCommandInBackground"
 ,"Shutdown","[ 'hotdog-performShutdown.pl' ]|runCommandInBackground"
