@@ -143,7 +143,11 @@ NSLog(@"unable to write to audio device, frameCount %d result %d", frameCount, n
     [cmd addObject:@"-c"];
     [cmd addObject:nsfmt(@"%d", channels)];
     [cmd addObject:@"-f"];
-    [cmd addObject:@"S16_LE"];
+    if (bitsPerChannel == 8) {
+        [cmd addObject:@"S8"];
+    } else {
+        [cmd addObject:@"S16_LE"];
+    }
     [cmd addObject:@"-"];
     id aplay = [cmd runCommandAndReturnProcess];
     [self setValue:aplay forKey:@"aplay"];
