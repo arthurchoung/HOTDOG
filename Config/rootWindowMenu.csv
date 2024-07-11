@@ -3,7 +3,6 @@ hotKey,displayName,messageForClick
 ,Chrome,"[ 'chromium' ] | runCommandInBackground"
 ,,
 "F2",Home,"NSArray|addObject:'hotdog'|addObject:'open'|addObject:(homeDir)|runCommandInBackground"
-"F3",OpenStep Workspace,"NSArray|addObject:'hotdog'|addObject:'show'|addObject:'OpenStepWorkspace:arg0'|addObject:(homeDir)|runCommandInBackground"
 ,,
 ,Breakout,"['hotdog' 'show' 'Breakout']|runCommandInBackground"
 ,Calculator,"['hotdog' 'show' 'Calculator']|runCommandInBackground"
@@ -15,7 +14,6 @@ hotKey,displayName,messageForClick
 ,Stopwatch,"['hotdog' 'show' 'Stopwatch']|runCommandInBackground"
 ,WorldClock,"['hotdog' 'show' 'WorldClock']|runCommandInBackground"
 ,,
-,Enter WinMac Mode,"windowManager|setValue:'enterWinMacMode' forKey:'pendingMessage'"
 ,Enter Hot Dog Stand Mode,"windowManager|setValue:'enterHotDogStandMode' forKey:'pendingMessage'"
 ,Enter Hot Dog Stand Mode x2,"windowManager|setValue:'enterHotDogStandMode:2' forKey:'pendingMessage'"
 ,Enter Windows 3.1 Mode,"windowManager|setValue:'enterWin31Mode' forKey:'pendingMessage'"
@@ -24,8 +22,6 @@ hotKey,displayName,messageForClick
 ,Enter Amiga Mode x2,"windowManager|setValue:'enterAmigaMode:2' forKey:'pendingMessage'"
 ,Enter Atari ST Mode,"windowManager|setValue:'enterAtariSTMode' forKey:'pendingMessage'"
 ,Enter Atari ST Mode x2,"windowManager|setValue:'enterAtariSTMode:2' forKey:'pendingMessage'"
-,Enter OpenStep Mode,"windowManager|setValue:'enterOpenStepMode' forKey:'pendingMessage'"
-,Enter MacWin Mode,"windowManager|setValue:'enterMacWinMode' forKey:'pendingMessage'"
 ,Enter Mac Classic Mode,"windowManager|setValue:'enterMacClassicMode' forKey:'pendingMessage'"
 ,Enter Mac Classic Mode x2,"windowManager|setValue:'enterMacClassicMode:2' forKey:'pendingMessage'"
 ,Enter Mac Color Mode,"windowManager|setValue:'enterMacColorMode' forKey:'pendingMessage'"
@@ -34,3 +30,7 @@ hotKey,displayName,messageForClick
 ,Enter Mac Platinum Mode x2,"windowManager|setValue:'enterMacPlatinumMode:2' forKey:'pendingMessage'"
 ,Enter Aqua Mode,"windowManager|setValue:'enterAquaMode' forKey:'pendingMessage'"
 ,Enter Aqua Mode x2,"windowManager|setValue:'enterAquaMode:2' forKey:'pendingMessage'"
+,Enter OpenStep Mode,"windowManager|setValue:'enterOpenStepMode' forKey:'pendingMessage'"
+,Enter Workbench Mode,"windowManager|setValue:'enterWorkbenchMode' forKey:'pendingMessage'"
+,Enter WinMac Mode,"windowManager|setValue:'enterWinMacMode' forKey:'pendingMessage'"
+,Enter MacWin Mode,"windowManager|setValue:'enterMacWinMode' forKey:'pendingMessage'"
