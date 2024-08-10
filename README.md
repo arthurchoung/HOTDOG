@@ -1,37 +1,5 @@
 # HOTDOG
 
-For more information, please visit http://hotdoglinux.com
-
-## Download
-
-Installer ISO based on Slackware64 (1.28 GB)
-
-Minimal ISO based on Slackware64 that runs from RAM (192 MB)
-
-Boot with Legacy BIOS.
-
-If using VirtualBox, 3D acceleration should be enabled.
-
-This is a multilib system, the only 32-bit application included is Wine.
-
-It comes with the 64-bit gcc only, so the included gcc cannot create 32 bit binaries.
-
-It is a stripped down system that does not include systemd, wayland, elogind, polkit, pulseaudio, or NetworkManager.
-
-http://hotdoglinux.com/download/
-
-## Hotdog on a (USB) stick
-
-To write the image to a USB drive:
-
-$ dd if=/path/to/file.iso of=/dev/sdX bs=1M
-
-/path/to/file.iso is the file name of the image file.
-
-/dev/sdX is the USB device to write the image to.
-
-Run as root. Be careful not to write to the wrong drive.
-
 ## Overview
 
 The design goals of HOTDOG include:
@@ -214,17 +182,11 @@ $ hotdog show LockScreen
 
 ![Lock Screen](Screenshots/hotdog-lockscreen.png)
 
-## Related
-
-FM AMP
-
-https://fmamp.com
-
 ## Legal
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
 
-Email: arthur -at- hotdoglinux.com
+Email: arthur -at- fmamp.com
 
 Released under the GNU General Public License, version 3.
 
