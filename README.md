@@ -30,6 +30,10 @@ $ dd if=/path/to/file.iso of=/dev/sdX bs=1M
 
 Run as root. Be careful not to write to the wrong drive.
 
+## Webpage
+
+https://fmamp.com/hotdoglinux/
+
 ## Overview
 
 The design goals of HOTDOG include:
