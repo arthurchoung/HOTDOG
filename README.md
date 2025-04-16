@@ -16,7 +16,7 @@ It comes with the 64-bit gcc only, so the included gcc cannot create 32 bit bina
 
 It is a stripped down system that does not include systemd, wayland, elogind, polkit, pulseaudio, or NetworkManager.
 
-http://fmamp.com/download/
+http://8bitoperahouse.com/download/
 
 ## Hot Dog (Linux) on a (USB) stick
 
@@ -32,7 +32,7 @@ Run as root. Be careful not to write to the wrong drive.
 
 ## Webpage
 
-https://fmamp.com/hotdoglinux/
+https://8bitoperahouse.com/hotdoglinux/
 
 ## Overview
 
@@ -220,7 +220,7 @@ $ hotdog show LockScreen
 
 Copyright (c) 2020 Arthur Choung. All rights reserved.
 
-Email: arthur -at- fmamp.com
+Email: arthur -at- 8bitoperahouse.com
 
 Released under the GNU General Public License, version 3.
 
